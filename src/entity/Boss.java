@@ -5,44 +5,44 @@ import java.awt.Graphics2D;
 
 import main.Settings;
 import game.BulletManager;
-import resource.SoundPlayer;
+
+import graphics.Depict;
+import resource.ResourceLoader;
+import resource.Sound;
 
 public class Boss extends Entity {
 	private BulletManager bulletManager;
-	private SoundPlayer fires;
+	private Sound fires;
 	
-	private int timer;
+	private int timer = 0;
 
 	public Boss(BulletManager bulletManager) {
 		this.bulletManager = bulletManager;
-		fires = new SoundPlayer("/assets/sounds/[TH] Fires.wav");
+		fires = ResourceLoader.sound("[TH] Fires");
 
-		x = Settings.GAME_WIDTH / 2.0;
+		x = 0;
 		y = 120;
-
 	}
 
 	@Override
 	public void update() {
-		timer++;
-		
-		if (timer % 10 == 0) {
-			
+		if (timer % 90 == 0) {
+			fires.setVolume(-10.0f);
 			fires.play();
+			
 
 			bulletManager.spawn(
-				new Bullet(x, y, 0, 2.55)
+				new Bullet(x, y, 0, -2.55)
 			);
 
 		}
+		
+		timer++;
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
-
-		g.setColor(Color.BLUE);
-		g.fillOval((int)x - 20, (int)y - 20, 40, 40);
-
+	public void draw(Graphics2D g2) {
+		g2.setColor(Color.BLUE);
+		Depict.circle(g2, x, y, 40);
 	}
-
 }

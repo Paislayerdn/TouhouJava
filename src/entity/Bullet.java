@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 
 import main.Settings;
 
+import graphics.Depict;
+
 public class Bullet extends Entity {
 
     private double vx;
@@ -25,9 +27,9 @@ public class Bullet extends Entity {
     }
 
     @Override
-    public void draw(Graphics2D g) {
-        g.setColor(Color.WHITE);
-        g.fillOval((int)x - 4, (int)y - 4, 8, 12);
+    public void draw(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        Depict.oval(g2, x, y, 8, 12);
     }
 
 }
