@@ -26,10 +26,9 @@ public class Boss extends Entity {
 
 	@Override
 	public void update() {
-		if (timer % 90 == 0) {
+		if (timer % 15 == 0) {
 			fires.setVolume(-10.0f);
 			fires.play();
-			
 
 			bulletManager.spawn(
 				new Bullet(x, y, 0, -2.55)

@@ -7,6 +7,13 @@ import entity.Player;
 import entity.Boss;
 import main.Settings;
 
+import action.TestAction;
+import action.MoveAction;
+import action.Wait;
+import action.PrintAction;
+import static action.JScratch.*;
+
+
 public class Game {
 	
 	private Player player;
@@ -40,6 +47,21 @@ public class Game {
 	
 	public Game() {
 		player = new Player();
+		player.run(
+			Parallel(
+				Forever("zequcen",
+					new MoveAction(-1),
+					Sequence(
+						new PrintAction("Forevering..."),
+						new Wait(1)
+					)
+				),
+				Sequence(
+					new PrintAction("I have existed for 45 frames."),
+					new Wait(45)
+				)
+			)
+		);
 		bulletManager = new BulletManager();
 		boss = new Boss(bulletManager);
 		gui = new GUI();

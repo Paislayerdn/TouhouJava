@@ -10,7 +10,6 @@ import graphics.Depict;
 import input.Input;
 
 public class Player extends Entity {
-
 	private boolean focusing = false;
 
 	public Player() {
@@ -20,7 +19,8 @@ public class Player extends Entity {
 	
 	@Override
 	public void update() {
-
+		updateActions();
+		
 		double speed = 4.2;
 		focusing = Input.focus;
 		
