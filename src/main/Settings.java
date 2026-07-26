@@ -2,15 +2,15 @@ package main;
 
 public final class Settings {
 
-    // Prevent instantiation
-    private Settings() {}
+	// Prevent instantiation
+	private Settings() {}
 
-    // Base game resolution
+	// Base game resolution
 	public static final int BASE_WIDTH = 960;
-    public static final int BASE_HEIGHT = 720;
-    
+	public static final int BASE_HEIGHT = 720;
+	
 	// Window scaling
-    public static final int SCALE = 1;
+	public static final int SCALE = 1;
 	
 	// Game rendering things
 	public static final int TILE_SIZE = 24;
@@ -25,10 +25,10 @@ public final class Settings {
 	public static final int PLAYFIELD_HALF_WIDTH =PLAYFIELD_WIDTH / 2;
 	public static final int PLAYFIELD_HALF_HEIGHT = PLAYFIELD_HEIGHT / 2;
 
-    // Final window size
-    public static final int WINDOW_WIDTH = BASE_WIDTH * SCALE;
-    public static final int WINDOW_HEIGHT = BASE_HEIGHT * SCALE;
+	// Final window size
+	public static final int WINDOW_WIDTH = BASE_WIDTH * SCALE;
+	public static final int WINDOW_HEIGHT = BASE_HEIGHT * SCALE;
 
-    // Target FPS
-    public static final int FPS = 60;
+	// Target FPS
+	public static final int FPS = 60;
 }

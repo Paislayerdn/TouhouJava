@@ -49,7 +49,7 @@ public class Game {
 		player = new Player();
 		player.run(
 			Parallel(
-				Forever("zequcen",
+				Forever("p",
 					new MoveAction(-1),
 					Sequence(
 						new PrintAction("Forevering..."),

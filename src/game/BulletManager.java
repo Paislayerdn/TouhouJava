@@ -6,22 +6,22 @@ import java.util.ArrayList;
 
 public class BulletManager {
 
-    private final ArrayList<Bullet> bullets = new ArrayList<>();
+	private final ArrayList<Bullet> bullets = new ArrayList<>();
 
-    public void spawn(Bullet bullet) {
-        bullets.add(bullet);
-    }
+	public void spawn(Bullet bullet) {
+		bullets.add(bullet);
+	}
 
-    public void update() {
-        for (Bullet bullet : bullets) {
-            bullet.update();
-        }
-    }
+	public void update() {
+		for (Bullet bullet : bullets) {
+			bullet.update();
+		}
+	}
 
-    public void draw(Graphics2D g) {
-        for (Bullet bullet : bullets) {
-            bullet.draw(g);
-        }
-    }
+	public void draw(Graphics2D g) {
+		for (Bullet bullet : bullets) {
+			bullet.draw(g);
+		}
+	}
 	
 }
