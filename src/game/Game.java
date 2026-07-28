@@ -3,29 +3,36 @@ package game;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-import entity.Player;
+import input.Input;
 import entity.Boss;
+import entity.Player;
+
 import main.Settings;
 
-import action.TestAction;
-import action.MoveAction;
-import action.Wait;
-import action.PrintAction;
 import static action.JScratch.*;
 
 
 public class Game {
+	final private Player player;
+	final private Boss boss;
+	final private BulletManager bulletManager;
+	final private HUD hud;
+	final private Debug debug;
 	
-	private Player player;
-	private Boss boss;
-	private BulletManager bulletManager;
-	private GUI gui;
+	private boolean lastDebugKey = false;
 	
 	public void update() {
+		if (Input.debug && !lastDebugKey) {
+			GameStats.debugMode = !GameStats.debugMode;
+		}
+
+		lastDebugKey = Input.debug;
+		
 		boss.update();
 		bulletManager.update();
 		player.update();
-		gui.update();
+		hud.update();
+		debug.update();
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -42,29 +49,16 @@ public class Game {
 		player.draw(g2);
 		
 		g2.setTransform(oldTransform);
-		gui.draw(g2);
+		hud.draw(g2);
+		debug.draw(g2);
 	}
 	
 	public Game() {
 		player = new Player();
-		player.run(
-			Parallel(
-				Forever("p",
-					new MoveAction(-1),
-					Sequence(
-						new PrintAction("Forevering..."),
-						new Wait(1)
-					)
-				),
-				Sequence(
-					new PrintAction("I have existed for 45 frames."),
-					new Wait(45)
-				)
-			)
-		);
 		bulletManager = new BulletManager();
 		boss = new Boss(bulletManager);
-		gui = new GUI();
+		hud = new HUD();
+		debug = new Debug(player);
 	}
 	
 }

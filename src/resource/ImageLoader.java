@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
-	private static final String IMAGE_PATH = "/assets/images/";
 	private static final String[] EXTENSIONS = {
 		".png",
 		".jpg",
@@ -25,7 +24,7 @@ public class ImageLoader {
 
 		if (image != null) { return image; }
 
-		URL url = ResourceFinder.find(IMAGE_PATH, name, EXTENSIONS);
+		URL url = ResourceFinder.find(ResourcePath.IMAGE, name, EXTENSIONS);
 
 		if (url == null) {
 			throw new RuntimeException("Image not found: " + name);

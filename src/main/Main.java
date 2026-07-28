@@ -12,7 +12,7 @@ public class Main {
 		window.add(panel);
 		window.pack();
 		window.setLocationRelativeTo(null);
-		
+				
 		window.setVisible(true);
 		panel.startGameThread();
 		panel.requestFocusInWindow();

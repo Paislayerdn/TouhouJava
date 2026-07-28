@@ -7,7 +7,6 @@ import java.util.Iterator;
 import javax.sound.sampled.*;
 
 public class Sound {
-	private static final String SOUND_PATH = "/assets/sounds/";
 	private static final String[] EXTENSIONS = {
 		".wav",
 		".aiff",
@@ -54,7 +53,7 @@ public class Sound {
 
 	private Clip createClip() {
 		try {
-			URL url = ResourceFinder.find(SOUND_PATH, name, EXTENSIONS);
+			URL url = ResourceFinder.find(ResourcePath.SOUND, name, EXTENSIONS);
 			if (url == null) {
 				System.out.println("[Sound] Cannot find sound: " + name);
 				return null;

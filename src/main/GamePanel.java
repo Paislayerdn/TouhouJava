@@ -9,19 +9,20 @@ import java.awt.Graphics2D;
 import game.Game;
 import input.Input;
 
-
 public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
 	private Game game;
 	private Input input;
 	
-	public static final int WIDTH = 960;
-	public static final int HEIGHT = 720;
-	
 	public void startGameThread() {
 		gameThread = new Thread(this);
 
 		gameThread.start();
+	}
+	
+	public void initialize() {
+		javax.swing.SwingUtilities.invokeLater(this::requestFocusInWindow);
+		setFocusTraversalKeysEnabled(false);
 	}
 	
 	public GamePanel(){
@@ -38,8 +39,9 @@ public class GamePanel extends JPanel implements Runnable {
 		input = new Input();
 		
 		this.addKeyListener(input);
+		this.addMouseMotionListener(input);
 		this.setFocusable(true);
-		this.requestFocusInWindow();
+		this.initialize();
 	}
 	
 	@Override
@@ -50,8 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 			try {
 				Thread.sleep(16);
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
