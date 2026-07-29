@@ -17,6 +17,7 @@ public class Boss extends Entity {
 	private int timer = 0;
 
 	public Boss(BulletManager bulletManager) {
+		name = "Boss";
 		this.bulletManager = bulletManager;
 		fires = ResourceLoader.sound("[TH] Fires");
 

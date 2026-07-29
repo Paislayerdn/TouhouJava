@@ -7,10 +7,11 @@ import input.Input;
 import entity.Boss;
 import entity.Player;
 
+import collision.CollisionManager;
+
 import main.Settings;
 
 import static action.JScratch.*;
-
 
 public class Game {
 	final private Player player;
@@ -18,6 +19,7 @@ public class Game {
 	final private BulletManager bulletManager;
 	final private HUD hud;
 	final private Debug debug;
+	final private CollisionManager collisionManager;
 	
 	private boolean lastDebugKey = false;
 	
@@ -31,6 +33,9 @@ public class Game {
 		boss.update();
 		bulletManager.update();
 		player.update();
+		
+		collisionManager.update();
+		
 		hud.update();
 		debug.update();
 	}
@@ -59,6 +64,6 @@ public class Game {
 		boss = new Boss(bulletManager);
 		hud = new HUD();
 		debug = new Debug(player);
+		collisionManager = new CollisionManager(player, bulletManager);
 	}
-	
 }

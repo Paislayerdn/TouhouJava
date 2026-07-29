@@ -3,6 +3,7 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import collision.CircleHitbox;
 import main.Settings;
 
 import graphics.Depict;
@@ -13,11 +14,17 @@ public class Bullet extends Entity {
 	private double vy;
 
 	public Bullet(double x, double y, double vx, double vy) {
+		name = "Bullet";
+		
 		this.x = x;
 		this.y = y;
 
 		this.vx = vx;
 		this.vy = vy;
+		
+		addHitbox(
+			new CircleHitbox(this, 4)
+		);
 	}
 
 	@Override
@@ -31,5 +38,4 @@ public class Bullet extends Entity {
 		g2.setColor(Color.WHITE);
 		Depict.oval(g2, x, y, 8, 12);
 	}
-
 }

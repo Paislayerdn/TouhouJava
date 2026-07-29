@@ -3,7 +3,7 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-//import main.Settings;
+import collision.CircleHitbox;
 
 import graphics.Depict;
 
@@ -13,8 +13,14 @@ public class Player extends Entity {
 	private boolean focusing = false;
 
 	public Player() {
+		name = "Player";
+		
 		x = 0;
 		y = -80;
+
+		addHitbox(
+			new CircleHitbox(this, 5)
+		);
 	}
 	
 	@Override
@@ -24,30 +30,23 @@ public class Player extends Entity {
 		double speed = 4.2;
 		focusing = Input.focus;
 		
-		if (focusing) {
-			speed = 2;
-		}
+		if (focusing) { speed = 2; }
 
 		double dx = 0;
 		double dy = 0;
 
 		if (Input.up) dy++;
-
 		if (Input.down) dy--;
-
 		if (Input.left) dx--;
-
 		if (Input.right) dx++;
 
 		double length = Math.sqrt(dx * dx + dy * dy);
 
 		if (length > 0) {
 			dx /= length; dy /= length;
-
 			x += dx * speed;
 			y += dy * speed;
 		}
-
 	}
 	
 	@Override
