@@ -19,6 +19,5 @@ public class Main {
 		window.setVisible(true);
 		panel.startGameThread();
 		panel.requestFocusInWindow();
-		
 	}
 }

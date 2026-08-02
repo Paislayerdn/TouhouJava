@@ -18,23 +18,35 @@ public class CollisionManager {
 	
 	public void update(){
 		for(Bullet bullet : bulletManager.getBullets()){
-			if(check(player, bullet)){
-				System.out.println( "[Collision] "+ player.getName()+ " <-hit-> "+ bullet.getName() );
-				GameStats.addDeath(); }
+			CollisionResult collision = check(player, bullet);
+			if(collision != null){
+				Hitbox playerHitbox = collision.getFirst();
+				Hitbox bulletHitbox = collision.getSecond();
+				System.out.printf("[Collision] %s <-hit-> %s\n",
+						playerHitbox.getName(), bulletHitbox.getName() );
+				player.onHit(
+					playerHitbox,
+					bulletHitbox
+				);
+				bullet.onHit(
+					bulletHitbox,
+					playerHitbox
+				);
+			}
 		}
 	}
 	
-	public static boolean check( Entity a, Entity b ){
+	public static CollisionResult check( Entity a, Entity b ) {
 		for (Hitbox ha : a.getHitboxes()) {
 			if(!ha.isEnabled()) continue;
 
 			for (Hitbox hb : b.getHitboxes()) {
 				if (!hb.isEnabled()) continue;
 
-				if (ha.checkCollision(hb)) return true;
+				if (ha.checkCollision(hb)) return new CollisionResult(ha, hb);
 			}
 		}
 
-		return false;
+		return null;
 	}
 }

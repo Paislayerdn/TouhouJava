@@ -1,7 +1,6 @@
 package main;
 
 public final class Settings {
-
 	// Prevent instantiation
 	private Settings() {}
 

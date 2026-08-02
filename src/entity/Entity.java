@@ -18,7 +18,7 @@ public abstract class Entity {
 	protected ActionRunner actions;
 	
 	//debugs
-	protected String name = "[NameNotSet]";
+	protected String name = "[unnamed entity]";
 
 	public Entity() {
 		this.alive = true;
@@ -34,35 +34,31 @@ public abstract class Entity {
 		actions.update();
 	}
 	
-	public void addHitbox(Hitbox hitbox) {
-		hitboxes.add(hitbox);
-	}
+	public void addHitbox(Hitbox hitbox) { hitboxes.add(hitbox); }
 
-	public ArrayList<Hitbox> getHitboxes() {
-		return hitboxes;
-	}
+	public ArrayList<Hitbox> getHitboxes() { return hitboxes; }
 
-	//getters / accessors
 	public double getX() { return x; }
 	public double getY() { return y; }
-	public boolean isAlive() { return alive; }
-	public String getName(){ return name; }
-	//setters / mutators
 	public void setX(double x) { this.x = x; }
 	public void setY(double y) { this.y = y; }
+	
+	public boolean isAlive() { return alive; }
+	public String getName(){ return name; }
 	
 	public void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
-
 	public void move(double dx, double dy) {
 		x += dx;
 		y += dy;
 	}
 	public void kill() { this.alive = false; }
 	
+	// the abstracts
+	public void onHit(Hitbox mine, Hitbox other) {}
+	public void onGraze(Hitbox mine, Hitbox other){}
 	public abstract void update();
-
 	public abstract void draw(Graphics2D g2);
 }

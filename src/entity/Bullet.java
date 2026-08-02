@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import collision.CircleHitbox;
+import collision.Hitbox;
 import main.Settings;
 
 import graphics.Depict;
 
 public class Bullet extends Entity {
-
 	private double vx;
 	private double vy;
 
@@ -22,11 +22,18 @@ public class Bullet extends Entity {
 		this.vx = vx;
 		this.vy = vy;
 		
-		addHitbox(
-			new CircleHitbox(this, 4)
-		);
+		addHitbox( new CircleHitbox(this, "bulletHB", 4) );
 	}
 
+	@Override
+	public void onHit(Hitbox mine, Hitbox other) {
+		System.out.println("[Bullet] Hit something.");
+	}
+	@Override
+	public void onGraze(Hitbox mine, Hitbox other) {
+		System.out.println("[Bullet] Grazed.");
+	}
+	
 	@Override
 	public void update() {
 		x += vx;

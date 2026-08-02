@@ -9,6 +9,10 @@ public class CircleHitbox extends Hitbox {
 		super(owner);
 		this.radius = radius;
 	}
+	public CircleHitbox(Entity owner, String name, double radius) {
+		super(owner, name);
+		this.radius = radius;
+	}
 
 	public double getRadius() {
 		return radius;
@@ -20,8 +24,8 @@ public class CircleHitbox extends Hitbox {
 		
 		CircleHitbox circle = (CircleHitbox) other;
 
-		double dx = owner.getX() - circle.owner.getX();
-		double dy = owner.getY() - circle.owner.getY();
+		double dx = getWorldX() - circle.getWorldX();
+		double dy = getWorldY() - circle.getWorldY();
 		double distanceSquared = dx * dx + dy * dy;
 		double r = radius + circle.radius;
 

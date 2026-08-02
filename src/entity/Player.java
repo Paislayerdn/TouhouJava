@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import collision.CircleHitbox;
+import collision.Hitbox;
 
 import graphics.Depict;
 
@@ -18,9 +19,7 @@ public class Player extends Entity {
 		x = 0;
 		y = -80;
 
-		addHitbox(
-			new CircleHitbox(this, 5)
-		);
+		addHitbox(new CircleHitbox(this, "playerHB", 5) );
 	}
 	
 	@Override
@@ -47,6 +46,23 @@ public class Player extends Entity {
 			x += dx * speed;
 			y += dy * speed;
 		}
+	}
+	
+	@Override
+	public void onHit(Hitbox mine, Hitbox other) {
+		System.out.println(
+			"[Player] "
+			+ mine.getName()
+			+ " was hit by "
+			+ other.getName()
+		);
+	}
+	
+	@Override
+	public void onGraze(Hitbox mine, Hitbox other) {
+		System.out.println(
+			"[Player] Graze!"
+		);
 	}
 	
 	@Override
