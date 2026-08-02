@@ -3,8 +3,9 @@ package graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.BasicStroke;
-
 
 public final class Depict {
 	// Constants
@@ -21,17 +22,26 @@ public final class Depict {
 
 
 	public static void oval(Graphics2D g2, double x, double y, double width, double height) {
-		g2.fillOval(
-			(int)(x - width / 2),
-			(int)(y - height / 2),
-			(int)width,
-			(int)height
+		g2.fill(
+			new Ellipse2D.Double(
+				x - width / 2,
+				y - height / 2,
+				width,
+				height
+			)
 		);
 	}
 
 	// due to Java's limitation method signatures must be exact, you cannot put default value to arguments
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2) {
-		line(g2, x1, y1, x2, y2, DEFAULT_LINE_WIDTH);
+		g2.draw(
+			new Line2D.Double(
+				x1,
+				y1,
+				x2,
+				y2
+			)
+		);
 	}
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2, float thickness) {
 		var oldStroke = g2.getStroke();
@@ -48,12 +58,12 @@ public final class Depict {
 		AffineTransform old = g2.getTransform();
 
 		// Undo world Y flip
+		
+		AffineTransform at = new AffineTransform();
+		at.translate(x - image.getWidth()/2.0, -y - image.getHeight()/2.0);
 		g2.scale(1, -1);
 
-		int drawX = (int)(x - image.getWidth() / 2.0);
-		int drawY = (int)(-y - image.getHeight() / 2.0);
-
-		g2.drawImage(image, drawX, drawY,null);
+		g2.drawImage(image, at,null);
 
 		g2.setTransform(old);
 	}
