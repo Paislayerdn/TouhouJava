@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class BulletManager {
-
 	private final ArrayList<Bullet> bullets = new ArrayList<>();
 	
 	public ArrayList<Bullet> getBullets() {

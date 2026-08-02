@@ -10,9 +10,7 @@ public class Wait extends Action {
 	}
 
 	@Override
-	public void start() {
-		timer = 0;
-	}
+	public void start() { timer = 0; }
 
 	@Override
 	public void update() {

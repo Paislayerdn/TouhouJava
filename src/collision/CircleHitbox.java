@@ -14,9 +14,7 @@ public class CircleHitbox extends Hitbox {
 		this.radius = radius;
 	}
 
-	public double getRadius() {
-		return radius;
-	}
+	public double getRadius() { return radius; }
 
 	@Override
 	public boolean checkCollision(Hitbox other) {

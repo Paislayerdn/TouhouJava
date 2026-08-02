@@ -8,25 +8,22 @@ public class Sequence extends Action {
 
 	public Sequence(Action... actions) {
 		this.actions = new ArrayList<>();
-		for(Action action : actions) {
+		for (Action action : actions) {
 			this.actions.add(action);
 		}
 
 		currentIndex = 0;
 	}
 
-
 	@Override
 	public void start() {
-		if(actions.isEmpty()) {
+		if (actions.isEmpty()) {
 			finish();
 			return;
 		}
 
-
 		startCurrent();
 	}
-
 
 	private void startCurrent() {
 		Action current = actions.get(currentIndex);
@@ -35,26 +32,22 @@ public class Sequence extends Action {
 		current.start();
 	}
 
-
 	@Override
 	public void update() {
-		if(finished)
-			return;
+		if (finished) return;
 
 		Action current = actions.get(currentIndex);
 
-
-		if(!current.isFinished()) {
+		if (!current.isFinished()) {
 			current.update();
 		}
 
-		if(current.isFinished()) {
+		if (current.isFinished()) {
 			currentIndex++;
 
-			if(currentIndex >= actions.size()) {
+			if (currentIndex >= actions.size()) {
 				finish();
-			}
-			else {
+			} else {
 				startCurrent();
 			}
 		}

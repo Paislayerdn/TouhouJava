@@ -8,7 +8,6 @@ public final class Coordinate {
 	private Coordinate() {}
 
 	/* ---------- World -> Screen ---------- */
-
 	public static double toScreenX(double worldX) {
 		return Settings.PLAYFIELD_X
 				+ Settings.PLAYFIELD_WIDTH / 2.0
@@ -26,7 +25,6 @@ public final class Coordinate {
 	}
 
 	/* ---------- Screen -> World ---------- */
-
 	public static double toWorldX(double screenX) {
 		return screenX
 				- Settings.PLAYFIELD_X
@@ -44,21 +42,13 @@ public final class Coordinate {
 	}
 
 	/* ---------- Formatting ---------- */
-
-	public static String format(double x, double y) {
-		return format(x, y, 2);
-	}
-
+	public static String format(double x, double y) { return format(x, y, 2); }
 	public static String format(double x, double y, int decimals) {
 		String pattern = "(x,y): (%." + decimals + "f, %." + decimals + "f)";
-
 		return String.format( pattern, x, y );
 	}
 
-	public static String format(Point2D.Double point) {
-		return format(point.x, point.y);
-	}
-
+	public static String format(Point2D.Double point) { return format(point.x, point.y); }
 	public static String format(Point2D.Double point, int decimals) {
 		return format(point.x, point.y, decimals);
 	}

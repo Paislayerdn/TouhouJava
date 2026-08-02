@@ -15,7 +15,7 @@ public class Forever extends Action {
 
 	@Override
 	public void update() {
-		if(action.isFinished()) {
+		if (action.isFinished()) {
 			action.reset();
 			action.start();
 		}

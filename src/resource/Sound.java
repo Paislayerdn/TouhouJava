@@ -74,7 +74,6 @@ public class Sound {
 		} catch (UnsupportedAudioFileException |
 				 IOException |
 				 LineUnavailableException e) {
-
 			e.printStackTrace();
 			return null;
 		}
@@ -88,10 +87,8 @@ public class Sound {
 
 			if (!clip.isRunning()
 					&& clip.getFramePosition() == clip.getFrameLength()) {
-
 				clip.close();
 				iterator.remove();
-
 			}
 		}
 	}
@@ -99,9 +96,7 @@ public class Sound {
 	public void setVolume(float volume) {
 		this.volume = volume;
 		for (Clip clip : clips) {
-			FloatControl control =
-					(FloatControl) clip.getControl(
-							FloatControl.Type.MASTER_GAIN);
+			FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
 			control.setValue(volume);
 		}

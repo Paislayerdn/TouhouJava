@@ -20,11 +20,7 @@ public final class GameStats {
 		deaths = 0;
 	}
 	
-	public static void addGraze() {
-		graze++;
-	}
+	public static void addGraze() { graze++; }
 
-	public static void addDeath() {
-		deaths++;
-	}
+	public static void addDeath() { deaths++; }
 }

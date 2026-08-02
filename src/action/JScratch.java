@@ -25,31 +25,28 @@ public class JScratch {
 	public static Forever Forever(Object type, Action... actions) {
 		Action container = null;
 		
-		if(type instanceof Number) {
+		if (type instanceof Number) {
 			int value = ((Number) type).intValue();
 
-			if(value == 0) {
+			if (value == 0) {
 				container = new Sequence(actions);
-			}
-			else if(value == 1) {
+			} else if (value == 1) {
 				container = new Parallel(actions);
 			}
 
-		} else if(type instanceof String) {
+		} else if (type instanceof String) {
 			String mode = ((String) type)
 					.toLowerCase()
 					.trim();
 
-			if(mode.startsWith("s")) {
+			if (mode.startsWith("s")) {
 				container = new Sequence(actions);
-			}
-			else if(mode.startsWith("p")) {
+			} else if (mode.startsWith("p")) {
 				container = new Parallel(actions);
 			}
 		}
 
-
-		if(container == null) {
+		if (container == null) {
 			System.out.println(
 				"[JScratch Warning] Unknown Forever mode: \""
 				+ type

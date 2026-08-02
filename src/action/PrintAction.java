@@ -7,16 +7,9 @@ public class PrintAction extends Action {
 		this.message = message;
 	}
 
-
 	@Override
 	public void start() {
 		System.out.println(message);
 		finish();
-	}
-
-
-	@Override
-	public void update() {
-
 	}
 }

@@ -45,7 +45,7 @@ public class Debug {
 		print(g2, "");
 		print(g2, "Mouse ABS");
 		print(g2, Coordinate.format(Input.mouseX,Input.mouseY, MOUSE_PRECISION));
-}
+	}
 
 	private void print(Graphics2D g2, String text) {
 		TextDrawer.draw(g2, text, 20, line);

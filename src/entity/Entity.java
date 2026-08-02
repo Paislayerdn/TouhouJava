@@ -44,7 +44,7 @@ public abstract class Entity {
 	public void setY(double y) { this.y = y; }
 	
 	public boolean isAlive() { return alive; }
-	public String getName(){ return name; }
+	public String getName() { return name; }
 	
 	public void setPosition(double x, double y) {
 		this.x = x;
@@ -58,7 +58,7 @@ public abstract class Entity {
 	
 	// the abstracts
 	public void onHit(Hitbox mine, Hitbox other) {}
-	public void onGraze(Hitbox mine, Hitbox other){}
+	public void onGraze(Hitbox mine, Hitbox other) {}
 	public abstract void update();
 	public abstract void draw(Graphics2D g2);
 }

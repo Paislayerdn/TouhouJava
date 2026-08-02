@@ -9,11 +9,6 @@ public class CollisionResult {
 		this.second = second;
 	}
 
-	public Hitbox getFirst() {
-		return first;
-	}
-
-	public Hitbox getSecond() {
-		return second;
-	}
+	public Hitbox getFirst() { return first;}
+	public Hitbox getSecond() { return second; }
 }

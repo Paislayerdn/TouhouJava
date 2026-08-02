@@ -7,35 +7,19 @@ public abstract class Action {
 
 	protected boolean finished = false;
 
+	public Entity getOwner() { return owner; }
+	public void setOwner(Entity owner) { this.owner = owner; }
 
-	// Called once when this action starts
-	public void start() {
-
-	}
-
-
-	// Called every frame
-	public abstract void update();
-
-
-	public void setOwner(Entity owner) {
-		this.owner = owner;
-	}
-
-
-	public boolean isFinished() {
-		return finished;
-	}
-
+	public boolean isFinished() { return finished; }
 
 	// Allows an action to stop itself
-	public void finish() {
-		finished = true;
-	}
-
+	public void finish() { finished = true; }
 
 	// Used later for Forever / reuse actions
-	public void reset() {
-		finished = false;
-	}
+	public void reset() { finished = false; }
+	
+	// Called once when this action starts
+	public void start() {}
+	// Called every frame
+	public void update() {}
 }

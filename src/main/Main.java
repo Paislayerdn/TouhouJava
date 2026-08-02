@@ -10,7 +10,6 @@ public class Main {
 		window.setResizable(false);
 		window.setIconImage(ResourceLoader.image("Icon"));
 		
-
 		GamePanel panel = new GamePanel();
 		window.add(panel);
 		window.pack();

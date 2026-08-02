@@ -64,5 +64,4 @@ public class Input implements KeyListener, MouseMotionListener {
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
 	}
-
 }

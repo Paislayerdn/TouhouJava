@@ -17,7 +17,6 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void startGameThread() {
 		gameThread = new Thread(this);
-
 		gameThread.start();
 	}
 	
@@ -26,13 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
 		setFocusTraversalKeysEnabled(false);
 	}
 	
-	public GamePanel(){
-		this.setPreferredSize(
-			new Dimension(
-				Settings.WINDOW_WIDTH,
-				Settings.WINDOW_HEIGHT
-			)
-		);
+	public GamePanel() {
+		this.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT ) );
 		
 		this.setBackground(Color.BLACK);
 		

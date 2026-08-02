@@ -8,7 +8,6 @@ import main.Settings;
 import resource.ResourceLoader;
 
 public class HUD {
-
 	private static final int LABEL_OFFSET = 22;
 	private static final int BUFFER_ZERO = 9;
 
@@ -47,5 +46,4 @@ public class HUD {
 		drawStat(g2,	"LIVES",	String.valueOf(GameStats.lives),	740, 295);
 		drawStat(g2,	"BOMBS",	String.valueOf(GameStats.bombs),	740, 370);
 	}
-
 }

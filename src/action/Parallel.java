@@ -8,14 +8,14 @@ public class Parallel extends Action {
 	public Parallel(Action... actions) {
 		this.actions = new ArrayList<>();
 
-		for(Action action : actions) {
+		for (Action action : actions) {
 			this.actions.add(action);
 		}
 	}
 
 	@Override
 	public void start() {
-		for(Action action : actions) {
+		for (Action action : actions) {
 			action.setOwner(owner);
 			action.start();
 		}
@@ -26,18 +26,17 @@ public class Parallel extends Action {
 	public void update() {
 		boolean allFinished = true;
 
-		for(Action action : actions) {
-			if(!action.isFinished()) {
+		for (Action action : actions) {
+			if (!action.isFinished()) {
 				action.update();
 			}
 
-			if(!action.isFinished()) {
+			if (!action.isFinished()) {
 				allFinished = false;
 			}
 		}
 
-
-		if(allFinished) {
+		if (allFinished) {
 			finish();
 		}
 	}

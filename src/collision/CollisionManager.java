@@ -11,34 +11,28 @@ public class CollisionManager {
 	private Player player;
 	private BulletManager bulletManager;
 	
-	public CollisionManager(Player player, BulletManager bulletManager){
+	public CollisionManager(Player player, BulletManager bulletManager) {
 		this.player = player;
 		this.bulletManager = bulletManager;
 	}
 	
-	public void update(){
-		for(Bullet bullet : bulletManager.getBullets()){
+	public void update() {
+		for (Bullet bullet : bulletManager.getBullets()) {
 			CollisionResult collision = check(player, bullet);
-			if(collision != null){
+			if (collision != null) {
 				Hitbox playerHitbox = collision.getFirst();
 				Hitbox bulletHitbox = collision.getSecond();
 				System.out.printf("[Collision] %s <-hit-> %s\n",
 						playerHitbox.getName(), bulletHitbox.getName() );
-				player.onHit(
-					playerHitbox,
-					bulletHitbox
-				);
-				bullet.onHit(
-					bulletHitbox,
-					playerHitbox
-				);
+				player.onHit( playerHitbox, bulletHitbox );
+				bullet.onHit( bulletHitbox, playerHitbox );
 			}
 		}
 	}
 	
 	public static CollisionResult check( Entity a, Entity b ) {
 		for (Hitbox ha : a.getHitboxes()) {
-			if(!ha.isEnabled()) continue;
+			if (!ha.isEnabled()) continue;
 
 			for (Hitbox hb : b.getHitboxes()) {
 				if (!hb.isEnabled()) continue;

@@ -3,7 +3,6 @@ package action;
 import java.util.ArrayList;
 import entity.Entity;
 
-
 public class ActionRunner {
 	private final ArrayList<Action> actions;
 
@@ -20,7 +19,6 @@ public class ActionRunner {
 		actions.add(action);
 	}
 
-
 	public void update() {
 		for (Action action : actions) {
 			if (!action.isFinished()) {
@@ -30,7 +28,6 @@ public class ActionRunner {
 
 		actions.removeIf(Action::isFinished);
 	}
-
 
 	public void clear() {
 		actions.clear();
