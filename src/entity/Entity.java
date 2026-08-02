@@ -1,9 +1,9 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import collision.Hitbox;
-import java.util.ArrayList;
 
 import action.Action;
 import action.ActionRunner;

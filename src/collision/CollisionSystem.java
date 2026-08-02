@@ -7,11 +7,11 @@ import game.BulletManager;
 
 import game.GameStats;
 
-public class CollisionManager {
+public class CollisionSystem {
 	private Player player;
 	private BulletManager bulletManager;
 	
-	public CollisionManager(Player player, BulletManager bulletManager) {
+	public CollisionSystem(Player player, BulletManager bulletManager) {
 		this.player = player;
 		this.bulletManager = bulletManager;
 	}

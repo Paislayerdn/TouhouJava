@@ -3,8 +3,8 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import collision.CircleHitbox;
 import collision.Hitbox;
+import static collision.Hitboxes.*;
 
 import graphics.Depict;
 
@@ -19,7 +19,7 @@ public class Player extends Entity {
 		x = 0;
 		y = -80;
 
-		addHitbox(new CircleHitbox(this, "playerHB", 5) );
+		addHitbox( circleHB(this, "playerHB", 5) );
 	}
 	
 	@Override

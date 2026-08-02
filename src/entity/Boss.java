@@ -3,12 +3,13 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import main.Settings;
 import game.BulletManager;
 
 import graphics.Depict;
 import resource.ResourceLoader;
 import resource.Sound;
+
+import main.Settings;
 
 public class Boss extends Entity {
 	private BulletManager bulletManager;
