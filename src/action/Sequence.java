@@ -29,27 +29,42 @@ public class Sequence extends Action {
 		Action current = actions.get(currentIndex);
 
 		current.setOwner(owner);
+		current.setContext(context);
 		current.start();
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		currentIndex = 0;
+
+		for (Action action : actions) {
+			action.reset();
+		}
 	}
 
 	@Override
 	public void update() {
 		if (finished) return;
 
-		Action current = actions.get(currentIndex);
+		while (!finished) {
+			Action current = actions.get(currentIndex);
+			
+			boolean wasFinished = current.isFinished();
 
-		if (!current.isFinished()) {
-			current.update();
-		}
+			if (!wasFinished) { current.update(); }
+			if (!current.isFinished()) { return; }
 
-		if (current.isFinished()) {
+			// Only yield if this action actually ran this frame.
+			if (!wasFinished && current.consumesFrame()) { return; }
+
 			currentIndex++;
-
 			if (currentIndex >= actions.size()) {
 				finish();
-			} else {
-				startCurrent();
+				return;
 			}
+
+			startCurrent();
 		}
 	}
 }

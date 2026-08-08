@@ -3,23 +3,40 @@ package action;
 import entity.Entity;
 
 public abstract class Action {
-	protected Entity owner;
-
 	protected boolean finished = false;
-
-	public Entity getOwner() { return owner; }
-	public void setOwner(Entity owner) { this.owner = owner; }
+	protected Entity owner;
+	protected ActionContext context;
+	public boolean consumesFrame() { return true;}
 
 	public boolean isFinished() { return finished; }
-
-	// Allows an action to stop itself
 	public void finish() { finished = true; }
-
-	// Used later for Forever / reuse actions
 	public void reset() { finished = false; }
 	
-	// Called once when this action starts
+	public Entity getOwner() { return owner; }
+	public void setOwner(Entity owner) { this.owner = owner; }
+	
+	public ActionContext getContext() { return context; }
+	public void setContext(ActionContext context) { this.context = context; }
+
+	public void declareVariable(String name, Object value) { context.declare(name, value); }
+	public Object getVariable(String name) { return context.get(name); }
+	public void setVariable(String name, Object value) { context.set(name, value); }
+
+	
+	public Object rs(Object value) { return resolve(value); }
+	public Object resolve(Object value) {
+		if (value instanceof Value) {
+			return ((Value) value).get(this);
+		}
+
+		return value;
+	}
+
+	public double rsD(Object value) { return resolveDouble(value); }
+	public double resolveDouble(Object value) {
+		return ((Number) resolve(value)).doubleValue();
+	}
+	
 	public void start() {}
-	// Called every frame
 	public void update() {}
 }

@@ -19,7 +19,9 @@ public class Player extends Entity {
 		x = 0;
 		y = -80;
 
-		addHitbox( circleHB(this, "playerHB", 5) );
+		addHitbox( circleHB(this, "grazeHB", 5) );
+		addHitbox( circleHB(this, "deathHB", 2) );
+		this.hitboxes.get(1).setEnabled(false);
 	}
 	
 	@Override
@@ -50,19 +52,12 @@ public class Player extends Entity {
 	
 	@Override
 	public void onHit(Hitbox mine, Hitbox other) {
-		System.out.println(
-			"[Player] "
-			+ mine.getName()
-			+ " was hit by "
-			+ other.getName()
-		);
-	}
-	
-	@Override
-	public void onGraze(Hitbox mine, Hitbox other) {
-		System.out.println(
-			"[Player] Graze!"
-		);
+//		System.out.println(
+//			"[Player] "
+//			+ mine.getName()
+//			+ " was hit by "
+//			+ other.getName()
+//		);
 	}
 	
 	@Override

@@ -11,14 +11,14 @@ public class BulletManager {
 		return bullets;
 	}
 	
-	public void spawn(Bullet bullet) {
-		bullets.add(bullet);
-	}
+	public void add(Bullet bullet) { spawn(bullet); }
+	public void spawn(Bullet bullet) { bullets.add(bullet); }
 
 	public void update() {
 		for (Bullet bullet : bullets) {
 			bullet.update();
 		}
+		bullets.removeIf(bullet -> !bullet.isAlive());
 	}
 
 	public void draw(Graphics2D g) {

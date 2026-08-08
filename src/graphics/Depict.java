@@ -17,12 +17,24 @@ public final class Depict {
 	}
 
 	public static void circle(Graphics2D g2, double x, double y, double radius) {
-		oval(g2, x, y, radius, radius);
+		oval(g2, x, y, radius, radius, 0);
+	}
+	public static void circle(Graphics2D g2, double x, double y, double radius, double angle) {
+		oval(g2, x, y, radius, radius, angle);
 	}
 
 
 	public static void oval(Graphics2D g2, double x, double y, double width, double height) {
-		g2.fill( new Ellipse2D.Double( x - width / 2, y - height / 2, width, height) );
+		oval(g2, x, y, width, height, 0);
+	}
+	public static void oval(Graphics2D g2, double x, double y, double width, double height, double angle) {
+		AffineTransform old = g2.getTransform();
+
+		g2.translate(x, y);
+		g2.rotate(Math.toRadians(angle));
+
+		g2.fill( new Ellipse2D.Double(-width/2, -height/2, width, height) );
+		g2.setTransform(old);
 	}
 
 	// due to Java's limitation method signatures must be exact, you cannot put default value to arguments

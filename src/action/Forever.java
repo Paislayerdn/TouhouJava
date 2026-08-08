@@ -2,6 +2,8 @@ package action;
 
 public class Forever extends Action {
 	private Action action;
+	@Override
+	public boolean consumesFrame() { return true; }
 
 	public Forever(Action action) {
 		this.action = action;
@@ -10,6 +12,7 @@ public class Forever extends Action {
 	@Override
 	public void start() {
 		action.setOwner(owner);
+		action.setContext(context);
 		action.start();
 	}
 

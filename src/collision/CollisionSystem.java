@@ -3,6 +3,7 @@ package collision;
 import entity.Entity;
 import entity.Player;
 import entity.Bullet;
+import entity.Boss;
 import game.BulletManager;
 
 import game.GameStats;
@@ -10,10 +11,12 @@ import game.GameStats;
 public class CollisionSystem {
 	private Player player;
 	private BulletManager bulletManager;
+	private Boss boss;
 	
-	public CollisionSystem(Player player, BulletManager bulletManager) {
+	public CollisionSystem(Player player, BulletManager bulletManager, Boss boss) {
 		this.player = player;
 		this.bulletManager = bulletManager;
+		this.boss = boss;
 	}
 	
 	public void update() {
@@ -22,8 +25,8 @@ public class CollisionSystem {
 			if (collision != null) {
 				Hitbox playerHitbox = collision.getFirst();
 				Hitbox bulletHitbox = collision.getSecond();
-				System.out.printf("[Collision] %s <-hit-> %s\n",
-						playerHitbox.getName(), bulletHitbox.getName() );
+//				System.out.printf("[Collision] %s <-hit-> %s\n",
+//						playerHitbox.getName(), bulletHitbox.getName() );
 				player.onHit( playerHitbox, bulletHitbox );
 				bullet.onHit( bulletHitbox, playerHitbox );
 			}

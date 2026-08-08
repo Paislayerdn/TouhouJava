@@ -1,25 +1,25 @@
 package action;
 
 public class Wait extends Action {
-	private int duration;
+	private Object duration;
 	private int timer;
 
-	public Wait(int frames) {
+	public Wait(Object frames) {
 		duration = frames;
 		timer = 0;
 	}
 
 	@Override
 	public void start() { timer = 0; }
+	public void rewait() { this.start(); }
 
 	@Override
 	public void update() {
 		timer++;
-		System.out.println("Waiting Frame: " + timer);
+		int intDuration = (int)resolveDouble(duration);
 
-		if (timer >= duration) {
+		if (timer >= intDuration) {
 			finish();
-			System.out.println("Finished waiting");
 		}
 	}
 }

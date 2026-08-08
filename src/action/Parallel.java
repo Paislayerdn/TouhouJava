@@ -4,6 +4,16 @@ import java.util.ArrayList;
 
 public class Parallel extends Action {
 	private ArrayList<Action> actions;
+	@Override
+	public boolean consumesFrame() {
+		for (Action action : actions) {
+			if (!action.isFinished() && action.consumesFrame()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public Parallel(Action... actions) {
 		this.actions = new ArrayList<>();
@@ -17,6 +27,7 @@ public class Parallel extends Action {
 	public void start() {
 		for (Action action : actions) {
 			action.setOwner(owner);
+			action.setContext(context);
 			action.start();
 		}
 	}

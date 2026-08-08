@@ -11,8 +11,6 @@ import collision.CollisionSystem;
 
 import main.Settings;
 
-import static action.JScratch.*;
-
 public class Game {
 	final private Player player;
 	final private Boss boss;
@@ -61,9 +59,9 @@ public class Game {
 	public Game() {
 		player = new Player();
 		bulletManager = new BulletManager();
-		boss = new Boss(bulletManager);
+		boss = new Boss(bulletManager, player);
 		hud = new HUD();
 		debug = new Debug(player);
-		collisionManager = new CollisionSystem(player, bulletManager);
+		collisionManager = new CollisionSystem(player, bulletManager, boss);
 	}
 }

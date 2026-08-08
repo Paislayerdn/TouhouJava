@@ -3,46 +3,65 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import collision.Hitbox;
 import static collision.Hitboxes.*;
-import main.Settings;
+import collision.Hitbox;
+import game.GameStats;
+
 
 import graphics.Depict;
+import resource.ResourceLoader;
+import resource.Sound;
 
 public class Bullet extends Entity {
-	private double vx;
-	private double vy;
+	private boolean grazable;
+	private Sound graze;
 
-	public Bullet(double x, double y, double vx, double vy) {
+	public Bullet() {
+		this(999,999);
+	}
+	public Bullet(double x, double y) {
 		name = "Bullet";
 		
 		this.x = x;
 		this.y = y;
-
-		this.vx = vx;
-		this.vy = vy;
 		
-		addHitbox( circleHB(this, "bulletHB", 4) );
+		addHitbox( circleHB(this, "bulletHB", 12) );
+		grazable = true;
+		graze = ResourceLoader.sound("[TH] Graze");
+//		Sound fires = ResourceLoader.sound("[TH] Fires");
+//		fires.setVolume(-2);
+//		fires.play();
 	}
 
 	@Override
 	public void onHit(Hitbox mine, Hitbox other) {
-		System.out.println("[Bullet] Hit something.");
+//		System.out.println("[Bullet] Hit something.");
+		if ( "grazeHB".equals(other.getName()) ) {
+			onGraze(mine, other);
+			return;
+		}
 	}
-	@Override
+	
 	public void onGraze(Hitbox mine, Hitbox other) {
-		System.out.println("[Bullet] Grazed.");
+		if (grazable) {
+//			System.out.println("[Bullet] Grazed.");
+			GameStats.addGraze();
+			graze.setVolume(0);
+			graze.play();
+			grazable = false;
+		} else {
+//			System.out.println("[Bullet] Already grazed.");
+		}
 	}
 	
 	@Override
 	public void update() {
-		x += vx;
-		y += vy;
+		updateActions();
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
 		g2.setColor(Color.WHITE);
-		Depict.oval(g2, x, y, 8, 12);
+		Depict.oval(g2, x, y, 24, 12, trueAngle);
 	}
 }

@@ -10,32 +10,36 @@ import resource.ResourceLoader;
 import resource.Sound;
 
 import main.Settings;
+import spell.Phyllotaxis;
+import spell.TestSpell;
 
 public class Boss extends Entity {
 	private BulletManager bulletManager;
-	private Sound fires;
+	private Sound shoot;
+	private Player player;
 	
 	private int timer = 0;
 
-	public Boss(BulletManager bulletManager) {
+	public Boss(BulletManager bulletManager, Player player) {
 		name = "Boss";
 		this.bulletManager = bulletManager;
-		fires = ResourceLoader.sound("[TH] Fires");
+		this.player = player;
+		shoot = ResourceLoader.sound("[TH] Shot");
 
 		x = 0;
 		y = 120;
 	}
+	public void setBulletManager(BulletManager bulletManager) { this.bulletManager = bulletManager; }
+	public BulletManager getBulletManager() { return bulletManager; }
 
 	@Override
 	public void update() {
-		if (timer % 15 == 0) {
-			fires.setVolume(-10.0f);
-			fires.play();
+		updateActions();
+		if (timer == 0) {
+			shoot.setVolume(-10.0f);
+			shoot.play();
 
-			bulletManager.spawn(
-				new Bullet(x, y, 0, -2.55)
-			);
-
+			run(new Phyllotaxis(this, player));
 		}
 		
 		timer++;
