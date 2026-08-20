@@ -10,6 +10,7 @@ public class VariableAction extends Action {
 	private String name;
 	private Operation operation;
 	private Object value;
+	@Override
 	public boolean consumesFrame() { return false; }
 
 	public VariableAction(
@@ -25,7 +26,6 @@ public class VariableAction extends Action {
 	@Override
 	public void start() {
 		switch (operation) {
-
 			case DECLARE:
 				declareVariable(name, value);
 				break;

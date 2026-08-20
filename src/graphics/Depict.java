@@ -10,6 +10,7 @@ import java.awt.BasicStroke;
 public final class Depict {
 	// Constants
 	private static final float DEFAULT_LINE_WIDTH = 1;
+	private static final float DEFAULT_OUTLINE_WIDTH = 1;
 	
 	
 	private Depict() {
@@ -22,7 +23,16 @@ public final class Depict {
 	public static void circle(Graphics2D g2, double x, double y, double radius, double angle) {
 		oval(g2, x, y, radius, radius, angle);
 	}
-
+	public static void circleOutline(Graphics2D g2, double x, double y, double radius) {
+		circleOutline(g2, x, y, radius, DEFAULT_OUTLINE_WIDTH);
+	}
+	public static void circleOutline(Graphics2D g2, double x, double y, double radius, float thickness) {
+		var oldStroke = g2.getStroke();
+		g2.setStroke(new BasicStroke(thickness));
+		
+		g2.draw( new Ellipse2D.Double(x-radius, y-radius, radius * 2, radius * 2) );
+		g2.setStroke(oldStroke);
+	}
 
 	public static void oval(Graphics2D g2, double x, double y, double width, double height) {
 		oval(g2, x, y, width, height, 0);

@@ -1,25 +1,18 @@
 package resource;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.sound.sampled.*;
 
 public class Sound {
-	private static final String[] EXTENSIONS = {
-		".wav",
-		".aiff",
-		".au"
-	};
-	private final String name;
-
+	private final AudioData data;
+	private float volume = 0.0f;
 	private final ArrayList<Clip> clips = new ArrayList<>();
 
-	private float volume = 0.0f;
-
-	public Sound(String name) {
-		this.name = name;
+	public Sound(AudioData data) {
+		this.data = data;
 	}
 	
 	public void play() {
@@ -28,10 +21,7 @@ public class Sound {
 
 		if (clip == null) {
 			clip = createClip();
-			if (clip == null) {
-				return;
-			}
-
+			if (clip == null) { return; }
 			clips.add(clip);
 		}
 
@@ -45,35 +35,24 @@ public class Sound {
 			if (!clip.isRunning()) {
 				return clip;
 			}
-
 		}
-
 		return null;
 	}
 
 	private Clip createClip() {
 		try {
-			URL url = ResourceFinder.find(ResourcePath.SOUND, name, EXTENSIONS);
-			if (url == null) {
-				System.out.println("[Sound] Cannot find sound: " + name);
-				return null;
-			}
+			ByteArrayInputStream input = new ByteArrayInputStream(data.data);
+			AudioInputStream audio =
+					new AudioInputStream(input, data.format, data.data.length / data.format.getFrameSize() );
 
-			try (AudioInputStream audio = AudioSystem.getAudioInputStream(url)) {
-				Clip clip = AudioSystem.getClip();
-				clip.open(audio);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audio);
 
-				FloatControl control =
-						(FloatControl) clip.getControl(
-								FloatControl.Type.MASTER_GAIN);
+			setClipVolume(clip, volume);
 
-				control.setValue(volume);
+			return clip;
 
-				return clip;
-			}
-		} catch (UnsupportedAudioFileException |
-				 IOException |
-				 LineUnavailableException e) {
+		} catch (IOException | LineUnavailableException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -92,13 +71,15 @@ public class Sound {
 			}
 		}
 	}
-
+	private void setClipVolume(Clip clip, float volume) {
+		FloatControl control = (FloatControl) clip.getControl( FloatControl.Type.MASTER_GAIN );
+		control.setValue(volume);
+	}
+	
 	public void setVolume(float volume) {
 		this.volume = volume;
 		for (Clip clip : clips) {
-			FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-
-			control.setValue(volume);
+			setClipVolume(clip, volume);
 		}
 	}
 }

@@ -7,7 +7,7 @@ import game.BulletManager;
 
 import graphics.Depict;
 import resource.ResourceLoader;
-import resource.Sound;
+import resource.Music;
 
 import main.Settings;
 import spell.Phyllotaxis;
@@ -15,7 +15,7 @@ import spell.TestSpell;
 
 public class Boss extends Entity {
 	private BulletManager bulletManager;
-	private Sound shoot;
+	private Music ost;
 	private Player player;
 	
 	private int timer = 0;
@@ -24,10 +24,10 @@ public class Boss extends Entity {
 		name = "Boss";
 		this.bulletManager = bulletManager;
 		this.player = player;
-		shoot = ResourceLoader.sound("[TH] Shot");
-
 		x = 0;
 		y = 120;
+		this.ost = ResourceLoader.music("PACHAD");
+		ost.setVolume(-17.5f);
 	}
 	public void setBulletManager(BulletManager bulletManager) { this.bulletManager = bulletManager; }
 	public BulletManager getBulletManager() { return bulletManager; }
@@ -36,9 +36,7 @@ public class Boss extends Entity {
 	public void update() {
 		updateActions();
 		if (timer == 0) {
-			shoot.setVolume(-10.0f);
-			shoot.play();
-
+			ost.play();
 			run(new Phyllotaxis(this, player));
 		}
 		

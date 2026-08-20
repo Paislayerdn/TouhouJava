@@ -37,13 +37,13 @@ public class TestSpell extends Spell {
 								)
 							),
 							Seq(
-								Wait(600),
+								Wait(30),
 								Destroy()
 							)
 						)
 					)
 				),
-			Change("offset", -20)
+				Change("offset", -20)
 			)
 		);
 	}

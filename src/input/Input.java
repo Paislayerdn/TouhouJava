@@ -12,9 +12,9 @@ public class Input implements KeyListener, MouseMotionListener {
 	public static boolean right;
 	public static boolean focus;
 	
-	public static boolean debug;
 	public static double mouseX;
 	public static double mouseY;
+	public static boolean debug;
 
 	@Override
 	public void keyPressed(KeyEvent e) {

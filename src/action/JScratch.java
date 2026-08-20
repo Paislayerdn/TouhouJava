@@ -19,6 +19,10 @@ public class JScratch {
 	public static Action Look(Object angle) { return new LookAction(angle); }
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
 
+	public static Action Sound(String name, String path) {
+		return new SoundAction(name, path);
+	}
+	public static SoundValue GetSound(String name) { return new SoundValue(name); }
 	
 	public static VariableAction Declare(String name, Object value) {
 		return new VariableAction( name, VariableAction.Operation.DECLARE, value);

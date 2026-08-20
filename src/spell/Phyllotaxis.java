@@ -23,33 +23,34 @@ public class Phyllotaxis extends Spell {
 		return Forever("Sequence",
 			Var("speed", 0.15),
 			Var("offset", Mul(Random(), 360) ),
+			Sound("fire", "[TH] Fires"),
+			GetSound("fire").setVolume(-20.0f),
 			For("i", 1, count,
 				() -> SpawnBullet(Get("i"),
-					Parallel(
+					Sequence(
 						GoTo(999,999),
-						Sequence(
-							Wait(Add(Mul(Get("i"), 0.35)) ),
-							Parallel(
-								Sequence(
-									GoTo(boss),
-									Look(0),
-									Turn(Mul(Get("i"), goldenAngle)),
-									Forward( Mul(Get("i"), step)),
-									Forever("Sequence",
-										Forward(Get("speed"))
-									)
-								),
-								Sequence(
-									Wait(35),
-									Forever("Sequence",
-										Change("speed", -0.035)
-									)
+						Wait(Add(Mul(Get("i"), 0.35)) ),
+						Parallel(
+							Sequence(
+								GoTo(boss),
+								Look(0),
+								Turn(Mul(Get("i"), goldenAngle) ),
+								Forward( Mul(Get("i"), step) ),
+								GetSound("fire").play(),
+								Forever("Sequence",
+									Forward( Get("speed") )
 								)
+							),
+							Sequence(
+								Wait(35),
+								Forever("Sequence",
+									Change("speed", -0.035)
+								)
+							),
+							Sequence(
+								Wait(360),
+								Destroy()
 							)
-						),
-						Sequence(
-							Wait(600),
-							Destroy()
 						)
 					)
 				)

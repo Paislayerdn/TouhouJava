@@ -8,7 +8,7 @@ import java.awt.Font;
 
 public class ResourceLoader {
 	private static final Map<String, BufferedImage> images = new HashMap<>();
-	private static final Map<String, Sound> sounds = new HashMap<>();
+	private static final Map<String, AudioData> sounds = new HashMap<>();
 	private static final Map<String, Font> fonts = new HashMap<>();
 
 	public static BufferedImage image(String name) {
@@ -23,14 +23,18 @@ public class ResourceLoader {
 	}
 
 	public static Sound sound(String name) {
-		Sound sound = sounds.get(name);
+		AudioData data = sounds.get(name);
 
-		if (sound == null) {
-			sound = new Sound(name);
-			sounds.put(name, sound);
+		if (data == null) {
+			data = AudioLoader.load(ResourcePath.SOUND, name);
+			sounds.put(name, data);
 		}
 
-		return sound;
+		return new Sound(data);
+	}
+	public static Music music(String name) {
+		AudioData data = AudioLoader.load(ResourcePath.MUSIC, name);
+		return new Music(data);
 	}
 	
 	public static Font font(String name) {

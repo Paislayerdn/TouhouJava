@@ -49,6 +49,9 @@ public class Game {
 		
 		boss.draw(g2);
 		bulletManager.draw(g2);
+		if (debug.isShowBulletHitboxes()) {
+			bulletManager.drawHitboxes(g2);
+		}
 		player.draw(g2);
 		
 		g2.setTransform(oldTransform);
@@ -61,7 +64,7 @@ public class Game {
 		bulletManager = new BulletManager();
 		boss = new Boss(bulletManager, player);
 		hud = new HUD();
-		debug = new Debug(player);
+		debug = new Debug(player, bulletManager);
 		collisionManager = new CollisionSystem(player, bulletManager, boss);
 	}
 }

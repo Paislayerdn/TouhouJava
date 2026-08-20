@@ -1,4 +1,3 @@
-// FACADE
 package collision;
 
 import java.util.HashSet;
@@ -49,8 +48,8 @@ public abstract class Hitbox {
 	public void setEnabled(boolean value) { enabled = value; }
 
 	public void addTag(String tag) { tags.add(tag); }
-	public void removeTag(String tag) { tags.clear(); }
-	public void clearTags() { tags.removeAll(tags); }
+	public void removeTag(String tag) { tags.remove(tag); }
+	public void clearTags() { tags.clear(); }
 	public boolean hasTag(String tag) { return tags.contains(tag); }
 	public HashSet<String> getTags() { return tags; }
 	
