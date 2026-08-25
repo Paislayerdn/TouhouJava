@@ -36,7 +36,7 @@ public class SpawnBulletAction extends Action {
 		
 		int intIndex = (int)resolveDouble(this.index);
 
-		Bullet bullet = new Bullet();
+		Bullet bullet = new Bullet(boss);
 		ActionContext bulletContext = getContext().snapshot();
 		bullet.setActionContext(bulletContext);
 		bullet.getActionContext().declare("index", intIndex);

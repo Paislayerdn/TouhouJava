@@ -22,11 +22,11 @@ public class Game {
 	private boolean lastDebugKey = false;
 	
 	public void update() {
-		if (Input.debug && !lastDebugKey) {
+		if (Input.P && !lastDebugKey) {
 			GameStats.debugMode = !GameStats.debugMode;
 		}
 
-		lastDebugKey = Input.debug;
+		lastDebugKey = Input.P;
 		
 		boss.update();
 		bulletManager.update();
@@ -49,8 +49,9 @@ public class Game {
 		
 		boss.draw(g2);
 		bulletManager.draw(g2);
-		if (debug.isShowBulletHitboxes()) {
+		if (debug.isShowHitboxes()) {
 			bulletManager.drawHitboxes(g2);
+			boss.drawHitboxes(g2);
 		}
 		player.draw(g2);
 		
@@ -60,11 +61,11 @@ public class Game {
 	}
 	
 	public Game() {
-		player = new Player();
 		bulletManager = new BulletManager();
+		player = new Player(bulletManager);
 		boss = new Boss(bulletManager, player);
 		hud = new HUD();
-		debug = new Debug(player, bulletManager);
+		debug = new Debug(bulletManager, player, boss);
 		collisionManager = new CollisionSystem(player, bulletManager, boss);
 	}
 }

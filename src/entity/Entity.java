@@ -42,8 +42,14 @@ public abstract class Entity {
 	public void updateActions() { actions.update(); }
 	
 	public void addHitbox(Hitbox hitbox) { hitboxes.add(hitbox); }
-
 	public ArrayList<Hitbox> getHitboxes() { return hitboxes; }
+	public void drawHitboxes(Graphics2D g2) {
+		for (Hitbox hitbox : hitboxes) {
+			if (!hitbox.isEnabled()) continue;
+
+			hitbox.drawDebug(g2);
+		}
+	}
 
 	public double getX() { return x; }
 	public double getY() { return y; }
@@ -75,9 +81,12 @@ public abstract class Entity {
 	public void destroy() { this.alive = false; }
 	
 	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
 	
 	// the abstracts
 	public void onHit(Hitbox mine, Hitbox other) {}
 	public abstract void update();
 	public abstract void draw(Graphics2D g2);
+	
+	
 }

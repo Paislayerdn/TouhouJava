@@ -1,5 +1,6 @@
 package collision;
 
+import java.awt.Graphics2D;
 import java.util.HashSet;
 
 import entity.Entity;
@@ -26,12 +27,10 @@ public abstract class Hitbox {
 
 	public Entity getOwner() { return owner; }
 	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
 
 	public double getOffsetX() { return offsetX; }
 	public double getOffsetY() { return offsetY; }
-	public double getWorldX() { return owner.getX() + offsetX; }
-	public double getWorldY() { return owner.getY() + offsetY; }
-	
 	public void setOffsetX(double x) { this.offsetX = x; }
 	public void setOffsetY(double y) { this.offsetY = y; }
 	public void setOffset(double x, double y) {
@@ -43,8 +42,10 @@ public abstract class Hitbox {
 		this.offsetY += dy;
 	}
 	
+	public double getWorldX() { return owner.getX() + offsetX; }
+	public double getWorldY() { return owner.getY() + offsetY; }
+		
 	public boolean isEnabled() { return enabled; }
-
 	public void setEnabled(boolean value) { enabled = value; }
 
 	public void addTag(String tag) { tags.add(tag); }
@@ -53,5 +54,5 @@ public abstract class Hitbox {
 	public boolean hasTag(String tag) { return tags.contains(tag); }
 	public HashSet<String> getTags() { return tags; }
 	
-	public abstract boolean checkCollision(Hitbox other);
+	public abstract void drawDebug(Graphics2D g2);
 }

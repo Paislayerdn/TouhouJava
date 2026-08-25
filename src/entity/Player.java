@@ -3,17 +3,26 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import collision.Hitbox;
-import static collision.Hitboxes.*;
-
+import game.BulletManager;
 import graphics.Depict;
-
 import input.Input;
+
+import static collision.Hitboxes.*;
+import static action.JScratch.*;
+
 
 public class Player extends Entity {
 	private boolean focusing = false;
+	private final BulletManager bulletManager;
 
-	public Player() {
+	private int shootCooldown = 0;
+	private boolean autoFire = false;
+	private boolean lastPageUp = false;
+
+	private static final int SHOOT_INTERVAL = 6;
+	
+	public Player(BulletManager bulletManager) {
+		this.bulletManager = bulletManager;
 		name = "Player";
 		
 		x = 0;
@@ -21,7 +30,7 @@ public class Player extends Entity {
 
 		addHitbox( circleHB(this, "grazeHB", 5) );
 		addHitbox( circleHB(this, "deathHB", 2) );
-		this.hitboxes.get(1).setEnabled(false);
+		hitboxes.get(1).setEnabled(false);
 	}
 	
 	@Override
@@ -29,36 +38,65 @@ public class Player extends Entity {
 		updateActions();
 		
 		double speed = 4.2;
-		focusing = Input.focus;
-		
+		focusing = Input.SPACE;
 		if (focusing) { speed = 2; }
 
-		double dx = 0;
-		double dy = 0;
-
-		if (Input.up) dy++;
-		if (Input.down) dy--;
-		if (Input.left) dx--;
-		if (Input.right) dx++;
+		double dx = 0;	double dy = 0;
+		if (Input.W) dy++;	if (Input.S) dy--;
+		if (Input.A) dx--;	if (Input.D) dx++;
 
 		double length = Math.sqrt(dx * dx + dy * dy);
 
 		if (length > 0) {
-			dx /= length; dy /= length;
-			x += dx * speed;
-			y += dy * speed;
+			dx /= length;	dy /= length;
+			x += dx * speed;	y += dy * speed;
+		}
+		
+		boolean pageUpPressed = Input.PAGEUP && !lastPageUp;
+		if (pageUpPressed) { autoFire = !autoFire;}
+		lastPageUp = Input.PAGEUP;
+		
+		if (shootCooldown > 0) { shootCooldown--; }
+		boolean firing = Input.Z || autoFire;
+		if (firing && shootCooldown <= 0) {
+			shoot();
+			shootCooldown = SHOOT_INTERVAL;
 		}
 	}
 	
-	@Override
-	public void onHit(Hitbox mine, Hitbox other) {
+	private void shoot() {
+		Bullet bullet = new Bullet(this, x, y + 12);
+
+		bullet.run(
+			Parallel(
+				Look(90),
+				MoveX( Mul( Random(), 15) ),
+				MoveY( Mul( Random(), 3) ),
+				Forever("Sequence",
+					Forward(10)
+				),
+				Sequence(
+					Sound("fire", "[TH] Fires"),
+					GetSound("fire").setVolume(-5.0f),
+					GetSound("fire").play(),
+					Wait(300),
+					Destroy()
+				)
+			)
+		);
+
+		bulletManager.spawn(bullet);
+	}
+	
+//	@Override
+//	public void onHit(Hitbox mine, Hitbox other) {
 //		System.out.println(
 //			"[Player] "
 //			+ mine.getName()
 //			+ " was hit by "
 //			+ other.getName()
 //		);
-	}
+//	}
 	
 	@Override
 	public void draw(Graphics2D g2) {

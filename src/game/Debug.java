@@ -7,27 +7,29 @@ import graphics.TextDrawer;
 import graphics.Coordinate;
 
 import entity.Player;
+import entity.Boss;
 
 public class Debug {
 	private final Player player;
 	private final BulletManager bulletManager;
+	private final Boss boss;
 	
 	private static final int PLAYER_PRECISION = 2;
 	private static final int MOUSE_PRECISION = 0;
 	
-	private boolean showPlayerHitboxes = false;
-	private boolean showBulletHitboxes = false;
+	private boolean showHitboxes = false;
 	
 	private int line;
 	
-	public Debug(Player player, BulletManager bulletManager) {
+	public Debug(BulletManager bulletManager, Player player, Boss boss) {
 		this.player = player;
 		this.bulletManager = bulletManager;
+		this.boss = boss;
 	}
 	
 	public void update() {
-		if (GameStats.debugMode != showBulletHitboxes) {
-			showBulletHitboxes = GameStats.debugMode;
+		if (GameStats.debugMode != showHitboxes) {
+			showHitboxes = GameStats.debugMode;
 		}
 	}
 
@@ -62,9 +64,7 @@ public class Debug {
 		TextDrawer.draw(g2, text, 20, line);
 		line += 20;
 	}
-	public void setShowPlayerHitboxes(boolean value) { showPlayerHitboxes = value; }
-	public boolean isShowPlayerHitboxes() { return showPlayerHitboxes; }
 	
-	public void setShowBulletHitboxes(boolean value) { showBulletHitboxes = value; }
-	public boolean isShowBulletHitboxes() { return showBulletHitboxes; }
+	public void setShowHitboxes(boolean value) { showHitboxes = value; }
+	public boolean isShowHitboxes() { return showHitboxes; }
 }

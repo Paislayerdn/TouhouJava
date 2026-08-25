@@ -59,7 +59,9 @@ public class ActionContext {
 		context.variables.put(name, value);
 	}
 
-	public boolean has(String name) { return findContext(name) != null; }
+	public boolean has(String name) {
+		return findContext(name) != null;
+	}
 	
 	public ActionContext snapshot() {
 		ActionContext snapshot = new ActionContext();

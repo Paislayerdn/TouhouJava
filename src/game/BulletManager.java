@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Bullet;
-import collision.CircleHitbox;
 import collision.Hitbox;
-import graphics.Depict;
 
 public class BulletManager {
 	private final ArrayList<Bullet> bullets = new ArrayList<>();
@@ -45,14 +43,7 @@ public class BulletManager {
 		Color oldColor = g2.getColor();
 		g2.setColor(Color.RED);
 		for (Bullet bullet : getBullets()) {
-			for ( Hitbox hitbox : bullet.getHitboxes() ) {
-				if (!hitbox.isEnabled()) { continue; }
-
-				if (hitbox instanceof CircleHitbox circle) {
-					Depict.circleOutline(
-							g2, circle.getWorldX(), circle.getWorldY(), circle.getRadius());
-				}
-			}
+			bullet.drawHitboxes(g2);
 		}
 		
 		g2.setColor(oldColor);

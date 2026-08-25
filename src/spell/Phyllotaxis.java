@@ -17,14 +17,17 @@ public class Phyllotaxis extends Spell {
 
 	@Override
 	protected Action buildAction() {
-		int count = 400;
+		int count = 350;
 		double step = 2.25;
 		double goldenAngle = 360*( 1-2/( 1+Math.sqrt(5) ) );
 		return Forever("Sequence",
 			Var("speed", 0.15),
 			Var("offset", Mul(Random(), 360) ),
-			Sound("fire", "[TH] Fires"),
-			GetSound("fire").setVolume(-20.0f),
+			Sound("jingle", "[TH] Jingle"),
+			GetSound("jingle").setVolume(-0.25f),
+			GetSound("jingle").play(),
+			Sound("shot", "[TH] Shot"),
+			GetSound("shot").setVolume(-27.5f),
 			For("i", 1, count,
 				() -> SpawnBullet(Get("i"),
 					Sequence(
@@ -36,7 +39,7 @@ public class Phyllotaxis extends Spell {
 								Look(0),
 								Turn(Mul(Get("i"), goldenAngle) ),
 								Forward( Mul(Get("i"), step) ),
-								GetSound("fire").play(),
+								GetSound("shot").play(),
 								Forever("Sequence",
 									Forward( Get("speed") )
 								)

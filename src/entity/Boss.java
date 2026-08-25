@@ -4,12 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import game.BulletManager;
+import collision.Hitbox;
 
 import graphics.Depict;
 import resource.ResourceLoader;
 import resource.Music;
 
-import main.Settings;
+import static collision.Hitboxes.*;
 import spell.Phyllotaxis;
 import spell.TestSpell;
 
@@ -28,9 +29,16 @@ public class Boss extends Entity {
 		y = 120;
 		this.ost = ResourceLoader.music("PACHAD");
 		ost.setVolume(-17.5f);
+		
+		addHitbox(rectangleHB(this, "bossHB", 85, 90));
 	}
 	public void setBulletManager(BulletManager bulletManager) { this.bulletManager = bulletManager; }
 	public BulletManager getBulletManager() { return bulletManager; }
+
+//	@Override
+//	public void onHit(Hitbox mine, Hitbox other) {
+//		System.out.println("[Boss] Hit by " + other.getOwner().getName());
+//	}
 
 	@Override
 	public void update() {
@@ -46,6 +54,6 @@ public class Boss extends Entity {
 	@Override
 	public void draw(Graphics2D g2) {
 		g2.setColor(Color.BLUE);
-		Depict.circle(g2, x, y, 40);
+		Depict.circle(g2, x, y, 80);
 	}
 }

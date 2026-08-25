@@ -46,6 +46,23 @@ public final class Depict {
 		g2.fill( new Ellipse2D.Double(-width/2, -height/2, width, height) );
 		g2.setTransform(old);
 	}
+	
+	public static void rectangleOutline(Graphics2D g2, double x, double y, double width, double height) {
+		rectangleOutline(g2, x, y, width, height, DEFAULT_OUTLINE_WIDTH);
+	}
+	public static void rectangleOutline(Graphics2D g2, double x, double y, double width, double height, float thickness) {
+		var oldStroke = g2.getStroke();
+		g2.setStroke(new BasicStroke(thickness));
+
+		g2.drawRect(
+			(int)(x - width / 2),
+			(int)(y - height / 2),
+			(int)width,
+			(int)height
+		);
+
+		g2.setStroke(oldStroke);
+	}
 
 	// due to Java's limitation method signatures must be exact, you cannot put default value to arguments
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2) {

@@ -1,5 +1,8 @@
 package collision;
 
+import java.awt.Graphics2D;
+import graphics.Depict;
+
 import entity.Entity;
 
 public class CircleHitbox extends Hitbox {
@@ -15,18 +18,9 @@ public class CircleHitbox extends Hitbox {
 	}
 
 	public double getRadius() { return radius; }
-
+	
 	@Override
-	public boolean checkCollision(Hitbox other) {
-		if (!(other instanceof CircleHitbox)) return false;
-		
-		CircleHitbox circle = (CircleHitbox) other;
-
-		double dx = getWorldX() - circle.getWorldX();
-		double dy = getWorldY() - circle.getWorldY();
-		double distanceSquared = dx * dx + dy * dy;
-		double r = radius + circle.radius;
-
-		return distanceSquared < r * r;
+	public void drawDebug(Graphics2D g2) {
+		Depict.circleOutline(g2, getWorldX(), getWorldY(), radius);
 	}
 }
