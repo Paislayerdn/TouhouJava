@@ -1,15 +1,15 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Color;
 
-import game.BulletManager;
 import graphics.Depict;
 import input.Input;
 
+import game.BulletManager;
+
 import static collision.Hitboxes.*;
 import static action.JScratch.*;
-
 
 public class Player extends Entity {
 	private boolean focusing = false;

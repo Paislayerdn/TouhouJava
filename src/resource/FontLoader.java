@@ -1,8 +1,8 @@
 package resource;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.net.URL;
+import java.awt.Font;
 
 public final class FontLoader {
 	private static final String[] EXTENSIONS = {

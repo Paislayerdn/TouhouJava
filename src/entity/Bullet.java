@@ -1,16 +1,17 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Color;
+
+import graphics.Depict;
 
 import game.GameStats;
 
-import static collision.Hitboxes.*;
-import collision.Hitbox;
-
-import graphics.Depict;
 import resource.ResourceLoader;
 import resource.Sound;
+
+import collision.Hitbox;
+import static collision.Hitboxes.*;
 
 public class Bullet extends Entity {
 	private final Entity owner;

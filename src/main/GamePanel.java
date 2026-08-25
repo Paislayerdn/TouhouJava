@@ -2,9 +2,9 @@ package main;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.RenderingHints;
 
 import game.Game;

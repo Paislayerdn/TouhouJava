@@ -1,6 +1,7 @@
 package collision;
 
 import java.awt.Graphics2D;
+
 import graphics.Depict;
 
 import entity.Entity;

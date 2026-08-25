@@ -1,12 +1,11 @@
 package game;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
 import entity.Bullet;
-import collision.Hitbox;
 
 public class BulletManager {
 	private final ArrayList<Bullet> bullets = new ArrayList<>();

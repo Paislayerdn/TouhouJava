@@ -1,12 +1,12 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-
-import game.BulletManager;
-import collision.Hitbox;
+import java.awt.Color;
 
 import graphics.Depict;
+
+import game.BulletManager;
+
 import resource.ResourceLoader;
 import resource.Music;
 

@@ -1,10 +1,10 @@
 package graphics;
 
+import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.GradientPaint;
 import java.awt.RenderingHints;
 
 public final class TextDrawer {

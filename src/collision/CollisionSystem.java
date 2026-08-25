@@ -2,11 +2,9 @@ package collision;
 
 import entity.Entity;
 import entity.Player;
-import entity.Bullet;
 import entity.Boss;
+import entity.Bullet;
 import game.BulletManager;
-
-import game.GameStats;
 
 public class CollisionSystem {
 	private Player player;

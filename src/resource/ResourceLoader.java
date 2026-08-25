@@ -2,7 +2,6 @@ package resource;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import java.awt.image.BufferedImage;
 import java.awt.Font;
 

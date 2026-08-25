@@ -4,12 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import input.Input;
-import entity.Boss;
-import entity.Player;
+import main.Settings;
 
 import collision.CollisionSystem;
-
-import main.Settings;
+import entity.Boss;
+import entity.Player;
 
 public class Game {
 	final private Player player;
