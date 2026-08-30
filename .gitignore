@@ -8,6 +8,7 @@ nbproject/private/
 # Java
 *.class
 *.jar
+!lib/luaj-jse-3.0.2.jar
 
 # Logs
 *.log
@@ -15,9 +16,3 @@ nbproject/private/
 # OS
 .DS_Store
 Thumbs.db
-
-# Personal notes
-GitHub Reference.txt
-namesake.txt
-credits.txt
-JScratch Specification.docx
