@@ -14,6 +14,11 @@ public class TestSpell extends Spell {
 		super(boss, "Test Spell");
 		this.player = player;
 	}
+	
+	@Override
+	public void onStart() {
+		boss.setMaxHP(1000);
+	}
 
 	@Override
 	protected Action buildAction() {
@@ -37,7 +42,7 @@ public class TestSpell extends Spell {
 								)
 							),
 							Seq(
-								Wait(30),
+								Wait(60),
 								Destroy()
 							)
 						)

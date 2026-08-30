@@ -13,7 +13,7 @@ class GoToAction extends Action {
 
 	@Override
 	public void start() {
-		owner.setPosition(
+		owner.setXY(
 			target.getX(),
 			target.getY()
 		);
@@ -67,7 +67,7 @@ class SetAction extends Action {
 				break;
 
 			case BOTH:
-				owner.setPosition(
+				owner.setXY(
 					resolveDouble(x),
 					resolveDouble(y)
 				);
@@ -115,7 +115,7 @@ class ForwardAction extends Action {
 
 		double radians = Math.toRadians(owner.getTrueAngle());
 		
-		owner.setPosition(
+		owner.setXY(
 			owner.getX() + Math.cos(radians) * ddDistance,
 			owner.getY() + Math.sin(radians) * ddDistance
 		);

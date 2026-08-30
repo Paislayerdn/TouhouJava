@@ -14,6 +14,11 @@ public class Phyllotaxis extends Spell {
 		super(boss, "Replication Sign \"Digitalized Pebbles\"");
 		this.player = player;
 	}
+	
+	@Override
+	public void onStart() {
+		boss.setMaxHP(1000);
+	}
 
 	@Override
 	protected Action buildAction() {
@@ -24,8 +29,8 @@ public class Phyllotaxis extends Spell {
 			Var("speed", 0.15),
 			Var("offset", Mul(Random(), 360) ),
 			Sound("jingle", "[TH] Jingle"),
-			GetSound("jingle").setVolume(-0.25f),
-			GetSound("jingle").play(),
+			SetSoundVolume("jingle", -0.25f),
+			PlaySound("jingle"),
 			Sound("shot", "[TH] Shot"),
 			GetSound("shot").setVolume(-27.5f),
 			For("i", 1, count,
@@ -39,7 +44,7 @@ public class Phyllotaxis extends Spell {
 								Look(0),
 								Turn(Mul(Get("i"), goldenAngle) ),
 								Forward( Mul(Get("i"), step) ),
-								GetSound("shot").play(),
+								PlaySound("shot"),
 								Forever("Sequence",
 									Forward( Get("speed") )
 								)

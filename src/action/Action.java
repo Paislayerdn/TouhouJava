@@ -40,3 +40,21 @@ public abstract class Action {
 	public void start() {}
 	public void update() {}
 }
+
+final class JDebug {
+	private JDebug() {}
+
+	public static void log(Class<?> source, String message) {
+		System.out.println(
+			"[JScratch " + source.getSimpleName() + "] " + message
+		);
+	}
+	public static void log(Object source, String message) {
+		System.out.println(
+			"[JScratch " + source.getClass().getSimpleName() + "] " + message
+		);
+	}
+	public static void log(String message) {
+		System.out.println("[JScratch] " + message);
+	}
+}

@@ -15,10 +15,7 @@ public final class ResourceFinder {
 			
 			URL url = ResourceFinder.class.getResource(path);
 
-			if (url != null) {
-				return url;
-			}
-
+			if (url != null) { return url; }
 		}
 		return null;
 	}

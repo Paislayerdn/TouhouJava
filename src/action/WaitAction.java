@@ -1,10 +1,10 @@
 package action;
 
-public class Wait extends Action {
+public class WaitAction extends Action {
 	private Object duration;
 	private int timer;
 
-	public Wait(Object frames) {
+	public WaitAction(Object frames) {
 		duration = frames;
 		timer = 0;
 	}

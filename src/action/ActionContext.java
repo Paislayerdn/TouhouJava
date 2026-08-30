@@ -39,7 +39,7 @@ public class ActionContext {
 
 		if (context == null) {
 			throw new IllegalArgumentException(
-				"Variable not declared: " + name
+				"[JScratch ActionContext] Variable not declared: " + name
 			);
 		}
 
@@ -52,7 +52,7 @@ public class ActionContext {
 
 		if (context == null) {
 			throw new IllegalArgumentException(
-				"Variable not declared: " + name
+				"[JScratch ActionContext] Variable not declared: " + name
 			);
 		}
 

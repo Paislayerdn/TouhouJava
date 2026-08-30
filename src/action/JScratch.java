@@ -4,12 +4,14 @@ package action;
 import entity.Entity;
 
 public class JScratch {
-	public static Wait Wait(Object x) { return new Wait(x); }
+	public static WaitAction Wait(Object x) { return new WaitAction(x); }
 	
+	public static Action MoveX(Object x) { return Move(x, 0); }
+	public static Action MoveY(Object y) { return Move(0, y); }
 	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
-	public static Action MoveX(Object x) { return new MoveAction(x, 0); }
-	public static Action MoveY(Object y) { return new MoveAction(0, y); }
+	public static Action Warp(Entity target) { return GoTo(target); }
 	public static Action GoTo(Entity target) { return new GoToAction(target); }
+	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
 	public static Action GoTo(Object x, Object y) { return new SetAction(x, y); }
 	public static Action SetX(Object x) { return new SetAction(x, SetAction.Axis.X); }
 	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
@@ -23,10 +25,9 @@ public class JScratch {
 		return new SoundAction(name, path);
 	}
 	public static SoundValue GetSound(String name) { return new SoundValue(name); }
-	
-	public static VariableAction Declare(String name, Object value) {
-		return new VariableAction( name, VariableAction.Operation.DECLARE, value);
-	}
+	public static Action SetSoundVolume(String name, float volume) { return GetSound(name).setVolume(volume); }
+	public static Action PlaySound(String name) { return GetSound(name).play(); }
+		public static VariableAction Declare(String name, Object value) { return Var(name, value); }
 	public static VariableAction Var(String name, Object value) {
 		return new VariableAction( name, VariableAction.Operation.DECLARE, value);
 	}
@@ -64,14 +65,14 @@ public class JScratch {
 	}
 	public static DestroyAction Destroy() { return new DestroyAction(); }
 	
-	public static Sequence Seq(Action... actions) { return new Sequence(actions); }
+	public static Sequence Seq(Action... actions) { return Sequence(actions); }
 	public static Sequence Sequence(Action... actions) { return new Sequence(actions); }
 
 	public static Parallel Paralell(Action... actions) {
-		System.out.println("[JScratch Warning] You're mispelling Parallel...");
-		return new Parallel(actions);
+		JDebug.log("Warning, you're mispelling \"Parallel\"...");
+		return Parallel(actions);
 	}
-	public static Parallel Par(Action... actions) { return new Parallel(actions); }
+	public static Parallel Par(Action... actions) { return Parallel(actions); }
 	public static Parallel Parallel(Action... actions) { return new Parallel(actions); }
 
 	public static Forever Forever(Object type, Action... actions) {
@@ -82,14 +83,12 @@ public class JScratch {
 
 			if (value == 0) {
 				container = new Sequence(actions);
-			} else if (value == 1) {
+			} else {
 				container = new Parallel(actions);
 			}
 
 		} else if (type instanceof String) {
-			String mode = ((String) type)
-					.toLowerCase()
-					.trim();
+			String mode = ((String) type).toLowerCase().trim();
 
 			if (mode.startsWith("s")) {
 				container = new Sequence(actions);
@@ -99,8 +98,8 @@ public class JScratch {
 		}
 
 		if (container == null) {
-			System.out.println("[JScratch Warning] Unknown Forever mode: \"" + type + "\"");
-			System.out.println("Try be sober. Defaulting to Sequence.");
+			JDebug.log(String.format("[JScratch] Warning, unknown Forever mode: \"%s\"", type));
+			JDebug.log("Try be sober. Defaulting to Sequence.");
 
 			container = new Sequence(actions);
 		}

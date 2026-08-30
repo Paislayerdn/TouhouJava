@@ -16,10 +16,7 @@ class SoundAction extends Action {
 	
 	@Override
 	public void start() {
-		getContext().declare(
-			name,
-			ResourceLoader.sound(path)
-		);
+		getContext().declare( name, ResourceLoader.sound(path) );
 
 		finish();
 	}

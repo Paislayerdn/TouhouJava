@@ -41,7 +41,7 @@ public class VariableAction extends Action {
 						|| !(value instanceof Number)) {
 
 					throw new IllegalArgumentException(
-						"Cannot change non-numeric variable: " + name
+						"[JScratch VariableAction] Cannot change non-numeric variable: " + name
 					);
 				}
 

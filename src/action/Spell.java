@@ -41,7 +41,7 @@ public abstract class Spell extends Action {
 			action.update();
 		}
 
-		if (action.isFinished()) {
+		if (boss.getHP() <= 0 || action.isFinished()) {
 			onEnd();
 			finish();
 		}

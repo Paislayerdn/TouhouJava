@@ -45,7 +45,7 @@ public class SpawnBulletAction extends Action {
 		bulletContext.declare("index",resolvedIndex);
 
 		if (hasPosition) {
-			bullet.setPosition(x, y);
+			bullet.setXY(x, y);
 			bullet.setTrueAngle(angle);
 		}
 

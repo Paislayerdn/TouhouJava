@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.awt.image.BufferedImage;
 import java.awt.Font;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class ResourceLoader {
 	private static final Map<String, BufferedImage> images = new HashMap<>();
@@ -45,5 +49,22 @@ public class ResourceLoader {
 		}
 
 		return font;
+	}
+	
+	public static String lua(String name) {
+		URL url = ResourceFinder.find( ResourcePath.SPELL, name, ".lua" );
+
+		if (url == null) {
+			throw new RuntimeException( "Lua resource not found: " + name );
+		}
+
+		try (InputStream in = url.openStream()) {
+			return new String(
+				in.readAllBytes(),
+				StandardCharsets.UTF_8
+			);
+		} catch (IOException e) {
+			throw new RuntimeException( "Failed to load Lua resource: " + name, e );
+		}
 	}
 }

@@ -11,7 +11,11 @@ public class PrintAction extends Action {
 
 	@Override
 	public void start() {
-		System.out.println("[Print] context=" + System.identityHashCode(getContext())+ " i=" + resolve(message));
+		JDebug.log(this, String.format(
+			"msg=%s context=%d ",
+			resolve(message),
+			System.identityHashCode(getContext())
+		));
 		finish();
 	}
 }
