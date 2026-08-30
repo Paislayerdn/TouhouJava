@@ -49,8 +49,7 @@ public class Boss extends Entity {
 	public double getMaxHP() { return maxHP; }
 	public double getHP() { return hp; }
 	public void damage(double amount) {
-		if (hp < 0) { hp = 0; }
-		else {
+		if (hp < 0) { hp = 0; } else {
 			hp -= amount;
 			if (hp/maxHP<0.15) lowHP.play();
 			System.out.println(hp);
