@@ -23,7 +23,7 @@ public final class AudioLoader {
 
 	// Default for Sound
 	public static AudioData load(String name) {
-		return load(ResourcePath.SOUND, name);
+		return load(ResourceFinder.SOUND, name);
 	}
 	public static AudioData load(String path, String name) {
 		try {

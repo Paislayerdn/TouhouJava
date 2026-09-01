@@ -3,7 +3,7 @@ package action;
 
 import entity.Entity;
 
-public class JScratch {
+public final class JScratch {
 	public static WaitAction Wait(Object x) { return new WaitAction(x); }
 	
 	public static Action MoveX(Object x) { return Move(x, 0); }

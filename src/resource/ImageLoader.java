@@ -24,7 +24,7 @@ public class ImageLoader {
 
 		if (image != null) { return image; }
 
-		URL url = ResourceFinder.find(ResourcePath.IMAGE, name, EXTENSIONS);
+		URL url = ResourceFinder.find(ResourceFinder.IMAGE, name, EXTENSIONS);
 
 		if (url == null) {
 			throw new RuntimeException("Image not found: " + name);

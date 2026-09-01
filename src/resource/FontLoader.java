@@ -13,7 +13,7 @@ public final class FontLoader {
 
 	public static Font load(String name) {
 
-		URL url = ResourceFinder.find(ResourcePath.FONT, name, EXTENSIONS);
+		URL url = ResourceFinder.find(ResourceFinder.FONT, name, EXTENSIONS);
 
 		if (url == null) {
 			throw new RuntimeException(

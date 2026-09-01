@@ -29,14 +29,14 @@ public class ResourceLoader {
 		AudioData data = sounds.get(name);
 
 		if (data == null) {
-			data = AudioLoader.load(ResourcePath.SOUND, name);
+			data = AudioLoader.load(ResourceFinder.SOUND, name);
 			sounds.put(name, data);
 		}
 
 		return new Sound(data);
 	}
 	public static Music music(String name) {
-		AudioData data = AudioLoader.load(ResourcePath.MUSIC, name);
+		AudioData data = AudioLoader.load(ResourceFinder.MUSIC, name);
 		return new Music(data);
 	}
 	
@@ -52,10 +52,21 @@ public class ResourceLoader {
 	}
 	
 	public static String lua(String name) {
-		URL url = ResourceFinder.find( ResourcePath.SPELL, name, ".lua" );
+		return text(ResourceFinder.SPELL, name, ".lua");
+	}
+
+	public static String dialogue(String name) {
+		return text(ResourceFinder.DIALOGUE, name, ".txt");
+	}
+	private static String text(
+		String folder,
+		String name,
+		String... extensions
+	) {
+		URL url = ResourceFinder.find(folder, name, extensions );
 
 		if (url == null) {
-			throw new RuntimeException( "Lua resource not found: " + name );
+			throw new RuntimeException("Text resource not found: " + name);
 		}
 
 		try (InputStream in = url.openStream()) {
@@ -64,7 +75,7 @@ public class ResourceLoader {
 				StandardCharsets.UTF_8
 			);
 		} catch (IOException e) {
-			throw new RuntimeException( "Failed to load Lua resource: " + name, e );
+			throw new RuntimeException("Failed to load text resource: " + name, e);
 		}
 	}
 }
