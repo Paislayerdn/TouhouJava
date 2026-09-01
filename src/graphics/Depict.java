@@ -4,11 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.BasicStroke;
+import java.awt.geom.Point2D;
 
 public final class Depict {
 	// Constants
+	private static final float DEFAULT_STROKE_WIDTH = 3;
 	private static final float DEFAULT_LINE_WIDTH = 1;
 	private static final float DEFAULT_OUTLINE_WIDTH = 1;
 	
@@ -54,39 +55,43 @@ public final class Depict {
 		var oldStroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(thickness));
 
-		g2.drawRect(
-			(int)(x - width / 2),
-			(int)(y - height / 2),
-			(int)width,
-			(int)height
+		g2.drawRect((int)(x - width / 2), (int)(y - height / 2),
+			(int)width, (int)height
 		);
 
 		g2.setStroke(oldStroke);
 	}
 
-	// due to Java's limitation method signatures must be exact, you cannot put default value to arguments
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2) {
-		g2.draw( new Line2D.Double( x1, y1, x2, y2 ) );
+		line(g2, x1, y1, x2, y2, DEFAULT_STROKE_WIDTH);
 	}
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2, float thickness) {
 		var oldStroke = g2.getStroke();
-
 		g2.setStroke( new BasicStroke(thickness) );
 
 		g2.drawLine( (int)x1, (int)y1, (int)x2, (int)y2 );
-
 		g2.setStroke(oldStroke);
-}
+	}
 
 
-	public static void image( Graphics2D g2, BufferedImage image, double x, double y) {
+	public static void worldImage( Graphics2D g2, BufferedImage image, double x, double y) {
 		AffineTransform old = g2.getTransform();
 
 		AffineTransform at = new AffineTransform();
 		at.translate(x - image.getWidth()/2.0, -y - image.getHeight()/2.0);
 		g2.scale(1, -1);
-
 		g2.drawImage(image, at,null);
+		
 		g2.setTransform(old);
+	}
+	
+	public static void dialogueImage(Graphics2D g2, BufferedImage image, double x, double y) {
+		Point2D.Double screen =DialogueCoordinate.toScreen(x, y);
+
+		g2.drawImage(image,
+			(int)(screen.x - image.getWidth() / 2.0),
+			(int)(screen.y - image.getHeight() / 2.0),
+			null
+		);
 	}
 }

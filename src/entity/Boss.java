@@ -17,6 +17,9 @@ import spell.LuaSpell;
 import spell.Phyllotaxis;
 import spell.TestSpell;
 
+import dialogue.DialogueParser;
+import dialogue.DialogueRunner;
+
 public class Boss extends Entity {
 	private BulletManager bulletManager;
 	private Music ost;
@@ -27,6 +30,8 @@ public class Boss extends Entity {
 	private double hp=0;
 	
 	private int timer = 0;
+	
+	private DialogueRunner dialogueRunner;
 
 	public Boss(BulletManager bulletManager, Player player) {
 		name = "Boss";
@@ -40,6 +45,8 @@ public class Boss extends Entity {
 		lowHP.setVolume(-10.0f);
 		
 		addHitbox(rectangleHB(this, "bossHB", 85, 90));
+		
+		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {
 		this.maxHP = maxHP;
@@ -54,6 +61,7 @@ public class Boss extends Entity {
 			if (hp/maxHP<0.15) lowHP.play();
 			System.out.println(hp);
 		}
+		
 	}
 	
 	public void setBulletManager(BulletManager bulletManager) { this.bulletManager = bulletManager; }
@@ -67,6 +75,12 @@ public class Boss extends Entity {
 	@Override
 	public void update() {
 		updateActions();
+		if (dialogueRunner != null) {
+			dialogueRunner.update();
+
+			if (dialogueRunner.isFinished())
+				dialogueRunner = null;
+		}
 		if (timer == 0) {
 			ost.play();
 			run(new LuaSpell(this, player, "GoldenLua"));

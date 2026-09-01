@@ -3,9 +3,10 @@ package input;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class Input implements KeyListener, MouseMotionListener {
+public class Input implements KeyListener, MouseMotionListener, MouseListener {
 	public static boolean W;
 	public static boolean S;
 	public static boolean A;
@@ -17,6 +18,7 @@ public class Input implements KeyListener, MouseMotionListener {
 	public static double mouseY;
 	public static boolean P;
 	public static boolean PAGEUP;
+	public static boolean mousePressed;
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -61,6 +63,25 @@ public class Input implements KeyListener, MouseMotionListener {
 	public void keyTyped(KeyEvent e) {
 
 	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		mousePressed = true;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		mousePressed = false;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
