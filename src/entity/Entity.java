@@ -1,13 +1,15 @@
 package entity;
 
+import java.util.Locale;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import collision.Hitbox;
+import collision.CollisionResult;
 
 import action.Action;
-import action.ActionRunner;
 import action.ActionContext;
+import action.ActionRunner;
 
 public abstract class Entity {
 	protected double x;
@@ -43,6 +45,15 @@ public abstract class Entity {
 	
 	public void addHitbox(Hitbox hitbox) { hitboxes.add(hitbox); }
 	public ArrayList<Hitbox> getHitboxes() { return hitboxes; }
+	public Hitbox getHitbox(String name) {
+		for (Hitbox hitbox : hitboxes) {
+			if (hitbox.getName().equals(name.toUpperCase(Locale.ROOT))) {
+				return hitbox;
+			}
+		}
+
+		return null;
+	}
 	public void drawHitboxes(Graphics2D g2) {
 		for (Hitbox hitbox : hitboxes) {
 			if (!hitbox.isEnabled()) continue;
@@ -83,9 +94,7 @@ public abstract class Entity {
 	public void setName(String name) { this.name = name; }
 	
 	// the abstracts
-	public void onHit(Hitbox mine, Hitbox other) {}
+	public void onHit(CollisionResult collisionResult) {}
 	public abstract void update();
 	public abstract void draw(Graphics2D g2);
-	
-	
 }

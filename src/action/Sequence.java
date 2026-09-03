@@ -22,7 +22,22 @@ public class Sequence extends Action {
 			return;
 		}
 
-		startCurrent();
+		while (!finished) {
+			startCurrent();
+
+			Action current = actions.get(currentIndex);
+
+			if (!current.isFinished()) {
+				return;
+			}
+
+			currentIndex++;
+
+			if (currentIndex >= actions.size()) {
+				finish();
+				return;
+			}
+		}
 	}
 
 	private void startCurrent() {

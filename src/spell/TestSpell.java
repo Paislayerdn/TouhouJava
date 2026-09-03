@@ -22,33 +22,34 @@ public class TestSpell extends Spell {
 
 	@Override
 	protected Action buildAction() {
-		int spokes = 7;
-		double spread = 35; 
+		int spokes = 13;
+		double spread = 215/(spokes); 
 		return Sequence(
-			Var("offset",0),
+			Var("offset", 0),
 			Forever("Sequence",
 				For("i", 1, spokes, 
-					() -> SpawnBullet(Get("i"),
+					() -> SpawnBullet(
 						Par(
+							Var("index", Get("i")),
+							Var("speed", 2),
 							Sequence(
 								GoTo(boss),
-								Look(0),
-								Turn( Get("offset") ),
-								Turn( Mul(spread, Sub(Get("i"), (spokes+1)/2) ) ),
-								Var("speed", 2),
+								Look( Get("offset") ),
+								Turn( Mul(spread, Sub(Get("index"), (spokes+1)/2) ) ),
 								Forever("Sequence",
 									Forward(Get("speed")),
 									Change("speed", 0.075)
 								)
 							),
 							Seq(
-								Wait(60),
+								Wait(120),
 								Destroy()
 							)
 						)
 					)
 				),
-				Change("offset", -20)
+				Wait(2),
+				Change("offset", 11)
 			)
 		);
 	}

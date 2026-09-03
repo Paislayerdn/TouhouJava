@@ -89,6 +89,41 @@ public class MathValue {
 		};
 	}
 	
+	public static Value Mod(Object... values) {
+		return action -> {
+			if (values.length == 0) return 0.0;
+
+			double result = ((Number) action.resolve(values[0])).doubleValue();
+
+			for (int i = 1; i < values.length; i++) {
+				double divisor = ((Number) action.resolve(values[i])).doubleValue();
+
+				result = ((result % divisor) + divisor) % divisor;
+			}
+
+			return result;
+		};
+	}
+
+	public static Value Power(Object base, Object exponent) {
+		return action -> Math.pow(
+			action.resolveDouble(base),
+			action.resolveDouble(exponent)
+		);
+	}
+
+	public static Value Root(Object value, Object n) {
+		return action -> {
+			double degree = action.resolveDouble(n);
+
+			if (degree == 0) {
+				throw new IllegalArgumentException("[JScratch MathValue] Root degree cannot be zero");
+			}
+
+			return Power(value, 1.0 / degree);
+		};
+	}
+	
 	public static Value Random() {
 		return action -> Math.random() * Math.nextUp(1.0);
 	}

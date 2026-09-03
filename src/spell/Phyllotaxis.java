@@ -26,24 +26,30 @@ public class Phyllotaxis extends Spell {
 		double step = 2.25;
 		double goldenAngle = 360*( 1-2/( 1+Math.sqrt(5) ) );
 		return Forever("Sequence",
-			Var("speed", 0.15),
 			Var("offset", Mul(Random(), 360) ),
+			
 			Sound("jingle", "[TH] Jingle"),
 			SetSoundVolume("jingle", -0.25f),
 			PlaySound("jingle"),
+			
 			Sound("shot", "[TH] Shot"),
 			GetSound("shot").setVolume(-27.5f),
+			
 			For("i", 1, count,
-				() -> SpawnBullet(Get("i"),
+				() -> SpawnBullet(
 					Sequence(
+						AddCircleHitbox("bulletHB", 12),
+						AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+						Var("index", Get("i")),
+						Var("speed", 0.15),
 						GoTo(999,999),
-						Wait(Add(Mul(Get("i"), 0.35)) ),
+						Wait(Add(Mul(Get("index"), 0.35)) ),
 						Parallel(
 							Sequence(
 								GoTo(boss),
-								Look(0),
-								Turn(Mul(Get("i"), goldenAngle) ),
-								Forward( Mul(Get("i"), step) ),
+								Look( Get("offset") ),
+								Turn(Mul(Get("index"), goldenAngle) ),
+								Forward( Mul(Get("index"), step) ),
 								PlaySound("shot"),
 								Forever("Sequence",
 									Forward( Get("speed") )

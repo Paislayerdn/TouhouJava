@@ -5,7 +5,9 @@ public class ForAction extends Action {
 	private final Object start;
 	private final Object end;
 	private final ActionFactory factory;
+	
 	private Action action;
+	private ActionContext loopContext;
 	@Override
 	public boolean consumesFrame() {
 		if (finished) return false;
@@ -30,11 +32,12 @@ public class ForAction extends Action {
 
 		step = current <= target ? 1 : -1;
 
-		getContext().declare(variable, current);
-		
+		loopContext = new ActionContext(getContext());
+		loopContext.declare(variable, current);
+
 		action = factory.create();
 		action.setOwner(owner);
-		action.setContext(getContext());
+		action.setContext(loopContext);
 		action.start();
 	}
 
@@ -53,11 +56,11 @@ public class ForAction extends Action {
 				return;
 			}
 
-			getContext().set(variable, current);
+			loopContext.set(variable, current);
 
 			action = factory.create();
 			action.setOwner(owner);
-			action.setContext(getContext());
+			action.setContext(loopContext);
 			action.start();
 		}
 	}

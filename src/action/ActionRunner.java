@@ -37,7 +37,5 @@ public class ActionRunner {
 		actions.removeIf(Action::isFinished);
 	}
 
-	public void clear() {
-		actions.clear();
-	}
+	public void clear() { actions.clear(); }
 }

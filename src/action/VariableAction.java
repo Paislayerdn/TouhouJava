@@ -13,11 +13,7 @@ public class VariableAction extends Action {
 	@Override
 	public boolean consumesFrame() { return false; }
 
-	public VariableAction(
-		String name,
-		Operation operation,
-		Object value
-	) {
+	public VariableAction(String name, Operation operation, Object value) {
 		this.name = name;
 		this.operation = operation;
 		this.value = value;
@@ -27,18 +23,17 @@ public class VariableAction extends Action {
 	public void start() {
 		switch (operation) {
 			case DECLARE:
-				declareVariable(name, value);
+				declareVariable(name, resolve(value));
 				break;
 
 			case SET:
-				setVariable(name, value);
+				setVariable(name, resolve(value));
 				break;
 
 			case CHANGE:
 				Object current = getVariable(name);
 
-				if (!(current instanceof Number)
-						|| !(value instanceof Number)) {
+				if (!(current instanceof Number) || !(value instanceof Number)) {
 
 					throw new IllegalArgumentException(
 						"[JScratch VariableAction] Cannot change non-numeric variable: " + name
@@ -47,7 +42,7 @@ public class VariableAction extends Action {
 
 				double result =
 					((Number) current).doubleValue()
-					+ ((Number) value).doubleValue();
+					+ resolveDouble(value);
 
 				setVariable(name, result);
 				break;

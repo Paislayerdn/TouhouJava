@@ -7,24 +7,26 @@ import java.awt.Color;
 
 import entity.Bullet;
 
-public class BulletManager {
-	private final ArrayList<Bullet> bullets = new ArrayList<>();
-	private final Object bulletLock = new Object();
+public final class BulletManager {
+	private static final ArrayList<Bullet> bullets = new ArrayList<>();
+	private static final Object bulletLock = new Object();
 	
-	public List<Bullet> getBullets() {
+	private BulletManager() {}
+	
+	public static List<Bullet> getBullets() {
 		synchronized (bulletLock) {
 			return List.copyOf(bullets);
 		}
 	}
 	
-	public void add(Bullet bullet) { spawn(bullet); }
-	public void spawn(Bullet bullet) {
+	public static void add(Bullet bullet) { spawn(bullet); }
+	public static void spawn(Bullet bullet) {
 		synchronized (bulletLock) {
 			bullets.add(bullet);
 		}
 	}
 
-	public void update() {
+	public static void update() {
 		synchronized (bulletLock) {
 			for (Bullet bullet : bullets) {
 				bullet.update();
@@ -33,12 +35,12 @@ public class BulletManager {
 		}
 	}
 
-	public void draw(Graphics2D g2) {
+	public static void draw(Graphics2D g2) {
 		for ( Bullet bullet : getBullets() ) {
 			bullet.draw(g2);
 		}
 	}
-	public void drawHitboxes(Graphics2D g2) {
+	public static void drawHitboxes(Graphics2D g2) {
 		Color oldColor = g2.getColor();
 		g2.setColor(Color.RED);
 		for (Bullet bullet : getBullets()) {
@@ -48,7 +50,7 @@ public class BulletManager {
 		g2.setColor(oldColor);
 	}
 	
-	public int getBulletCount() {
+	public static int getBulletCount() {
 		synchronized (bulletLock) {
 			return bullets.size();
 		}
