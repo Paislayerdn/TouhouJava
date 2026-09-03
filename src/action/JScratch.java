@@ -20,6 +20,15 @@ public final class JScratch {
 	public static Action Turn(Object angle) { return new TurnAction(angle); }
 	public static Action Look(Object angle) { return new LookAction(angle); }
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
+	
+	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
+	public static Action AddRectangleHitbox( String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
+
+	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
+	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
+
+	public static Action AddHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, true); }
+	public static Action RemoveHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, false); }
 
 	public static Action Sound(String name, String path) {
 		return new SoundAction(name, path);
@@ -57,11 +66,11 @@ public final class JScratch {
 	}
 	public static Value Get(String name) { return action -> action.getVariable(name); }
 	
-	public static SpawnBulletAction SpawnBullet(Object index, Action action) {
-		return new SpawnBulletAction(index, action);
+	public static SpawnBulletAction SpawnBullet(Action action) {
+		return new SpawnBulletAction(action);
 	}
-	public static SpawnBulletAction SpawnBullet(Object index, double x, double y, double angle, Action action) {
-		return new SpawnBulletAction(index, x, y, angle, action);
+	public static SpawnBulletAction SpawnBullet(double x, double y, double angle, Action action) {
+		return new SpawnBulletAction(x, y, angle, action);
 	}
 	public static DestroyAction Destroy() { return new DestroyAction(); }
 	
@@ -114,6 +123,10 @@ public final class JScratch {
 	public static Value Sub(Object... values) { return MathValue.Sub(values); }
 	public static Value Mul(Object... values) { return MathValue.Mul(values); }
 	public static Value Div(Object... values) { return MathValue.Div(values); }
+	public static Value Mod(Object... values) { return MathValue.Mod(values); }
+	public static Value Pow(Object a, Object b) { return Power(a, b); }
+	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
+	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
 	
 	public static Value Min(Object... values) { return MathValue.Min(values); }
 	public static Value Max(Object... values) { return MathValue.Max(values); }
@@ -124,4 +137,5 @@ public final class JScratch {
 	
 	
 	public static PrintAction Print(Object message) { return new PrintAction(message); }
+	public static JSLPrintAction LuaPrint(Object message) { return new JSLPrintAction(message); }
 }

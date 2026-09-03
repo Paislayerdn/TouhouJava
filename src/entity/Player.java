@@ -7,13 +7,13 @@ import graphics.Depict;
 import input.Input;
 
 import game.BulletManager;
-
 import static collision.Hitboxes.*;
+import static collision.CollisionTags.*;
+
 import static action.JScratch.*;
 
 public class Player extends Entity {
 	private boolean focusing = false;
-	private final BulletManager bulletManager;
 
 	private int shootCooldown = 0;
 	private boolean autoFire = false;
@@ -21,16 +21,18 @@ public class Player extends Entity {
 
 	private static final int SHOOT_INTERVAL = 6;
 	
-	public Player(BulletManager bulletManager) {
-		this.bulletManager = bulletManager;
+	public Player() {
 		name = "Player";
 		
 		x = 0;
 		y = -80;
 
-		addHitbox( circleHB(this, "grazeHB", 5) );
-		addHitbox( circleHB(this, "deathHB", 2) );
-		hitboxes.get(1).setEnabled(false);
+		addHitbox(circleHB(this, "grazeHB", 5));
+		getHitbox("grazeHB").addTag(PGRAZE);
+
+		addHitbox(circleHB(this, "deathHB", 2));
+		getHitbox("deathHB").addTag(PDEATH);
+		getHitbox("deathHB").setEnabled(false);
 	}
 	
 	@Override
@@ -65,10 +67,12 @@ public class Player extends Entity {
 	}
 	
 	private void shoot() {
-		Bullet bullet = new Bullet(this, x, y + 12);
+		Bullet bullet = new Bullet(x, y + 12);
 
 		bullet.run(
 			Parallel(
+				AddCircleHitbox("bulletHB", 12),
+				AddHitboxTag("bulletHB", "PLAYER_BULLET"),
 				Look(90),
 				MoveX( Mul( Random(), 15) ),
 				MoveY( Mul( Random(), 3) ),
@@ -85,7 +89,7 @@ public class Player extends Entity {
 			)
 		);
 
-		bulletManager.spawn(bullet);
+		BulletManager.spawn(bullet);
 	}
 	
 //	@Override

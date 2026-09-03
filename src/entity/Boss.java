@@ -5,14 +5,15 @@ import java.awt.Color;
 
 import graphics.Depict;
 
-import game.BulletManager;
-
 import resource.ResourceLoader;
 import resource.Sound;
 import resource.Music;
 
 import collision.Hitbox;
 import static collision.Hitboxes.*;
+import collision.CollisionResult;
+import static collision.CollisionType.*;
+
 import spell.LuaSpell;
 import spell.Phyllotaxis;
 import spell.TestSpell;
@@ -21,7 +22,6 @@ import dialogue.DialogueParser;
 import dialogue.DialogueRunner;
 
 public class Boss extends Entity {
-	private BulletManager bulletManager;
 	private Music ost;
 	private Sound lowHP;
 	private Player player;
@@ -33,9 +33,8 @@ public class Boss extends Entity {
 	
 	private DialogueRunner dialogueRunner;
 
-	public Boss(BulletManager bulletManager, Player player) {
+	public Boss(Player player) {
 		name = "Boss";
-		this.bulletManager = bulletManager;
 		this.player = player;
 		x = 0;
 		y = 120;
@@ -45,8 +44,8 @@ public class Boss extends Entity {
 		lowHP.setVolume(-10.0f);
 		
 		addHitbox(rectangleHB(this, "bossHB", 85, 90));
-		
-		dialogueRunner = new DialogueRunner("Test");
+		getHitbox("bossHB").addTag("BOSS");
+//		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {
 		this.maxHP = maxHP;
@@ -64,12 +63,11 @@ public class Boss extends Entity {
 		
 	}
 	
-	public void setBulletManager(BulletManager bulletManager) { this.bulletManager = bulletManager; }
-	public BulletManager getBulletManager() { return bulletManager; }
-
 	@Override
-	public void onHit(Hitbox mine, Hitbox other) {
-		damage(1);
+	public void onHit(CollisionResult collisionResult) {
+		if (collisionResult.getType() == DAMAGE) {
+			damage(1);
+		}
 	}
 
 	@Override
@@ -83,7 +81,8 @@ public class Boss extends Entity {
 		}
 		if (timer == 0) {
 			ost.play();
-			run(new LuaSpell(this, player, "GoldenLua"));
+//			run(new TestSpell(this, player));
+			run(new LuaSpell(this, player, "Eirin"));
 		}
 		
 		timer++;

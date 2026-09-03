@@ -13,10 +13,6 @@ import entity.Player;
 public class Game {
 	final private Player player;
 	final private Boss boss;
-	final private BulletManager bulletManager;
-	final private HUD hud;
-	final private Debug debug;
-	final private CollisionSystem collisionManager;
 	
 	private boolean lastDebugKey = false;
 	
@@ -28,13 +24,13 @@ public class Game {
 		lastDebugKey = Input.P;
 		
 		boss.update();
-		bulletManager.update();
+		BulletManager.update();
 		player.update();
 		
-		collisionManager.update();
+		CollisionSystem.update();
 		
-		hud.update();
-		debug.update();
+		HUD.update();
+		Debug.update();
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -47,24 +43,23 @@ public class Game {
 		g2.scale(1, -1);
 		
 		boss.draw(g2);
-		bulletManager.draw(g2);
-		if (debug.isShowHitboxes()) {
-			bulletManager.drawHitboxes(g2);
+		BulletManager.draw(g2);
+		if (Debug.isShowHitboxes()) {
+			BulletManager.drawHitboxes(g2);
 			boss.drawHitboxes(g2);
 		}
 		player.draw(g2);
 		
 		g2.setTransform(oldTransform);
-		hud.draw(g2);
-		debug.draw(g2);
+		HUD.draw(g2);
+		Debug.draw(g2);
 	}
 	
 	public Game() {
-		bulletManager = new BulletManager();
-		player = new Player(bulletManager);
-		boss = new Boss(bulletManager, player);
-		hud = new HUD();
-		debug = new Debug(bulletManager, player, boss);
-		collisionManager = new CollisionSystem(player, bulletManager, boss);
+		player = new Player();
+		boss = new Boss(player);
+		HUD.init();
+		Debug.init(player, boss);
+		CollisionSystem.init(player, boss);
 	}
 }

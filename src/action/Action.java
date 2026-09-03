@@ -25,8 +25,8 @@ public abstract class Action {
 	
 	public Object rs(Object value) { return resolve(value); }
 	public Object resolve(Object value) {
-		if (value instanceof Value) {
-			return ((Value) value).get(this);
+		while (value instanceof Value) {
+			value = ((Value) value).get(this);
 		}
 
 		return value;

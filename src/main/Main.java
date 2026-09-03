@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args) {
 		JFrame window = new JFrame("Touhou Java");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);
+		window.setResizable(true);
 		window.setIconImage(ResourceLoader.image("Icon"));
 		
 		GamePanel panel = new GamePanel();

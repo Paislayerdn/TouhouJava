@@ -9,7 +9,6 @@ public class ActionContext {
 	public ActionContext() {
 		this(null);
 	}
-
 	public ActionContext(ActionContext parent) {
 		this.parent = parent;
 		this.variables = new HashMap<>();
@@ -22,13 +21,9 @@ public class ActionContext {
 
 	// Find the context where this variable was declared.
 	private ActionContext findContext(String name) {
-		if (variables.containsKey(name)) {
-			return this;
-		}
+		if (variables.containsKey(name)) { return this; }
 
-		if (parent != null) {
-			return parent.findContext(name);
-		}
+		if (parent != null) { return parent.findContext(name); }
 
 		return null;
 	}
@@ -38,9 +33,7 @@ public class ActionContext {
 		ActionContext context = findContext(name);
 
 		if (context == null) {
-			throw new IllegalArgumentException(
-				"[JScratch ActionContext] Variable not declared: " + name
-			);
+			throw new IllegalArgumentException( "[JScratch ActionContext] Variable not declared: " + name );
 		}
 
 		return context.variables.get(name);
@@ -51,9 +44,7 @@ public class ActionContext {
 		ActionContext context = findContext(name);
 
 		if (context == null) {
-			throw new IllegalArgumentException(
-				"[JScratch ActionContext] Variable not declared: " + name
-			);
+			throw new IllegalArgumentException( "[JScratch ActionContext] Variable not declared: " + name );
 		}
 
 		context.variables.put(name, value);

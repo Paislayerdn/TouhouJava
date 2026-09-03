@@ -12,45 +12,40 @@ import resource.Sound;
 
 import collision.Hitbox;
 import static collision.Hitboxes.*;
+import collision.CollisionResult;
+import static collision.CollisionType.*;
 
 public class Bullet extends Entity {
-	private final Entity owner;
 	private boolean grazable;
 	private Sound graze;
 
 	public Bullet() {
-		this(null, 999,999);
+		this(999,999);
 	}
-	public Bullet(Entity owner) {
-		this(owner, 999,999);
-	}
-	public Bullet(Entity owner, double x, double y) {
-		this.owner = owner;
+	public Bullet(double x, double y) {
 		this.x = x;
 		this.y = y;
 		
 		name = "Bullet";
-		addHitbox( circleHB(this, "bulletHB", 12) );
 		grazable = true;
 		graze = ResourceLoader.sound("[TH] Graze");
-//		Sound fires = ResourceLoader.sound("[TH] Fires");
-//		fires.setVolume(-2);
-//		fires.play();
-	}
 
-	public Entity getOwner() { return owner; }
-	@Override
-	public void onHit(Hitbox mine, Hitbox other) {
-//		System.out.println("[Bullet] Hit something.");
-		if ( "grazeHB".equals(other.getName()) ) {
-			onGraze(mine, other);
-			return;
-		}
-		if ( "bossHB".equals(other.getName()) ) {
-			alive = false;
-			return;
-		}
 	}
+	
+	@Override
+	public void onHit(CollisionResult collision) {
+		if (collision.getType() == GRAZE) {
+			onGraze(
+				collision.getSelf(this),
+				collision.getOther(this)
+			);
+			return;
+		}
+
+		if (collision.getType() == DAMAGE) {
+			alive = false;
+		}
+}
 	
 	public void onGraze(Hitbox mine, Hitbox other) {
 		if (grazable) {

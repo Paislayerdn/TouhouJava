@@ -1,66 +1,57 @@
 package collision;
 
+import static collision.CollisionTags.*;
+import game.BulletManager;
+
 import entity.Entity;
 import entity.Player;
 import entity.Boss;
 import entity.Bullet;
-import game.BulletManager;
 
-public class CollisionSystem {
-	private Player player;
-	private BulletManager bulletManager;
-	private Boss boss;
+public final class CollisionSystem {
+	private static Player player;
+	private static Boss boss;
 	
-	public CollisionSystem(Player player, BulletManager bulletManager, Boss boss) {
-		this.player = player;
-		this.bulletManager = bulletManager;
-		this.boss = boss;
+	private CollisionSystem() {}
+	
+	public static void init(Player player, Boss boss) {
+		CollisionSystem.player = player;
+		CollisionSystem.boss = boss;
 	}
 	
-	public void update() {
-	for (Bullet bullet : bulletManager.getBullets()) {
+	public static void update() {
+		for (Bullet bullet : BulletManager.getBullets()) {
+			for (Hitbox bulletHitbox : bullet.getHitboxes()) {
+				for (Hitbox playerHitbox : player.getHitboxes()) {
+					CollisionResult collision = check(playerHitbox, bulletHitbox);
 
-		// Boss bullets → Player
-		if (bullet.getOwner() == boss) {
-			CollisionResult collision = check(player, bullet);
+					if (collision != null) {
+						player.onHit(collision);
+						bullet.onHit(collision);
+					}
+				}
 
-			if (collision != null) {
-				Hitbox playerHitbox = collision.getFirst();
-				Hitbox bulletHitbox = collision.getSecond();
+				for (Hitbox bossHitbox : boss.getHitboxes()) {
+					CollisionResult collision = check(bossHitbox, bulletHitbox);
 
-				player.onHit(playerHitbox, bulletHitbox);
-				bullet.onHit(bulletHitbox, playerHitbox);
-			}
-		}
-
-		// Player bullets → Boss
-		if (bullet.getOwner() == player) {
-			CollisionResult collision = check(bullet, boss);
-
-			if (collision != null) {
-				Hitbox bulletHitbox = collision.getFirst();
-				Hitbox bossHitbox = collision.getSecond();
-
-				bullet.onHit(bulletHitbox, bossHitbox);
-				boss.onHit(bossHitbox, bulletHitbox);
+					if (collision != null) {
+						boss.onHit(collision);
+						bullet.onHit(collision);
+					}
+				}
 			}
 		}
 	}
-}
 	
-	public static CollisionResult check( Entity a, Entity b ) {
-		for (Hitbox ha : a.getHitboxes()) {
-			if (!ha.isEnabled()) continue;
+	public static CollisionResult check(Hitbox a, Hitbox b) {
+		if (!a.isEnabled() || !b.isEnabled()) return null;
 
-			for (Hitbox hb : b.getHitboxes()) {
-				if (!hb.isEnabled()) continue;
+		CollisionType type = CollisionSemantics.getType(a, b);
 
-				if (checkHitboxes(ha, hb))
-					return new CollisionResult(ha, hb);
-			}
-		}
+		if (type == null) return null;
+		if (!checkHitboxes(a, b)) return null;
 
-		return null;
+		return new CollisionResult(a, b, type);
 	}
 	
 	private static boolean checkHitboxes(Hitbox a, Hitbox b) {

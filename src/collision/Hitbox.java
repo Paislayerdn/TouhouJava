@@ -1,5 +1,6 @@
 package collision;
 
+import java.util.Locale;
 import java.awt.Graphics2D;
 import java.util.HashSet;
 
@@ -7,7 +8,7 @@ import entity.Entity;
 
 public abstract class Hitbox {
 	private Entity owner;
-	private String name = "[unnamed hitbox]";
+	private String name = "[UNNAMED HITBOX]";
 
 	private double offsetX;
 	private double offsetY;
@@ -22,7 +23,7 @@ public abstract class Hitbox {
 	}
 	public Hitbox(Entity owner, String name) {
 		this.owner = owner;
-		this.name = name;
+		this.name = name.toUpperCase(Locale.ROOT);
 	}
 
 	public Entity getOwner() { return owner; }
@@ -48,10 +49,19 @@ public abstract class Hitbox {
 	public boolean isEnabled() { return enabled; }
 	public void setEnabled(boolean value) { enabled = value; }
 
-	public void addTag(String tag) { tags.add(tag); }
-	public void removeTag(String tag) { tags.remove(tag); }
+	public void addTag(String tag) { tags.add( tag.toUpperCase( Locale.ROOT ) ); }
+	public void removeTag(String tag) { tags.remove( tag.toUpperCase( Locale.ROOT ) ); }
 	public void clearTags() { tags.clear(); }
-	public boolean hasTag(String tag) { return tags.contains(tag); }
+	public boolean hasTag(String tag) { return tags.contains( tag.toUpperCase( Locale.ROOT ) ); }
+	public boolean hasAnyTag(String... tags) {
+		for (String tag : tags) {
+			if (hasTag(tag)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 	public HashSet<String> getTags() { return tags; }
 	
 	public abstract void drawDebug(Graphics2D g2);
