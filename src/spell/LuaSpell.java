@@ -17,29 +17,27 @@ import entity.Player;
 public class LuaSpell extends Spell {
 	private final String luaFile;
 	private final Player player;
+	private final LuaValue luaSpell;
 
 	public LuaSpell(Boss boss, Player player, String file) {
 		super(boss, "LLL Replication Sign \"Digitalized Pebbles\"");
 		this.luaFile = file;
 		this.player = player;
+		Globals globals = JSL.registerJScratch();
+		globals.set("boss", CoerceJavaToLua.coerce(boss));
+		globals.set("player", CoerceJavaToLua.coerce(player));
+		String source = ResourceLoader.lua(luaFile);
+		LuaValue script = globals.load( source, luaFile+".lua" );
+		this.luaSpell = script.call();
 	}
 	
 	@Override
 	public void onStart() {
-		boss.setMaxHP(50);
+		luaSpell.get("onStart").call();
 	}
-
+	
 	@Override
 	protected Action buildAction() {
-		Globals globals = JSL.registerJScratch();
-		globals.set("boss", CoerceJavaToLua.coerce(boss));
-		globals.set("player", CoerceJavaToLua.coerce(player));
-		
-		String source = ResourceLoader.lua(luaFile);
-
-		LuaValue script = globals.load( source, luaFile+".lua" );
-		LuaValue result = script.call();
-
-		return (Action) result.checkuserdata(Action.class);
+		return (Action) luaSpell.get("buildAction").call().checkuserdata(Action.class);
 	}
 }

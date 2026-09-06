@@ -30,16 +30,12 @@ public final class JScratch {
 	public static Action AddHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, true); }
 	public static Action RemoveHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, false); }
 
-	public static Action Sound(String name, String path) {
-		return new SoundAction(name, path);
-	}
+	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
 	public static SoundValue GetSound(String name) { return new SoundValue(name); }
 	public static Action SetSoundVolume(String name, float volume) { return GetSound(name).setVolume(volume); }
 	public static Action PlaySound(String name) { return GetSound(name).play(); }
-		public static VariableAction Declare(String name, Object value) { return Var(name, value); }
-	public static VariableAction Var(String name, Object value) {
-		return new VariableAction( name, VariableAction.Operation.DECLARE, value);
-	}
+	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
+	public static VariableAction Var(String name, Object value) { return new VariableAction( name, VariableAction.Operation.DECLARE, value); }
 	public static Sequence Vars(Object... values) {
 		if (values.length % 2 != 0) {
 			throw new IllegalArgumentException(
@@ -66,12 +62,8 @@ public final class JScratch {
 	}
 	public static Value Get(String name) { return action -> action.getVariable(name); }
 	
-	public static SpawnBulletAction SpawnBullet(Action action) {
-		return new SpawnBulletAction(action);
-	}
-	public static SpawnBulletAction SpawnBullet(double x, double y, double angle, Action action) {
-		return new SpawnBulletAction(x, y, angle, action);
-	}
+	public static SpawnBulletAction SpawnBullet(Action action) { return new SpawnBulletAction(action); }
+	public static SpawnBulletAction SpawnBullet(double x, double y, double angle, Action action) { return new SpawnBulletAction(x, y, angle, action); }
 	public static DestroyAction Destroy() { return new DestroyAction(); }
 	
 	public static Sequence Seq(Action... actions) { return Sequence(actions); }

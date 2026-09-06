@@ -1,6 +1,14 @@
+local spell = {}
+
 local count = 350
 local step = 2.25
 local goldenAngle = 360 * (1 - 2 / (1 + math.sqrt(5)))
+
+spell.onStart = function()
+	boss:setMaxHP(50)
+end
+
+spell.buildAction = function()
 
 return forever("sequence",
 	var("offset", mul(random(), 360)),
@@ -53,3 +61,7 @@ return forever("sequence",
 	end),
 	wait(150)
 )
+
+end
+
+return spell

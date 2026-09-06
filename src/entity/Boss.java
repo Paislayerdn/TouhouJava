@@ -18,7 +18,6 @@ import spell.LuaSpell;
 import spell.Phyllotaxis;
 import spell.TestSpell;
 
-import dialogue.DialogueParser;
 import dialogue.DialogueRunner;
 
 public class Boss extends Entity {
@@ -82,7 +81,7 @@ public class Boss extends Entity {
 		if (timer == 0) {
 			ost.play();
 //			run(new TestSpell(this, player));
-			run(new LuaSpell(this, player, "Eirin"));
+			run(new LuaSpell(this, player, "GoldenLua"));
 		}
 		
 		timer++;

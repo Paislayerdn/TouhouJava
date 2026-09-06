@@ -1,8 +1,14 @@
+local spell = {}
+
 local rings = 16
 local density = 32
 local step = 2.25
 local angle1, angle2 = 360/rings, 360/density
 local speed = 3
+
+spell.onStart = function()
+	boss:setMaxHP(50)
+end
 
 local Lasseree = function()
 	return spawnBullet(
@@ -54,6 +60,8 @@ local CasualWalk = function()
 	)
 end
 
+spell.buildAction = function()
+
 return forever("sequence",
 	sound("jingle", "[TH] Jingle"),
 	setsoundvolume("jingle", -0.25),
@@ -65,3 +73,7 @@ return forever("sequence",
 	CasualWalk(),
 	wait(10)
 )
+
+end
+
+return spell
