@@ -1,8 +1,10 @@
-package game;
+package gameplay;
 
 import java.awt.Graphics2D;
 
-import input.Input;
+import main.Game;
+import main.Input;
+
 import graphics.TextDrawer;
 import graphics.Coordinate;
 
@@ -28,13 +30,13 @@ public final class Debug {
 	}
 	
 	public static void update() {
-		if (GameStats.debugMode != showHitboxes) {
-			showHitboxes = GameStats.debugMode;
+		if (PlayingStats.debugMode != showHitboxes) {
+			showHitboxes = PlayingStats.debugMode;
 		}
 	}
 
 	public static void draw(Graphics2D g2) {
-		if (!GameStats.debugMode) {
+		if (!PlayingStats.debugMode) {
 			return;
 		}
 		line = 20;

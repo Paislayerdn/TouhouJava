@@ -9,7 +9,7 @@ public final class Settings {
 	public static final int BASE_HEIGHT = 720;
 	
 	// Window scaling
-	public static final int SCALE = 1;
+	public static int SCALE = 1;
 	
 	// Game rendering things
 	public static final int TILE_SIZE = 24;
@@ -21,7 +21,7 @@ public final class Settings {
 	public static final int PLAYFIELD_WIDTH = 24 * TILE_SIZE; //576
 	public static final int PLAYFIELD_HEIGHT = 28 * TILE_SIZE; //672
 	
-	public static final int PLAYFIELD_HALF_WIDTH =PLAYFIELD_WIDTH / 2;
+	public static final int PLAYFIELD_HALF_WIDTH = PLAYFIELD_WIDTH / 2;
 	public static final int PLAYFIELD_HALF_HEIGHT = PLAYFIELD_HEIGHT / 2;
 
 	// Final window size

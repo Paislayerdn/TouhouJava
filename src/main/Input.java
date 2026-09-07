@@ -1,4 +1,4 @@
-package input;
+package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,7 +19,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 	public static boolean P;
 	public static boolean PAGEUP;
 	public static boolean mousePressed;
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {

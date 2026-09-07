@@ -4,9 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 
 import graphics.Depict;
-import input.Input;
+import main.Input;
 
-import game.BulletManager;
+import gameplay.BulletManager;
 import static collision.Hitboxes.*;
 import static collision.CollisionTags.*;
 

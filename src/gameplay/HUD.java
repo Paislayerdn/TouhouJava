@@ -1,10 +1,12 @@
-package game;
+package gameplay;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import graphics.TextDrawer;
+import main.Game;
 import main.Settings;
+
+import graphics.TextDrawer;
 import resource.ResourceLoader;
 
 public final class HUD {
@@ -16,7 +18,7 @@ public final class HUD {
 	private HUD() {}
 	
 	public static void init() {
-		foreground = ResourceLoader.image("Foreground");
+		HUD.foreground = ResourceLoader.image("Foreground");
 	}
 
 	public static void update() {
@@ -33,11 +35,11 @@ public final class HUD {
 	}
 	
 	private static void drawPlayerStats(Graphics2D g2) {
-		drawStat(g2,	"SCORE",	pad(GameStats.score, BUFFER_ZERO),	740, 70);
-		drawStat(g2,	"GRAZE",	pad(GameStats.graze, 6),			740, 145);
-		drawStat(g2,	"POWER",	String.valueOf(GameStats.power),	740, 220);
-		drawStat(g2,	"LIVES",	String.valueOf(GameStats.lives),	740, 295);
-		drawStat(g2,	"BOMBS",	String.valueOf(GameStats.bombs),	740, 370);
+		drawStat(g2,	"SCORE",	pad(PlayingStats.getScore(), BUFFER_ZERO),	740, 70);
+		drawStat(g2,	"GRAZE",	pad(PlayingStats.getGraze(), 6),			740, 145);
+		drawStat(g2,	"POWER",	String.valueOf(PlayingStats.getPower()),	740, 220);
+		drawStat(g2,	"LIVES",	String.valueOf(PlayingStats.getLives()),	740, 295);
+		drawStat(g2,	"BOMBS",	String.valueOf(PlayingStats.getBombs()),	740, 370);
 	}
 	
 	private static String pad(long value, int digits) {

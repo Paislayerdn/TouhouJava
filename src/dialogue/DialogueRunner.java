@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import resource.ResourceLoader;
 
-import input.Input;
+import main.Input;
 
 public class DialogueRunner {
 	private final Dialogue dialogue;

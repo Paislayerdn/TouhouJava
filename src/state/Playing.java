@@ -1,24 +1,38 @@
-package game;
+package state;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-import input.Input;
+import main.Game;
+import main.Input;
 import main.Settings;
 
 import collision.CollisionSystem;
 import entity.Boss;
 import entity.Player;
+import gameplay.BulletManager;
+import gameplay.PlayingStats;
+import gameplay.HUD;
+import gameplay.Debug;
 
-public class Game {
-	final private Player player;
-	final private Boss boss;
+public class Playing implements GameState {
+	private final Player player;
+	private final Boss boss;
 	
 	private boolean lastDebugKey = false;
 	
+	public Playing() {
+		player = new Player();
+		boss = new Boss(player);
+		HUD.init();
+		Debug.init(player, boss);
+		CollisionSystem.init(player, boss);
+	}
+	
+	@Override
 	public void update() {
 		if (Input.P && !lastDebugKey) {
-			GameStats.debugMode = !GameStats.debugMode;
+			PlayingStats.debugMode = !PlayingStats.debugMode;
 		}
 
 		lastDebugKey = Input.P;
@@ -33,6 +47,7 @@ public class Game {
 		Debug.update();
 	}
 	
+	@Override
 	public void draw(Graphics2D g2) {
 		AffineTransform oldTransform = g2.getTransform();
 		
@@ -53,13 +68,5 @@ public class Game {
 		g2.setTransform(oldTransform);
 		HUD.draw(g2);
 		Debug.draw(g2);
-	}
-	
-	public Game() {
-		player = new Player();
-		boss = new Boss(player);
-		HUD.init();
-		Debug.init(player, boss);
-		CollisionSystem.init(player, boss);
 	}
 }

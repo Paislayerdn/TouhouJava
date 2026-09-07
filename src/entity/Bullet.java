@@ -5,7 +5,7 @@ import java.awt.Color;
 
 import graphics.Depict;
 
-import game.GameStats;
+import gameplay.PlayingStats;
 
 import resource.ResourceLoader;
 import resource.Sound;
@@ -50,7 +50,7 @@ public class Bullet extends Entity {
 	public void onGraze(Hitbox mine, Hitbox other) {
 		if (grazable) {
 //			System.out.println("[Bullet] Grazed.");
-			GameStats.addGraze();
+			PlayingStats.addGraze();
 			graze.setVolume(0);
 			graze.play();
 			grazable = false;

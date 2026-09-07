@@ -1,5 +1,5 @@
 // FACADE and BRIDGE(Java, Lua)
-package jsl;
+package action;
 
 import action.Action;
 import action.ActionFactory;

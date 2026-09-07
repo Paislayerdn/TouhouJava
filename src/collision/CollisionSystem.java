@@ -1,7 +1,7 @@
 package collision;
 
 import static collision.CollisionTags.*;
-import game.BulletManager;
+import gameplay.BulletManager;
 
 import entity.Entity;
 import entity.Player;

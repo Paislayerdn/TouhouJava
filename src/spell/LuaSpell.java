@@ -3,7 +3,7 @@ package spell;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
-import jsl.JSL;
+import action.JSL;
 
 import resource.ResourceLoader;
 

@@ -86,12 +86,16 @@ public final class Depict {
 	}
 	
 	public static void dialogueImage(Graphics2D g2, BufferedImage image, double x, double y) {
-		Point2D.Double screen =DialogueCoordinate.toScreen(x, y);
+		Point2D.Double screen = DialogueCoordinate.toScreen(x, y);
 
 		g2.drawImage(image,
 			(int)(screen.x - image.getWidth() / 2.0),
 			(int)(screen.y - image.getHeight() / 2.0),
 			null
 		);
+	}
+	
+	public static void image(Graphics2D g2, BufferedImage image) {
+		g2.drawImage(image, -image.getWidth() / 2, -image.getHeight() / 2, null);
 	}
 }
