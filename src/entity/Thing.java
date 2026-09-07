@@ -6,7 +6,10 @@ import action.Action;
 import action.ActionContext;
 import action.ActionRunner;
 
+import graphics.Depict;
+
 public abstract class Thing {
+	protected Appearance appearance;
 	protected double x;
 	protected double y;
 	protected double trueAngle;
@@ -20,8 +23,11 @@ public abstract class Thing {
 	public Thing() {
 		name = "[UNNAMED THING]";
 		actions = new ActionRunner();
+		appearance = new Appearance();
 	}
 
+	public Appearance getAppearance() { return appearance; }
+	
 	public void run(Action action) {
 		actions.add(action, this);
 	}
@@ -55,7 +61,7 @@ public abstract class Thing {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	
+	public void draw(Graphics2D g2) { Depict.thing(g2, this); }
 	// the abstracts
 	public abstract void update();
-	public abstract void draw(Graphics2D g2);
 }

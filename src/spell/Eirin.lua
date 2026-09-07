@@ -12,7 +12,7 @@ end
 local bullette = function()
 	return spawnBullet(
 		sequence(
-			addCircleHitbox("bulletHB", 12),
+			addCircleHitbox("bulletHB", 6),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			var("index", get("i")),
 			var("jndex", get("j")),

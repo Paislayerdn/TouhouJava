@@ -140,6 +140,80 @@ public final class JSL {
 			}
 		});
 		
+		globals.set("setCostume", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue name) {
+				return CoerceJavaToLua.coerce( SetCostume(name.tojstring()) );
+			}
+		});
+		
+		globals.set("setColor", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( SetColor(toJava(value)) );
+			}
+		});
+		globals.set("changeColor", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( ChangeColor(toJava(value)) );
+			}
+		});
+		
+		globals.set("setPixelate", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( SetPixelate(toJava(value)) );
+			}
+		});
+		globals.set("changePixelate", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				
+				return CoerceJavaToLua.coerce( ChangePixelate(toJava(value)) );
+			}
+		});
+		
+		globals.set("setBrightness", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( SetBrightness(toJava(value)) );
+			}
+		});
+		globals.set("changeBrightness", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( ChangeBrightness(toJava(value)) );
+			}
+		});
+		
+		globals.set("setGhost", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( SetGhost(toJava(value)) );
+			}
+		});
+		globals.set("changeGhost", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( ChangeGhost(toJava(value)) );
+			}
+		});
+		
+		globals.set("setSize", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				
+				return CoerceJavaToLua.coerce( SetSize(toJava(value)) );
+			}
+		});
+		globals.set("changeSize", new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce( ChangeSize(toJava(value)) );
+			}
+		});
+		
 		globals.set("addCircleHitbox", new TwoArgFunction() {
 			@Override
 			public LuaValue call(LuaValue name, LuaValue radius) {

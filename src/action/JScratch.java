@@ -4,7 +4,7 @@ package action;
 import entity.Entity;
 
 public final class JScratch {
-	public static WaitAction Wait(Object x) { return new WaitAction(x); }
+	public static Action Wait(Object x) { return new WaitAction(x); }
 	
 	public static Action MoveX(Object x) { return Move(x, 0); }
 	public static Action MoveY(Object y) { return Move(0, y); }
@@ -21,14 +21,33 @@ public final class JScratch {
 	public static Action Look(Object angle) { return new LookAction(angle); }
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
 	
+	public static Action SetCostume(String name) { return new SetCostume(name); }
+	
+	public static Action SetColor(Object color) { return new SetColor(color); }
+	public static Action ChangeColor(Object amount) { return new ChangeColor(amount); }
+
+	public static Action SetPixelate(Object pixelate) { return new SetPixelate(pixelate); }
+	public static Action ChangePixelate(Object amount) { return new ChangePixelate(amount); }
+
+	public static Action SetBrightness(Object brightness) { return new SetBrightness(brightness); }
+	public static Action ChangeBrightness(Object amount) { return new ChangeBrightness(amount); }
+
+	public static Action SetGhost(Object ghost) { return new SetGhost(ghost); }
+	public static Action ChangeGhost(Object amount) { return new ChangeGhost(amount); }
+
+	public static Action SetSize(Object size) { return new SetSize(size); }
+	public static Action ChangeSize(Object amount) { return new ChangeSize(amount); }
+	
+	// ONLY FOR ENTITY
 	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
-	public static Action AddRectangleHitbox( String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
+	public static Action AddRectangleHitbox(String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
 
 	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
 	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
 
 	public static Action AddHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, true); }
 	public static Action RemoveHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, false); }
+	// END
 
 	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
 	public static SoundValue GetSound(String name) { return new SoundValue(name); }
@@ -38,20 +57,16 @@ public final class JScratch {
 	public static VariableAction Var(String name, Object value) { return new VariableAction( name, VariableAction.Operation.DECLARE, value); }
 	public static Sequence Vars(Object... values) {
 		if (values.length % 2 != 0) {
-			throw new IllegalArgumentException(
-				"Vars requires name/value pairs."
-			);
+			throw new IllegalArgumentException("[JScratch] Vars requires name/value pairs.");
 		}
 
 		Action[] actions = new Action[values.length / 2];
-
 		for (int i = 0; i < values.length; i += 2) {
 			String name = (String) values[i];
 			Object value = values[i + 1];
 
 			actions[i / 2] = Var(name, value);
 		}
-
 		return new Sequence(actions);
 	}
 	public static VariableAction Set(String name, Object value) {
@@ -62,19 +77,19 @@ public final class JScratch {
 	}
 	public static Value Get(String name) { return action -> action.getVariable(name); }
 	
-	public static SpawnBulletAction SpawnBullet(Action action) { return new SpawnBulletAction(action); }
-	public static SpawnBulletAction SpawnBullet(double x, double y, double angle, Action action) { return new SpawnBulletAction(x, y, angle, action); }
-	public static DestroyAction Destroy() { return new DestroyAction(); }
+	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }
+	public static Action SpawnBullet(double x, double y, double angle, Action action) { return new SpawnBulletAction(x, y, angle, action); }
+	public static Action Destroy() { return new DestroyAction(); }
 	
-	public static Sequence Seq(Action... actions) { return Sequence(actions); }
-	public static Sequence Sequence(Action... actions) { return new Sequence(actions); }
+	public static Action Seq(Action... actions) { return Sequence(actions); }
+	public static Action Sequence(Action... actions) { return new Sequence(actions); }
 
-	public static Parallel Paralell(Action... actions) {
+	public static Action Paralell(Action... actions) {
 		JDebug.log("Warning, you're mispelling \"Parallel\"...");
 		return Parallel(actions);
 	}
-	public static Parallel Par(Action... actions) { return Parallel(actions); }
-	public static Parallel Parallel(Action... actions) { return new Parallel(actions); }
+	public static Action Par(Action... actions) { return Parallel(actions); }
+	public static Action Parallel(Action... actions) { return new Parallel(actions); }
 
 	public static Forever Forever(Object type, Action... actions) {
 		Action container = null;
@@ -107,7 +122,7 @@ public final class JScratch {
 		return new Forever(container);
 	}
 	
-	public static ForAction For(String variable, Object start, Object end, ActionFactory factory) {
+	public static Action For(String variable, Object start, Object end, ActionFactory factory) {
 		return new ForAction(variable, start, end, factory);
 	}
 	
@@ -128,6 +143,6 @@ public final class JScratch {
 	
 	
 	
-	public static PrintAction Print(Object message) { return new PrintAction(message); }
-	public static JSLPrintAction LuaPrint(Object message) { return new JSLPrintAction(message); }
+	public static Action Print(Object message) { return new PrintAction(message); }
+	public static Action LuaPrint(Object message) { return new JSLPrintAction(message); }
 }

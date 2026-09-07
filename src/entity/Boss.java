@@ -9,7 +9,6 @@ import resource.ResourceLoader;
 import resource.Sound;
 import resource.Music;
 
-import collision.Hitbox;
 import static collision.Hitboxes.*;
 import collision.CollisionResult;
 import static collision.CollisionType.*;
@@ -38,9 +37,9 @@ public class Boss extends Entity {
 		x = 0;
 		y = 120;
 		this.ost = ResourceLoader.music("PACHAD");
-		ost.setVolume(-22.5f);
+		ost.setVolume(-15.0f);
 		this.lowHP = ResourceLoader.sound("[TH] LowHP");
-		lowHP.setVolume(-10.0f);
+		lowHP.setVolume(-5.0f);
 		
 		addHitbox(rectangleHB(this, "bossHB", 85, 90));
 		getHitbox("bossHB").addTag("BOSS");

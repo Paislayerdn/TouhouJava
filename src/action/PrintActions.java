@@ -1,6 +1,6 @@
 package action;
 
-public class PrintAction extends Action {
+class PrintAction extends Action {
 	private final Object message;
 	@Override
 	public boolean consumesFrame() { return false; }
