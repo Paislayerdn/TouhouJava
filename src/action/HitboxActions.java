@@ -18,11 +18,13 @@ class AddCircleHitbox extends Action {
 
 	@Override
 	public void start() {
-		if (owner.getHitbox(name) != null) {
+		Entity entity = ActionUtil.requireEntity(this);
+		
+		if (entity.getHitbox(name) != null) {
 			throw new IllegalArgumentException("[JScratch AddCircleHitbox] Hitbox already exists: " + name);
 		}
 
-		owner.addHitbox( circleHB(owner, name, resolveDouble(radius)) );
+		entity.addHitbox( circleHB(entity, name, resolveDouble(radius)) );
 
 		finish();
 	}
@@ -33,9 +35,7 @@ class AddRectangleHitbox extends Action {
 	private final Object width;
 	private final Object height;
 	@Override
-	public boolean consumesFrame() {
-		return false;
-	}
+	public boolean consumesFrame() { return false; }
 
 	public AddRectangleHitbox(String name, Object width, Object height) {
 		this.name = name;
@@ -43,15 +43,16 @@ class AddRectangleHitbox extends Action {
 		this.height = height;
 	}
 
-
 	@Override
 	public void start() {
-		if (owner.getHitbox(name) != null) {
+		Entity entity = ActionUtil.requireEntity(this);
+		
+		if (entity.getHitbox(name) != null) {
 			throw new IllegalArgumentException("[JScratch AddRectangleHitbox] Hitbox already exists: " + name);
 		}
 
-		owner.addHitbox(
-			rectangleHB(owner, name, resolveDouble(width), resolveDouble(height))
+		entity.addHitbox(
+			rectangleHB(entity, name, resolveDouble(width), resolveDouble(height))
 		);
 
 		finish();
@@ -69,10 +70,11 @@ class SetHitboxEnabled extends Action {
 		this.enabled = enabled;
 	}
 
-
 	@Override
 	public void start() {
-		Hitbox hitbox = owner.getHitbox(name);
+		Entity entity = ActionUtil.requireEntity(this);
+		
+		Hitbox hitbox = entity.getHitbox(name);
 
 		if (hitbox == null) {
 			throw new IllegalArgumentException("[JScratch SetHitboxEnabled] Hitbox not found: " + name);
@@ -89,9 +91,7 @@ class SetHitboxTag extends Action {
 	private final boolean add;
 
 	@Override
-	public boolean consumesFrame() {
-		return false;
-	}
+	public boolean consumesFrame() { return false; }
 
 	public SetHitboxTag(String hitboxName, String tag, boolean add) {
 		this.hitboxName = hitboxName;
@@ -101,7 +101,9 @@ class SetHitboxTag extends Action {
 
 	@Override
 	public void start() {
-		Hitbox hitbox = owner.getHitbox(hitboxName);
+		Entity entity = ActionUtil.requireEntity(this);
+		
+		Hitbox hitbox = entity.getHitbox(hitboxName);
 
 		if (hitbox == null) {
 			throw new IllegalArgumentException(

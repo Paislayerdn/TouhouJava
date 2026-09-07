@@ -1,10 +1,11 @@
 package action;
 
+import entity.Thing;
 import entity.Entity;
 
 public abstract class Action {
 	protected boolean finished = false;
-	protected Entity owner;
+	protected Thing owner;
 	protected ActionContext context;
 	public boolean consumesFrame() { return true;}
 
@@ -12,8 +13,8 @@ public abstract class Action {
 	public void finish() { finished = true; }
 	public void reset() { finished = false; }
 	
-	public Entity getOwner() { return owner; }
-	public void setOwner(Entity owner) { this.owner = owner; }
+	public Thing getOwner() { return owner; }
+	public void setOwner(Thing owner) { this.owner = owner; }
 	
 	public ActionContext getContext() { return context; }
 	public void setContext(ActionContext context) { this.context = context; }
@@ -41,6 +42,20 @@ public abstract class Action {
 	public void update() {}
 }
 
+final class ActionUtil {
+	private ActionUtil() {}
+
+	static Entity requireEntity(Action action) {
+		if (!(action.getOwner() instanceof Entity entity)) {
+			throw new IllegalStateException(
+				"[JScratch " + action.getClass().getSimpleName()
+				+ "] Owner must be an Entity"
+			);
+		}
+		return entity;
+	}
+}
+
 final class JDebug {
 	private JDebug() {}
 
@@ -58,3 +73,4 @@ final class JDebug {
 		System.out.println("[JScratch] " + message);
 	}
 }
+

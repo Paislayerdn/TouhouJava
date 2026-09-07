@@ -20,9 +20,7 @@ class Sequence extends Action {
 		if (actions.isEmpty()) {
 			finish();
 			return;
-		}
-
-		while (!finished) {
+		} while (!finished) {
 			startCurrent();
 
 			Action current = actions.get(currentIndex);

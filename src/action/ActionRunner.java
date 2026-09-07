@@ -2,7 +2,7 @@ package action;
 
 import java.util.ArrayList;
 
-import entity.Entity;
+import entity.Thing;
 
 public class ActionRunner {
 	private ActionContext context;
@@ -18,7 +18,7 @@ public class ActionRunner {
 	}	
 	public ActionContext getContext() { return context; }
 
-	public void add(Action action, Entity owner) {
+	public void add(Action action, Thing owner) {
 		action.setOwner(owner);
 		action.setContext(context);
 		actions.add(action);

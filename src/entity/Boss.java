@@ -81,7 +81,7 @@ public class Boss extends Entity {
 		if (timer == 0) {
 			ost.play();
 //			run(new TestSpell(this, player));
-			run(new LuaSpell(this, player, "GoldenLua"));
+			run(new LuaSpell(this, player, "Eirin"));
 		}
 		
 		timer++;

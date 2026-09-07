@@ -10,27 +10,27 @@ import resource.ResourceLoader;
 import main.Settings;
 
 public class TitleScreen implements GameState {
-    private final BufferedImage background;
-    private final BufferedImage reimu;
-    private final BufferedImage marisa;
-    private final BufferedImage game1;
-    private final BufferedImage game2;
+	private final BufferedImage background;
+	private final BufferedImage reimu;
+	private final BufferedImage marisa;
+	private final BufferedImage game1;
+	private final BufferedImage game2;
 
-    public TitleScreen() {
-        background = ResourceLoader.image("TSC1");
-        reimu = ResourceLoader.image("TSC2F");
-        marisa = ResourceLoader.image("TSC3F");
-        game1 = ResourceLoader.image("TSC4");
-        game2 = ResourceLoader.image("TSC5");
-    }
+	public TitleScreen() {
+		background = ResourceLoader.image("TSC1");
+		reimu = ResourceLoader.image("TSC2F");
+		marisa = ResourceLoader.image("TSC3F");
+		game1 = ResourceLoader.image("TSC4");
+		game2 = ResourceLoader.image("TSC5");
+	}
 
-    @Override
-    public void update() {
-        
-    }
+	@Override
+	public void update() {
+		
+	}
 
-    @Override
-    public void draw(Graphics2D g2) {
+	@Override
+	public void draw(Graphics2D g2) {
 		AffineTransform old = g2.getTransform();
 
 		g2.translate(

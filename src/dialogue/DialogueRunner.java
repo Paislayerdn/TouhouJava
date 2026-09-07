@@ -63,9 +63,7 @@ public class DialogueRunner {
 			if (!advancePressed()) return;
 
 			waitingForInput = false;
-		}
-
-		while (!waitingForInput
+		} while (!waitingForInput
 				&& !waitingForMovement
 				&& commandIndex < dialogue.getCommands().size()) {
 
