@@ -1,22 +1,36 @@
 package action;
 
+import java.awt.image.BufferedImage;
 import resource.ResourceLoader;
 
 class SetCostume extends Action {
 	private final String name;
+	private final BufferedImage image;
 
 	@Override
-	public boolean consumesFrame() { return false; }
+	public boolean consumesFrame() {
+		return false;
+	}
 
 	public SetCostume(String name) {
 		this.name = name;
+		this.image = null;
+	}
+
+	public SetCostume(BufferedImage image) {
+		this.name = null;
+		this.image = image;
 	}
 
 	@Override
-	public void update() {
-		owner.getAppearance().setCostume(
-			ResourceLoader.image(name)
-		);
+	public void start() {
+		if (image != null) {
+			owner.getAppearance().setCostume(image);
+		} else {
+			owner.getAppearance().setCostume(
+				ResourceLoader.image(name)
+			);
+		}
 
 		finish();
 	}
@@ -33,9 +47,9 @@ class SetColor extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().setColor(
-			(int) resolveDouble(color)
+			(double) resolveDouble(color)
 		);
 
 		finish();
@@ -53,9 +67,9 @@ class ChangeColor extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().changeColor(
-			(int) resolveDouble(amount)
+			(double) resolveDouble(amount)
 		);
 
 		finish();
@@ -73,9 +87,9 @@ class SetPixelate extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().setPixelate(
-			(int) resolveDouble(pixelate)
+			(double) resolveDouble(pixelate)
 		);
 
 		finish();
@@ -93,9 +107,9 @@ class ChangePixelate extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().changePixelate(
-			(int) resolveDouble(amount)
+			(double) resolveDouble(amount)
 		);
 
 		finish();
@@ -113,9 +127,9 @@ class SetBrightness extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().setBrightness(
-			(int) resolveDouble(brightness)
+			(double) resolveDouble(brightness)
 		);
 
 		finish();
@@ -133,9 +147,9 @@ class ChangeBrightness extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().changeBrightness(
-			(int) resolveDouble(amount)
+			(double) resolveDouble(amount)
 		);
 
 		finish();
@@ -153,9 +167,9 @@ class SetGhost extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().setGhost(
-			(int) resolveDouble(ghost)
+			(double) resolveDouble(ghost)
 		);
 
 		finish();
@@ -173,9 +187,9 @@ class ChangeGhost extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().changeGhost(
-			(int) resolveDouble(amount)
+			(double) resolveDouble(amount)
 		);
 
 		finish();
@@ -193,9 +207,9 @@ class SetSize extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().setSize(
-			resolveDouble(size)
+			(double) resolveDouble(size)
 		);
 
 		finish();
@@ -213,9 +227,9 @@ class ChangeSize extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		owner.getAppearance().changeSize(
-			resolveDouble(amount)
+			(double) resolveDouble(amount)
 		);
 
 		finish();

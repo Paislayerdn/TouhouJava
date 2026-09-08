@@ -33,13 +33,17 @@ public class Phyllotaxis extends Spell {
 			PlaySound("jingle"),
 			
 			Sound("shot", "[TH] Shot"),
-			GetSound("shot").setVolume(-27.5f),
-			
+			SetSoundVolume("shot", -27.5f),
+
 			For("i", 1, count,
 				() -> SpawnBullet(
 					Sequence(
-						AddCircleHitbox("bulletHB", 12),
+						SetCostume("OvalBullet"),
+						SetSize(11),
+						SetBrightness(90),
+						AddCircleHitbox("bulletHB", 7),
 						AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+						
 						Var("index", Get("i")),
 						Var("speed", 0.15),
 						GoTo(999,999),

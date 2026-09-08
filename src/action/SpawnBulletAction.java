@@ -1,6 +1,6 @@
 package action;
 
-import gameplay.BulletManager;
+import state.gameplay.BulletManager;
 import entity.Bullet;
 
 public class SpawnBulletAction extends Action {

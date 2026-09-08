@@ -1,17 +1,11 @@
 package entity;
 
-import java.awt.Graphics2D;
-import java.awt.Color;
-
-import graphics.Depict;
-
-import gameplay.PlayingStats;
+import state.gameplay.PlayingStats;
 
 import resource.ResourceLoader;
 import resource.Sound;
 
 import collision.Hitbox;
-import static collision.Hitboxes.*;
 import collision.CollisionResult;
 import static collision.CollisionType.*;
 
@@ -62,11 +56,5 @@ public class Bullet extends Entity {
 	@Override
 	public void update() {
 		updateActions();
-	}
-
-	@Override
-	public void draw(Graphics2D g2) {
-		g2.setColor(Color.WHITE);
-		Depict.oval(g2, x, y, 24, 12, trueAngle);
 	}
 }

@@ -4,6 +4,7 @@ local rings = 16
 local density = 32
 local initialSpeed = 1.25
 local angle1, angle2 = 360/rings, 360/density
+local cooldown = 175
 
 spell.onStart = function()
 	boss:setMaxHP(50)
@@ -12,7 +13,12 @@ end
 local bullette = function()
 	return spawnBullet(
 		sequence(
-			addCircleHitbox("bulletHB", 6),
+			setCostume("OvalBullet"),
+			setColor(130),
+			setSize(10),
+			setBrightness(-100),
+			setGhost(70),
+			addCircleHitbox("bulletHB", 5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			var("index", get("i")),
 			var("jndex", get("j")),
@@ -34,7 +40,9 @@ local bullette = function()
 				),
 				
 				forever("sequence",
-					forward(get("speed"))
+					forward(get("speed")),
+					changeBrightness(1),
+					changeGhost(-1)
 				),
 				
 				sequence(
@@ -77,7 +85,7 @@ return sequence(
 			end)
 		end),
 		change("count", 1),
-		wait(175)
+		wait(cooldown)
 	)
 )
 

@@ -294,23 +294,6 @@ public final class JSL {
 			}
 		});
 		globals.set("declare", globals.get("var"));
-
-		globals.set("vars", new VarArgFunction() {
-			@Override
-			public Varargs invoke(Varargs args) {
-				if (args.narg() % 2 != 0) {
-					throw new IllegalArgumentException("vars requires name/value pairs.");
-				}
-
-				Object[] values = new Object[args.narg()];
-
-				for (int i = 0; i < args.narg(); i++) {
-					values[i] = toJava(args.arg(i + 1));
-				}
-
-				return CoerceJavaToLua.coerce( Vars(values) );
-			}
-		});
 		
 		globals.set("set", new TwoArgFunction() {
 			@Override

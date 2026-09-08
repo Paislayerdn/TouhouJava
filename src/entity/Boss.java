@@ -1,18 +1,13 @@
 package entity;
 
-import java.awt.Graphics2D;
-import java.awt.Color;
-
-import graphics.Depict;
-
 import resource.ResourceLoader;
 import resource.Sound;
-import resource.Music;
 
-import static collision.Hitboxes.*;
 import collision.CollisionResult;
 import static collision.CollisionType.*;
+import static collision.CollisionTags.*;
 
+import static action.JScratch.*;
 import spell.LuaSpell;
 import spell.Phyllotaxis;
 import spell.TestSpell;
@@ -20,7 +15,6 @@ import spell.TestSpell;
 import dialogue.DialogueRunner;
 
 public class Boss extends Entity {
-	private Music ost;
 	private Sound lowHP;
 	private Player player;
 	
@@ -36,13 +30,21 @@ public class Boss extends Entity {
 		this.player = player;
 		x = 0;
 		y = 120;
-		this.ost = ResourceLoader.music("PACHAD");
-		ost.setVolume(-15.0f);
 		this.lowHP = ResourceLoader.sound("[TH] LowHP");
-		lowHP.setVolume(-5.0f);
+		lowHP.setVolume(0.0f);
 		
-		addHitbox(rectangleHB(this, "bossHB", 85, 90));
-		getHitbox("bossHB").addTag("BOSS");
+		this.run(
+			Sequence(
+				SetCostume("CircleBullet"),
+				SetColor(120),
+				SetBrightness(-20),
+				SetSize(80),
+				AddRectangleHitbox("bossHB", 85, 90),
+				AddHitboxTag("bossHB", BOSS)
+			)
+		);
+//		run(new Phyllotaxis(this, player));
+		this.run(new LuaSpell(this, player, "Eirin"));
 //		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {
@@ -52,15 +54,14 @@ public class Boss extends Entity {
 
 	public double getMaxHP() { return maxHP; }
 	public double getHP() { return hp; }
+	
 	public void damage(double amount) {
 		if (hp < 0) { hp = 0; } else {
 			hp -= amount;
 			if (hp/maxHP<0.15) lowHP.play();
-			System.out.println(hp);
+//			System.out.println(hp);
 		}
-		
 	}
-	
 	@Override
 	public void onHit(CollisionResult collisionResult) {
 		if (collisionResult.getType() == DAMAGE) {
@@ -74,21 +75,8 @@ public class Boss extends Entity {
 		if (dialogueRunner != null) {
 			dialogueRunner.update();
 
-			if (dialogueRunner.isFinished())
-				dialogueRunner = null;
+			if (dialogueRunner.isFinished()) dialogueRunner = null;
 		}
-		if (timer == 0) {
-			ost.play();
-//			run(new TestSpell(this, player));
-			run(new LuaSpell(this, player, "Eirin"));
-		}
-		
 		timer++;
-	}
-
-	@Override
-	public void draw(Graphics2D g2) {
-		g2.setColor(Color.BLUE);
-		Depict.circle(g2, x, y, 80);
 	}
 }

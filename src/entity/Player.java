@@ -6,7 +6,7 @@ import java.awt.Color;
 import graphics.Depict;
 import main.Input;
 
-import gameplay.BulletManager;
+import state.gameplay.BulletManager;
 import static collision.Hitboxes.*;
 import static collision.CollisionTags.*;
 
@@ -26,13 +26,19 @@ public class Player extends Entity {
 		
 		x = 0;
 		y = -80;
+		
+		this.run(
+			Sequence(
+				SetCostume("CircleBullet"),
+				SetSize(14),
+				AddCircleHitbox("grazeHB", 5),
+				AddHitboxTag("grazeHB", PGRAZE),
 
-		addHitbox(circleHB(this, "grazeHB", 5));
-		getHitbox("grazeHB").addTag(PGRAZE);
-
-		addHitbox(circleHB(this, "deathHB", 2));
-		getHitbox("deathHB").addTag(PDEATH);
-		getHitbox("deathHB").setEnabled(false);
+				AddCircleHitbox("deathHB", 2),
+				AddHitboxTag("deathHB", PDEATH),
+				DisableHitbox("deathHB")
+			)
+		);
 	}
 	
 	@Override
@@ -71,8 +77,11 @@ public class Player extends Entity {
 
 		bullet.run(
 			Parallel(
-				AddCircleHitbox("bulletHB", 12),
-				AddHitboxTag("bulletHB", "PLAYER_BULLET"),
+				SetCostume("OvalBullet"),
+				SetSize(9),
+				SetColor(15),
+				AddCircleHitbox("bulletHB", 6),
+				AddHitboxTag("bulletHB", PLAYER_BULLET),
 				Look(90),
 				MoveX( Mul( Random(), 15) ),
 				MoveY( Mul( Random(), 3) ),
@@ -104,8 +113,8 @@ public class Player extends Entity {
 	
 	@Override
 	public void draw(Graphics2D g2) {
-		if (!focusing) g2.setColor(Color.YELLOW);
-		else g2.setColor(Color.RED);
-		Depict.oval(g2, x, y, 20, 20);
+		if (!focusing) this.run( SetColor(0) );
+		else this.run( SetColor(50) );
+		Depict.thing(g2, this);
 	}
 }

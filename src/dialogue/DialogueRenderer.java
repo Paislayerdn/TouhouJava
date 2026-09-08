@@ -17,7 +17,7 @@ public final class DialogueRenderer {
 
 			BufferedImage image = ResourceLoader.image(expression);
 
-			Depict.dialogueImage(g2, image, speaker.getX(), speaker.getY());
+			Depict.image(g2, image, speaker.getX(), speaker.getY() );
 		}
 	}
 }

@@ -7,13 +7,10 @@ import java.util.ArrayList;
 import collision.Hitbox;
 import collision.CollisionResult;
 
-import action.ActionRunner;
-
 public abstract class Entity extends Thing {
 	protected double appearAngle;
 	protected boolean angleOverride;
 	
-	protected boolean visible = true;
 	protected boolean alive = true;
 	public boolean isAlive() { return alive; }
 	public void setAlive(boolean alive) { this.alive = alive; }
@@ -55,10 +52,6 @@ public abstract class Entity extends Thing {
 	
 	public boolean getAngleOverride() { return angleOverride; }
 	public void getAngleOverride(boolean state) { this.angleOverride = state; }
-	
-	public boolean isVisible() { return visible; }
-	public void setVisible(boolean visible) { this.visible = visible; }
-	
 	
 	// the abstracts
 	public void onHit(CollisionResult collisionResult) {}

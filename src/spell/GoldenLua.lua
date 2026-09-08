@@ -23,7 +23,10 @@ return forever("sequence",
 	jsfor("i", 1, count, function()
 		return spawnBullet(
 			sequence(
-				addCircleHitbox("bulletHB", 12),
+				setCostume("OvalBullet"),
+				setSize(11),
+				setBrightness(90),
+				addCircleHitbox("bulletHB", 7),
 				addHitboxTag("bulletHB", "ENEMY_BULLET"),
 				var("index", get("i")),
 				var("speed", 0.15),

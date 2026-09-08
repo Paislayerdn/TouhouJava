@@ -1,0 +1,72 @@
+package state.gameplay;
+
+import java.awt.Graphics2D;
+
+import main.Game;
+import main.Input;
+
+import graphics.TextDrawer;
+import static graphics.Coordinate.*;
+
+import entity.Player;
+import entity.Boss;
+
+public final class Debug {
+	private static Player player;
+	private static Boss boss;
+	
+	private static final int PLAYER_PRECISION = 2;
+	private static final int MOUSE_PRECISION = 0;
+	
+	private static boolean showHitboxes = false;
+	
+	private static int line;
+	
+	private Debug() {}
+	
+	public static void init(Player player, Boss boss) {
+		Debug.player = player;
+		Debug.boss = boss;
+	}
+	
+	public static void update() {
+		if (PlayingStats.debugMode != showHitboxes) {
+			showHitboxes = PlayingStats.debugMode;
+		}
+	}
+
+	public static void draw(Graphics2D g2) {
+		if (!PlayingStats.debugMode) {
+			return;
+		}
+		line = 320;
+
+		print(g2, "=== DEBUG ===");
+		print(g2, "");
+
+		print(g2, "Player PF");
+		print(g2, format( player.getX(),player.getY(), PLAYER_PRECISION));
+		print(g2, "");
+		print(g2, "Player ABS");
+		print(g2, format( toScreen( player.getX(), player.getY()), PLAYER_PRECISION));
+
+		print(g2, "");
+
+		print(g2, "Mouse PF");
+		print(g2, format( toWorld( Input.mouseX, Input.mouseY), MOUSE_PRECISION ) );
+		print(g2, "");
+		print(g2, "Mouse ABS");
+		print(g2, format(Input.mouseX,Input.mouseY, MOUSE_PRECISION));
+		
+		print(g2, "");
+		print(g2, "Bullets: " + BulletManager.getBulletCount());
+	}
+
+	private static void print(Graphics2D g2, String text) {
+		TextDrawer.draw(g2, text, -460, line);
+		line -= 20;
+	}
+	
+	public static void setShowHitboxes(boolean value) { showHitboxes = value; }
+	public static boolean isShowHitboxes() { return showHitboxes; }
+}

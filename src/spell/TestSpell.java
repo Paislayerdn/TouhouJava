@@ -30,6 +30,12 @@ public class TestSpell extends Spell {
 				For("i", 1, spokes, 
 					() -> SpawnBullet(
 						Par(
+							SetCostume("OvalBullet"),
+							SetSize(11),
+							SetBrightness(90),
+							AddCircleHitbox("bulletHB", 7),
+							AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+							
 							Var("index", Get("i")),
 							Var("speed", 2),
 							Sequence(

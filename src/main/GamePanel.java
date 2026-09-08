@@ -24,8 +24,9 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT ) );
-		
+		this.setPreferredSize( new Dimension(
+			Settings.getWindowWidth(), Settings.getWindowHeight()
+		));
 		this.setBackground(Color.BLACK);
 		
 		game = new Game();
@@ -54,7 +55,8 @@ public class GamePanel extends JPanel implements Runnable {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
+		Graphics2D g2 = (Graphics2D) g.create();
+
 		g2.setRenderingHint(
 			RenderingHints.KEY_ANTIALIASING,
 			RenderingHints.VALUE_ANTIALIAS_ON
@@ -63,8 +65,14 @@ public class GamePanel extends JPanel implements Runnable {
 			RenderingHints.KEY_INTERPOLATION,
 			RenderingHints.VALUE_INTERPOLATION_BILINEAR
 		);
+
+		// Move origin from top-left to screen center.
+		g2.translate( getWidth() / 2.0, getHeight() / 2.0 );
+		// Cartesian coordinates: +Y goes UP.
+		g2.scale(1, -1);
+		g2.scale(Settings.SCALE, Settings.SCALE);
+
 		game.draw(g2);
 		g2.dispose();
-
 	}
 }

@@ -1,6 +1,8 @@
 // FACADE
 package action;
 
+import java.awt.image.BufferedImage;
+
 import entity.Entity;
 
 public final class JScratch {
@@ -22,6 +24,7 @@ public final class JScratch {
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
 	
 	public static Action SetCostume(String name) { return new SetCostume(name); }
+	public static Action SetCostume(BufferedImage image) { return new SetCostume(image); }
 	
 	public static Action SetColor(Object color) { return new SetColor(color); }
 	public static Action ChangeColor(Object amount) { return new ChangeColor(amount); }
@@ -55,20 +58,6 @@ public final class JScratch {
 	public static Action PlaySound(String name) { return GetSound(name).play(); }
 	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
 	public static VariableAction Var(String name, Object value) { return new VariableAction( name, VariableAction.Operation.DECLARE, value); }
-	public static Sequence Vars(Object... values) {
-		if (values.length % 2 != 0) {
-			throw new IllegalArgumentException("[JScratch] Vars requires name/value pairs.");
-		}
-
-		Action[] actions = new Action[values.length / 2];
-		for (int i = 0; i < values.length; i += 2) {
-			String name = (String) values[i];
-			Object value = values[i + 1];
-
-			actions[i / 2] = Var(name, value);
-		}
-		return new Sequence(actions);
-	}
 	public static VariableAction Set(String name, Object value) {
 		return new VariableAction(name, VariableAction.Operation.SET, value);
 	}
