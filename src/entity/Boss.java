@@ -43,8 +43,8 @@ public class Boss extends Entity {
 				AddHitboxTag("bossHB", BOSS)
 			)
 		);
-//		run(new Phyllotaxis(this, player));
-		this.run(new LuaSpell(this, player, "Eirin"));
+		run(new Phyllotaxis(this, player));
+//		this.run(new LuaSpell(this, player, "Eirin"));
 //		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {

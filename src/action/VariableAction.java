@@ -19,6 +19,15 @@ public class VariableAction extends Action {
 		this.value = value;
 	}
 
+	
+	private static void reservedCheck(String name) {
+		if (ReservedProperty.isReserved(name)) {
+			throw new IllegalArgumentException(
+				"[JScratch VariableAction] Cannot set/change reserved value: "
+				+ name
+			);
+		}
+	}
 	@Override
 	public void start() {
 		switch (operation) {
@@ -27,19 +36,13 @@ public class VariableAction extends Action {
 				break;
 
 			case SET:
+				reservedCheck(name);
 				setVariable(name, resolve(value));
 				break;
 
 			case CHANGE:
+				reservedCheck(name);
 				Object current = getVariable(name);
-
-				if (!(current instanceof Number) || !(value instanceof Number)) {
-
-					throw new IllegalArgumentException(
-						"[JScratch VariableAction] Cannot change non-numeric variable: " + name
-					);
-				}
-
 				double result =
 					((Number) current).doubleValue()
 					+ resolveDouble(value);

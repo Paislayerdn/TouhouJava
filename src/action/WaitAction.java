@@ -1,8 +1,10 @@
 package action;
 
-public class WaitAction extends Action {
+class WaitAction extends Action {
 	private Object duration;
 	private int timer;
+	@Override
+	public boolean consumesFrame() { return !finished; }
 
 	public WaitAction(Object frames) {
 		duration = frames;
@@ -19,6 +21,23 @@ public class WaitAction extends Action {
 		int intDuration = (int)resolveDouble(duration);
 
 		if (timer >= intDuration) {
+			finish();
+		}
+	}
+}
+
+class WaitUntilAction extends Action {
+	private final Object condition;
+	@Override
+	public boolean consumesFrame() { return !finished; }
+
+	public WaitUntilAction(Object condition) {
+		this.condition = condition;
+	}
+
+	@Override
+	public void update() {
+		if (LogicValue.toBoolean(resolve(condition), this)) {
 			finish();
 		}
 	}

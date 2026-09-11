@@ -10,10 +10,10 @@ import entity.Entity;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
+import org.luaj.vm2.lib.ZeroArgFunction;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
-import org.luaj.vm2.lib.ZeroArgFunction;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
@@ -325,19 +325,8 @@ public final class JSL {
 					Action action = (Action) args.arg(1).checkuserdata(Action.class);
 					return CoerceJavaToLua.coerce( SpawnBullet(action) );
 				}
-				if (count == 4) {
-					double x = args.arg(1).todouble();
-					double y = args.arg(2).todouble();
-					double angle = args.arg(3).todouble();
-
-					Action action = (Action) args.arg(4).checkuserdata(Action.class);
-					return CoerceJavaToLua.coerce( SpawnBullet(x, y, angle, action) );
-				}
-
-				throw new IllegalArgumentException(
-					"SpawnBullet expects (action) or " +
-					"(x, y, angle, action)"
-				);
+				
+				throw new IllegalArgumentException("SpawnBullet expects (action)");
 			}
 		});
 		

@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import entity.Entity;
 
 public final class JScratch {
-	public static Action Wait(Object x) { return new WaitAction(x); }
 	
+	// POSITION
 	public static Action MoveX(Object x) { return Move(x, 0); }
 	public static Action MoveY(Object y) { return Move(0, y); }
 	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
@@ -19,10 +19,19 @@ public final class JScratch {
 	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
 	public static Action Forward(Object distance) { return new ForwardAction(distance); }
 
-	public static Action Turn(Object angle) { return new TurnAction(angle); }
-	public static Action Look(Object angle) { return new LookAction(angle); }
+	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
+	public static Action Look(Object angle) { return new AngleAction(AngleAction.Angle.ACTIVE,AngleAction.Operation.SET,angle); }
+	public static Action Turn(Object angle) { return new AngleAction(AngleAction.Angle.ACTIVE,AngleAction.Operation.CHANGE,angle); }
+	public static Action SetTrueAngle(Object angle) { return new AngleAction(AngleAction.Angle.TRUE, AngleAction.Operation.SET, angle); }
+	public static Action ChangeTrueAngle(Object angle) { return new AngleAction(AngleAction.Angle.TRUE,AngleAction.Operation.CHANGE,angle); }
+	// ONLY FOR ENTITY, WARNING FOR USAGE UPON THING
+	public static Action SetAppearAngle(Object angle) { return new AngleAction(AngleAction.Angle.APPEAR,AngleAction.Operation.SET,angle); }
+	public static Action ChangeAppearAngle(Object angle) { return new AngleAction(AngleAction.Angle.APPEAR,AngleAction.Operation.CHANGE,angle); }
+	public static Action EnableAngleOverride() { return new AngleOverrideAction(true); }
+	public static Action DisableAngleOverride() { return new AngleOverrideAction(false); }
 	
+	// APPEARANCE
 	public static Action SetCostume(String name) { return new SetCostume(name); }
 	public static Action SetCostume(BufferedImage image) { return new SetCostume(image); }
 	
@@ -41,7 +50,7 @@ public final class JScratch {
 	public static Action SetSize(Object size) { return new SetSize(size); }
 	public static Action ChangeSize(Object amount) { return new ChangeSize(amount); }
 	
-	// ONLY FOR ENTITY
+	// HITBOX, ONLY FOR ENTITY
 	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
 	public static Action AddRectangleHitbox(String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
 
@@ -50,12 +59,14 @@ public final class JScratch {
 
 	public static Action AddHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, true); }
 	public static Action RemoveHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, false); }
-	// END
-
+	
+	// SOUND
 	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
 	public static SoundValue GetSound(String name) { return new SoundValue(name); }
 	public static Action SetSoundVolume(String name, float volume) { return GetSound(name).setVolume(volume); }
 	public static Action PlaySound(String name) { return GetSound(name).play(); }
+	
+	// VARIABLE
 	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
 	public static VariableAction Var(String name, Object value) { return new VariableAction( name, VariableAction.Operation.DECLARE, value); }
 	public static VariableAction Set(String name, Object value) {
@@ -64,12 +75,27 @@ public final class JScratch {
 	public static VariableAction Change(String name, Object value) {
 		return new VariableAction(name, VariableAction.Operation.CHANGE,value);
 	}
-	public static Value Get(String name) { return action -> action.getVariable(name); }
+	public static Value Get(String name) { return Value.Get(name); }
 	
+	// BULLET CREATION
 	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }
-	public static Action SpawnBullet(double x, double y, double angle, Action action) { return new SpawnBulletAction(x, y, angle, action); }
 	public static Action Destroy() { return new DestroyAction(); }
 	
+	// LOGIC
+	public static Value And(Object... values) { return LogicValue.And(values); }
+	public static Value Or(Object... values) { return LogicValue.Or(values); }
+	public static Value Not(Object value) { return LogicValue.Not(value); }
+
+	// COMPARISON
+	public static Value More(Object... values) { return Greater(values); }
+	public static Value MoreEqual(Object... values) { return GreaterEqual(values); }
+	public static Value Greater(Object... values) { return CompareValue.Greater(values); }
+	public static Value GreaterEqual(Object... values) { return CompareValue.GreaterEqual(values); }
+	public static Value Less(Object... values) { return CompareValue.Less(values); }
+	public static Value LessEqual(Object... values) { return CompareValue.LessEqual(values); }
+	public static Value Equal(Object... values) { return CompareValue.Equal(values); }
+
+	// PROCESS CONTROL
 	public static Action Seq(Action... actions) { return Sequence(actions); }
 	public static Action Sequence(Action... actions) { return new Sequence(actions); }
 
@@ -79,7 +105,17 @@ public final class JScratch {
 	}
 	public static Action Par(Action... actions) { return Parallel(actions); }
 	public static Action Parallel(Action... actions) { return new Parallel(actions); }
+	
+	// CONTROL FLOW
+	public static Action Wait(Object x) { return new WaitAction(x); }
+	public static Action WaitUntil(Object condition) { return new WaitUntilAction(condition); }
+	
+	public static Action If(Object condition, ActionFactory thenFactory) { return new IfAction(condition, thenFactory); }
+	public static Action If(Object condition, ActionFactory thenFactory, ActionFactory elseFactory) { return new IfAction(condition, thenFactory, elseFactory); }
 
+	public static Action For(String variable, Object start, Object end, ActionFactory factory) { return new ForAction(variable, start, end, factory); }
+	public static Action While(Object condition, ActionFactory factory) { return new WhileAction(condition, factory); }
+	public static Action RepeatUntil(Object condition, ActionFactory factory) { return new RepeatUntilAction(condition, factory); }	
 	public static Forever Forever(Object type, Action... actions) {
 		Action container = null;
 		
@@ -111,10 +147,8 @@ public final class JScratch {
 		return new Forever(container);
 	}
 	
-	public static Action For(String variable, Object start, Object end, ActionFactory factory) {
-		return new ForAction(variable, start, end, factory);
-	}
 	
+	// MATH
 	public static Value Add(Object... values) { return MathValue.Add(values); }
 	public static Value Sub(Object... values) { return MathValue.Sub(values); }
 	public static Value Mul(Object... values) { return MathValue.Mul(values); }
@@ -131,7 +165,7 @@ public final class JScratch {
 	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
 	
 	
-	
+	// PRINT
 	public static Action Print(Object message) { return new PrintAction(message); }
 	public static Action LuaPrint(Object message) { return new JSLPrintAction(message); }
 }

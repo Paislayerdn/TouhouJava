@@ -11,14 +11,7 @@ public abstract class Entity extends Thing {
 	protected double appearAngle;
 	protected boolean angleOverride;
 	
-	protected boolean alive = true;
-	public boolean isAlive() { return alive; }
-	public void setAlive(boolean alive) { this.alive = alive; }
-	public void destroy() { this.alive = false; }
-	
 	protected ArrayList<Hitbox> hitboxes;
-	
-	//debugs
 
 	public Entity() {
 		super();
@@ -51,7 +44,7 @@ public abstract class Entity extends Thing {
 	public void setAppearAngle(double angle) { this.appearAngle = angle; }
 	
 	public boolean getAngleOverride() { return angleOverride; }
-	public void getAngleOverride(boolean state) { this.angleOverride = state; }
+	public void setAngleOverride(boolean state) { this.angleOverride = state; }
 	
 	// the abstracts
 	public void onHit(CollisionResult collisionResult) {}

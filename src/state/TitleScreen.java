@@ -10,7 +10,6 @@ import graphics.Depict;
 import resource.ResourceLoader;
 import resource.Music;
 
-import state.title.SakuraPetal;
 import state.title.TitleThing;
 
 import action.Action;
@@ -18,7 +17,7 @@ import static action.JScratch.*;
 
 public class TitleScreen implements GameState {
 	private final BufferedImage sakuraImage;
-	private final ArrayList<SakuraPetal> sakuras;
+	private final ArrayList<TitleThing> sakuras;
 	private final Object sakuraLock = new Object();
 
 	private final BufferedImage background;
@@ -68,7 +67,7 @@ public class TitleScreen implements GameState {
 
 	}
 	
-	private List<SakuraPetal> getSakuras() {
+	private List<TitleThing> getSakuras() {
 		synchronized (sakuraLock) {
 			return List.copyOf(sakuras);
 		}
@@ -80,7 +79,7 @@ public class TitleScreen implements GameState {
 		marisa.update();
 
 		synchronized (sakuraLock) {
-			for (SakuraPetal sakura : sakuras) {
+			for (TitleThing sakura : sakuras) {
 				sakura.update();
 			}
 
@@ -112,13 +111,13 @@ public class TitleScreen implements GameState {
 		g2.setTransform(old);
 		
 		// Sakura layer
-		for (SakuraPetal sakura : getSakuras()) {
+		for (TitleThing sakura : getSakuras()) {
 			sakura.draw(g2);
 		}
 	}
 
 	private void spawnSakura() {
-		SakuraPetal sakura = new SakuraPetal();
+		TitleThing sakura = new TitleThing();
 
 		sakura.run(
 			Par(
