@@ -2,6 +2,7 @@ package state.gameplay;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
@@ -15,7 +16,7 @@ public final class BulletManager {
 	
 	public static List<Bullet> getBullets() {
 		synchronized (bulletLock) {
-			return List.copyOf(bullets);
+			return Collections.unmodifiableList(new ArrayList<>(bullets));
 		}
 	}
 	

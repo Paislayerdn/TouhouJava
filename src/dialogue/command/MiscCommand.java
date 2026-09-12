@@ -16,10 +16,10 @@ public class MiscCommand implements DialogueCommand {
 	@Override
 	public void execute(DialogueRunner runner) {
 		switch (command) {
-			case "print" -> DialogueDebug.log(argument);
-			case "kill" -> runner.removeCurrentSpeaker();
-			case "name" -> runner.setCurrentSpeakerName(argument);
-			default -> DialogueDebug.log(this, "Unknown misc command: " + command);
+			case "print": DialogueDebug.log(argument); break;
+			case "kill": runner.removeCurrentSpeaker(); break;
+			case "name": runner.setCurrentSpeakerName(argument); break;
+			default: DialogueDebug.log(this, "Unknown misc command: " + command); break;
 		}
 	}
 

@@ -33,36 +33,35 @@ public enum ReservedProperty {
 			case X: return owner.getX();
 			case Y: return owner.getY();
 			case ANGLE:
-				if (owner instanceof Entity entity && entity.getAngleOverride()) {
-					return entity.getAppearAngle();
+				if (owner instanceof Entity) {
+					Entity entity = (Entity) owner;
+					if (entity.getAngleOverride()) return entity.getAppearAngle();
 				}
 
 				return owner.getTrueAngle();
 
 			case TRUE_ANGLE: return owner.getTrueAngle();
 			case APPEAR_ANGLE:
-				if (!(owner instanceof Entity entity)) {
+				if (!(owner instanceof Entity)) {
 					JDebug.log(
 						"[JScratch] Warning: appearAngle used on a Thing. "
 						+ "Using trueAngle instead."
 					);
-
 					return owner.getTrueAngle();
 				}
-
-				return entity.getAppearAngle();
+				Entity appearEntity = (Entity) owner;
+				return appearEntity.getAppearAngle();
 
 			case ANGLE_OVERRIDE:
-				if (!(owner instanceof Entity entity)) {
+				if (!(owner instanceof Entity)) {
 					JDebug.log(
 						"[JScratch] Warning: angleOverride used on a Thing. "
 						+ "Returning false."
 					);
-
 					return false;
 				}
-
-				return entity.getAngleOverride();
+				Entity overrideEntity = (Entity) owner;
+				return overrideEntity.getAngleOverride();
 
 			case SIZE: return owner.getAppearance().size;
 			case COLOR: return owner.getAppearance().color;

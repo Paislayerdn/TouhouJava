@@ -23,38 +23,42 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-
-			case KeyEvent.VK_W, KeyEvent.VK_UP -> W = true;
-			case KeyEvent.VK_S, KeyEvent.VK_DOWN -> S = true;
-
-			case KeyEvent.VK_A, KeyEvent.VK_LEFT -> A = true;
-			case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> D = true;
-
-			case KeyEvent.VK_SPACE -> SPACE = true;
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:		W = true; break;
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:		S = true; break;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:		A = true; break;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:		D = true; break;
+				
+			case KeyEvent.VK_SPACE:		SPACE = true; break;
 			
-			case KeyEvent.VK_Z -> Z = true;
-			case KeyEvent.VK_PAGE_UP -> PAGEUP = true;
+			case KeyEvent.VK_Z:			Z = true; break;
+			case KeyEvent.VK_PAGE_UP:	PAGEUP = true; break;
 
-			case KeyEvent.VK_P -> P = true;
+			case KeyEvent.VK_P:			P = true; break;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:		W = false; break;
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:		S = false; break;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:		A = false; break;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:		D = false; break;
 
-			case KeyEvent.VK_W, KeyEvent.VK_UP -> W = false;
-			case KeyEvent.VK_S, KeyEvent.VK_DOWN -> S = false;
-
-			case KeyEvent.VK_A, KeyEvent.VK_LEFT -> A = false;
-			case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> D = false;
-
-			case KeyEvent.VK_SPACE -> SPACE = false;
+			case KeyEvent.VK_SPACE:		SPACE = false; break;
 			
-			case KeyEvent.VK_Z -> Z = false;
-			case KeyEvent.VK_PAGE_UP -> PAGEUP = false;
+			case KeyEvent.VK_Z:			Z = false; break;
+			case KeyEvent.VK_PAGE_UP:	PAGEUP = false; break;
 			
-			case KeyEvent.VK_P -> P = false;
+			case KeyEvent.VK_P:			P = false; break;
 
 		}
 	}

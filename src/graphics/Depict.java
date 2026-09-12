@@ -10,6 +10,7 @@ import java.awt.AlphaComposite;
 
 import entity.Appearance;
 import entity.Thing;
+import java.awt.Composite;
 
 public final class Depict {
 	// Constants
@@ -31,7 +32,7 @@ public final class Depict {
 		circleOutline(g2, x, y, radius, DEFAULT_OUTLINE_WIDTH);
 	}
 	public static void circleOutline(Graphics2D g2, double x, double y, double radius, float thickness) {
-		var oldStroke = g2.getStroke();
+		BasicStroke oldStroke = (BasicStroke) g2.getStroke();
 		g2.setStroke(new BasicStroke(thickness));
 		
 		g2.draw( new Ellipse2D.Double(x-radius, y-radius, radius * 2, radius * 2) );
@@ -55,7 +56,7 @@ public final class Depict {
 		rectangleOutline(g2, x, y, width, height, DEFAULT_OUTLINE_WIDTH);
 	}
 	public static void rectangleOutline(Graphics2D g2, double x, double y, double width, double height, float thickness) {
-		var oldStroke = g2.getStroke();
+		BasicStroke oldStroke = (BasicStroke) g2.getStroke();
 		g2.setStroke(new BasicStroke(thickness));
 
 		g2.drawRect((int)(x - width / 2), (int)(y - height / 2),
@@ -69,7 +70,7 @@ public final class Depict {
 		line(g2, x1, y1, x2, y2, DEFAULT_STROKE_WIDTH);
 	}
 	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2, float thickness) {
-		var oldStroke = g2.getStroke();
+		BasicStroke oldStroke = (BasicStroke) g2.getStroke();
 		g2.setStroke( new BasicStroke(thickness) );
 
 		g2.drawLine( (int)x1, (int)y1, (int)x2, (int)y2 );
@@ -89,7 +90,7 @@ public final class Depict {
 		BufferedImage image = appearance.getRenderedCostume();
 
 		AffineTransform oldTransform = g2.getTransform();
-		var oldComposite = g2.getComposite();
+		Composite oldComposite = g2.getComposite();
 
 		g2.translate(thing.getX(), thing.getY());
 		g2.rotate(Math.toRadians(thing.getTrueAngle()));

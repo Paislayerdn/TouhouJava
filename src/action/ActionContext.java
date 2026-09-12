@@ -1,5 +1,6 @@
 package action;
 
+import java.util.Map;
 import java.util.HashMap;
 
 public class ActionContext {
@@ -63,8 +64,8 @@ public class ActionContext {
 	private void copyVariables(ActionContext target) {
 		if (parent != null) { parent.copyVariables(target); }
 
-		for (var entry : variables.entrySet()) {
+		variables.entrySet().forEach((entry) -> {
 			target.declare(entry.getKey(), entry.getValue());
-		}
+		});
 	}
 }

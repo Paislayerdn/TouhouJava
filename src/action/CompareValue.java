@@ -1,28 +1,6 @@
 package action;
 
 public final class CompareValue {
-	private CompareValue() {}
-
-	public static Value Greater(Object... values) {
-		return action -> compare(values, action, Comparison.GREATER);
-	}
-
-	public static Value GreaterEqual(Object... values) {
-		return action -> compare(values, action, Comparison.GREATER_EQUAL);
-	}
-
-	public static Value Less(Object... values) {
-		return action -> compare(values, action, Comparison.LESS);
-	}
-
-	public static Value LessEqual(Object... values) {
-		return action -> compare(values, action, Comparison.LESS_EQUAL);
-	}
-
-	public static Value Equal(Object... values) {
-		return action -> compare(values, action, Comparison.EQUAL);
-	}
-
 	private enum Comparison {
 		GREATER,
 		GREATER_EQUAL,
@@ -30,12 +8,15 @@ public final class CompareValue {
 		LESS_EQUAL,
 		EQUAL
 	}
+	private CompareValue() {}
 
-	private static boolean compare(
-		Object[] values,
-		Action action,
-		Comparison comparison
-	) {
+	public static Value Greater(Object... values) { return action -> compare(values, action, Comparison.GREATER); }
+	public static Value GreaterEqual(Object... values) { return action -> compare(values, action, Comparison.GREATER_EQUAL); }
+	public static Value Less(Object... values) { return action -> compare(values, action, Comparison.LESS); }
+	public static Value LessEqual(Object... values) { return action -> compare(values, action, Comparison.LESS_EQUAL); }
+	public static Value Equal(Object... values) { return action -> compare(values, action, Comparison.EQUAL); }
+
+	private static boolean compare(Object[] values, Action action, Comparison comparison) {
 		if (values.length < 2) {
 			throw new IllegalArgumentException(
 				"[JScratch CompareValue] Comparison requires at least 2 values"
@@ -110,33 +91,39 @@ public final class CompareValue {
 		);
 	}
 
-	private static boolean compareNumbers(
-		double a,
-		double b,
-		Comparison comparison
-	) {
-		return switch (comparison) {
-			case GREATER -> a > b;
-			case GREATER_EQUAL -> a >= b;
-			case LESS -> a < b;
-			case LESS_EQUAL -> a <= b;
-			case EQUAL -> a == b;
-		};
+	private static boolean compareNumbers(double a, double b, Comparison comparison) {
+		switch (comparison) {
+			case GREATER:
+				return a > b;
+			case GREATER_EQUAL:
+				return a >= b;
+			case LESS:
+				return a < b;
+			case LESS_EQUAL:
+				return a <= b;
+			case EQUAL:
+				return a == b;
+			default:
+				throw new IllegalArgumentException("Unknown comparison: " + comparison);
+		}
 	}
 
-	private static boolean compareStrings(
-		String a,
-		String b,
-		Comparison comparison
-	) {
+	private static boolean compareStrings(String a, String b, Comparison comparison) {
 		int result = a.compareTo(b);
 
-		return switch (comparison) {
-			case GREATER -> result > 0;
-			case GREATER_EQUAL -> result >= 0;
-			case LESS -> result < 0;
-			case LESS_EQUAL -> result <= 0;
-			case EQUAL -> result == 0;
-		};
+		switch (comparison) {
+			case GREATER:
+				return result > 0;
+			case GREATER_EQUAL:
+				return result >= 0;
+			case LESS:
+				return result < 0;
+			case LESS_EQUAL:
+				return result <= 0;
+			case EQUAL:
+				return result == 0;
+			default:
+				throw new IllegalArgumentException("Unknown comparison: " + comparison);
+		}
 	}
 }

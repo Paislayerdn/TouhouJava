@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import graphics.Depict;
 import resource.ResourceLoader;
@@ -69,7 +70,7 @@ public class TitleScreen implements GameState {
 	
 	private List<TitleThing> getSakuras() {
 		synchronized (sakuraLock) {
-			return List.copyOf(sakuras);
+			return Collections.unmodifiableList(new ArrayList<>(sakuras));
 		}
 	}
 

@@ -15,23 +15,35 @@ public final class CollisionChecker {
 	}
 	
 	private static boolean checkHitboxes(Hitbox a, Hitbox b) {
-		if (a instanceof CircleHitbox ca &&
-			b instanceof CircleHitbox cb) {
+		if (a instanceof CircleHitbox &&
+			b instanceof CircleHitbox) {
+			CircleHitbox ca = (CircleHitbox) a;
+			CircleHitbox cb = (CircleHitbox) b;
+
 			return circleCircle(ca, cb);
 		}
 
-		if (a instanceof CircleHitbox ca &&
-			b instanceof RectangleHitbox rb) {
+		if (a instanceof CircleHitbox &&
+			b instanceof RectangleHitbox) {
+			CircleHitbox ca = (CircleHitbox) a;
+			RectangleHitbox rb = (RectangleHitbox) b;
+
 			return circleRectangle(ca, rb);
 		}
 
-		if (a instanceof RectangleHitbox ra &&
-			b instanceof CircleHitbox cb) {
+		if (a instanceof RectangleHitbox &&
+			b instanceof CircleHitbox) {
+			RectangleHitbox ra = (RectangleHitbox) a;
+			CircleHitbox cb = (CircleHitbox) b;
+
 			return circleRectangle(cb, ra);
 		}
 
-		if (a instanceof RectangleHitbox ra &&
-			b instanceof RectangleHitbox rb) {
+		if (a instanceof RectangleHitbox &&
+			b instanceof RectangleHitbox) {
+			RectangleHitbox ra = (RectangleHitbox) a;
+			RectangleHitbox rb = (RectangleHitbox) b;
+
 			return rectangleRectangle(ra, rb);
 		}
 

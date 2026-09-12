@@ -27,7 +27,6 @@ local bullette = function()
 
 			parallel(
 				sequence(
-					--wait( div(get("jndex")) ),
 					warp(boss),
 					look( get( "offset" ) ),
 					turn(mul(get("index"), angle1)),

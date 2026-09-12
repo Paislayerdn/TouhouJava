@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.GradientPaint;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 
 public final class TextDrawer {
 	private static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 18);
@@ -20,7 +21,7 @@ public final class TextDrawer {
 	public static void draw(Graphics2D g2, String text, double x, double y, Font font) {
 		Font oldFont = g2.getFont();
 		Paint oldPaint = g2.getPaint();
-		var oldTransform = g2.getTransform();
+		AffineTransform oldTransform = g2.getTransform();
 
 		g2.setRenderingHint(
 			RenderingHints.KEY_TEXT_ANTIALIASING,

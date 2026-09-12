@@ -46,13 +46,16 @@ final class ActionUtil {
 	private ActionUtil() {}
 
 	static Entity requireEntity(Action action) {
-		if (!(action.getOwner() instanceof Entity entity)) {
+		Object owner = action.getOwner();
+
+		if (!(owner instanceof Entity)) {
 			throw new IllegalStateException(
 				"[JScratch " + action.getClass().getSimpleName()
 				+ "] Owner must be an Entity"
 			);
 		}
-		return entity;
+
+		return (Entity) owner;
 	}
 }
 

@@ -18,7 +18,8 @@ class LookTowardsAction extends Action {
 
 		double angle = Math.toDegrees(Math.atan2(dy, dx));
 
-		if (owner instanceof Entity entity && entity.getAngleOverride()) {
+		if (owner instanceof Entity) {
+			Entity entity = (Entity) owner;
 			entity.setAppearAngle(angle);
 		} else {
 			owner.setTrueAngle(angle);
@@ -60,8 +61,14 @@ class AngleAction extends Action {
 	}
 
 	private void applyActiveAngle(double value) {
-		if (owner instanceof Entity entity && entity.getAngleOverride()) {
-			applyAppearAngle(value);
+		if (owner instanceof Entity) {
+			Entity entity = (Entity) owner;
+
+			if (entity.getAngleOverride()) {
+				applyAppearAngle(value);
+			} else {
+				applyTrueAngle(value);
+			}
 		} else {
 			applyTrueAngle(value);
 		}
@@ -77,7 +84,7 @@ class AngleAction extends Action {
 	}
 
 	private void applyAppearAngle(double value) {
-		if (!(owner instanceof Entity entity)) {
+		if (!(owner instanceof Entity)) {
 			JDebug.log(
 				"[JScratch] Warning: AppearAngle used on a Thing. "
 				+ "Using trueAngle instead."
@@ -86,12 +93,10 @@ class AngleAction extends Action {
 			applyTrueAngle(value);
 			return;
 		}
-
+		Entity entity = (Entity) owner;
 		switch (operation) {
-			case SET:
-				entity.setAppearAngle(value); break;
-			case CHANGE:
-				entity.setAppearAngle(entity.getAppearAngle() + value); break;
+			case SET: entity.setAppearAngle(value); break;
+			case CHANGE: entity.setAppearAngle(entity.getAppearAngle() + value); break;
 		}
 	}
 }
@@ -107,7 +112,7 @@ class AngleOverrideAction extends Action {
 
 	@Override
 	public void start() {
-		if (!(owner instanceof Entity entity)) {
+		if (!(owner instanceof Entity)) {
 			JDebug.log(
 				"[JScratch] Warning: AngleOverride used on a Thing. "
 				+ "Ignoring."
@@ -116,7 +121,7 @@ class AngleOverrideAction extends Action {
 			finish();
 			return;
 		}
-
+		Entity entity = (Entity) owner;
 		entity.setAngleOverride(enabled);
 		finish();
 	}

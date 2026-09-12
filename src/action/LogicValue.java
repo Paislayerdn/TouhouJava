@@ -44,11 +44,13 @@ public final class LogicValue {
 	}
 
 	protected static boolean toBoolean(Object value, Action action) {
-		if (value instanceof Boolean bool) {
+		if (value instanceof Boolean) {
+			Boolean bool = (Boolean) value;
 			return bool;
 		}
 
-		if (value instanceof Number number) {
+		if (value instanceof Number) {
+			Number number = (Number) value;
 			double n = number.doubleValue();
 
 			if (n == 1) {

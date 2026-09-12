@@ -17,7 +17,7 @@ public class TestSpell extends Spell {
 	
 	@Override
 	public void onStart() {
-		boss.setMaxHP(1000);
+		boss.setMaxHP(50);
 	}
 
 	@Override

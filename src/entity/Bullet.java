@@ -14,7 +14,7 @@ public class Bullet extends Entity {
 	private Sound graze;
 
 	public Bullet() {
-		this(999,999);
+		this(888,888);
 	}
 	public Bullet(double x, double y) {
 		this.x = x;

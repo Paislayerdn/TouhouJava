@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -70,12 +71,20 @@ public class ResourceLoader {
 		}
 
 		try (InputStream in = url.openStream()) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			byte[] buffer = new byte[4096];
+			int n;
+
+			while ((n = in.read(buffer)) != -1) {
+				out.write(buffer, 0, n);
+			}
+
 			return new String(
-				in.readAllBytes(),
+				out.toByteArray(),
 				StandardCharsets.UTF_8
 			);
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load text resource: " + name, e);
 		}
-	}
+			}
 }

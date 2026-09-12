@@ -14,9 +14,9 @@ local bulette = function()
 	return spawnBullet(
 		sequence(
 			setCostume("CircleBullet"),
-			setSize(10),
+			setSize(11),
 			setBrightness(100),
-			addCircleHitbox("bulletHB", 8),
+			addCircleHitbox("bulletHB", 5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			var("index", get("i")),
 			var("jndex", get("j")),

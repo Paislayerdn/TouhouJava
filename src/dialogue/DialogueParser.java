@@ -28,26 +28,13 @@ public final class DialogueParser {
 				continue;
 
 			switch (token) {
-				case SPEAKER ->
-					dialogue.addCommand( new SpeakerCommand(tokens.poll()) );
-
-				case EXPRESSION ->
-					dialogue.addCommand( new ExpressionCommand(tokens.poll()) );
-
-				case MOVE ->
-					dialogue.addCommand( parseMove(tokens) );
-
-				case SFX ->
-					dialogue.addCommand( new SFXCommand(tokens.poll()) );
-
-				case TEXT ->
-					dialogue.addCommand(
-						new TextCommand( tokens.poll()) );
-
-				case MISC ->
-					dialogue.addCommand( parseMisc(tokens) );
-
-				default -> DialogueDebug.log("Unknown token: " + token);
+				case SPEAKER:		dialogue.addCommand( new SpeakerCommand(tokens.poll()) ); break;
+				case EXPRESSION:	dialogue.addCommand( new ExpressionCommand(tokens.poll()) ); break;
+				case MOVE:			dialogue.addCommand( parseMove(tokens) ); break;
+				case SFX:			dialogue.addCommand( new SFXCommand(tokens.poll()) ); break;
+				case TEXT:			dialogue.addCommand( new TextCommand( tokens.poll()) ); break;
+				case MISC:			dialogue.addCommand( parseMisc(tokens) );  break;
+				default:			DialogueDebug.log("Unknown token: " + token); break;
 			}
 		}
 

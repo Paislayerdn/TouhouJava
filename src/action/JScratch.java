@@ -10,14 +10,14 @@ public final class JScratch {
 	// POSITION
 	public static Action MoveX(Object x) { return Move(x, 0); }
 	public static Action MoveY(Object y) { return Move(0, y); }
-	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
+	public static Action Move(Object x, Object y) { return new PositionAction(x, y); }
 	public static Action Warp(Entity target) { return GoTo(target); }
-	public static Action GoTo(Entity target) { return new GoToAction(target); }
+	public static Action GoTo(Entity target) { return new PositionAction(target); }
 	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
-	public static Action GoTo(Object x, Object y) { return new SetAction(x, y); }
-	public static Action SetX(Object x) { return new SetAction(x, SetAction.Axis.X); }
-	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
-	public static Action Forward(Object distance) { return new ForwardAction(distance); }
+	public static Action GoTo(Object x, Object y) { return new PositionAction(x, y); }
+	public static Action SetX(Object x) { return new PositionAction(x, Axis.X); }
+	public static Action SetY(Object y) { return new PositionAction(y, Axis.Y); }
+	public static Action Forward(Object distance) { return new PositionAction(distance); }
 
 	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
