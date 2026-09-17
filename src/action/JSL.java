@@ -21,7 +21,7 @@ public final class JSL {
 	private JSL() {}
 	
 	private static Object toJava(LuaValue value) {
-		if (value.isnumber()) {	return value.todouble();}
+		if (value.isnumber()) {	return value.tofloat();}
 		if (value.isstring()) {	return value.tojstring();}
 		if (value.isuserdata()) { return value.touserdata(); }
 

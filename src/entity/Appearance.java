@@ -5,14 +5,16 @@ import graphics.AppearanceCache;
 
 public class Appearance {
 	public BufferedImage costume;
-	public double color;
-	public double pixelate;
-	public double brightness;
-	public double ghost;
-	public double size;
+	public float color;
+	public float desaturation;
+	public float pixelate;
+	public float brightness;
+	public float ghost;
+	public float size;
 
 	public Appearance() {
 		color = 0;
+		desaturation = 0;
 		pixelate = 0;
 		brightness = 0;
 		ghost = 0;
@@ -23,21 +25,24 @@ public class Appearance {
 		return AppearanceCache.get(
 			costume,
 			color,
+			desaturation,
 			pixelate,
 			brightness
 		);
 	}
 
 	public void setCostume(BufferedImage costume) { this.costume = costume; }
-	public void setColor(double color) { this.color = ((color % 256) + 256) % 256; }
-	public void changeColor(double amount) { setColor(color + amount); }
-	public void setPixelate(double pixelate) { this.pixelate = Math.max(0, pixelate); }
-	public void changePixelate(double amount) { setPixelate(pixelate + amount); }
-	public void setBrightness(double brightness) { this.brightness = Math.max(-100, Math.min(100, brightness)); }
-	public void changeBrightness(double amount) { setBrightness(brightness + amount); }
+	public void setColor(float color) { this.color = ((color % 256) + 256) % 256; }
+	public void changeColor(float amount) { setColor(color + amount); }
+	public void setDesaturation(float desat) { this.desaturation = Math.max(0, Math.min(100, desat)); }
+	public void changeDesaturation(float desat) { setDesaturation(desaturation + desat); }
+	public void setPixelate(float pixelate) { this.pixelate = Math.max(0, pixelate); }
+	public void changePixelate(float amount) { setPixelate(pixelate + amount); }
+	public void setBrightness(float brightness) { this.brightness = Math.max(-100, Math.min(100, brightness)); }
+	public void changeBrightness(float amount) { setBrightness(brightness + amount); }
 	// These do NOT require regenerating the image.
-	public void setGhost(double ghost) { this.ghost = Math.max(0, Math.min(100, ghost)); }
-	public void changeGhost(double amount) { setGhost(ghost + amount); }
-	public void setSize(double size) { this.size = Math.max(0, size); }
-	public void changeSize(double amount) { setSize(size + amount); }
+	public void setGhost(float ghost) { this.ghost = Math.max(0, Math.min(100, ghost)); }
+	public void changeGhost(float amount) { setGhost(ghost + amount); }
+	public void setSize(float size) { this.size = Math.max(0, size); }
+	public void changeSize(float amount) { setSize(size + amount); }
 }

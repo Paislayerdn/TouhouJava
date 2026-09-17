@@ -16,7 +16,7 @@ class SetSoundVolumeAction extends Action {
 	@Override
 	public void start() {
 		Sound actualSound = (Sound) getVariable(sound.getName());
-		actualSound.setVolume( (float) resolveDouble(volume) );
+		actualSound.setVolume( resolveFloat(volume) );
 		finish();
 	}
 }

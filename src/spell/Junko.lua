@@ -13,14 +13,14 @@ end
 local bulette = function()
 	return spawnBullet(
 		sequence(
+			var("index", get("i")),
+			var("jndex", get("j")),
+			var("speed", 2.75),
 			setCostume("CircleBullet"),
 			setSize(10),
 			setBrightness(100),
 			addCircleHitbox("bulletHB", 8),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			var("index", get("i")),
-			var("jndex", get("j")),
-			var("speed", 2.75),
 			warp(999, 999),
 
 			parallel(

@@ -20,18 +20,18 @@ public class Phyllotaxis extends Spell {
 		boss.setMaxHP(1000);
 	}
 	
-	private Action bullete(double goldenAngle, double step) {
-		double maxBright = 60;
+	private Action bullete(float goldenAngle, float step) {
+		float maxBright = 60;
 		return SpawnBullet(
 			Sequence(
+				Var("index", Get("i")),
+				Var("speed", 0.15),
+				
 				SetCostume("OvalBullet"),
 				SetSize(11), SetColor(240),
 				SetBrightness(maxBright), SetGhost(90),
 				AddCircleHitbox("bulletHB", 7),
 				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-
-				Var("index", Get("i")),
-				Var("speed", 0.15),
 				GoTo(999,999),
 				Wait(Add(Mul(Get("index"), 0.35)) ),
 				Parallel(
@@ -75,8 +75,8 @@ public class Phyllotaxis extends Spell {
 	@Override
 	protected Action buildAction() {
 		int count = 250;
-		double step = 4;
-		double goldenAngle = 360*( 1-2/( 1+Math.sqrt(5) ) );
+		float step = 4;
+		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
 		return Forever("Sequence",
 			Var("offset", Mul(Random(), 360) ),
 			

@@ -48,7 +48,7 @@ public class DialogueRunner {
 	public void waitForAdvance() { waitingForInput = true; }
 
 	public void startMovement(DialogueSpeaker speaker,
-		double x, double y, int duration, boolean blocking
+		float x, float y, int duration, boolean blocking
 	) {
 		movement = new DialogueMovement(speaker, x, y, duration);
 

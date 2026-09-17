@@ -13,11 +13,11 @@ public final class TextDrawer {
 	// Utility class
 	private TextDrawer() {}
 
-	public static void draw(Graphics2D g2, String text, double x, double y) {
+	public static void draw(Graphics2D g2, String text, float x, float y) {
 		draw(g2, text, x, y, DEFAULT_FONT);
 	}
 
-	public static void draw(Graphics2D g2, String text, double x, double y, Font font) {
+	public static void draw(Graphics2D g2, String text, float x, float y, Font font) {
 		Font oldFont = g2.getFont();
 		Paint oldPaint = g2.getPaint();
 		var oldTransform = g2.getTransform();

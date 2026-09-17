@@ -11,26 +11,27 @@ public final class AppearanceCache {
 
 	public static BufferedImage get(
 			BufferedImage costume,
-			double color,
-			double pixelate,
-			double brightness
+			float color,
+			float desaturation,
+			float pixelate,
+			float brightness
 	) {
 		if (costume == null) {
 			return null;
 		}
 
 		// No effects? Don't cache anything unnecessarily.
-		if (color == 0
-				&& pixelate == 0
-				&& brightness == 0) {
+		if (color == 0 && pixelate == 0 && brightness == 0) {
 			return costume;
 		}
 
-		Key key = new Key(
-			costume,
-			color,
-			pixelate,
-			brightness
+		Key key;
+		key = new Key(
+				costume,
+				color,
+				desaturation,
+				pixelate,
+				brightness
 		);
 
 		return cache.computeIfAbsent(key, k -> {
@@ -52,14 +53,13 @@ public final class AppearanceCache {
 		});
 	}
 
-	public static void clear() {
-		cache.clear();
-	}
+	public static void clear() { cache.clear(); }
 
 	private record Key(
 		BufferedImage costume,
-		double color,
-		double pixelate,
-		double brightness
+		float color,
+		float desaturation,
+		float pixelate,
+		float brightness
 	) {}
 }

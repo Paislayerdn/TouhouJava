@@ -5,12 +5,12 @@ import java.awt.image.BufferedImage;
 public final class DepictUtility {
 	private DepictUtility() {}
 
-	public static BufferedImage pixelate(BufferedImage source, double amount) {
+	public static BufferedImage pixelate(BufferedImage source, float amount) {
 		if (amount <= 0) {
 			return source;
 		}
 
-		double blockSize = amount + 1;
+		float blockSize = amount + 1;
 
 		BufferedImage result = new BufferedImage(
 			source.getWidth(),
@@ -23,8 +23,8 @@ public final class DepictUtility {
 
 				int sample = source.getRGB(x, y);
 
-				double maxX = Math.min(x + blockSize, source.getWidth());
-				double maxY = Math.min(y + blockSize, source.getHeight());
+				float maxX = Math.min(x + blockSize, source.getWidth());
+				float maxY = Math.min(y + blockSize, source.getHeight());
 
 				for (int py = y; py < maxY; py++) {
 					for (int px = x; px < maxX; px++) {
@@ -37,7 +37,7 @@ public final class DepictUtility {
 		return result;
 	}
 
-	public static BufferedImage color(BufferedImage source, double amount) {
+	public static BufferedImage color(BufferedImage source, float amount) {
 		if (amount == 0) {
 			return source;
 		}
@@ -87,7 +87,7 @@ public final class DepictUtility {
 		return result;
 	}
 
-	public static BufferedImage brightness(BufferedImage source, double amount) {
+	public static BufferedImage brightness(BufferedImage source, float amount) {
 		if (amount == 0) {
 			return source;
 		}
@@ -98,7 +98,7 @@ public final class DepictUtility {
 			BufferedImage.TYPE_INT_ARGB
 		);
 
-		double factor = Math.abs(amount) / 100.0;
+		float factor = Math.abs(amount) / 100.0f;
 
 		for (int y = 0; y < source.getHeight(); y++) {
 			for (int x = 0; x < source.getWidth(); x++) {

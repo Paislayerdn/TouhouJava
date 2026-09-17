@@ -43,9 +43,9 @@ public class VariableAction extends Action {
 			case CHANGE:
 				reservedCheck(name);
 				Object current = getVariable(name);
-				double result =
-					((Number) current).doubleValue()
-					+ resolveDouble(value);
+				float result =
+					((Number) current).floatValue()
+					+ resolveFloat(value);
 
 				setVariable(name, result);
 				break;

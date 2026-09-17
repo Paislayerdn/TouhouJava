@@ -21,40 +21,40 @@ public final class Depict {
 	// Utility class
 	private Depict() {}
 
-	public static void circle(Graphics2D g2, double x, double y, double radius) {
+	public static void circle(Graphics2D g2, float x, float y, float radius) {
 		oval(g2, x, y, radius, radius, 0);
 	}
-	public static void circle(Graphics2D g2, double x, double y, double radius, double angle) {
+	public static void circle(Graphics2D g2, float x, float y, float radius, float angle) {
 		oval(g2, x, y, radius, radius, angle);
 	}
-	public static void circleOutline(Graphics2D g2, double x, double y, double radius) {
+	public static void circleOutline(Graphics2D g2, float x, float y, float radius) {
 		circleOutline(g2, x, y, radius, DEFAULT_OUTLINE_WIDTH);
 	}
-	public static void circleOutline(Graphics2D g2, double x, double y, double radius, float thickness) {
+	public static void circleOutline(Graphics2D g2, float x, float y, float radius, float thickness) {
 		var oldStroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(thickness));
 		
-		g2.draw( new Ellipse2D.Double(x-radius, y-radius, radius * 2, radius * 2) );
+		g2.draw( new Ellipse2D.Float(x-radius, y-radius, radius * 2, radius * 2) );
 		g2.setStroke(oldStroke);
 	}
 
-	public static void oval(Graphics2D g2, double x, double y, double width, double height) {
+	public static void oval(Graphics2D g2, float x, float y, float width, float height) {
 		oval(g2, x, y, width, height, 0);
 	}
-	public static void oval(Graphics2D g2, double x, double y, double width, double height, double angle) {
+	public static void oval(Graphics2D g2, float x, float y, float width, float height, float angle) {
 		AffineTransform old = g2.getTransform();
 
 		g2.translate(x, y);
 		g2.rotate(Math.toRadians(angle));
 
-		g2.fill( new Ellipse2D.Double(-width/2, -height/2, width, height) );
+		g2.fill( new Ellipse2D.Float(-width/2, -height/2, width, height) );
 		g2.setTransform(old);
 	}
 	
-	public static void rectangleOutline(Graphics2D g2, double x, double y, double width, double height) {
+	public static void rectangleOutline(Graphics2D g2, float x, float y, float width, float height) {
 		rectangleOutline(g2, x, y, width, height, DEFAULT_OUTLINE_WIDTH);
 	}
-	public static void rectangleOutline(Graphics2D g2, double x, double y, double width, double height, float thickness) {
+	public static void rectangleOutline(Graphics2D g2, float x, float y, float width, float height, float thickness) {
 		var oldStroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(thickness));
 
@@ -65,10 +65,10 @@ public final class Depict {
 		g2.setStroke(oldStroke);
 	}
 
-	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2) {
+	public static void line(Graphics2D g2, float x1, float y1, float x2, float y2) {
 		line(g2, x1, y1, x2, y2, DEFAULT_STROKE_WIDTH);
 	}
-	public static void line(Graphics2D g2, double x1, double y1, double x2, double y2, float thickness) {
+	public static void line(Graphics2D g2, float x1, float y1, float x2, float y2, float thickness) {
 		var oldStroke = g2.getStroke();
 		g2.setStroke( new BasicStroke(thickness) );
 
@@ -95,12 +95,12 @@ public final class Depict {
 		g2.rotate(Math.toRadians(thing.getTrueAngle()));
 
 		if (appearance.size != 100) {
-			double scale = appearance.size / 100.0;
+			float scale = appearance.size / 100.0f;
 			g2.scale(scale, scale);
 		}
 
 		if (appearance.ghost != 0) {
-			float alpha = 1.0f - (float)appearance.ghost / 100.0f;
+			float alpha = 1.0f - appearance.ghost / 100.0f;
 
 			g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha) );
 		}
@@ -112,7 +112,7 @@ public final class Depict {
 	}
 	public static void image(Graphics2D g2,
 		BufferedImage image,
-		double x, double y
+		float x, float y
 	) {
 		AffineTransform old = g2.getTransform();
 
@@ -125,20 +125,19 @@ public final class Depict {
 	
 	public static void image(Graphics2D g2,
 		BufferedImage image,
-		double x, double y,
-		double width, double height
+		float x, float y,
+		float width, float height
 	) {
 		AffineTransform old = g2.getTransform();
-
 		g2.translate(x, y);
+
+		float halfWidth = width / 2.0f;
+		float halfHeight = height / 2.0f;
 
 		// Cancel the world's Y flip so the image is upright.
 		g2.scale(1, -1);
 
-		g2.drawImage(
-			image, (int) (-width / 2), (int) (-height / 2),
-			(int) width, (int) height, null
-		);
+		g2.drawImage(image, (int) -halfWidth, (int) -halfHeight, (int) width, (int) height, null);
 
 		g2.setTransform(old);
 	}

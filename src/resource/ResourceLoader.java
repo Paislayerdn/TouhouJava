@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class ResourceLoader {
+public final class ResourceLoader {
 	private static final Map<String, BufferedImage> images = new HashMap<>();
 	private static final Map<String, AudioData> sounds = new HashMap<>();
 	private static final Map<String, Font> fonts = new HashMap<>();
@@ -51,19 +51,8 @@ public class ResourceLoader {
 		return font;
 	}
 	
-	public static String lua(String name) {
-		return text(ResourceFinder.SPELL, name, ".lua");
-	}
-
-	public static String dialogue(String name) {
-		return text(ResourceFinder.DIALOGUE, name, ".txt");
-	}
-	private static String text(
-		String folder,
-		String name,
-		String... extensions
-	) {
-		URL url = ResourceFinder.find(folder, name, extensions );
+	public static String text(String folder, String name) {
+		URL url = ResourceFinder.find(folder, name);
 
 		if (url == null) {
 			throw new RuntimeException("Text resource not found: " + name);
@@ -78,4 +67,27 @@ public class ResourceLoader {
 			throw new RuntimeException("Failed to load text resource: " + name, e);
 		}
 	}
+	public static String lua(String name) {
+		return text(ResourceFinder.SPELL, name, ".lua");
+	}
+
+	public static String dialogue(String name) {
+		return text(ResourceFinder.DIALOGUE, name, ".txt");
+	}
+	private static String text(String folder, String name, String... extensions	) {
+		URL url = ResourceFinder.find(folder, name, extensions);
+
+		if (url == null) {
+			throw new RuntimeException("Text resource not found: " + name);
+		}
+
+		try (InputStream in = url.openStream()) {
+			return new String(
+				in.readAllBytes(),
+				StandardCharsets.UTF_8
+			);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to load text resource: " + name, e);
+		}
+	}	
 }

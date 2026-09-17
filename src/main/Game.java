@@ -1,6 +1,6 @@
 package main;
 
-import java.awt.Graphics2D;
+import graphics.Renderer;
 
 import state.gameplay.PlayingStats;
 import state.GameState;
@@ -19,8 +19,8 @@ public class Game {
 		currentState.update();
 	}
 
-	public void draw(Graphics2D g2) {
-		currentState.draw(g2);
+	public void draw(Renderer renderer) {
+		currentState.draw(renderer);
 	}
 	
 	public void setPlayingStats(PlayingStats playingStats) { this.playingStats = playingStats; }

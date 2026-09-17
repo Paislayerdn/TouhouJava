@@ -1,14 +1,10 @@
 package state;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-
-import main.Game;
 import main.Input;
-import main.Settings;
 
 import entity.Boss;
 import entity.Player;
+import graphics.Renderer;
 import resource.Music;
 import resource.ResourceLoader;
 import state.gameplay.PlayingStats;
@@ -55,26 +51,22 @@ public class Playing implements GameState {
 	}
 	
 	@Override
-	public void draw(Graphics2D g2) {
-		AffineTransform oldTransform = g2.getTransform();
+	public void draw(Renderer renderer) {
+		renderer.beginPlayfield();
 
-		// Move from global game space
-		// to the playfield's local coordinate space.
-		g2.translate(
-			Settings.PLAYFIELD_CENTER_X,
-			Settings.PLAYFIELD_CENTER_Y
-		);
+		boss.draw(renderer);
+		BulletManager.draw(renderer);
 
-		boss.draw(g2);
-		BulletManager.draw(g2);
 		if (Debug.isShowHitboxes()) {
-			BulletManager.drawHitboxes(g2);
-			boss.drawHitboxes(g2);
+			BulletManager.drawHitboxes(renderer);
+			boss.drawHitboxes(renderer);
 		}
-		player.draw(g2);
-		
-		g2.setTransform(oldTransform);
-		HUD.draw(g2);
-		Debug.draw(g2);
+
+		player.draw(renderer);
+
+		renderer.endPlayfield();
+
+		HUD.draw(renderer);
+		Debug.draw(renderer);
 	}
 }

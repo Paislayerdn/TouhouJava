@@ -1,8 +1,8 @@
 package state;
 
-import java.awt.Graphics2D;
+import graphics.Renderer;
 
 public interface GameState {
 	void update();
-	void draw(Graphics2D g2);
+	void draw(Renderer renderer);
 }

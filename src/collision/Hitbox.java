@@ -1,5 +1,6 @@
 package collision;
 
+import graphics.Renderer;
 import java.util.Locale;
 import java.awt.Graphics2D;
 import java.util.HashSet;
@@ -10,8 +11,8 @@ public abstract class Hitbox {
 	private Entity owner;
 	private String name = "[UNNAMED HITBOX]";
 
-	private double offsetX;
-	private double offsetY;
+	private float offsetX;
+	private float offsetY;
 
 	private final HashSet<String> tags = new HashSet<>();
 
@@ -30,21 +31,21 @@ public abstract class Hitbox {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
-	public double getOffsetX() { return offsetX; }
-	public double getOffsetY() { return offsetY; }
-	public void setOffsetX(double x) { this.offsetX = x; }
-	public void setOffsetY(double y) { this.offsetY = y; }
-	public void setOffset(double x, double y) {
+	public float getOffsetX() { return offsetX; }
+	public float getOffsetY() { return offsetY; }
+	public void setOffsetX(float x) { this.offsetX = x; }
+	public void setOffsetY(float y) { this.offsetY = y; }
+	public void setOffset(float x, float y) {
 		this.offsetX = x;
 		this.offsetY = y;
 	}
-	public void changeOffset(double dx, double dy) {
+	public void changeOffset(float dx, float dy) {
 		this.offsetX += dx;
 		this.offsetY += dy;
 	}
 	
-	public double getWorldX() { return owner.getX() + offsetX; }
-	public double getWorldY() { return owner.getY() + offsetY; }
+	public float getWorldX() { return owner.getX() + offsetX; }
+	public float getWorldY() { return owner.getY() + offsetY; }
 		
 	public boolean isEnabled() { return enabled; }
 	public void setEnabled(boolean value) { enabled = value; }
@@ -64,5 +65,5 @@ public abstract class Hitbox {
 	}
 	public HashSet<String> getTags() { return tags; }
 	
-	public abstract void drawDebug(Graphics2D g2);
+	public abstract void drawDebug(Renderer renderer);
 }

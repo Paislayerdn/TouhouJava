@@ -3,7 +3,6 @@ package resource;
 import java.net.URL;
 
 public final class ResourceFinder {
-	
 	public static final String IMAGE = "/assets/images/";
 	public static final String SOUND = "/assets/sounds/";
 	public static final String MUSIC = "/assets/music/";
@@ -13,6 +12,9 @@ public final class ResourceFinder {
 	
 	private ResourceFinder() {}
 
+	public static URL find(String folder, String name) {
+		return ResourceFinder.class.getResource(folder + name);
+	}
 	public static URL find(
 			String folder,
 			String name,
@@ -27,4 +29,4 @@ public final class ResourceFinder {
 		}
 		return null;
 	}
-}
+}		

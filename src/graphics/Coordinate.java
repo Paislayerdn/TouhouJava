@@ -8,49 +8,49 @@ public final class Coordinate {
 	private Coordinate() {}
 
 	/* ---------- World -> Screen ---------- */
-	public static double toScreenX(double worldX) {
+	public static float toScreenX(float worldX) {
 		return Settings.PLAYFIELD_CENTER_X + worldX;
 	}
-	public static double toScreenY(double worldY) {
+	public static float toScreenY(float worldY) {
 		return Settings.PLAYFIELD_CENTER_Y + worldY;
 	}
 
-	public static Point2D.Double toScreen(
-		double worldX,
-		double worldY
+	public static Point2D.Float toScreen(
+		float worldX,
+		float worldY
 	) {
-		return new Point2D.Double(
+		return new Point2D.Float(
 			toScreenX(worldX),
 			toScreenY(worldY)
 		);
 	}
 
 	/* ---------- Screen -> World ---------- */
-	public static double toWorldX(double screenX) {
+	public static float toWorldX(float screenX) {
 		return screenX - Settings.PLAYFIELD_CENTER_X;
 	}
-	public static double toWorldY(double screenY) {
+	public static float toWorldY(float screenY) {
 		return screenY - Settings.PLAYFIELD_CENTER_Y;
 	}
 
-	public static Point2D.Double toWorld(
-		double screenX,
-		double screenY
+	public static Point2D.Float toWorld(
+		float screenX,
+		float screenY
 	) {
-		return new Point2D.Double(
+		return new Point2D.Float(
 			toWorldX(screenX),
 			toWorldY(screenY)
 		);
 	}
 
 	/* ---------- Formatting ---------- */
-	public static String format(double x, double y) {
+	public static String format(float x, float y) {
 		return format(x, y, 2);
 	}
 
 	public static String format(
-		double x,
-		double y,
+		float x,
+		float y,
 		int decimals
 	) {
 		String pattern =
@@ -60,11 +60,11 @@ public final class Coordinate {
 		return String.format(pattern, x, y);
 	}
 
-	public static String format(Point2D.Double point) {
+	public static String format(Point2D.Float point) {
 		return format(point.x, point.y);
 	}
 
-	public static String format(Point2D.Double point, int decimals) {
+	public static String format(Point2D.Float point, int decimals) {
 		return format(point.x, point.y, decimals);
 	}
 }

@@ -24,7 +24,7 @@ class AddCircleHitbox extends Action {
 			throw new IllegalArgumentException("[JScratch AddCircleHitbox] Hitbox already exists: " + name);
 		}
 
-		entity.addHitbox( circleHB(entity, name, resolveDouble(radius)) );
+		entity.addHitbox( circleHB(entity, name, resolveFloat(radius)) );
 
 		finish();
 	}
@@ -52,7 +52,7 @@ class AddRectangleHitbox extends Action {
 		}
 
 		entity.addHitbox(
-			rectangleHB(entity, name, resolveDouble(width), resolveDouble(height))
+			rectangleHB(entity, name, resolveFloat(width), resolveFloat(height))
 		);
 
 		finish();

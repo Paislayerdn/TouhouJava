@@ -6,14 +6,14 @@ import dialogue.DialogueRunner;
 import dialogue.DialogueSpeaker;
 
 public class MoveCommand implements DialogueCommand {
-	private final double x;
-	private final double y;
+	private final float x;
+	private final float y;
 	private final int duration;
 	private final boolean blocking;
 
 	public MoveCommand(
-		double x,
-		double y,
+		float x,
+		float y,
 		int duration,
 		boolean blocking
 	) {

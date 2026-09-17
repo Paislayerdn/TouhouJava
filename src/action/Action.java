@@ -23,8 +23,6 @@ public abstract class Action {
 	public Object getVariable(String name) { return context.get(name); }
 	public void setVariable(String name, Object value) { context.set(name, value); }
 
-	
-	public Object rs(Object value) { return resolve(value); }
 	public Object resolve(Object value) {
 		while (value instanceof Value) {
 			value = ((Value) value).get(this);
@@ -33,9 +31,8 @@ public abstract class Action {
 		return value;
 	}
 
-	public double rsD(Object value) { return resolveDouble(value); }
-	public double resolveDouble(Object value) {
-		return ((Number) resolve(value)).doubleValue();
+	public float resolveFloat(Object value) {
+		return ((Number) resolve(value)).floatValue();
 	}
 	
 	public void start() {}

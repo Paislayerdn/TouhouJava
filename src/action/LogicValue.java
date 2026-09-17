@@ -49,7 +49,7 @@ public final class LogicValue {
 		}
 
 		if (value instanceof Number number) {
-			double n = number.doubleValue();
+			float n = number.floatValue();
 
 			if (n == 1) {
 				JDebug.log(

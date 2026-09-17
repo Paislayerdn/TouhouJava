@@ -10,7 +10,7 @@ public final class PlayingStats {
 	
 	public static boolean debugMode = false;
 	
-	public static  void reset() {
+	public static void reset() {
 		score = 0;
 		graze = 0;
 		lives = 3;

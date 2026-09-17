@@ -9,6 +9,10 @@ nbproject/private/
 *.class
 *.jar
 !lib/luaj-jse-3.0.2.jar
+!lib/lwjgl/
+!lib/lwjgl/*.jar
+!natives/lwjgl/
+!natives/lwjgl/*.jar
 
 # Logs
 *.log

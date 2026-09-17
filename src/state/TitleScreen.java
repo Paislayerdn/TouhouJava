@@ -14,6 +14,7 @@ import state.title.TitleThing;
 
 import action.Action;
 import static action.JScratch.*;
+import graphics.Renderer;
 
 public class TitleScreen implements GameState {
 	private final BufferedImage sakuraImage;
@@ -100,20 +101,23 @@ public class TitleScreen implements GameState {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
-		AffineTransform old = g2.getTransform();
-		g2.scale(0.5, 0.5);
-		Depict.image(g2, background, 0, 0);
-		reimu.draw(g2);
-		marisa.draw(g2);
-		Depict.image(g2, game1, 0, 0);
-		Depict.image(g2, game2, 0, 0);
-		g2.setTransform(old);
+	public void draw(Renderer renderer) {
+		renderer.beginTitle();
+		renderer.scale(0.5f, 0.5f);
+		
+		renderer.image(background, 0, 0);
+		reimu.draw(renderer);
+		marisa.draw(renderer);
+		renderer.image(game1, 0, 0);
+		renderer.image(game2, 0, 0);
 		
 		// Sakura layer
+		renderer.scale(2.0f, 2.0f);
 		for (TitleThing sakura : getSakuras()) {
-			sakura.draw(g2);
+			sakura.draw(renderer);
 		}
+		renderer.endTitle();
+		
 	}
 
 	private void spawnSakura() {
@@ -151,19 +155,13 @@ public class TitleScreen implements GameState {
 	}
 	
 	private Action show() {
-		int iteration1 = 240;
-		int iteration2 = 5;
+		int iteration1 = 120;
 		return Par(
 			For("i", 1, iteration1,
 				() -> Sequence(
 					MoveX(400.0/iteration1),
-					ChangeGhost(-100.0/iteration1)
-				)
-			),
-			For("j", 1, iteration2,
-				() -> Sequence(
-					ChangeBrightness(-100.0/iteration2),
-					Wait(1)
+					ChangeGhost(-100.0/iteration1),
+					ChangeBrightness(-100.0/iteration1)
 				)
 			)
 		);

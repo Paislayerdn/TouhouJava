@@ -11,6 +11,7 @@ import static collision.Hitboxes.*;
 import static collision.CollisionTags.*;
 
 import static action.JScratch.*;
+import graphics.Renderer;
 
 public class Player extends Entity {
 	private boolean focusing = false;
@@ -45,15 +46,15 @@ public class Player extends Entity {
 	public void update() {
 		updateActions();
 		
-		double speed = 4.2;
+		float speed = 4.2f;
 		focusing = Input.SPACE;
 		if (focusing) { speed = 2; }
 
-		double dx = 0;	double dy = 0;
+		float dx = 0;	float dy = 0;
 		if (Input.W) dy++;	if (Input.S) dy--;
 		if (Input.A) dx--;	if (Input.D) dx++;
 
-		double length = Math.sqrt(dx * dx + dy * dy);
+		float length = (float) Math.sqrt(dx * dx + dy * dy);
 
 		if (length > 0) {
 			dx /= length;	dy /= length;
@@ -112,9 +113,9 @@ public class Player extends Entity {
 //	}
 	
 	@Override
-	public void draw(Graphics2D g2) {
-		if (!focusing) this.run( SetColor(0) );
-		else this.run( SetColor(50) );
-		Depict.thing(g2, this);
+	public void draw(Renderer renderer) {
+		if (!focusing) this.run( SetColor(15) );
+		else this.run( SetColor(40) );
+		renderer.thing(this);
 	}
 }

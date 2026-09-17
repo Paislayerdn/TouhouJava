@@ -23,12 +23,12 @@ public class TestSpell extends Spell {
 	@Override
 	protected Action buildAction() {
 		int spokes = 13;
-		double spread = 215/(spokes); 
+		float spread = 215/(spokes); 
 		return Sequence(
 			Var("offset", 0),
 			Forever("Sequence",
-				For("i", 1, spokes, 
-					() -> SpawnBullet(
+				For("i", 1, spokes, () ->
+					SpawnBullet(
 						Par(
 							SetCostume("OvalBullet"),
 							SetSize(11),

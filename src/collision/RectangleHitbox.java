@@ -1,32 +1,30 @@
 package collision;
 
-import java.awt.Graphics2D;
-
-import graphics.Depict;
+import graphics.Renderer;
 
 import entity.Entity;
 
 public class RectangleHitbox extends Hitbox {
-	private double width;
-	private double height;
+	private float width;
+	private float height;
 
-	public RectangleHitbox(Entity owner, double width, double height) {
+	public RectangleHitbox(Entity owner, float width, float height) {
 		super(owner);
 		this.width = width;
 		this.height = height;
 	}
 
-	public RectangleHitbox(Entity owner, String name, double width, double height) {
+	public RectangleHitbox(Entity owner, String name, float width, float height) {
 		super(owner, name);
 		this.width = width;
 		this.height = height;
 	}
 
-	public double getWidth() { return width; }
-	public double getHeight() { return height; }
+	public float getWidth() { return width; }
+	public float getHeight() { return height; }
 	
 	@Override
-	public void drawDebug(Graphics2D g2) {
-		Depict.rectangleOutline(g2, getWorldX(), getWorldY(), width, height);
+	public void drawDebug(Renderer renderer) {
+		renderer.rectangleOutline(getWorldX(), getWorldY(), width, height);
 	}
 }

@@ -13,10 +13,10 @@ class LookTowardsAction extends Action {
 
 	@Override
 	public void start() {
-		double dx = target.getX() - owner.getX();
-		double dy = target.getY() - owner.getY();
+		float dx = target.getX() - owner.getX();
+		float dy = target.getY() - owner.getY();
 
-		double angle = Math.toDegrees(Math.atan2(dy, dx));
+		float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 
 		if (owner instanceof Entity entity && entity.getAngleOverride()) {
 			entity.setAppearAngle(angle);
@@ -46,7 +46,7 @@ class AngleAction extends Action {
 
 	@Override
 	public void start() {
-		double amount = resolveDouble(value);
+		float amount = resolveFloat(value);
 		switch (angle) {
 			case ACTIVE:
 				applyActiveAngle(amount); break;
@@ -59,7 +59,7 @@ class AngleAction extends Action {
 		finish();
 	}
 
-	private void applyActiveAngle(double value) {
+	private void applyActiveAngle(float value) {
 		if (owner instanceof Entity entity && entity.getAngleOverride()) {
 			applyAppearAngle(value);
 		} else {
@@ -67,7 +67,7 @@ class AngleAction extends Action {
 		}
 	}
 	
-	private void applyTrueAngle(double value) {
+	private void applyTrueAngle(float value) {
 		switch (operation) {
 			case SET:
 				owner.setTrueAngle(value); break;
@@ -76,7 +76,7 @@ class AngleAction extends Action {
 		}
 	}
 
-	private void applyAppearAngle(double value) {
+	private void applyAppearAngle(float value) {
 		if (!(owner instanceof Entity entity)) {
 			JDebug.log(
 				"[JScratch] Warning: AppearAngle used on a Thing. "

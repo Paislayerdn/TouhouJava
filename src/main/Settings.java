@@ -11,7 +11,7 @@ public final class Settings {
 	public static final int HALF_HEIGHT = BASE_HEIGHT / 2;
 
 	// Window scaling
-	public static double SCALE = 1;
+	public static float SCALE = 1;
 	public static int getWindowWidth() {return (int)(BASE_WIDTH * SCALE);}
 	public static int getWindowHeight() {return (int)(BASE_HEIGHT * SCALE);}
 	
@@ -32,12 +32,12 @@ public final class Settings {
 	 * +X goes right.
 	 * +Y goes up.
 	 */
-	public static final double PLAYFIELD_CENTER_X = -144;
-	public static final double PLAYFIELD_CENTER_Y = 0;
-	public static final double PLAYFIELD_LEFT = PLAYFIELD_CENTER_X - PLAYFIELD_HALF_WIDTH;
-	public static final double PLAYFIELD_RIGHT = PLAYFIELD_CENTER_X + PLAYFIELD_HALF_WIDTH;
-	public static final double PLAYFIELD_BOTTOM = PLAYFIELD_CENTER_Y - PLAYFIELD_HALF_HEIGHT;
-	public static final double PLAYFIELD_TOP = PLAYFIELD_CENTER_Y + PLAYFIELD_HALF_HEIGHT;
+	public static final float PLAYFIELD_CENTER_X = -144;
+	public static final float PLAYFIELD_CENTER_Y = 0;
+	public static final float PLAYFIELD_LEFT = PLAYFIELD_CENTER_X - PLAYFIELD_HALF_WIDTH;
+	public static final float PLAYFIELD_RIGHT = PLAYFIELD_CENTER_X + PLAYFIELD_HALF_WIDTH;
+	public static final float PLAYFIELD_BOTTOM = PLAYFIELD_CENTER_Y - PLAYFIELD_HALF_HEIGHT;
+	public static final float PLAYFIELD_TOP = PLAYFIELD_CENTER_Y + PLAYFIELD_HALF_HEIGHT;
 	
 	// Target FPS
 	public static final int FPS = 60;

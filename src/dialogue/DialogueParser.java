@@ -57,8 +57,8 @@ public final class DialogueParser {
 	private static MoveCommand parseMove(Deque<String> tokens) {
 		String[] args = tokens.poll().split(",");
 
-		double x = Double.parseDouble(args[0]);
-		double y = Double.parseDouble(args[1]);
+		float x = Float.parseFloat(args[0]);
+		float y = Float.parseFloat(args[1]);
 		int frames = Integer.parseInt(args[2]);
 		boolean blocking = !args[3].equals("0");
 

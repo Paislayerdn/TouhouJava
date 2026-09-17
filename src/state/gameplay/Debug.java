@@ -10,6 +10,7 @@ import static graphics.Coordinate.*;
 
 import entity.Player;
 import entity.Boss;
+import graphics.Renderer;
 
 public final class Debug {
 	private static Player player;
@@ -35,35 +36,33 @@ public final class Debug {
 		}
 	}
 
-	public static void draw(Graphics2D g2) {
-		if (!PlayingStats.debugMode) {
-			return;
-		}
+	public static void draw(Renderer renderer) {
+		if (!PlayingStats.debugMode) { return; }
 		line = 320;
 
-		print(g2, "=== DEBUG ===");
-		print(g2, "");
+		print(renderer, "=== DEBUG ===");
+		print(renderer, "");
 
-		print(g2, "Player PF");
-		print(g2, format( player.getX(),player.getY(), PLAYER_PRECISION));
-		print(g2, "");
-		print(g2, "Player ABS");
-		print(g2, format( toScreen( player.getX(), player.getY()), PLAYER_PRECISION));
+		print(renderer, "Player PF");
+		print(renderer, format( player.getX(),player.getY(), PLAYER_PRECISION));
+		print(renderer, "");
+		print(renderer, "Player ABS");
+		print(renderer, format( toScreen( player.getX(), player.getY()), PLAYER_PRECISION));
 
-		print(g2, "");
+		print(renderer, "");
 
-		print(g2, "Mouse PF");
-		print(g2, format( toWorld( Input.mouseX, Input.mouseY), MOUSE_PRECISION ) );
-		print(g2, "");
-		print(g2, "Mouse ABS");
-		print(g2, format(Input.mouseX,Input.mouseY, MOUSE_PRECISION));
+		print(renderer, "Mouse PF");
+		print(renderer, format( toWorld(Input.mouseX, Input.mouseY), MOUSE_PRECISION ) );
+		print(renderer, "");
+		print(renderer, "Mouse ABS");
+		print(renderer, format(Input.mouseX,Input.mouseY, MOUSE_PRECISION));
 		
-		print(g2, "");
-		print(g2, "Bullets: " + BulletManager.getBulletCount());
+		print(renderer, "");
+		print(renderer, "Bullets: " + BulletManager.getBulletCount());
 	}
 
-	private static void print(Graphics2D g2, String text) {
-		TextDrawer.draw(g2, text, -460, line);
+	private static void print(Renderer renderer, String text) {
+		renderer.text(text, -460, line);
 		line -= 20;
 	}
 	

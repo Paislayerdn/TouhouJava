@@ -7,12 +7,13 @@ import action.ActionContext;
 import action.ActionRunner;
 
 import graphics.Depict;
+import graphics.Renderer;
 
 public abstract class Thing {
 	protected Appearance appearance;
-	protected double x;
-	protected double y;
-	protected double trueAngle;
+	protected float x;
+	protected float y;
+	protected float trueAngle;
 	protected ActionRunner actions;
 	
 	protected boolean alive = true;
@@ -22,6 +23,7 @@ public abstract class Thing {
 
 	public Thing() {
 		name = "[UNNAMED THING]";
+		x = 1024.0f;	y = 1024.0f;
 		actions = new ActionRunner();
 		appearance = new Appearance();
 	}
@@ -38,21 +40,21 @@ public abstract class Thing {
 	public Object getVariable(String name) { return actions.getContext().get(name); }
 	public void updateActions() { actions.update(); }
 
-	public double getX() { return x; }
-	public double getY() { return y; }
-	public void setX(double x) { this.x = x; }
-	public void setY(double y) { this.y = y; }
-	public void setXY(double x, double y) {
+	public float getX() { return x; }
+	public float getY() { return y; }
+	public void setX(float x) { this.x = x; }
+	public void setY(float y) { this.y = y; }
+	public void setXY(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	public void move(double dx, double dy) {
+	public void move(float dx, float dy) {
 		x += dx;
 		y += dy;
 	}
 	
-	public double getTrueAngle() { return trueAngle; }
-	public void setTrueAngle(double angle) { this.trueAngle = angle; }
+	public float getTrueAngle() { return trueAngle; }
+	public void setTrueAngle(float angle) { this.trueAngle = angle; }
 	
 	public boolean isAlive() { return alive; }
 	public void setAlive(boolean alive) { this.alive = alive; }
@@ -61,7 +63,7 @@ public abstract class Thing {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	
-	public void draw(Graphics2D g2) { Depict.thing(g2, this); }
+	public void draw(Renderer renderer) { renderer.thing(this); }
 	// the abstracts
 	public abstract void update();
 }

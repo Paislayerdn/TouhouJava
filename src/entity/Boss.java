@@ -8,9 +8,7 @@ import static collision.CollisionType.*;
 import static collision.CollisionTags.*;
 
 import static action.JScratch.*;
-import spell.LuaSpell;
-import spell.Phyllotaxis;
-import spell.TestSpell;
+import spell.*;
 
 import dialogue.DialogueRunner;
 
@@ -18,8 +16,8 @@ public class Boss extends Entity {
 	private Sound lowHP;
 	private Player player;
 	
-	private double maxHP=0;
-	private double hp=0;
+	private float maxHP=0;
+	private float hp=0;
 	
 	private int timer = 0;
 	
@@ -43,8 +41,8 @@ public class Boss extends Entity {
 				AddHitboxTag("bossHB", BOSS)
 			)
 		);
-		run(new Phyllotaxis(this, player));
-//		this.run(new LuaSpell(this, player, "Eirin"));
+//		run(new Phyllotaxis(this, player));
+		this.run(new LuaSpell(this, player, "DoubleBullet"));
 //		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {
@@ -52,10 +50,10 @@ public class Boss extends Entity {
 		this.hp = maxHP;
 	}
 
-	public double getMaxHP() { return maxHP; }
-	public double getHP() { return hp; }
+	public float getMaxHP() { return maxHP; }
+	public float getHP() { return hp; }
 	
-	public void damage(double amount) {
+	public void damage(float amount) {
 		if (hp < 0) { hp = 0; } else {
 			hp -= amount;
 			if (hp/maxHP<0.15) lowHP.play();

@@ -16,7 +16,7 @@ public class Bullet extends Entity {
 	public Bullet() {
 		this(999,999);
 	}
-	public Bullet(double x, double y) {
+	public Bullet(float x, float y) {
 		this.x = x;
 		this.y = y;
 		

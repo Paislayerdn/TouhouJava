@@ -13,6 +13,9 @@ end
 local bullette = function()
 	return spawnBullet(
 		sequence(
+			var("index", get("i")),
+			var("jndex", get("j")),
+			var("speed", initialSpeed),
 			setCostume("OvalBullet"),
 			setColor(130),
 			setSize(10),
@@ -20,9 +23,6 @@ local bullette = function()
 			setGhost(70),
 			addCircleHitbox("bulletHB", 5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			var("index", get("i")),
-			var("jndex", get("j")),
-			var("speed", initialSpeed),
 			warp(999, 999),
 
 			parallel(

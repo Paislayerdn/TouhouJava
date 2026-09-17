@@ -18,7 +18,7 @@ class WaitAction extends Action {
 	@Override
 	public void update() {
 		timer++;
-		int intDuration = (int)resolveDouble(duration);
+		int intDuration = (int) resolveFloat(duration);
 
 		if (timer >= intDuration) {
 			finish();

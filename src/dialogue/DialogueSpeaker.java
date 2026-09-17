@@ -1,12 +1,12 @@
-package dialogue;
+	package dialogue;
 
 public class DialogueSpeaker {
 	private final String name;
 	private String displayName;
 	private String expression;
 
-	private double x;
-	private double y;
+	private float x;
+	private float y;
 
 	public DialogueSpeaker(String name) {
 		this.name = name;
@@ -20,7 +20,7 @@ public class DialogueSpeaker {
 	public String getExpression() { return expression; }
 	public void setExpression(String expression) { this.expression = expression; }
 	
-	public double getX() { return x; }
-	public double getY() { return y; }
-	public void setPosition(double x, double y) { this.x = x; this.y = y; }
+	public float getX() { return x; }
+	public float getY() { return y; }
+	public void setPosition(float x, float y) { this.x = x; this.y = y; }
 }

@@ -5,10 +5,10 @@ public class MathValue {
 
 	public static Value Add(Object... values) {
 		return action -> {
-			double result = 0;
+			float result = 0;
 
 			for (Object value : values) {
-				result += ((Number) action.resolve(value)).doubleValue();
+				result += ((Number) action.resolve(value)).floatValue();
 			}
 
 			return result;
@@ -19,10 +19,10 @@ public class MathValue {
 		return action -> {
 			if (values.length == 0) return 0.0;
 
-			double result = ((Number) action.resolve(values[0])).doubleValue();
+			float result = ((Number) action.resolve(values[0])).floatValue();
 
 			for (int i = 1; i < values.length; i++) {
-				result -= ((Number) action.resolve(values[i])).doubleValue();
+				result -= ((Number) action.resolve(values[i])).floatValue();
 			}
 
 			return result;
@@ -31,10 +31,10 @@ public class MathValue {
 
 	public static Value Mul(Object... values) {
 		return action -> {
-			double result = 1;
+			float result = 1;
 
 			for (Object value : values) {
-				result *= ((Number) action.resolve(value)).doubleValue();
+				result *= ((Number) action.resolve(value)).floatValue();
 			}
 
 			return result;
@@ -45,10 +45,10 @@ public class MathValue {
 		return action -> {
 			if (values.length == 0) return 1.0;
 
-			double result = ((Number) action.resolve(values[0])).doubleValue();
+			float result = ((Number) action.resolve(values[0])).floatValue();
 
 			for (int i = 1; i < values.length; i++) {
-				result /= ((Number) action.resolve(values[i])).doubleValue();
+				result /= ((Number) action.resolve(values[i])).floatValue();
 			}
 
 			return result;
@@ -59,12 +59,12 @@ public class MathValue {
 		return action -> {
 			if (values.length == 0) return 0.0;
 
-			double result = Double.POSITIVE_INFINITY;
+			float result = Float.POSITIVE_INFINITY;
 
 			for (Object value : values) {
 				result = Math.min(
 					result,
-					((Number) action.resolve(value)).doubleValue()
+					((Number) action.resolve(value)).floatValue()
 				);
 			}
 
@@ -76,12 +76,12 @@ public class MathValue {
 		return action -> {
 			if (values.length == 0) return 0.0;
 
-			double result = Double.NEGATIVE_INFINITY;
+			float result = Float.NEGATIVE_INFINITY;
 
 			for (Object value : values) {
 				result = Math.max(
 					result,
-					((Number) action.resolve(value)).doubleValue()
+					((Number) action.resolve(value)).floatValue()
 				);
 			}
 
@@ -93,10 +93,10 @@ public class MathValue {
 		return action -> {
 			if (values.length == 0) return 0.0;
 
-			double result = ((Number) action.resolve(values[0])).doubleValue();
+			float result = ((Number) action.resolve(values[0])).floatValue();
 
 			for (int i = 1; i < values.length; i++) {
-				double divisor = ((Number) action.resolve(values[i])).doubleValue();
+				float divisor = ((Number) action.resolve(values[i])).floatValue();
 
 				result = ((result % divisor) + divisor) % divisor;
 			}
@@ -107,14 +107,14 @@ public class MathValue {
 
 	public static Value Power(Object base, Object exponent) {
 		return action -> Math.pow(
-			action.resolveDouble(base),
-			action.resolveDouble(exponent)
+			action.resolveFloat(base),
+			action.resolveFloat(exponent)
 		);
 	}
 
 	public static Value Root(Object value, Object n) {
 		return action -> {
-			double degree = action.resolveDouble(n);
+			float degree = action.resolveFloat(n);
 
 			if (degree == 0) {
 				throw new IllegalArgumentException("[JScratch MathValue] Root degree cannot be zero");
@@ -130,8 +130,8 @@ public class MathValue {
 
 	public static Value Random(Object a, Object b) {
 		return action -> {
-			int min = (int)action.resolveDouble(a);
-			int max = (int)action.resolveDouble(b);
+			int min = (int)action.resolveFloat(a);
+			int max = (int)action.resolveFloat(b);
 
 			return min + (int)(Math.random()*(max - min+1));
 		};

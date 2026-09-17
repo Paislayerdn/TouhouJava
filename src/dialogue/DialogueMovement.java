@@ -3,18 +3,18 @@ package dialogue;
 public class DialogueMovement {
 	private final DialogueSpeaker speaker;
 
-	private final double startX;
-	private final double startY;
-	private final double targetX;
-	private final double targetY;
+	private final float startX;
+	private final float startY;
+	private final float targetX;
+	private final float targetY;
 	private final int duration;
 
 	private int elapsed;
 
 	public DialogueMovement(
 		DialogueSpeaker speaker,
-		double targetX,
-		double targetY,
+		float targetX,
+		float targetY,
 		int duration
 	) {
 		this.speaker = speaker;
@@ -35,14 +35,10 @@ public class DialogueMovement {
 
 		elapsed++;
 
-		double progress =
-			Math.min((double) elapsed / duration, 1.0);
+		float progress = Math.min(elapsed / duration, 1.0f);
 
-		double x =
-			startX + (targetX - startX) * progress;
-
-		double y =
-			startY + (targetY - startY) * progress;
+		float x = startX + (targetX - startX) * progress;
+		float y = startY + (targetY - startY) * progress;
 
 		speaker.setPosition(x, y);
 	}

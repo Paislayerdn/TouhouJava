@@ -39,25 +39,25 @@ public final class CollisionChecker {
 	}
 	
 	private static boolean circleCircle(CircleHitbox a, CircleHitbox b) {
-		double dx = a.getWorldX() - b.getWorldX();
-		double dy = a.getWorldY() - b.getWorldY();
+		float dx = a.getWorldX() - b.getWorldX();
+		float dy = a.getWorldY() - b.getWorldY();
 
-		double distanceSquared = dx * dx + dy * dy;
-		double radiusSum = a.getRadius() + b.getRadius();
+		float distanceSquared = dx * dx + dy * dy;
+		float radiusSum = a.getRadius() + b.getRadius();
 
 		return distanceSquared < radiusSum * radiusSum;
 	}
 	
 	private static boolean rectangleRectangle(RectangleHitbox a, RectangleHitbox b) {
-		double aLeft = a.getWorldX() - a.getWidth() / 2;
-		double aRight = a.getWorldX() + a.getWidth() / 2;
-		double aBottom = a.getWorldY() - a.getHeight() / 2;
-		double aTop = a.getWorldY() + a.getHeight() / 2;
+		float aLeft = a.getWorldX() - a.getWidth() / 2;
+		float aRight = a.getWorldX() + a.getWidth() / 2;
+		float aBottom = a.getWorldY() - a.getHeight() / 2;
+		float aTop = a.getWorldY() + a.getHeight() / 2;
 
-		double bLeft = b.getWorldX() - b.getWidth() / 2;
-		double bRight = b.getWorldX() + b.getWidth() / 2;
-		double bBottom = b.getWorldY() - b.getHeight() / 2;
-		double bTop = b.getWorldY() + b.getHeight() / 2;
+		float bLeft = b.getWorldX() - b.getWidth() / 2;
+		float bRight = b.getWorldX() + b.getWidth() / 2;
+		float bBottom = b.getWorldY() - b.getHeight() / 2;
+		float bTop = b.getWorldY() + b.getHeight() / 2;
 
 		return aLeft < bRight &&
 			   aRight > bLeft &&
@@ -66,7 +66,7 @@ public final class CollisionChecker {
 	}
 	
 	private static boolean circleRectangle(CircleHitbox circle, RectangleHitbox rectangle) {
-		double closestX = Math.max(
+		float closestX = Math.max(
 			rectangle.getWorldX() - rectangle.getWidth() / 2,
 			Math.min(
 				circle.getWorldX(),
@@ -74,7 +74,7 @@ public final class CollisionChecker {
 			)
 		);
 
-		double closestY = Math.max(
+		float closestY = Math.max(
 			rectangle.getWorldY() - rectangle.getHeight() / 2,
 			Math.min(
 				circle.getWorldY(),
@@ -82,8 +82,8 @@ public final class CollisionChecker {
 			)
 		);
 
-		double dx = circle.getWorldX() - closestX;
-		double dy = circle.getWorldY() - closestY;
+		float dx = circle.getWorldX() - closestX;
+		float dy = circle.getWorldY() - closestY;
 
 		return dx * dx + dy * dy < circle.getRadius() * circle.getRadius();
 	}

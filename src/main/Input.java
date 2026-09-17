@@ -14,8 +14,8 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 	public static boolean SPACE;
 	public static boolean Z;
 	
-	public static double mouseX;
-	public static double mouseY;
+	public static float mouseX;
+	public static float mouseY;
 	public static boolean P;
 	public static boolean PAGEUP;
 	public static boolean mousePressed;

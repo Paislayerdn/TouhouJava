@@ -49,7 +49,7 @@ class SetColor extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().setColor(
-			(double) resolveDouble(color)
+			(float) resolveFloat(color)
 		);
 
 		finish();
@@ -69,7 +69,7 @@ class ChangeColor extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().changeColor(
-			(double) resolveDouble(amount)
+			(float) resolveFloat(amount)
 		);
 
 		finish();
@@ -89,7 +89,7 @@ class SetPixelate extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().setPixelate(
-			(double) resolveDouble(pixelate)
+			(float) resolveFloat(pixelate)
 		);
 
 		finish();
@@ -109,7 +109,7 @@ class ChangePixelate extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().changePixelate(
-			(double) resolveDouble(amount)
+			(float) resolveFloat(amount)
 		);
 
 		finish();
@@ -129,7 +129,7 @@ class SetBrightness extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().setBrightness(
-			(double) resolveDouble(brightness)
+			(float) resolveFloat(brightness)
 		);
 
 		finish();
@@ -149,7 +149,7 @@ class ChangeBrightness extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().changeBrightness(
-			(double) resolveDouble(amount)
+			(float) resolveFloat(amount)
 		);
 
 		finish();
@@ -169,7 +169,7 @@ class SetGhost extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().setGhost(
-			(double) resolveDouble(ghost)
+			(float) resolveFloat(ghost)
 		);
 
 		finish();
@@ -189,7 +189,7 @@ class ChangeGhost extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().changeGhost(
-			(double) resolveDouble(amount)
+			(float) resolveFloat(amount)
 		);
 
 		finish();
@@ -209,7 +209,7 @@ class SetSize extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().setSize(
-			(double) resolveDouble(size)
+			(float) resolveFloat(size)
 		);
 
 		finish();
@@ -229,7 +229,7 @@ class ChangeSize extends Action {
 	@Override
 	public void start() {
 		owner.getAppearance().changeSize(
-			(double) resolveDouble(amount)
+			(float) resolveFloat(amount)
 		);
 
 		finish();

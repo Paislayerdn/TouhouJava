@@ -13,7 +13,7 @@ public class SpawnBulletAction extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		Bullet bullet = new Bullet();
 
 		ActionContext bulletContext = new ActionContext(getContext());

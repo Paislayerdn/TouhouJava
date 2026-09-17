@@ -1,9 +1,9 @@
 package state.gameplay;
 
+import graphics.Renderer;
+
 import java.util.List;
 import java.util.ArrayList;
-import java.awt.Graphics2D;
-import java.awt.Color;
 
 import entity.Bullet;
 
@@ -27,27 +27,30 @@ public final class BulletManager {
 	}
 
 	public static void update() {
+		List<Bullet> snapshot;
+
 		synchronized (bulletLock) {
-			for (Bullet bullet : bullets) {
-				bullet.update();
-			}
+			snapshot = List.copyOf(bullets);
+		}
+
+		for (Bullet bullet : snapshot) {
+			bullet.update();
+		}
+
+		synchronized (bulletLock) {
 			bullets.removeIf(bullet -> !bullet.isAlive());
 		}
 	}
 
-	public static void draw(Graphics2D g2) {
+	public static void draw(Renderer renderer) {
 		for ( Bullet bullet : getBullets() ) {
-			bullet.draw(g2);
+			bullet.draw(renderer);
 		}
 	}
-	public static void drawHitboxes(Graphics2D g2) {
-		Color oldColor = g2.getColor();
-		g2.setColor(Color.RED);
+	public static void drawHitboxes(Renderer renderer) {
 		for (Bullet bullet : getBullets()) {
-			bullet.drawHitboxes(g2);
+			bullet.drawHitboxes(renderer);
 		}
-		
-		g2.setColor(oldColor);
 	}
 	
 	public static int getBulletCount() {

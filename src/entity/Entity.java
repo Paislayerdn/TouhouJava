@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 import collision.Hitbox;
 import collision.CollisionResult;
+import graphics.Renderer;
 
 public abstract class Entity extends Thing {
-	protected double appearAngle;
+	protected float appearAngle;
 	protected boolean angleOverride;
 	
 	protected ArrayList<Hitbox> hitboxes;
@@ -32,16 +33,16 @@ public abstract class Entity extends Thing {
 
 		return null;
 	}
-	public void drawHitboxes(Graphics2D g2) {
+	public void drawHitboxes(Renderer renderer) {
 		for (Hitbox hitbox : hitboxes) {
 			if (!hitbox.isEnabled()) continue;
 
-			hitbox.drawDebug(g2);
+			hitbox.drawDebug(renderer);
 		}
 	}
 	
-	public double getAppearAngle() { return appearAngle; }
-	public void setAppearAngle(double angle) { this.appearAngle = angle; }
+	public float getAppearAngle() { return appearAngle; }
+	public void setAppearAngle(float angle) { this.appearAngle = angle; }
 	
 	public boolean getAngleOverride() { return angleOverride; }
 	public void setAngleOverride(boolean state) { this.angleOverride = state; }

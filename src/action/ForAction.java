@@ -14,9 +14,9 @@ public class ForAction extends Action {
 		return action != null && action.consumesFrame();
 	}
 
-	private double current;
-	private double target;
-	private double step;
+	private float current;
+	private float target;
+	private float step;
 
 	public ForAction(String variable, Object start, Object end, ActionFactory factory) {
 		this.variable = variable;
@@ -27,8 +27,8 @@ public class ForAction extends Action {
 
 	@Override
 	public void start() {
-		current = resolveDouble(start);
-		target = resolveDouble(end);
+		current = resolveFloat(start);
+		target = resolveFloat(end);
 
 		step = current <= target ? 1 : -1;
 

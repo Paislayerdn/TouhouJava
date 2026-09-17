@@ -59,17 +59,17 @@ class SetAction extends Action {
 	public void update() {
 		switch (axis) {
 			case X:
-				owner.setX(resolveDouble(x));
+				owner.setX(resolveFloat(x));
 				break;
 
 			case Y:
-				owner.setY(resolveDouble(y));
+				owner.setY(resolveFloat(y));
 				break;
 
 			case BOTH:
 				owner.setXY(
-					resolveDouble(x),
-					resolveDouble(y)
+					resolveFloat(x),
+					resolveFloat(y)
 				);
 				break;
 		}
@@ -91,8 +91,8 @@ class MoveAction extends Action {
 
 	@Override
 	public void update() {
-		double dx = resolveDouble(x);
-		double dy = resolveDouble(y);
+		float dx = resolveFloat(x);
+		float dy = resolveFloat(y);
 
 		owner.move(dx, dy);
 
@@ -111,13 +111,13 @@ class ForwardAction extends Action {
 
 	@Override
 	public void update() {
-		double ddDistance = resolveDouble(this.distance);
+		float ddDistance = resolveFloat(this.distance);
 
-		double radians = Math.toRadians(owner.getTrueAngle());
+		float radians = (float) Math.toRadians(owner.getTrueAngle());
 		
 		owner.setXY(
-			owner.getX() + Math.cos(radians) * ddDistance,
-			owner.getY() + Math.sin(radians) * ddDistance
+			owner.getX() + (float) Math.cos(radians) * ddDistance,
+			owner.getY() + (float) Math.sin(radians) * ddDistance
 		);
 		finish();
 	}

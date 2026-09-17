@@ -93,8 +93,8 @@ public final class CompareValue {
 
 		if (allNumbers) {
 			for (int i = 0; i < resolved.length - 1; i++) {
-				double a = ((Number) resolved[i]).doubleValue();
-				double b = ((Number) resolved[i + 1]).doubleValue();
+				float a = ((Number) resolved[i]).floatValue();
+				float b = ((Number) resolved[i + 1]).floatValue();
 
 				if (!compareNumbers(a, b, comparison)) {
 					return false;
@@ -111,8 +111,8 @@ public final class CompareValue {
 	}
 
 	private static boolean compareNumbers(
-		double a,
-		double b,
+		float a,
+		float b,
 		Comparison comparison
 	) {
 		return switch (comparison) {
