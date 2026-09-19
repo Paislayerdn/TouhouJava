@@ -8,9 +8,6 @@ import static collision.CollisionType.*;
 import static collision.CollisionTags.*;
 
 import static action.JScratch.*;
-import spell.*;
-
-import dialogue.DialogueRunner;
 
 public class Boss extends Entity {
 	private Sound lowHP;
@@ -18,10 +15,6 @@ public class Boss extends Entity {
 	
 	private float maxHP=0;
 	private float hp=0;
-	
-	private int timer = 0;
-	
-	private DialogueRunner dialogueRunner;
 
 	public Boss(Player player) {
 		name = "Boss";
@@ -41,9 +34,6 @@ public class Boss extends Entity {
 				AddHitboxTag("bossHB", BOSS)
 			)
 		);
-//		run(new Phyllotaxis(this, player));
-		this.run(new LuaSpell(this, player, "DoubleBullet"));
-//		dialogueRunner = new DialogueRunner("Test");
 	}
 	public void setMaxHP(int maxHP) {
 		this.maxHP = maxHP;
@@ -69,12 +59,5 @@ public class Boss extends Entity {
 
 	@Override
 	public void update() {
-		updateActions();
-		if (dialogueRunner != null) {
-			dialogueRunner.update();
-
-			if (dialogueRunner.isFinished()) dialogueRunner = null;
-		}
-		timer++;
 	}
 }

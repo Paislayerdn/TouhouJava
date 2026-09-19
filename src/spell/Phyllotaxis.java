@@ -8,16 +8,21 @@ import entity.Boss;
 import entity.Player;
 
 public class Phyllotaxis extends Spell {
-	private final Player player;
-
 	public Phyllotaxis(Boss boss, Player player) {
-		super(boss, "Replication Sign \"Digitalized Pebbles\"");
-		this.player = player;
+		super(boss, player);
+	}
+	
+	@Override
+	public void configure() {
+		name = "Replication Sign \"Digitalized Pebbles\"";
+		playerCandidateRadius = 40;
+		timer = 4200;
+		isSpell = true;
 	}
 	
 	@Override
 	public void onStart() {
-		boss.setMaxHP(1000);
+		boss.setMaxHP(75);
 	}
 	
 	private Action bullete(float goldenAngle, float step) {

@@ -8,16 +8,22 @@ import entity.Boss;
 import entity.Player;
 
 public class TestSpell extends Spell {
-	private final Player player;
-
 	public TestSpell(Boss boss, Player player) {
-		super(boss, "Test Spell");
-		this.player = player;
+		super(boss, player);
 	}
 	
 	@Override
+	public void configure() {
+		name = "TestSpell";
+		playerCandidateRadius = 60;
+		timer = 3000;
+		isSpell = true;
+	}
+	
+	
+	@Override
 	public void onStart() {
-		boss.setMaxHP(1000);
+		boss.setMaxHP(75);
 	}
 
 	@Override

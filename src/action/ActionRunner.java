@@ -18,6 +18,9 @@ public class ActionRunner {
 	}	
 	public ActionContext getContext() { return context; }
 
+	public void add(Action action) {
+		add(action, null);
+	}
 	public void add(Action action, Thing owner) {
 		action.setOwner(owner);
 		action.setContext(context);
@@ -27,8 +30,9 @@ public class ActionRunner {
 	}
 
 	public void update() {
-		for (Action action : actions) {
+		ArrayList<Action> snapshot = new ArrayList<>(actions);
 
+		for (Action action : snapshot) {
 			if (!action.isFinished()) {
 				action.update();
 			}

@@ -1,5 +1,8 @@
 package state.gameplay;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static collision.CollisionChecker.*;
 import collision.CollisionResult;
 import collision.Hitbox;
@@ -7,9 +10,9 @@ import collision.Hitbox;
 import entity.Player;
 import entity.Boss;
 import entity.Bullet;
-import state.gameplay.BulletManager;
 
 public final class CollisionManager {
+	private static final Set<Bullet> playerCandidates = new HashSet<>();
 	private static Player player;
 	private static Boss boss;
 	
@@ -20,23 +23,46 @@ public final class CollisionManager {
 		CollisionManager.boss = boss;
 	}
 	
+	public static void updateEnemyCandidate(Bullet bullet) {
+		if (!bullet.isAlive()) {
+			playerCandidates.remove(bullet);
+			return;
+		}
+
+		float dx = bullet.getX() - player.getX();
+		float dy = bullet.getY() - player.getY();
+
+		float distanceSquared = dx * dx + dy * dy;
+		float radiusSquared = 50.0f * 50.0f;
+
+		if (distanceSquared <= radiusSquared) {
+			playerCandidates.add(bullet);
+		} else {
+			playerCandidates.remove(bullet);
+		}
+	}
+	
 	public static void update() {
-		for (Bullet bullet : BulletManager.getBullets()) {
+		for (Bullet bullet : BulletManager.getPlayerBullets()) {
+			for (Hitbox bulletHitbox : bullet.getHitboxes()) {
+				for (Hitbox bossHitbox : boss.getHitboxes()) {
+					CollisionResult collision = check(bossHitbox, bulletHitbox);
+
+					if (collision != null) {
+						boss.onHit(collision);
+						bullet.onHit(collision);
+					}
+				}
+			}
+		}
+
+		for (Bullet bullet : playerCandidates) {
 			for (Hitbox bulletHitbox : bullet.getHitboxes()) {
 				for (Hitbox playerHitbox : player.getHitboxes()) {
 					CollisionResult collision = check(playerHitbox, bulletHitbox);
 
 					if (collision != null) {
 						player.onHit(collision);
-						bullet.onHit(collision);
-					}
-				}
-
-				for (Hitbox bossHitbox : boss.getHitboxes()) {
-					CollisionResult collision = check(bossHitbox, bulletHitbox);
-
-					if (collision != null) {
-						boss.onHit(collision);
 						bullet.onHit(collision);
 					}
 				}

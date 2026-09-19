@@ -14,21 +14,43 @@ import entity.Boss;
 import entity.Player;
 
 
-public class LuaSpell extends Spell {
+public final class LuaSpell extends Spell {
 	private final String luaFile;
-	private final Player player;
 	private final LuaValue luaSpell;
 
 	public LuaSpell(Boss boss, Player player, String file) {
-		super(boss, "LLL Replication Sign \"Digitalized Pebbles\"");
+		super(boss, player);
 		this.luaFile = file;
-		this.player = player;
+		name = "[UNNAMED LUASPELL]";
+		 
 		Globals globals = JSL.registerJScratch();
 		globals.set("boss", CoerceJavaToLua.coerce(boss));
 		globals.set("player", CoerceJavaToLua.coerce(player));
 		String source = ResourceLoader.lua(luaFile);
 		LuaValue script = globals.load( source, luaFile+".lua" );
 		this.luaSpell = script.call();
+	
+		configure();
+	}
+	
+	@Override
+	protected void configure() {
+		LuaValue config = luaSpell.get("config");
+
+		if (config.isnil()) return;
+
+		LuaValue value;
+		value = config.get("name");
+		if (!value.isnil()) name = value.tojstring();
+		
+		value = config.get("playerCandidateRadius");
+		if (!value.isnil()) playerCandidateRadius = value.tofloat();
+
+		value = config.get("timer");
+		if (!value.isnil()) timer = value.tofloat();
+
+		value = config.get("isSpell");
+		if (!value.isnil()) isSpell = value.toboolean();
 	}
 	
 	@Override

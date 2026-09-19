@@ -7,22 +7,24 @@ import entity.Player;
 import graphics.Renderer;
 import resource.Music;
 import resource.ResourceLoader;
-import state.gameplay.PlayingStats;
-import state.gameplay.BulletManager;
-import state.gameplay.CollisionManager;
-import state.gameplay.HUD;
-import state.gameplay.Debug;
+
+import state.gameplay.*;
 
 public class Playing implements GameState {
 	private Music bgm;
 	private final Player player;
 	private final Boss boss;
+	private final GameplayScript gameScript;
 	
 	private boolean lastDebugKey = false;
 	
 	public Playing() {
 		player = new Player();
 		boss = new Boss(player);
+		
+		gameScript = new GameplayScript(player, boss);
+		gameScript.start();
+
 		HUD.init();
 		Debug.init(player, boss);
 		CollisionManager.init(player, boss);
@@ -40,9 +42,11 @@ public class Playing implements GameState {
 
 		lastDebugKey = Input.P;
 		
+		gameScript.update();
+		
 		boss.update();
-		BulletManager.update();
 		player.update();
+		BulletManager.update();
 		
 		CollisionManager.update();
 		
@@ -55,14 +59,15 @@ public class Playing implements GameState {
 		renderer.beginPlayfield();
 
 		boss.draw(renderer);
+		player.draw(renderer);
 		BulletManager.draw(renderer);
 
 		if (Debug.isShowHitboxes()) {
 			BulletManager.drawHitboxes(renderer);
 			boss.drawHitboxes(renderer);
+			player.drawHitboxes(renderer);
 		}
 
-		player.draw(renderer);
 
 		renderer.endPlayfield();
 

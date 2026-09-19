@@ -6,6 +6,13 @@ local density = 107
 local angle = 360/density
 local step = -20
 
+spell.config = {
+	name = "Junko",
+	timer = 120*60,
+	playerCandidateRadius = 30,
+	isSpell = false
+}
+
 spell.onStart = function()
 	boss:setMaxHP(50)
 end

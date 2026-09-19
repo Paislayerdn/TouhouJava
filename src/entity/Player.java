@@ -32,10 +32,10 @@ public class Player extends Entity {
 			Sequence(
 				SetCostume("CircleBullet"),
 				SetSize(14),
-				AddCircleHitbox("grazeHB", 5),
+				AddCircleHitbox("grazeHB", 7),
 				AddHitboxTag("grazeHB", PGRAZE),
 
-				AddCircleHitbox("deathHB", 2),
+				AddCircleHitbox("deathHB", 4),
 				AddHitboxTag("deathHB", PDEATH),
 				DisableHitbox("deathHB")
 			)
@@ -99,7 +99,7 @@ public class Player extends Entity {
 			)
 		);
 
-		BulletManager.spawn(bullet);
+		BulletManager.spawnPlayer(bullet);
 	}
 	
 //	@Override
