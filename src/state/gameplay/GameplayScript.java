@@ -24,7 +24,7 @@ public final class GameplayScript {
 	}
 
 	public void start() {
-		this.run(new Phyllotaxis(boss, player));
+//		this.run(new Phyllotaxis(boss, player));
 		this.run(new LuaSpell(boss, player, "Eirin"));
 //		dialogueRunner = new DialogueRunner("Test");
 	}

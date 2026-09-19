@@ -5,11 +5,11 @@ import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.BasicStroke;
-import java.awt.geom.Point2D;
 import java.awt.AlphaComposite;
 
 import entity.Appearance;
 import entity.Thing;
+import java.awt.Color;
 
 public final class Depict {
 	// Constants
@@ -32,6 +32,7 @@ public final class Depict {
 	}
 	public static void circleOutline(Graphics2D g2, float x, float y, float radius, float thickness) {
 		var oldStroke = g2.getStroke();
+		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(thickness));
 		
 		g2.draw( new Ellipse2D.Float(x-radius, y-radius, radius * 2, radius * 2) );
@@ -46,6 +47,7 @@ public final class Depict {
 
 		g2.translate(x, y);
 		g2.rotate(Math.toRadians(angle));
+		g2.setColor(Color.RED);
 
 		g2.fill( new Ellipse2D.Float(-width/2, -height/2, width, height) );
 		g2.setTransform(old);
@@ -56,6 +58,7 @@ public final class Depict {
 	}
 	public static void rectangleOutline(Graphics2D g2, float x, float y, float width, float height, float thickness) {
 		var oldStroke = g2.getStroke();
+		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(thickness));
 
 		g2.drawRect((int)(x - width / 2), (int)(y - height / 2),

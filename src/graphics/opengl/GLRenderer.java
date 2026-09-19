@@ -267,11 +267,27 @@ public class GLRenderer implements Renderer {
 		GL11.glPopMatrix();
 	}
 
+	private void beginDebug() {
+		endShader();
+
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glColor3f(1.0f, 0.0f, 0.0f);
+		GL11.glLineWidth(2.0f);
+	}
+
+	private void endDebug() {
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glColor3f(1.0f, 1.0f, 1.0f);
+
+		beginShader();
+	}
 	@Override
 	public void rectangleOutline(float x, float y, float width, float height) {
 		float halfWidth = width / 2.0f;
 		float halfHeight = height / 2.0f;
-
+		beginDebug();
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 
 		GL11.glVertex2f(x - halfWidth, y - halfHeight);
@@ -280,12 +296,14 @@ public class GLRenderer implements Renderer {
 		GL11.glVertex2f(x - halfWidth, y + halfHeight);
 
 		GL11.glEnd();
+		endDebug();
 	}
 
 	@Override
 	public void circleOutline(float x, float y, float radius) {
 		int segments = 64;
 
+		beginDebug();
 		GL11.glBegin(GL11.GL_LINE_LOOP);
 
 		for (int i = 0; i < segments; i++) {
@@ -298,6 +316,7 @@ public class GLRenderer implements Renderer {
 		}
 
 		GL11.glEnd();
+		endDebug();
 	}
 
 	@Override
