@@ -1,4 +1,4 @@
-local spell = {}
+local spellData = {}
 
 local cooldown = 30
 local startAmount = 3
@@ -6,15 +6,17 @@ local density = 107
 local angle = 360/density
 local step = -20
 
-spell.config = {
+spellData.config = {
 	name = "Junko",
 	timer = 120*60,
 	playerCandidateRadius = 30,
 	isSpell = false
 }
 
-spell.onStart = function()
+spellData.onStart = function()
 	boss:setMaxHP(50)
+	spell:startTimer()
+	spell:startCounting()
 end
 
 local bulette = function()
@@ -59,24 +61,24 @@ local bulette = function()
 	)
 end
 
-spell.buildAction = function()
+spellData.buildAction = function()
 
 return sequence(
 	var("offset", 0),
 	var("amount", startAmount),
 
 	sound("jingle", "[TH] Jingle"),
-	setsoundvolume("jingle", -0.25),
+	setSoundVolume("jingle", -0.25),
 
 	sound("shot", "[TH] Shot"),
-	setsoundvolume("shot", -15.5),
+	setSoundVolume("shot", -15.5),
 	
 	forever("sequence",
 		set("offset", mul(random(), 360)),
 		jsfor("i", 1, get("amount"), function()
 			return sequence(
-				playsound("jingle"),
-				playsound("shot"),
+				playSound("jingle"),
+				playSound("shot"),
 				jsfor("j", 1, density, function()
 					return bulette()
 				end),
@@ -90,4 +92,4 @@ return sequence(
 
 end
 
-return spell
+return spellData

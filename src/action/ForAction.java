@@ -1,6 +1,6 @@
 package action;
 
-public class ForAction extends Action {
+public final class ForAction extends Action {
 	private final String variable;
 	private final Object start;
 	private final Object end;

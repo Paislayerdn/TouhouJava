@@ -83,6 +83,22 @@ public class Java2DRenderer implements Renderer {
 
 	@Override
 	public void text(String text, float x, float y) {
-		TextDrawer.draw(g2, text, x, y);
+		text(text, x, y, 18, TextAlign.LEFT);
+	}
+
+	@Override
+	public void text(String text, float x, float y, int size) {
+		text(text, x, y, size, TextAlign.LEFT);
+	}
+
+	@Override
+	public void text(
+		String text,
+		float x,
+		float y,
+		int size,
+		TextAlign align
+	) {
+		TextDrawer.draw(g2, text, x, y, size, align);
 	}
 }

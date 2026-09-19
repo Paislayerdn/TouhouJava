@@ -1,6 +1,6 @@
 package action;
 
-public class DestroyAction extends Action {
+public final class DestroyAction extends Action {
 	@Override
 	public boolean consumesFrame() { return false; }
 

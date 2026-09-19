@@ -21,10 +21,9 @@ public abstract class Entity extends Thing {
 		hitboxes = new ArrayList<>();
 	}
 
-
-	public void addHitbox(Hitbox hitbox) { hitboxes.add(hitbox); }
-	public ArrayList<Hitbox> getHitboxes() { return hitboxes; }
-	public Hitbox getHitbox(String name) {
+	public final void addHitbox(Hitbox hitbox) { hitboxes.add(hitbox); }
+	public final ArrayList<Hitbox> getHitboxes() { return hitboxes; }
+	public final Hitbox getHitbox(String name) {
 		for (Hitbox hitbox : hitboxes) {
 			if (hitbox.getName().equals(name.toUpperCase(Locale.ROOT))) {
 				return hitbox;
@@ -33,7 +32,7 @@ public abstract class Entity extends Thing {
 
 		return null;
 	}
-	public void drawHitboxes(Renderer renderer) {
+	public final void drawHitboxes(Renderer renderer) {
 		for (Hitbox hitbox : hitboxes) {
 			if (!hitbox.isEnabled()) continue;
 
@@ -41,11 +40,11 @@ public abstract class Entity extends Thing {
 		}
 	}
 	
-	public float getAppearAngle() { return appearAngle; }
-	public void setAppearAngle(float angle) { this.appearAngle = angle; }
+	public final float getAppearAngle() { return appearAngle; }
+	public final void setAppearAngle(float angle) { this.appearAngle = angle; }
 	
-	public boolean getAngleOverride() { return angleOverride; }
-	public void setAngleOverride(boolean state) { this.angleOverride = state; }
+	public final boolean getAngleOverride() { return angleOverride; }
+	public final void setAngleOverride(boolean state) { this.angleOverride = state; }
 	
 	// the abstracts
 	public void onHit(CollisionResult collisionResult) {}

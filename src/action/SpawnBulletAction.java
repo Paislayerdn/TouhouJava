@@ -3,7 +3,7 @@ package action;
 import state.gameplay.BulletManager;
 import entity.Bullet;
 
-public class SpawnBulletAction extends Action {
+public final class SpawnBulletAction extends Action {
 	@Override
 	public boolean consumesFrame() { return false; }
 	private final Action bulletAction;

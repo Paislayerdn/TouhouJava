@@ -4,7 +4,7 @@ import graphics.Renderer;
 
 import entity.Entity;
 
-public class CircleHitbox extends Hitbox {
+public final class CircleHitbox extends Hitbox {
 	private float radius;
 
 	public CircleHitbox(Entity owner, float radius) {

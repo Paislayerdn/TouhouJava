@@ -2,7 +2,7 @@ package action;
 
 import java.util.HashMap;
 
-public class ActionContext {
+public final class ActionContext {
 	private final HashMap<String, Object> variables;
 	private final ActionContext parent;
 

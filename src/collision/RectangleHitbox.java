@@ -4,7 +4,7 @@ import graphics.Renderer;
 
 import entity.Entity;
 
-public class RectangleHitbox extends Hitbox {
+public final class RectangleHitbox extends Hitbox {
 	private float width;
 	private float height;
 

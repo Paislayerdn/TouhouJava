@@ -2,7 +2,7 @@ package collision;
 
 import entity.Entity;
 
-public class CollisionResult {
+public final class CollisionResult {
 	private Hitbox first;
 	private Hitbox second;
 	private CollisionType type;

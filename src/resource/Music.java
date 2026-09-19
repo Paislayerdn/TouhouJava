@@ -7,9 +7,8 @@ import javax.sound.sampled.AudioInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class Music {
+public final class Music {
 	private final AudioData data;
 
 	private Clip clip;

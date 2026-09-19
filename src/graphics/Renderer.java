@@ -22,4 +22,6 @@ public interface Renderer {
 	void circleOutline(float x,	float y,	float radius);
 	
 	void text(String text, float x, float y);
+	void text(String text, float x, float y, int size);
+	void text(String text, float x, float y, int size, TextAlign align);
 }

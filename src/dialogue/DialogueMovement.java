@@ -1,6 +1,6 @@
 package dialogue;
 
-public class DialogueMovement {
+public final class DialogueMovement {
 	private final DialogueSpeaker speaker;
 
 	private final float startX;

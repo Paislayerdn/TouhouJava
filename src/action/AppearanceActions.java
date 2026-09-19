@@ -3,7 +3,7 @@ package action;
 import java.awt.image.BufferedImage;
 import resource.ResourceLoader;
 
-class SetCostume extends Action {
+final class SetCostume extends Action {
 	private final String name;
 	private final BufferedImage image;
 
@@ -36,7 +36,7 @@ class SetCostume extends Action {
 	}
 }
 
-class SetColor extends Action {
+final class SetColor extends Action {
 	private final Object color;
 
 	@Override
@@ -56,7 +56,7 @@ class SetColor extends Action {
 	}
 }
 
-class ChangeColor extends Action {
+final class ChangeColor extends Action {
 	private final Object amount;
 
 	@Override
@@ -76,7 +76,7 @@ class ChangeColor extends Action {
 	}
 }
 
-class SetPixelate extends Action {
+final class SetPixelate extends Action {
 	private final Object pixelate;
 
 	@Override
@@ -96,7 +96,7 @@ class SetPixelate extends Action {
 	}
 }
 
-class ChangePixelate extends Action {
+final class ChangePixelate extends Action {
 	private final Object amount;
 
 	@Override
@@ -116,7 +116,7 @@ class ChangePixelate extends Action {
 	}
 }
 
-class SetBrightness extends Action {
+final class SetBrightness extends Action {
 	private final Object brightness;
 
 	@Override
@@ -136,7 +136,7 @@ class SetBrightness extends Action {
 	}
 }
 
-class ChangeBrightness extends Action {
+final class ChangeBrightness extends Action {
 	private final Object amount;
 
 	@Override
@@ -156,7 +156,7 @@ class ChangeBrightness extends Action {
 	}
 }
 
-class SetGhost extends Action {
+final class SetGhost extends Action {
 	private final Object ghost;
 
 	@Override
@@ -176,7 +176,7 @@ class SetGhost extends Action {
 	}
 }
 
-class ChangeGhost extends Action {
+final class ChangeGhost extends Action {
 	private final Object amount;
 
 	@Override
@@ -196,7 +196,7 @@ class ChangeGhost extends Action {
 	}
 }
 
-class SetSize extends Action {
+final class SetSize extends Action {
 	private final Object size;
 
 	@Override
@@ -216,7 +216,7 @@ class SetSize extends Action {
 	}
 }
 
-class ChangeSize extends Action {
+final class ChangeSize extends Action {
 	private final Object amount;
 
 	@Override

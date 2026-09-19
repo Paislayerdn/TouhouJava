@@ -1,4 +1,4 @@
-local spell = {}
+local spellData = {}
 
 local rings = 16
 local density = 32
@@ -6,8 +6,10 @@ local initialSpeed = 1.25
 local angle1, angle2 = 360/rings, 360/density
 local cooldown = 175
 
-spell.onStart = function()
+spellData.onStart = function()
 	boss:setMaxHP(50)
+	spell:startTimer()
+	spell:startCounting()
 end
 
 local bullette = function()
@@ -62,7 +64,7 @@ local bullette = function()
 	)
 end
 
-spell.buildAction = function()
+spellData.buildAction = function()
 
 return sequence(
 	var("offset", mul(random(), 360)),
@@ -70,14 +72,14 @@ return sequence(
 	var("dir", mod(get("count", 2)) ),
 
 	sound("jingle", "[TH] Jingle"),
-	setsoundvolume("jingle", -0.25),
+	setSoundVolume("jingle", -0.25),
 
 	sound("shot", "[TH] Shot"),
-	setsoundvolume("shot", -15.5),
+	setSoundVolume("shot", -15.5),
 
 	forever("sequence",
-		playsound("jingle"),
-		playsound("shot"),
+		playSound("jingle"),
+		playSound("shot"),
 		set("dir", sub( mul(get("count"), 2), 1 )),
 		jsfor("i", 1, rings, function()
 			return jsfor("j", 1, density, function()
@@ -91,4 +93,4 @@ return sequence(
 
 end
 
-return spell
+return spellData

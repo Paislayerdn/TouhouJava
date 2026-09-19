@@ -7,9 +7,10 @@ import static action.JScratch.*;
 import entity.Boss;
 import entity.Player;
 
-public class TestSpell extends Spell {
+public final class TestSpell extends Spell {
 	public TestSpell(Boss boss, Player player) {
 		super(boss, player);
+		configure();
 	}
 	
 	@Override
@@ -24,6 +25,8 @@ public class TestSpell extends Spell {
 	@Override
 	public void onStart() {
 		boss.setMaxHP(75);
+		startTimer();
+		startCounting();
 	}
 
 	@Override
@@ -32,18 +35,22 @@ public class TestSpell extends Spell {
 		float spread = 215/(spokes); 
 		return Sequence(
 			Var("offset", 0),
+			Var("count", 1),
 			Forever("Sequence",
 				For("i", 1, spokes, () ->
 					SpawnBullet(
 						Par(
+							Var("index", Get("i")),
+							Var("speed", 2),
 							SetCostume("OvalBullet"),
 							SetSize(11),
 							SetBrightness(90),
 							AddCircleHitbox("bulletHB", 7),
 							AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+							If( Equal( Mod( Get("index"), 2 ), Get("count") ),
+								() -> SetColor(50)
+							),
 							
-							Var("index", Get("i")),
-							Var("speed", 2),
 							Sequence(
 								GoTo(boss),
 								Look( Get("offset") ),
@@ -61,7 +68,8 @@ public class TestSpell extends Spell {
 					)
 				),
 				Wait(2),
-				Change("offset", 11)
+				Change("offset", 11),
+				Set("count", Mod( Add(Get("count"), 1), 2 ))
 			)
 		);
 	}

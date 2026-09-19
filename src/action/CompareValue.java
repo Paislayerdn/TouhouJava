@@ -23,13 +23,7 @@ public final class CompareValue {
 		return action -> compare(values, action, Comparison.EQUAL);
 	}
 
-	private enum Comparison {
-		GREATER,
-		GREATER_EQUAL,
-		LESS,
-		LESS_EQUAL,
-		EQUAL
-	}
+	private enum Comparison { GREATER, GREATER_EQUAL, LESS,LESS_EQUAL, EQUAL }
 
 	private static boolean compare(
 		Object[] values,
@@ -110,11 +104,7 @@ public final class CompareValue {
 		);
 	}
 
-	private static boolean compareNumbers(
-		float a,
-		float b,
-		Comparison comparison
-	) {
+	private static boolean compareNumbers(float a, float b, Comparison comparison) {
 		return switch (comparison) {
 			case GREATER -> a > b;
 			case GREATER_EQUAL -> a >= b;
@@ -124,11 +114,7 @@ public final class CompareValue {
 		};
 	}
 
-	private static boolean compareStrings(
-		String a,
-		String b,
-		Comparison comparison
-	) {
+	private static boolean compareStrings(String a, String b, Comparison comparison) {
 		int result = a.compareTo(b);
 
 		return switch (comparison) {

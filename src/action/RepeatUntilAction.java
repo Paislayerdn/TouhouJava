@@ -1,6 +1,6 @@
 package action;
 
-public class RepeatUntilAction extends Action {
+public final class RepeatUntilAction extends Action {
 	private final Object condition;
 	private final ActionFactory factory;
 

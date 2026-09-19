@@ -7,6 +7,8 @@ import java.awt.Paint;
 import java.awt.GradientPaint;
 import java.awt.RenderingHints;
 
+import graphics.TextAlign;
+
 public final class TextDrawer {
 	private static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 18);
 
@@ -14,10 +16,29 @@ public final class TextDrawer {
 	private TextDrawer() {}
 
 	public static void draw(Graphics2D g2, String text, float x, float y) {
-		draw(g2, text, x, y, DEFAULT_FONT);
+		draw(g2, text, x, y, DEFAULT_FONT, TextAlign.LEFT);
 	}
-
-	public static void draw(Graphics2D g2, String text, float x, float y, Font font) {
+	public static void draw(Graphics2D g2, String text, float x, float y, int size) {
+		draw(g2, text, x, y, new Font("Arial", Font.PLAIN, size), TextAlign.LEFT);
+	}
+	public static void draw(Graphics2D g2, String text, float x, float y, TextAlign align) {
+		draw(g2, text, x, y, DEFAULT_FONT, align);
+	}
+	public static void draw( Graphics2D g2, String text, float x, float y, int size, TextAlign align) {
+		draw(
+			g2,
+			text,
+			x,
+			y,
+			new Font("Arial", Font.PLAIN, size),
+			align
+		);
+	}
+	public static void draw(Graphics2D g2,
+		String text,
+		float x, float y,
+		Font font, TextAlign align
+	) {
 		Font oldFont = g2.getFont();
 		Paint oldPaint = g2.getPaint();
 		var oldTransform = g2.getTransform();
@@ -29,10 +50,15 @@ public final class TextDrawer {
 
 		g2.setFont(font);
 
-		// Move to the game's Cartesian coordinate.
-		g2.translate(x, y);
+		int width = g2.getFontMetrics().stringWidth(text);
 
-		// Cancel the global Y flip so text is readable.
+		float offset = switch (align) {
+			case LEFT -> 0;
+			case CENTER -> -width / 2.0f;
+			case RIGHT -> -width;
+		};
+
+		g2.translate(x, y);
 		g2.scale(1, -1);
 
 		g2.setPaint(new GradientPaint(
@@ -44,12 +70,7 @@ public final class TextDrawer {
 			new Color(80, 170, 255)
 		));
 
-		/*
-		 * x = 0 because we already translated.
-		 *
-		 * y = 0 is the baseline.
-		 */
-		g2.drawString(text, 0, 0);
+		g2.drawString(text, offset, 0);
 
 		g2.setTransform(oldTransform);
 		g2.setFont(oldFont);

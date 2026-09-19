@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Dialogue {
+public final class Dialogue {
 	private final Map<String, DialogueSpeaker> speakers;
 	private final List<DialogueCommand> commands;
 

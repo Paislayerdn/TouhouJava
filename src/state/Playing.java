@@ -68,10 +68,11 @@ public class Playing implements GameState {
 			player.drawHitboxes(renderer);
 		}
 
+		HUD.drawPlayfield(renderer);
 
 		renderer.endPlayfield();
 
-		HUD.draw(renderer);
+		HUD.drawOverlay(renderer);
 		Debug.draw(renderer);
 	}
 }

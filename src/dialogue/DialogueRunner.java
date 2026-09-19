@@ -6,7 +6,7 @@ import resource.ResourceLoader;
 
 import main.Input;
 
-public class DialogueRunner {
+public final class DialogueRunner {
 	private final Dialogue dialogue;
 
 	private int commandIndex;

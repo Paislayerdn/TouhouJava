@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import entity.Thing;
 
-public class ActionRunner {
+public final class ActionRunner {
 	private ActionContext context;
 	private final ArrayList<Action> actions;
 

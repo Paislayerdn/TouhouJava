@@ -1,6 +1,6 @@
 	package dialogue;
 
-public class DialogueSpeaker {
+public final class DialogueSpeaker {
 	private final String name;
 	private String displayName;
 	private String expression;

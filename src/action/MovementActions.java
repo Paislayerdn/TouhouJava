@@ -2,7 +2,7 @@ package action;
 
 import entity.Entity;
 
-class GoToAction extends Action {
+final class GoToAction extends Action {
 	private Entity target;
 	@Override
 	public boolean consumesFrame() { return false; }
@@ -22,7 +22,7 @@ class GoToAction extends Action {
 	}
 }
 
-class SetAction extends Action {
+final class SetAction extends Action {
 	public enum Axis {
 		X,
 		Y,
@@ -78,7 +78,7 @@ class SetAction extends Action {
 	}
 }
 
-class MoveAction extends Action {
+final class MoveAction extends Action {
 	private final Object x;
 	private final Object y;
 	@Override
@@ -100,7 +100,7 @@ class MoveAction extends Action {
 	}
 }
 
-class ForwardAction extends Action {
+final class ForwardAction extends Action {
 	private Object distance;
 	@Override
 	public boolean consumesFrame() { return false; }

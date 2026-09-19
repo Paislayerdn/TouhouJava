@@ -5,7 +5,7 @@ public interface Value {
 	
 	public static Value Get(String name) {
 		return action -> {
-			ReservedProperty property = ReservedProperty.fromName(name);
+			ReservedVariable property = ReservedVariable.fromName(name);
 
 			if (property != null) {
 				return property.get(action);

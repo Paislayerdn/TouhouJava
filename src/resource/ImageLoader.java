@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 
-public class ImageLoader {
+public final class ImageLoader {
 	private static final String[] EXTENSIONS = {
 		".png",
 		".jpg",

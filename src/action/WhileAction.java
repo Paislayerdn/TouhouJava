@@ -1,6 +1,6 @@
 package action;
 
-public class WhileAction extends Action {
+public final class WhileAction extends Action {
 	private final Object condition;
 	private final ActionFactory factory;
 

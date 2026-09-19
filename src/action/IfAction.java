@@ -1,6 +1,6 @@
 package action;
 
-public class IfAction extends Action {
+public final class IfAction extends Action {
 	private final Object condition;
 	private final ActionFactory thenFactory;
 	private final ActionFactory elseFactory;

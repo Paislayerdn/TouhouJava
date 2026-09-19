@@ -24,6 +24,7 @@ public final class LuaSpell extends Spell {
 		name = "[UNNAMED LUASPELL]";
 		 
 		Globals globals = JSL.registerJScratch();
+		globals.set("spell", CoerceJavaToLua.coerce(this));
 		globals.set("boss", CoerceJavaToLua.coerce(boss));
 		globals.set("player", CoerceJavaToLua.coerce(player));
 		String source = ResourceLoader.lua(luaFile);
@@ -37,20 +38,44 @@ public final class LuaSpell extends Spell {
 	protected void configure() {
 		LuaValue config = luaSpell.get("config");
 
-		if (config.isnil()) return;
+		if (config.isnil()) {
+			System.out.println("[LuaSpell] No config found, using default values.");
+			return;
+		}
 
 		LuaValue value;
+
 		value = config.get("name");
-		if (!value.isnil()) name = value.tojstring();
-		
+		if (!value.isnil()) {
+			name = value.tojstring();
+			System.out.println("[LuaSpell] name = " + name);
+		} else {
+			System.out.println("[LuaSpell] name = " + name + " (default)");
+		}
+
 		value = config.get("playerCandidateRadius");
-		if (!value.isnil()) playerCandidateRadius = value.tofloat();
+		if (!value.isnil()) {
+			playerCandidateRadius = value.tofloat();
+			System.out.println("[LuaSpell] playerCandidateRadius = " + playerCandidateRadius);
+		} else {
+			System.out.println("[LuaSpell] playerCandidateRadius = " + playerCandidateRadius + " (default)");
+		}
 
 		value = config.get("timer");
-		if (!value.isnil()) timer = value.tofloat();
+		if (!value.isnil()) {
+			timer = value.tofloat();
+			System.out.println("[LuaSpell] timer = " + timer);
+		} else {
+			System.out.println("[LuaSpell] timer = " + timer + " (default)");
+		}
 
 		value = config.get("isSpell");
-		if (!value.isnil()) isSpell = value.toboolean();
+		if (!value.isnil()) {
+			isSpell = value.toboolean();
+			System.out.println("[LuaSpell] isSpell = " + isSpell);
+		} else {
+			System.out.println("[LuaSpell] isSpell = " + isSpell + " (default)");
+		}
 	}
 	
 	@Override

@@ -2,7 +2,7 @@ package action;
 
 import resource.Sound;
 
-class PlaySoundAction extends Action {
+final class PlaySoundAction extends Action {
 	private final SoundValue sound;
 	@Override
 	public boolean consumesFrame() { return false; }

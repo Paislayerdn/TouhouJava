@@ -1,6 +1,6 @@
 package action;
 
-public class Forever extends Action {
+public final class Forever extends Action {
 	private Action action;
 	@Override
 	public boolean consumesFrame() { return true; }

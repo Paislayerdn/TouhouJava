@@ -1,6 +1,6 @@
 package action;
 
-public class MathValue {
+public final class MathValue {
 	private MathValue() {}
 
 	public static Value Add(Object... values) {

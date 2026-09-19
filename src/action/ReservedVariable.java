@@ -3,7 +3,7 @@ package action;
 import entity.Entity;
 import entity.Thing;
 
-public enum ReservedProperty {
+public enum ReservedVariable {
 	X("x"),
 	Y("y"),
 	ANGLE("angle"),
@@ -18,15 +18,13 @@ public enum ReservedProperty {
 
 	private final String name;
 
-	ReservedProperty(String name) {
+	ReservedVariable(String name) {
 		this.name = name;
 	}
 
-	public String getName() {
-		return name;
-	}
+	public final String getName() { return name; }
 
-	public Object get(Action action) {
+	public final Object get(Action action) {
 		Thing owner = action.getOwner();
 
 		switch (this) {
@@ -76,19 +74,19 @@ public enum ReservedProperty {
 		);
 	}
 	
-	public static boolean isReserved(String input) {
+	public final static boolean isReserved(String input) {
 		return fromName(input) != null;
 	}
-	public static ReservedProperty fromName(String input) {
+	public final static ReservedVariable fromName(String input) {
 		// Correct spelling: no warning.
-		for (ReservedProperty property : values()) {
+		for (ReservedVariable property : values()) {
 			if (property.name.equals(input)) {
 				return property;
 			}
 		}
 
 		// Wrong capitalization: still works, but warn.
-		for (ReservedProperty property : values()) {
+		for (ReservedVariable property : values()) {
 			if (property.name.equalsIgnoreCase(input)) {
 				JDebug.log(
 					"ReservedProperty Warning: \"" + input

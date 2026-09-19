@@ -1,9 +1,8 @@
 package action;
 
 import resource.ResourceLoader;
-import resource.Sound;
 
-class SoundAction extends Action {
+final class SoundAction extends Action {
 	private final String name;
 	private final String path;
 	@Override

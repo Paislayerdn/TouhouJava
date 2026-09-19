@@ -2,7 +2,7 @@ package action;
 
 import resource.Sound;
 
-class SetSoundVolumeAction extends Action {
+final class SetSoundVolumeAction extends Action {
 	private final SoundValue sound;
 	private final Object volume;
 	@Override

@@ -3,6 +3,7 @@ package state.gameplay;
 import action.Action;
 import action.ActionContext;
 import action.ActionRunner;
+import action.Spell;
 import dialogue.DialogueRunner;
 
 import entity.Boss;
@@ -28,8 +29,9 @@ public final class GameplayScript {
 		this.run(new LuaSpell(boss, player, "Eirin"));
 //		dialogueRunner = new DialogueRunner("Test");
 	}
-	public void run(Action action) {
-		actions.add(action);
+	public void run(Spell spell) {
+		actions.add((Action) spell);
+		HUD.setSpell(spell);
 	}
 
 	public void update() {

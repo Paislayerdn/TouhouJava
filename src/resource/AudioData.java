@@ -2,7 +2,7 @@ package resource;
 
 import javax.sound.sampled.AudioFormat;
 
-class AudioData {
+public final class AudioData {
 	final AudioFormat format;
 	final byte[] data;
 

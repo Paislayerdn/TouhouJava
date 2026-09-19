@@ -27,41 +27,37 @@ public abstract class Thing {
 		actions = new ActionRunner();
 		appearance = new Appearance();
 	}
-
-	public Appearance getAppearance() { return appearance; }
 	
-	public void run(Action action) {
-		actions.add(action, this);
-	}
-	public ActionContext getActionContext() { return actions.getContext(); }
-	public void setActionContext(ActionContext context) {
-		actions = new ActionRunner(context);
-	}
-	public Object getVariable(String name) { return actions.getContext().get(name); }
-	public void updateActions() { actions.update(); }
+	public void run(Action action) { actions.add(action, this); }
+	
+	public final Appearance getAppearance() { return appearance; }
+	public final ActionContext getActionContext() { return actions.getContext(); }
+	public final void setActionContext(ActionContext context) { actions = new ActionRunner(context); }
+	public final Object getVariable(String name) { return actions.getContext().get(name); }
+	public final void updateActions() { actions.update(); }
 
-	public float getX() { return x; }
-	public float getY() { return y; }
-	public void setX(float x) { this.x = x; }
-	public void setY(float y) { this.y = y; }
-	public void setXY(float x, float y) {
+	public final float getX() { return x; }
+	public final float getY() { return y; }
+	public final void setX(float x) { this.x = x; }
+	public final void setY(float y) { this.y = y; }
+	public final void setXY(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	public void move(float dx, float dy) {
+	public final void move(float dx, float dy) {
 		x += dx;
 		y += dy;
 	}
 	
-	public float getTrueAngle() { return trueAngle; }
-	public void setTrueAngle(float angle) { this.trueAngle = angle; }
+	public final float getTrueAngle() { return trueAngle; }
+	public final void setTrueAngle(float angle) { this.trueAngle = angle; }
 	
-	public boolean isAlive() { return alive; }
-	public void setAlive(boolean alive) { this.alive = alive; }
-	public void destroy() { this.alive = false; }
+	public final boolean isAlive() { return alive; }
+	public final void setAlive(boolean alive) { this.alive = alive; }
+	public final void destroy() { this.alive = false; }
 	
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
+	public final String getName() { return name; }
+	public final void setName(String name) { this.name = name; }
 	
 	public void draw(Renderer renderer) { renderer.thing(this); }
 	// the abstracts

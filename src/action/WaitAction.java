@@ -1,11 +1,15 @@
 package action;
 
-class WaitAction extends Action {
+final class WaitAction extends Action {
 	private Object duration;
 	private int timer;
 	@Override
-	public boolean consumesFrame() { return !finished; }
+	public boolean consumesFrame() { return true; }
 
+	public WaitAction() {
+		duration = 0;
+		timer = 0;
+	}
 	public WaitAction(Object frames) {
 		duration = frames;
 		timer = 0;
@@ -13,7 +17,6 @@ class WaitAction extends Action {
 
 	@Override
 	public void start() { timer = 0; }
-	public void rewait() { this.start(); }
 
 	@Override
 	public void update() {
@@ -26,10 +29,10 @@ class WaitAction extends Action {
 	}
 }
 
-class WaitUntilAction extends Action {
+final class WaitUntilAction extends Action {
 	private final Object condition;
 	@Override
-	public boolean consumesFrame() { return !finished; }
+	public boolean consumesFrame() { return true; }
 
 	public WaitUntilAction(Object condition) {
 		this.condition = condition;

@@ -3,7 +3,7 @@ package entity;
 import java.awt.image.BufferedImage;
 import graphics.AppearanceCache;
 
-public class Appearance {
+public final class Appearance {
 	public BufferedImage costume;
 	public float color;
 	public float desaturation;

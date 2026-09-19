@@ -1,24 +1,24 @@
-local spell = {}
+local spellData = {}
 
 local count = 350
 local step = 2.25
 local goldenAngle = 360 * (1 - 2 / (1 + math.sqrt(5)))
 
-spell.onStart = function()
+spellData.onStart = function()
 	boss:setMaxHP(50)
 end
 
-spell.buildAction = function()
+spellData.buildAction = function()
 
 return forever("sequence",
 	var("offset", mul(random(), 360)),
 
 	sound("jingle", "[TH] Jingle"),
-	setsoundvolume("jingle", -0.25),
-	playsound("jingle"),
+	setSoundVolume("jingle", -0.25),
+	playSound("jingle"),
 
 	sound("shot", "[TH] Shot"),
-	setsoundvolume("shot", -27.5),
+	setSoundVolume("shot", -27.5),
 
 	jsfor("i", 1, count, function()
 		return spawnBullet(
@@ -39,7 +39,7 @@ return forever("sequence",
 						look( get("offset") ),
 						turn(mul(get("index"), goldenAngle)),
 						forward(mul(get("index"), step)),
-						playsound("shot"),
+						playSound("shot"),
 
 						forever("sequence",
 							forward(get("speed"))
@@ -67,4 +67,4 @@ return forever("sequence",
 
 end
 
-return spell
+return spellData

@@ -2,6 +2,9 @@ package graphics.opengl;
 
 import graphics.Renderer;
 import org.lwjgl.opengl.GL11;
+import graphics.TextAlign;
+
+import java.awt.image.BufferedImage;
 
 import main.Settings;
 
@@ -9,13 +12,6 @@ import resource.ResourceLoader;
 
 import entity.Appearance;
 import entity.Thing;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 
 public class GLRenderer implements Renderer {
 	private static final String VERTEX_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.vert");
@@ -321,71 +317,22 @@ public class GLRenderer implements Renderer {
 
 	@Override
 	public void text(String text, float x, float y) {
-		Font font = new Font("Arial", Font.PLAIN, 18);
-
-		BufferedImage image = createTextImage(text, font);
-
-		float wwidth = image.getWidth();
-		float hheight = image.getHeight();
-
-		float ascent = font.getSize() * 0.8f;
-
-		image(
-			image,
-			x + wwidth / 2.0f,
-			y + (ascent - hheight / 2.0f)
-		);
+		GLText.draw(this, text, x, y);
 	}
-	private BufferedImage createTextImage(String text, Font font) {
-		Graphics2D g2 = new BufferedImage(
-			1,
-			1,
-			BufferedImage.TYPE_INT_ARGB
-		).createGraphics();
 
-		g2.setRenderingHint(
-			RenderingHints.KEY_TEXT_ANTIALIASING,
-			RenderingHints.VALUE_TEXT_ANTIALIAS_ON
-		);
+	@Override
+	public void text(String text, float x, float y, int size) {
+		GLText.draw(this, text, x, y, size);
+	}
 
-		g2.setFont(font);
-
-		var metrics = g2.getFontMetrics();
-
-		int width = Math.max(1, metrics.stringWidth(text));
-		int ascent = metrics.getAscent();
-		int height = Math.max(1, ascent + metrics.getDescent());
-
-		g2.dispose();
-
-		BufferedImage image = new BufferedImage(
-			width,
-			height,
-			BufferedImage.TYPE_INT_ARGB
-		);
-
-		g2 = image.createGraphics();
-
-		g2.setRenderingHint(
-			RenderingHints.KEY_TEXT_ANTIALIASING,
-			RenderingHints.VALUE_TEXT_ANTIALIAS_ON
-		);
-
-		g2.setFont(font);
-
-		g2.setPaint(new GradientPaint(
-			0,
-			0,
-			Color.WHITE,
-			0,
-			ascent,
-			new Color(80, 170, 255)
-		));
-
-		g2.drawString(text, 0, ascent);
-
-		g2.dispose();
-
-		return image;
+	@Override
+	public void text(
+		String text,
+		float x,
+		float y,
+		int size,
+		TextAlign align
+	) {
+		GLText.draw(this, text, x, y, size, align);
 	}
 }

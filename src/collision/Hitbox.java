@@ -2,7 +2,6 @@ package collision;
 
 import graphics.Renderer;
 import java.util.Locale;
-import java.awt.Graphics2D;
 import java.util.HashSet;
 
 import entity.Entity;
@@ -27,34 +26,34 @@ public abstract class Hitbox {
 		this.name = name.toUpperCase(Locale.ROOT);
 	}
 
-	public Entity getOwner() { return owner; }
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
+	public final Entity getOwner() { return owner; }
+	public final String getName() { return name; }
+	public final void setName(String name) { this.name = name; }
 
-	public float getOffsetX() { return offsetX; }
-	public float getOffsetY() { return offsetY; }
-	public void setOffsetX(float x) { this.offsetX = x; }
-	public void setOffsetY(float y) { this.offsetY = y; }
-	public void setOffset(float x, float y) {
+	public final float getOffsetX() { return offsetX; }
+	public final float getOffsetY() { return offsetY; }
+	public final void setOffsetX(float x) { this.offsetX = x; }
+	public final void setOffsetY(float y) { this.offsetY = y; }
+	public final void setOffset(float x, float y) {
 		this.offsetX = x;
 		this.offsetY = y;
 	}
-	public void changeOffset(float dx, float dy) {
+	public final void changeOffset(float dx, float dy) {
 		this.offsetX += dx;
 		this.offsetY += dy;
 	}
 	
-	public float getWorldX() { return owner.getX() + offsetX; }
-	public float getWorldY() { return owner.getY() + offsetY; }
+	public final float getWorldX() { return owner.getX() + offsetX; }
+	public final float getWorldY() { return owner.getY() + offsetY; }
 		
-	public boolean isEnabled() { return enabled; }
-	public void setEnabled(boolean value) { enabled = value; }
+	public final boolean isEnabled() { return enabled; }
+	public final void setEnabled(boolean value) { enabled = value; }
 
-	public void addTag(String tag) { tags.add( tag.toUpperCase( Locale.ROOT ) ); }
-	public void removeTag(String tag) { tags.remove( tag.toUpperCase( Locale.ROOT ) ); }
-	public void clearTags() { tags.clear(); }
-	public boolean hasTag(String tag) { return tags.contains( tag.toUpperCase( Locale.ROOT ) ); }
-	public boolean hasAnyTag(String... tags) {
+	public final void addTag(String tag) { tags.add( tag.toUpperCase( Locale.ROOT ) ); }
+	public final void removeTag(String tag) { tags.remove( tag.toUpperCase( Locale.ROOT ) ); }
+	public final void clearTags() { tags.clear(); }
+	public final boolean hasTag(String tag) { return tags.contains( tag.toUpperCase( Locale.ROOT ) ); }
+	public final boolean hasAnyTag(String... tags) {
 		for (String tag : tags) {
 			if (hasTag(tag)) {
 				return true;
@@ -63,7 +62,7 @@ public abstract class Hitbox {
 
 		return false;
 	}
-	public HashSet<String> getTags() { return tags; }
+	public final HashSet<String> getTags() { return tags; }
 	
 	public abstract void drawDebug(Renderer renderer);
 }

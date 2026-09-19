@@ -1,11 +1,7 @@
 package action;
 
-public class VariableAction extends Action {
-	public enum Operation {
-		DECLARE,
-		SET,
-		CHANGE
-	}
+public final class VariableAction extends Action {
+	public enum Operation { DECLARE, SET, CHANGE }
 
 	private String name;
 	private Operation operation;
@@ -21,7 +17,7 @@ public class VariableAction extends Action {
 
 	
 	private static void reservedCheck(String name) {
-		if (ReservedProperty.isReserved(name)) {
+		if (ReservedVariable.isReserved(name)) {
 			throw new IllegalArgumentException(
 				"[JScratch VariableAction] Cannot set/change reserved value: "
 				+ name

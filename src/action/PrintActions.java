@@ -1,6 +1,6 @@
 package action;
 
-class PrintAction extends Action {
+final class PrintAction extends Action {
 	private final Object message;
 	@Override
 	public boolean consumesFrame() { return false; }
@@ -20,7 +20,7 @@ class PrintAction extends Action {
 	}
 }
 
-class JSLPrintAction extends Action {
+final class JSLPrintAction extends Action {
 	private final Object message;
 	@Override
 	public boolean consumesFrame() { return false; }

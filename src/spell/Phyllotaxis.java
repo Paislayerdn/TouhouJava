@@ -7,22 +7,25 @@ import static action.JScratch.*;
 import entity.Boss;
 import entity.Player;
 
-public class Phyllotaxis extends Spell {
+public final class Phyllotaxis extends Spell {
 	public Phyllotaxis(Boss boss, Player player) {
 		super(boss, player);
+		configure();
 	}
 	
 	@Override
 	public void configure() {
 		name = "Replication Sign \"Digitalized Pebbles\"";
 		playerCandidateRadius = 40;
-		timer = 4200;
+		timer = 3600;
 		isSpell = true;
 	}
 	
 	@Override
 	public void onStart() {
 		boss.setMaxHP(75);
+		startTimer();
+		startCounting();
 	}
 	
 	private Action bullete(float goldenAngle, float step) {
@@ -58,14 +61,14 @@ public class Phyllotaxis extends Spell {
 					Sequence(
 						Wait(360), Destroy()
 					),
-					While( More( Get("color"), 45),
+					While( Greater( Get("color"), 45),
 						() -> Sequence(
 							ChangeColor(-1),
 							Wait(2)
 						)
 					),
 					Sequence(
-						While( More( Get("ghost"), 0),
+						While( Greater( Get("ghost"), 0),
 							() -> Sequence(
 								ChangeGhost(-2)
 							)

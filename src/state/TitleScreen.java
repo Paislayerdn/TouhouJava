@@ -161,7 +161,8 @@ public class TitleScreen implements GameState {
 				() -> Sequence(
 					MoveX(400.0/iteration1),
 					ChangeGhost(-100.0/iteration1),
-					ChangeBrightness(-100.0/iteration1)
+					ChangeBrightness(-100.0/iteration1),
+					Wait(1)
 				)
 			)
 		);

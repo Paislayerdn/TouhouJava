@@ -2,7 +2,7 @@ package action;
 
 import entity.Entity;
 
-class LookTowardsAction extends Action {
+final class LookTowardsAction extends Action {
 	private Entity target;
 	@Override
 	public boolean consumesFrame() { return false; }
@@ -28,7 +28,7 @@ class LookTowardsAction extends Action {
 	}
 }
 
-class AngleAction extends Action {
+final class AngleAction extends Action {
 	enum Angle {ACTIVE, TRUE, APPEAR}
 	enum Operation {SET, CHANGE}
 
@@ -96,7 +96,7 @@ class AngleAction extends Action {
 	}
 }
 
-class AngleOverrideAction extends Action {
+final class AngleOverrideAction extends Action {
 	private final boolean enabled;
 	@Override
 	public boolean consumesFrame() { return false; }

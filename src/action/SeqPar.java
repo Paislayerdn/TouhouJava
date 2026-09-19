@@ -2,9 +2,14 @@ package action;
 
 import java.util.ArrayList;
 
-class Sequence extends Action {
-	private ArrayList<Action> actions;
+final class Sequence extends Action {
+	private final ArrayList<Action> actions;
 	private int currentIndex;
+	@Override
+	public boolean consumesFrame() {
+		if (finished) return false;
+		return actions.get(currentIndex).consumesFrame();
+	}
 
 	public Sequence(Action... actions) {
 		this.actions = new ArrayList<>();
@@ -82,7 +87,7 @@ class Sequence extends Action {
 	}
 }
 
-class Parallel extends Action {
+final class Parallel extends Action {
 	private ArrayList<Action> actions;
 	@Override
 	public boolean consumesFrame() {

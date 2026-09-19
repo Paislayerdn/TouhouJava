@@ -5,7 +5,7 @@ import static collision.Hitboxes.*;
 
 import entity.Entity;
 
-class AddCircleHitbox extends Action {
+final class AddCircleHitbox extends Action {
 	private final String name;
 	private final Object radius;
 	@Override
@@ -30,7 +30,7 @@ class AddCircleHitbox extends Action {
 	}
 }
 
-class AddRectangleHitbox extends Action {
+final class AddRectangleHitbox extends Action {
 	private final String name;
 	private final Object width;
 	private final Object height;
@@ -59,7 +59,7 @@ class AddRectangleHitbox extends Action {
 	}
 }
 
-class SetHitboxEnabled extends Action {
+final class SetHitboxEnabled extends Action {
 	private final String name;
 	private final boolean enabled;
 	@Override
@@ -85,7 +85,7 @@ class SetHitboxEnabled extends Action {
 	}
 }
 
-class SetHitboxTag extends Action {
+final class SetHitboxTag extends Action {
 	private final String hitboxName;
 	private final String tag;
 	private final boolean add;

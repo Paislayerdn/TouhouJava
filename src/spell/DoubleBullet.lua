@@ -1,11 +1,13 @@
-local spell = {}
+local spellData = {}
 
 local wing = 8
 local wingAngle = 20
-local stack = 4
+local stack = 5
 
-spell.onStart = function()
+spellData.onStart = function()
 	boss:setMaxHP(50)
+	spell:startTimer()
+	spell:startCounting()
 end
 
 local Lasseree = function()
@@ -15,10 +17,13 @@ local Lasseree = function()
 			var("kndex", get("k")),
 			setCostume("OvalBullet"),
 			setSize(15),
-			setColor( add( mul(95, mod(get("jndex"), 2) ), 45 ) ),
-			setBrightness( -20 ),
-			changeBrightness( mul(get("kndex"), 10) ),
-			addCircleHitbox("bulletHB", 12),
+			setColor(45),
+			jsif( equal( mod(get("jndex"), 2), 1 ),
+				function() return setColor(140) end
+			),
+			setBrightness(-30),
+			changeBrightness( mul(get("kndex"), 15) ),
+			addCircleHitbox("bulletHB", 7),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			parallel(
 				sequence(
@@ -67,7 +72,7 @@ local CasualWalk = function()
 
 				forever("sequence",
 					wait(10),
-					playsound("shot"),
+					playSound("shot"),
 					jsfor("j", 1, wing, function()
 						return jsfor("k", 1, stack, function()
 							return Lasseree()
@@ -84,17 +89,17 @@ local CasualWalk = function()
 	)
 end
 
-spell.buildAction = function()
+spellData.buildAction = function()
 
 return sequence(
 	sound("jingle", "[TH] Jingle"),
-	setsoundvolume("jingle", -0.25),
-	playsound("jingle"),
+	setSoundVolume("jingle", -0.25),
+	playSound("jingle"),
 
 	sound("shot", "[TH] Shot"),
-	setsoundvolume("shot", -15.5),
+	setSoundVolume("shot", -15.5),
 	forever("sequence",
-		playsound("shot"),
+		playSound("shot"),
 		jsfor("i", 1, 1, function()
 			return CasualWalk()
 		end),
@@ -104,4 +109,4 @@ return sequence(
 
 end
 
-return spell
+return spellData

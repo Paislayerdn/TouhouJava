@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.sound.sampled.*;
 
-public class Sound {
+public final class Sound {
 	private final AudioData data;
 	private float volume = 0.0f;
 	private final ArrayList<Clip> clips = new ArrayList<>();
