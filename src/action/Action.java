@@ -8,7 +8,11 @@ public abstract class Action {
 	protected Thing owner;
 	protected ActionContext context;
 
+	public abstract boolean consumesFrame();
 	public void reset() { finished = false; }
+	public void start() {}
+	public void update() {}
+	
 	public final boolean isFinished() { return finished; }
 	public final void finish() { finished = true; }
 	
@@ -29,14 +33,9 @@ public abstract class Action {
 
 		return value;
 	}
-
 	public final float resolveFloat(Object value) {
 		return ((Number) resolve(value)).floatValue();
 	}
-	
-	public abstract boolean consumesFrame();
-	public void start() {}
-	public void update() {}
 }
 
 final class ActionUtil {

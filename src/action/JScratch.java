@@ -1,29 +1,91 @@
 // FACADE
 package action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.image.BufferedImage;
 
 import static action.AngleAction.*;
+
+import entity.Thing;
 import entity.Entity;
 
 public final class JScratch {
 	
 	// POSITION
+	public static Action Forward(Object distance) { return new ForwardAction(distance); }
 	public static Action MoveX(Object x) { return Move(x, 0); }
 	public static Action MoveY(Object y) { return Move(0, y); }
 	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
-	public static Action Warp(Entity target) { return GoTo(target); }
+	
 	public static Action GoTo(Entity target) { return new GoToAction(target); }
-	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
+	public static Action Warp(Entity target) { return GoTo(target); }
 	public static Action GoTo(Object x, Object y) { return new SetAction(x, y); }
+	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
 	public static Action SetX(Object x) { return new SetAction(x, SetAction.Axis.X); }
 	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
-	public static Action Forward(Object distance) { return new ForwardAction(distance); }
+	
+	// TWEEN: POSITION
+	public static Action GoTo(Entity target, int frames) {
+		return Parallel(
+			TweenX((Value) action -> target.getX(), frames),
+			TweenY((Value) action -> target.getY(), frames)
+		);
+	}
+	public static Action Warp(Entity target, int frames) { return GoTo(target, frames); }
+	public static Action GoTo(Object x, Object y, int frames) {
+		return Parallel(
+			TweenX(x, frames),
+			TweenY(y, frames)
+		);
+	}
+	public static Action GoTo(Object startX, Object startY, Object x, Object y, int frames) {
+		return Parallel(
+			TweenX(startX, x, frames),
+			TweenY(startY, y, frames)
+		);
+	}
+	public static Action SetX(Object x, int frames) { return TweenX(x, frames); }
+	public static Action SetX(Object start, Object end, int frames) { return TweenX(start, end, frames); }
+	public static Action SetY(Object y, int frames) { return TweenY(y, frames); }
+	public static Action SetY(Object start, Object end, int frames) { return TweenY(start, end, frames); }
+	
 
 	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
 	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
 	public static Action Look(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.SET, angle); }
 	public static Action Turn(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.CHANGE, angle); }
+	// TWEEN: ANGLE
+	public static Action LookTowards(Entity target, int frames) {
+		return new TweenAction(
+			ReservedVariable.ANGLE.getName(),
+			Value.Get("angle"),
+			(Value) action -> {
+				Thing owner = action.getOwner();
+
+				float dx = target.getX() - owner.getX();
+				float dy = target.getY() - owner.getY();
+
+				return (float) Math.toDegrees(Math.atan2(dy, dx));
+			},
+			frames,
+			Easing.LINEAR
+		);
+	}
+	public static Action Look(Object angle, int frames) {
+		return new TweenAction(ReservedVariable.ANGLE.getName(),
+			angle, frames,
+			Easing.LINEAR
+		);
+	}
+	public static Action Look(Object start, Object end, int frames) {
+		return new TweenAction(ReservedVariable.ANGLE.getName(),
+			start, end, frames,
+			Easing.LINEAR
+		);
+	}
+	public static Action Turn(Object angle, int frames) { return Look(Value.Get("angle"), angle, frames); }
+	
 	public static Action SetTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.SET, angle); }
 	public static Action ChangeTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.CHANGE, angle); }
 	// ONLY FOR ENTITY, WARNING FOR USAGE UPON THING
@@ -158,6 +220,69 @@ public final class JScratch {
 	
 	public static Value Random() { return MathValue.Random(); }
 	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
+	
+	// TWEENSERVICE, SYNTAX SUGAR TWEEN
+	public static Action Tween(Object... args) {
+		Easing easing = Easing.LINEAR;
+
+		if (args[args.length - 1] instanceof Easing) {
+			easing = (Easing) args[args.length - 1];
+			args = Arrays.copyOf(args, args.length - 1);
+		}
+
+		int frames = ((Number) args[args.length - 1]).intValue();
+		args = Arrays.copyOf(args, args.length - 1);
+
+		ArrayList<Action> tweens = new ArrayList<>();
+
+		int i = 0;
+
+		while (i < args.length) {
+			String property = (String) args[i++];
+
+			Object startOrEnd = args[i++];
+
+			if (i < args.length && !(args[i] instanceof String)) {
+				Object end = args[i++];
+
+				tweens.add(
+					new TweenAction(property, startOrEnd, end, frames, easing)
+				);
+			} else {
+				tweens.add(
+					new TweenAction(property, startOrEnd, frames, easing)
+				);
+			}
+		}
+
+		return Parallel(tweens.toArray(new Action[0]));
+	}
+	
+	// TWEENSERVICE: POSITION HELPER
+	private static Action TweenX(Object end, int frames) {
+		return new TweenAction(ReservedVariable.X.getName(),
+			Value.Get("x"), end, frames,
+			Easing.LINEAR
+		);
+	}
+	private static Action TweenX(Object start, Object end, int frames) {
+		return new TweenAction(ReservedVariable.X.getName(),
+			start, end, frames,
+			Easing.LINEAR
+		);
+	}
+	private static Action TweenY(Object end, int frames) {
+		return new TweenAction(ReservedVariable.Y.getName(),
+			Value.Get("y"), end, frames,
+			Easing.LINEAR
+		);
+	}
+	private static Action TweenY(Object start, Object end, int frames) {
+		return new TweenAction(ReservedVariable.Y.getName(),
+			start, end, frames,
+			Easing.LINEAR
+		);
+	}
 	
 	
 	// PRINT

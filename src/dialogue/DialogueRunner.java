@@ -1,6 +1,6 @@
 package dialogue;
 
-import java.awt.Graphics2D;
+import graphics.Renderer;
 
 import resource.ResourceLoader;
 
@@ -10,7 +10,7 @@ public final class DialogueRunner {
 	private final Dialogue dialogue;
 
 	private int commandIndex;
-	private DialogueSpeaker currentSpeaker;
+	private DialogueThing currentSpeaker;
 
 	private String currentText;
 
@@ -18,9 +18,7 @@ public final class DialogueRunner {
 	private boolean waitingForMovement;
 	private boolean previousZ;
 	private boolean previousMousePressed;
-
-	private DialogueMovement movement;
-
+	
 	public DialogueRunner(Dialogue dialogue) {
 		this.dialogue = dialogue;
 	}
@@ -30,8 +28,8 @@ public final class DialogueRunner {
 	
 	public Dialogue getDialogue() { return dialogue; }
 	
-	public DialogueSpeaker getCurrentSpeaker() { return currentSpeaker; }
-	public void setCurrentSpeaker(DialogueSpeaker speaker) { currentSpeaker = speaker; }
+	public DialogueThing getCurrentSpeaker() { return currentSpeaker; }
+	public void setCurrentSpeaker(DialogueThing speaker) { currentSpeaker = speaker; }
 	public void removeCurrentSpeaker() {
 		if (currentSpeaker == null) return;
 
@@ -47,17 +45,7 @@ public final class DialogueRunner {
 	
 	public void waitForAdvance() { waitingForInput = true; }
 
-	public void startMovement(DialogueSpeaker speaker,
-		float x, float y, int duration, boolean blocking
-	) {
-		movement = new DialogueMovement(speaker, x, y, duration);
-
-		if (blocking) waitingForMovement = true;
-	}
-
 	public void update() {
-		updateMovement();
-
 		if (waitingForMovement) return;
 		if (waitingForInput) {
 			if (!advancePressed()) return;
@@ -73,19 +61,10 @@ public final class DialogueRunner {
 		}
 	}
 	
-	public void draw(Graphics2D g2) {
-		DialogueRenderer.draw(g2, this);
+	public void draw(Renderer renderer) {
+		DialogueRenderer.draw(renderer, this);
 	}
-
-	private void updateMovement() {
-		if (movement == null) return;
-		movement.update();
-
-		if (!movement.isFinished()) return;
-		movement = null;
-		waitingForMovement = false;
-	}
-
+	
 	private boolean advancePressed() {
 		boolean zPressed = Input.Z && !previousZ;
 		boolean mouseClicked = Input.mousePressed && !previousMousePressed;

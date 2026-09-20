@@ -67,14 +67,7 @@ public final class Phyllotaxis extends Spell {
 							Wait(2)
 						)
 					),
-					Sequence(
-						While( Greater( Get("ghost"), 0),
-							() -> Sequence(
-								ChangeGhost(-2)
-							)
-						),
-						SetGhost(0)
-					)
+					Tween("ghost", 0, 45)
 				)
 			)
 		);
@@ -85,7 +78,7 @@ public final class Phyllotaxis extends Spell {
 		int count = 250;
 		float step = 4;
 		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
-		return Forever("Sequence",
+		return Sequence(
 			Var("offset", Mul(Random(), 360) ),
 			
 			Sound("jingle", "[TH] Jingle"),
@@ -95,10 +88,12 @@ public final class Phyllotaxis extends Spell {
 			Sound("shot", "[TH] Shot"),
 			SetSoundVolume("shot", -27.5f),
 
-			For("i", 1, count,
-				() -> bullete(goldenAngle, step)
-			),
-			Wait(150)
+			Forever("Sequence",
+				For("i", 1, count,
+					() -> bullete(goldenAngle, step)
+				),
+				Wait(150)
+			)
 		);
 	}
 }

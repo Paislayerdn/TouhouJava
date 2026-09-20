@@ -1,16 +1,13 @@
 package state;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ArrayList;
 
-import graphics.Depict;
 import resource.ResourceLoader;
 import resource.Music;
 
-import state.title.TitleThing;
+import entity.Thing;
 
 import action.Action;
 import static action.JScratch.*;
@@ -18,12 +15,12 @@ import graphics.Renderer;
 
 public class TitleScreen implements GameState {
 	private final BufferedImage sakuraImage;
-	private final ArrayList<TitleThing> sakuras;
+	private final ArrayList<Thing> sakuras;
 	private final Object sakuraLock = new Object();
 
 	private final BufferedImage background;
-	private final TitleThing reimu;
-	private final TitleThing marisa;
+	private final Thing reimu;
+	private final Thing marisa;
 	private final BufferedImage game1;
 	private final BufferedImage game2;
 	private Music bgm;
@@ -33,7 +30,7 @@ public class TitleScreen implements GameState {
 	public TitleScreen() {
 		background = ResourceLoader.image("TSC1");
 
-		reimu = new TitleThing();
+		reimu = new Thing();
 		reimu.run(
 			Sequence(
 				SetCostume("TSC2F"),
@@ -44,7 +41,7 @@ public class TitleScreen implements GameState {
 				show()
 			)
 		);
-		marisa = new TitleThing();
+		marisa = new Thing();
 		marisa.run(
 			Sequence(
 				SetCostume("TSC3F"),
@@ -68,7 +65,7 @@ public class TitleScreen implements GameState {
 
 	}
 	
-	private List<TitleThing> getSakuras() {
+	private List<Thing> getSakuras() {
 		synchronized (sakuraLock) {
 			return List.copyOf(sakuras);
 		}
@@ -80,7 +77,7 @@ public class TitleScreen implements GameState {
 		marisa.update();
 
 		synchronized (sakuraLock) {
-			for (TitleThing sakura : sakuras) {
+			for (Thing sakura : sakuras) {
 				sakura.update();
 			}
 
@@ -113,7 +110,7 @@ public class TitleScreen implements GameState {
 		
 		// Sakura layer
 		renderer.scale(2.0f, 2.0f);
-		for (TitleThing sakura : getSakuras()) {
+		for (Thing sakura : getSakuras()) {
 			sakura.draw(renderer);
 		}
 		renderer.endTitle();
@@ -121,7 +118,7 @@ public class TitleScreen implements GameState {
 	}
 
 	private void spawnSakura() {
-		TitleThing sakura = new TitleThing();
+		Thing sakura = new Thing();
 
 		sakura.run(
 			Par(

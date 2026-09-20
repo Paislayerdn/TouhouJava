@@ -8,6 +8,7 @@ import static action.JScratch.*;
 import entity.Entity;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.*;
@@ -68,36 +69,128 @@ public final class JSL {
 			}
 		} );
 		
-		globals.set( "goTo", new VarArgFunction() {
+		globals.set("goTo", new VarArgFunction() {
 			@Override
-			public Varargs invoke( Varargs args ) {
+			public Varargs invoke(Varargs args) {
 				int count = args.narg();
 
-				if ( count == 1 ) {
-					Entity target = ( Entity ) args.arg( 1 ).checkuserdata( Entity.class );
+				if (count == 1) {
+					Entity target =
+						(Entity) args.arg(1).checkuserdata(Entity.class);
 
-					return CoerceJavaToLua.coerce( GoTo( target ) );
-				}
-				if ( count == 2 ) {
-					return CoerceJavaToLua.coerce( GoTo( toJava( args.arg( 1 ) ), toJava( args.arg( 2 ) ) ) );
+					return CoerceJavaToLua.coerce(GoTo(target));
 				}
 
-				throw new IllegalArgumentException( "goTo expects (Entity) or (x,y)" );
+				if (count == 2) {
+					return CoerceJavaToLua.coerce(
+						GoTo(
+							toJava(args.arg(1)),
+							toJava(args.arg(2))
+						)
+					);
+				}
+
+				if (count == 3) {
+					if (args.arg(1).isuserdata()) {
+						Entity target =
+							(Entity) args.arg(1).checkuserdata(Entity.class);
+
+						return CoerceJavaToLua.coerce(
+							GoTo(target, args.arg(2).checkint())
+						);
+					}
+
+					return CoerceJavaToLua.coerce(
+						GoTo(
+							toJava(args.arg(1)),
+							toJava(args.arg(2)),
+							args.arg(3).checkint()
+						)
+					);
+				}
+
+				if (count == 5) {
+					return CoerceJavaToLua.coerce(
+						GoTo(
+							toJava(args.arg(1)),
+							toJava(args.arg(2)),
+							toJava(args.arg(3)),
+							toJava(args.arg(4)),
+							args.arg(5).checkint()
+						)
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"goTo expects (Entity), (x,y), "
+					+ "(Entity,frames), (x,y,frames), "
+					+ "or (startX,startY,x,y,frames)"
+				);
+			}
+		});
+		globals.set("warp", globals.get("goTo"));
+		
+		globals.set("setX", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					return CoerceJavaToLua.coerce(
+						SetX(toJava(args.arg(1)))
+					);
+				}
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						SetX(
+							toJava(args.arg(1)),
+							args.arg(2).checkint()
+						)
+					);
+				}
+				if (args.narg() == 3) {
+					return CoerceJavaToLua.coerce(
+						SetX(
+							toJava(args.arg(1)),
+							toJava(args.arg(2)),
+							args.arg(3).checkint()
+						)
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"setX expects (x), (x, frames), or (start, end, frames)"
+				);
 			}
 		} );
-		globals.set( "warp", globals.get( "goTo" ) );
-		
-		globals.set( "setX", new OneArgFunction() {
+
+		globals.set("setY", new VarArgFunction() {
 			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( SetX( toJava( value ) ) );
-			}
-		} );
-		
-		globals.set( "setY", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( SetY( toJava( value ) ) );
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					return CoerceJavaToLua.coerce(
+						SetY(toJava(args.arg(1)))
+					);
+				}
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						SetY(
+							toJava(args.arg(1)),
+							args.arg(2).checkint()
+						)
+					);
+				}
+				if (args.narg() == 3) {
+					return CoerceJavaToLua.coerce(
+						SetY(
+							toJava(args.arg(1)),
+							toJava(args.arg(2)),
+							args.arg(3).checkint()
+						)
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"setY expects (y), (y, frames), or (start, end, frames)"
+				);
 			}
 		} );
 		
@@ -109,28 +202,92 @@ public final class JSL {
 		} );
 		
 		// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
-		globals.set( "turn", new OneArgFunction() {
+		globals.set("look", new VarArgFunction() {
 			@Override
-			public LuaValue call( LuaValue angle ) {
-				return CoerceJavaToLua.coerce( Turn( toJava( angle ) ) );
-			}
-		} );
-		
-		globals.set( "look", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue angle ) {
-				return CoerceJavaToLua.coerce( Look( toJava( angle ) ) );
-			}
-		} );
-		
-		globals.set( "lookTowards", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				Entity target = ( Entity ) value.checkuserdata( Entity.class );
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					return CoerceJavaToLua.coerce(
+						Look(toJava(args.arg(1)))
+					);
+				}
 
-				return CoerceJavaToLua.coerce( LookTowards( target ) );
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						Look(
+							toJava(args.arg(1)),
+							args.arg(2).checkint()
+						)
+					);
+				}
+
+				if (args.narg() == 3) {
+					return CoerceJavaToLua.coerce(
+						Look(
+							toJava(args.arg(1)),
+							toJava(args.arg(2)),
+							args.arg(3).checkint()
+						)
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"look expects (angle), (angle, frames), "
+					+ "or (start, end, frames)"
+				);
 			}
-		} );
+		});
+
+		globals.set("turn", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					return CoerceJavaToLua.coerce(
+						Turn(toJava(args.arg(1)))
+					);
+				}
+
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						Turn(
+							toJava(args.arg(1)),
+							args.arg(2).checkint()
+						)
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"turn expects (angle) or (angle, frames)"
+				);
+			}
+		});
+
+		globals.set("lookTowards", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					Entity target =
+						(Entity) args.arg(1).checkuserdata(Entity.class);
+
+					return CoerceJavaToLua.coerce(
+						LookTowards(target)
+					);
+				}
+
+				if (args.narg() == 2) {
+					Entity target =
+						(Entity) args.arg(1).checkuserdata(Entity.class);
+
+					return CoerceJavaToLua.coerce(
+						LookTowards(target, args.arg(2).checkint())
+					);
+				}
+
+				throw new IllegalArgumentException(
+					"lookTowards expects (Entity) or (Entity, frames)"
+				);
+			}
+		});
+		
 		globals.set( "setTrueAngle", new OneArgFunction() {
 			@Override
 			public LuaValue call( LuaValue value ) {
@@ -506,6 +663,26 @@ public final class JSL {
 				 );
 			}
 		} );
+		
+		globals.set( "jsfor", new VarArgFunction() {
+			@Override
+			public Varargs invoke( Varargs args ) {
+				String variable = args.arg( 1 ).tojstring();
+				Object start = toJava( args.arg( 2 ) );
+				Object end = toJava( args.arg( 3 ) );
+
+				LuaValue function = args.arg( 4 );
+				function.checkfunction();
+
+				ActionFactory factory = () -> {
+					LuaValue result = function.call();
+
+					return ( Action ) result.checkuserdata( Action.class );
+				};
+
+				return CoerceJavaToLua.coerce( For( variable, start, end, factory ) );
+			}
+		} );
 		globals.set( "jswhile", new TwoArgFunction() {
 			@Override
 			public LuaValue call( LuaValue condition, LuaValue function ) {
@@ -536,26 +713,6 @@ public final class JSL {
 				return CoerceJavaToLua.coerce( 
 					RepeatUntil( toJava( condition ), factory )
 				 );
-			}
-		} );
-		
-		globals.set( "jsfor", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				String variable = args.arg( 1 ).tojstring();
-				Object start = toJava( args.arg( 2 ) );
-				Object end = toJava( args.arg( 3 ) );
-
-				LuaValue function = args.arg( 4 );
-				function.checkfunction();
-
-				ActionFactory factory = () -> {
-					LuaValue result = function.call();
-
-					return ( Action ) result.checkuserdata( Action.class );
-				};
-
-				return CoerceJavaToLua.coerce( For( variable, start, end, factory ) );
 			}
 		} );
 		globals.set( "forever", new VarArgFunction() {
@@ -654,6 +811,28 @@ public final class JSL {
 				throw new IllegalArgumentException( "random expects () or (a, b)" );
 			}
 		} );
+		
+		// TWEENSERVICE
+		LuaTable easing = new LuaTable();
+
+		easing.set("linear", CoerceJavaToLua.coerce(Easing.LINEAR));
+		easing.set("quadIn", CoerceJavaToLua.coerce(Easing.QUAD_IN));
+		easing.set("quadOut", CoerceJavaToLua.coerce(Easing.QUAD_OUT));
+		easing.set("quadInOut", CoerceJavaToLua.coerce(Easing.QUAD_IN_OUT));
+		
+		globals.set("easing", easing);
+		globals.set("tween", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				Object[] values = new Object[args.narg()];
+
+				for (int i = 0; i < args.narg(); i++) {
+					values[i] = toJava(args.arg(i + 1));
+				}
+
+				return CoerceJavaToLua.coerce(Tween(values));
+			}
+		});
 		
 		// PRINT
 		globals.set( "jsprint", new OneArgFunction() {

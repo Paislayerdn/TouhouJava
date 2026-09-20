@@ -74,9 +74,45 @@ public enum ReservedVariable {
 		);
 	}
 	
-	public final static boolean isReserved(String input) {
-		return fromName(input) != null;
+	public final void set(Action action, float value) {
+		Thing owner = action.getOwner();
+
+		switch (this) {
+			case X:
+				owner.setX(value);
+				break;
+			case Y:
+				owner.setY(value);
+				break;
+			case ANGLE:
+				if (owner instanceof Entity entity && entity.getAngleOverride()) {
+					entity.setAppearAngle(value);
+				} else {
+					owner.setTrueAngle(value);
+				}
+				break;
+				
+			case SIZE:
+				owner.getAppearance().setSize(value);
+				break;
+			case COLOR:
+				owner.getAppearance().setColor(value);
+				break;
+			case BRIGHTNESS:
+				owner.getAppearance().setBrightness(value);
+				break;
+			case GHOST:
+				owner.getAppearance().setGhost(value);
+				break;
+			case PIXELATE:
+				owner.getAppearance().setPixelate(value);
+				break;
+			default:
+				throw new IllegalStateException("[JScratch] Property is not writable/tweenable: " + name);
+		}
 	}
+	
+	public final static boolean isReserved(String input) { return fromName(input) != null; }
 	public final static ReservedVariable fromName(String input) {
 		// Correct spelling: no warning.
 		for (ReservedVariable property : values()) {
@@ -100,5 +136,32 @@ public enum ReservedVariable {
 		}
 
 		return null;
+	}
+	public final void warnUsage(String operation) {
+		switch (this) {
+			case X:
+				JDebug.log(
+					"[JScratch] Warning: " + operation + "(\"x\", ...) is discouraged. "
+					+ "Use " + (operation.equals("Set") ? "SetX(...)" : "MoveX(...)") + " instead."
+				);
+				break;
+
+			case Y:
+				JDebug.log(
+					"[JScratch] Warning: " + operation + "(\"y\", ...) is discouraged. "
+					+ "Use " + (operation.equals("Set") ? "SetY(...)" : "MoveY(...)") + " instead."
+				);
+				break;
+
+			case ANGLE:
+				JDebug.log(
+					"[JScratch] Warning: " + operation + "(\"angle\", ...) is discouraged. "
+					+ "Use " + (operation.equals("Set") ? "Look(...)" : "Turn(...)") + " instead."
+				);
+				break;
+
+			default:
+				break;
+		}
 	}
 }

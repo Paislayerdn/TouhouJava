@@ -4,7 +4,7 @@ import dialogue.DialogueCommand;
 import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 
-public class TextCommand implements DialogueCommand {
+public final class TextCommand implements DialogueCommand {
 	private final String text;
 
 	public TextCommand(String text) {

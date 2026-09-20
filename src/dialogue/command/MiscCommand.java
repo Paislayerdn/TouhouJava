@@ -4,7 +4,7 @@ import dialogue.DialogueCommand;
 import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 
-public class MiscCommand implements DialogueCommand {
+public final class MiscCommand implements DialogueCommand {
 	private final String command;
 	private final String argument;
 

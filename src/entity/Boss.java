@@ -56,8 +56,4 @@ public class Boss extends Entity {
 			damage(1);
 		}
 	}
-
-	@Override
-	public void update() {
-	}
 }

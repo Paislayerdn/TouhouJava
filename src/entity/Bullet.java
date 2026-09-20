@@ -52,9 +52,4 @@ public class Bullet extends Entity {
 //			System.out.println("[Bullet] Already grazed.");
 		}
 	}
-	
-	@Override
-	public void update() {
-		updateActions();
-	}
 }

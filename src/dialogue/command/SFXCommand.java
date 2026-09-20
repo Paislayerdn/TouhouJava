@@ -3,7 +3,7 @@ package dialogue.command;
 import dialogue.DialogueCommand;
 import dialogue.DialogueRunner;
 
-public class SFXCommand implements DialogueCommand {
+public final class SFXCommand implements DialogueCommand {
 	private final String filename;
 
 	public SFXCommand(String filename) {

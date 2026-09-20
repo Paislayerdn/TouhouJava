@@ -3,9 +3,9 @@ package action;
 public final class VariableAction extends Action {
 	public enum Operation { DECLARE, SET, CHANGE }
 
-	private String name;
-	private Operation operation;
-	private Object value;
+	private final String name;
+	private final Operation operation;
+	private final Object value;
 	@Override
 	public boolean consumesFrame() { return false; }
 
@@ -15,35 +15,46 @@ public final class VariableAction extends Action {
 		this.value = value;
 	}
 
-	
-	private static void reservedCheck(String name) {
-		if (ReservedVariable.isReserved(name)) {
-			throw new IllegalArgumentException(
-				"[JScratch VariableAction] Cannot set/change reserved value: "
-				+ name
-			);
-		}
-	}
 	@Override
 	public void start() {
+		ReservedVariable property = ReservedVariable.fromName(name);
+
 		switch (operation) {
 			case DECLARE:
+				if (property != null) {
+					throw new IllegalArgumentException("[JScratch VariableAction] Cannot declare reserved value: "+ name);
+				}
+
 				declareVariable(name, resolve(value));
 				break;
 
 			case SET:
-				reservedCheck(name);
-				setVariable(name, resolve(value));
+				if (property != null) {
+					property.warnUsage("Set");
+					property.set(this, resolveFloat(value));
+				} else {
+					setVariable(name, resolve(value));
+				}
 				break;
 
 			case CHANGE:
-				reservedCheck(name);
-				Object current = getVariable(name);
-				float result =
-					((Number) current).floatValue()
-					+ resolveFloat(value);
+				if (property != null) {
+					property.warnUsage("Change");
 
-				setVariable(name, result);
+					float result =
+						((Number) property.get(this)).floatValue()
+						+ resolveFloat(value);
+
+					property.set(this, result);
+				} else {
+					Object current = getVariable(name);
+
+					float result =
+						((Number) current).floatValue()
+						+ resolveFloat(value);
+
+					setVariable(name, result);
+				}
 				break;
 		}
 

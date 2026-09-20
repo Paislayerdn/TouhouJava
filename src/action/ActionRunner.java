@@ -3,19 +3,24 @@ package action;
 import java.util.ArrayList;
 
 import entity.Thing;
+import java.util.HashMap;
 
 public final class ActionRunner {
-	private ActionContext context;
+	private final ActionContext context;
 	private final ArrayList<Action> actions;
+	private final HashMap<ReservedVariable, TweenAction> tweens;
 
 	public ActionRunner() {
-		this.actions = new ArrayList<>();
-		this.context = new ActionContext();
+		actions = new ArrayList<>();
+		tweens = new HashMap<>();
+		context = new ActionContext();
 	}
 	public ActionRunner(ActionContext context) {
-		this.actions = new ArrayList<>();
+		actions = new ArrayList<>();
+		tweens = new HashMap<>();
 		this.context = context;
-	}	
+	}
+	
 	public ActionContext getContext() { return context; }
 
 	public void add(Action action) {
@@ -24,9 +29,20 @@ public final class ActionRunner {
 	public void add(Action action, Thing owner) {
 		action.setOwner(owner);
 		action.setContext(context);
+
+		if (action instanceof TweenAction tween) {
+			registerTween(tween);
+		}
+
 		actions.add(action);
-		
 		action.start();
+	}
+	private void registerTween(TweenAction tween) {
+		ReservedVariable property = tween.getProperty();
+
+		TweenAction old = tweens.put(property, tween);
+
+		if (old != null && old != tween) { old.finish(); }
 	}
 
 	public void update() {
@@ -39,7 +55,12 @@ public final class ActionRunner {
 		}
 
 		actions.removeIf(Action::isFinished);
+
+		tweens.entrySet().removeIf(entry -> entry.getValue().isFinished());
 	}
 
-	public void clear() { actions.clear(); }
+	public void clear() {
+		actions.clear();
+		tweens.clear();
+	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class Dialogue {
-	private final Map<String, DialogueSpeaker> speakers;
+	private final Map<String, DialogueThing> speakers;
 	private final List<DialogueCommand> commands;
 
 	public Dialogue() {
@@ -15,14 +15,14 @@ public final class Dialogue {
 		this.commands = new ArrayList<>();
 	}
 
-	public Collection<DialogueSpeaker> getAllSpeakers() {
+	public Collection<DialogueThing> getSpeakers() {
 		return speakers.values();
 	}
-	public DialogueSpeaker getSpeaker(String name) {
+	public DialogueThing getSpeaker(String name) {
 		return getOrCreateSpeaker(name);
 	}
-	public DialogueSpeaker getOrCreateSpeaker(String name) {
-		return speakers.computeIfAbsent(name, DialogueSpeaker::new);
+	public DialogueThing getOrCreateSpeaker(String name) {
+		return speakers.computeIfAbsent(name, DialogueThing::new);
 	}
 	public void removeSpeaker(String name) {
 		speakers.remove(name);

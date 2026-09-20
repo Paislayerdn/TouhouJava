@@ -4,7 +4,9 @@ import dialogue.DialogueCommand;
 import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 
-public class ExpressionCommand implements DialogueCommand {
+import resource.ResourceLoader;
+
+public final class ExpressionCommand implements DialogueCommand {
 	private final String expression;
 
 	public ExpressionCommand(String expression) {
@@ -13,7 +15,10 @@ public class ExpressionCommand implements DialogueCommand {
 
 	@Override
 	public void execute(DialogueRunner runner) {
-		runner.getCurrentSpeaker().setExpression(expression);
+		runner.getCurrentSpeaker()
+			.getAppearance()
+			.setCostume(ResourceLoader.image(expression));
+
 		DialogueDebug.log(this, "Expression: " + expression);
 	}
 }

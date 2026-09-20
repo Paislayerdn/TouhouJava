@@ -88,7 +88,7 @@ final class Sequence extends Action {
 }
 
 final class Parallel extends Action {
-	private ArrayList<Action> actions;
+	private final ArrayList<Action> actions;
 	@Override
 	public boolean consumesFrame() {
 		for (Action action : actions) {

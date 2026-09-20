@@ -2,6 +2,9 @@ package state;
 
 import main.Input;
 
+import action.*;
+import dialogue.*;
+
 import entity.Boss;
 import entity.Player;
 import graphics.Renderer;
@@ -12,17 +15,20 @@ import state.gameplay.*;
 
 public class Playing implements GameState {
 	private Music bgm;
-	private final Player player;
-	private final Boss boss;
-	private final GameplayScript gameScript;
+	private Player player;
+	private Boss boss;
+	private GameplayScript gameScript;
+	private final ActionRunner actions;
+	private DialogueRunner dialogueRunner;
 	
 	private boolean lastDebugKey = false;
-	
+
 	public Playing() {
 		player = new Player();
 		boss = new Boss(player);
+		actions = new ActionRunner();
 		
-		gameScript = new GameplayScript(player, boss);
+		gameScript = new GameplayScript(this);
 		gameScript.start();
 
 		HUD.init();
@@ -34,6 +40,14 @@ public class Playing implements GameState {
 		bgm.play();
 	}
 	
+	public void run(Spell spell) {
+		actions.add((Action) spell);
+		HUD.setSpell(spell);
+	}
+	public void run(DialogueRunner dialogueRunner) {
+		this.dialogueRunner = dialogueRunner;
+	}
+	
 	@Override
 	public void update() {
 		if (Input.P && !lastDebugKey) {
@@ -42,7 +56,10 @@ public class Playing implements GameState {
 
 		lastDebugKey = Input.P;
 		
-		gameScript.update();
+		actions.update();
+		if (dialogueRunner != null) {
+			dialogueRunner.update();
+		}
 		
 		boss.update();
 		player.update();
@@ -73,6 +90,16 @@ public class Playing implements GameState {
 		renderer.endPlayfield();
 
 		HUD.drawOverlay(renderer);
+		
+		if (dialogueRunner != null) {
+			dialogueRunner.draw(renderer);
+		}
+		
 		Debug.draw(renderer);
 	}
+	public Music getBGM() { return bgm; }
+	public Player getPlayer() { return player; }
+	public Boss getBoss() { return boss; }
+	public GameplayScript getGameScript() { return gameScript; }
+	public DialogueRunner getDialogueRunner() { return dialogueRunner; }
 }

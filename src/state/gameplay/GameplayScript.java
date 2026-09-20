@@ -1,49 +1,19 @@
 package state.gameplay;
 
-import action.Action;
-import action.ActionContext;
-import action.ActionRunner;
-import action.Spell;
-import dialogue.DialogueRunner;
-
-import entity.Boss;
-import entity.Player;
-
+import state.Playing;
 import spell.*;
+import dialogue.*;
 
 public final class GameplayScript {
-	private final Player player;
-	private final Boss boss;
+	private final Playing parent;
 	
-	private final ActionRunner actions;
-	private DialogueRunner dialogueRunner;
-
-	public GameplayScript(Player player, Boss boss) {
-		this.player = player;
-		this.boss = boss;
-		this.actions = new ActionRunner();
+	public GameplayScript(Playing playing) {
+		this.parent = playing;
 	}
 
 	public void start() {
-//		this.run(new Phyllotaxis(boss, player));
-		this.run(new LuaSpell(boss, player, "Eirin"));
-//		dialogueRunner = new DialogueRunner("Test");
+//		parent.run(new Phyllotaxis( parent.getBoss(), parent.getPlayer() ));
+		parent.run(new LuaSpell( parent.getBoss(), parent.getPlayer(), "Eirin"));
+//		parent.run( new DialogueRunner("Test") );
 	}
-	public void run(Spell spell) {
-		actions.add((Action) spell);
-		HUD.setSpell(spell);
-	}
-
-	public void update() {
-		actions.update();
-		if (dialogueRunner != null) dialogueRunner.update();
-	}
-
-	public ActionContext getActionContext() {
-		return actions.getContext();
-	}
-	public void setDialogueRunner(DialogueRunner dialogueRunner) { this.dialogueRunner = dialogueRunner; }
-	public DialogueRunner getDialogueRunner() { return dialogueRunner; }
-	public Player getPlayer() { return player; } 
-	public Boss getBoss() { return boss; }
 }	

@@ -1,15 +1,12 @@
 package entity;
 
-import java.awt.Graphics2D;
-
 import action.Action;
 import action.ActionContext;
 import action.ActionRunner;
 
-import graphics.Depict;
 import graphics.Renderer;
 
-public abstract class Thing {
+public class Thing {
 	protected Appearance appearance;
 	protected float x;
 	protected float y;
@@ -59,7 +56,10 @@ public abstract class Thing {
 	public final String getName() { return name; }
 	public final void setName(String name) { this.name = name; }
 	
-	public void draw(Renderer renderer) { renderer.thing(this); }
-	// the abstracts
-	public abstract void update();
+	public void draw(Renderer renderer) {
+		renderer.thing(this);
+	}
+	public void update() {
+		updateActions();
+	}
 }
