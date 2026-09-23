@@ -1,4 +1,4 @@
-package graphics;
+package graphics.java2d;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -83,9 +83,7 @@ public final class Depict {
 	public static void thing(Graphics2D g2, Thing thing) {
 		Appearance appearance = thing.getAppearance();
 
-		if (appearance.costume == null
-				|| appearance.size == 0
-				|| appearance.ghost == 100) {
+		if (appearance.costume == null || appearance.size == 0 || appearance.ghost == 100) {
 			return;
 		}
 
@@ -95,7 +93,8 @@ public final class Depict {
 		var oldComposite = g2.getComposite();
 
 		g2.translate(thing.getX(), thing.getY());
-		g2.rotate(Math.toRadians(thing.getTrueAngle()));
+		float angle = thing.getAngleOverride()? thing.getAppearAngle() : thing.getTrueAngle();
+		g2.rotate(Math.toRadians(angle));
 
 		if (appearance.size != 100) {
 			float scale = appearance.size / 100.0f;

@@ -12,7 +12,7 @@ public class Game {
 	private PlayingStats playingStats;
 
 	public Game() {
-		currentState = new TitleScreen();
+		currentState = new Playing();
 	}
 	
 	public void update() {

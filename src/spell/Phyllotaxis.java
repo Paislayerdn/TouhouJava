@@ -28,20 +28,43 @@ public final class Phyllotaxis extends Spell {
 		startCounting();
 	}
 	
-	private Action bullete(float goldenAngle, float step) {
-		float maxBright = 60;
+	@Override
+	protected Action buildAction() {
+		int count = 270;
+		float step = 2f;
+		float waitIteration = 0.2f;
+		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
+		return Sequence(
+			Var("offset", Mul(Random(), 360) ),
+			
+			Sound("jingle", "[TH] Jingle"),
+			SetSoundVolume("jingle", -0.25f),
+			
+			Sound("shot", "[TH] Shot"),
+			SetSoundVolume("shot", -17.5f),
+
+			Forever("Sequence",
+				PlaySound("jingle"),
+				For("i", 1, count,
+					() -> bullete(goldenAngle, step, waitIteration)
+				),
+				Wait(150)
+			)
+		);
+	}
+	
+	private Action bullete(float goldenAngle, float step, float waitIteration) {
+		float capSpeed = -4.0f;
 		return SpawnBullet(
 			Sequence(
 				Var("index", Get("i")),
 				Var("speed", 0.15),
 				
 				SetCostume("OvalBullet"),
-				SetSize(11), SetColor(240),
-				SetBrightness(maxBright), SetGhost(90),
-				AddCircleHitbox("bulletHB", 7),
+				AddCircleHitbox("bulletHB", 5),
 				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-				GoTo(999,999),
-				Wait(Add(Mul(Get("index"), 0.35)) ),
+				DisableHitbox("bulletHB"),
+				Wait(Add(Mul(Get("index"), waitIteration), 1) ),
 				Parallel(
 					Sequence(
 						GoTo(boss), Look( Get("offset") ),
@@ -53,46 +76,23 @@ public final class Phyllotaxis extends Spell {
 						)
 					),
 					Sequence(
-						Wait(35),
-						Forever("Sequence",
-							Change("speed", -0.035)
+						Wait(30),
+						While( Greater( Get("speed"), capSpeed),
+							() -> Sequence(
+								Change("speed", -0.035),
+								Wait()
+							)
 						)
 					),
 					Sequence(
-						Wait(360), Destroy()
+						Wait(480), Destroy()
 					),
-					While( Greater( Get("color"), 45),
-						() -> Sequence(
-							ChangeColor(-1),
-							Wait(2)
-						)
-					),
-					Tween("ghost", 0, 45)
+					Tween("color", 240, 130, 90),
+					Sequence(
+						Tween("size", 30, 11, "brightness", 100, 60, "ghost", 90, 0, 45),
+						EnableHitbox("bulletHB")
+					)
 				)
-			)
-		);
-	}
-	
-	@Override
-	protected Action buildAction() {
-		int count = 250;
-		float step = 4;
-		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
-		return Sequence(
-			Var("offset", Mul(Random(), 360) ),
-			
-			Sound("jingle", "[TH] Jingle"),
-			SetSoundVolume("jingle", -0.25f),
-			PlaySound("jingle"),
-			
-			Sound("shot", "[TH] Shot"),
-			SetSoundVolume("shot", -27.5f),
-
-			Forever("Sequence",
-				For("i", 1, count,
-					() -> bullete(goldenAngle, step)
-				),
-				Wait(150)
 			)
 		);
 	}

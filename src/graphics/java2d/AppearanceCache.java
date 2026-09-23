@@ -1,4 +1,4 @@
-package graphics;
+package graphics.java2d;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;

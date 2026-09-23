@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import static action.AngleAction.*;
 
 import entity.Thing;
-import entity.Entity;
 
 public final class JScratch {
 	
@@ -18,21 +17,21 @@ public final class JScratch {
 	public static Action MoveY(Object y) { return Move(0, y); }
 	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
 	
-	public static Action GoTo(Entity target) { return new GoToAction(target); }
-	public static Action Warp(Entity target) { return GoTo(target); }
+	public static Action GoTo(Thing target) { return new GoToAction(target); }
+	public static Action Warp(Thing target) { return GoTo(target); }
 	public static Action GoTo(Object x, Object y) { return new SetAction(x, y); }
 	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
 	public static Action SetX(Object x) { return new SetAction(x, SetAction.Axis.X); }
 	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
 	
 	// TWEEN: POSITION
-	public static Action GoTo(Entity target, int frames) {
+	public static Action GoTo(Thing target, int frames) {
 		return Parallel(
 			TweenX((Value) action -> target.getX(), frames),
 			TweenY((Value) action -> target.getY(), frames)
 		);
 	}
-	public static Action Warp(Entity target, int frames) { return GoTo(target, frames); }
+	public static Action Warp(Thing target, int frames) { return GoTo(target, frames); }
 	public static Action GoTo(Object x, Object y, int frames) {
 		return Parallel(
 			TweenX(x, frames),
@@ -52,11 +51,11 @@ public final class JScratch {
 	
 
 	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
-	public static Action LookTowards(Entity target) { return new LookTowardsAction(target); }
+	public static Action LookTowards(Thing target) { return new LookTowardsAction(target); }
 	public static Action Look(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.SET, angle); }
 	public static Action Turn(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.CHANGE, angle); }
 	// TWEEN: ANGLE
-	public static Action LookTowards(Entity target, int frames) {
+	public static Action LookTowards(Thing target, int frames) {
 		return new TweenAction(
 			ReservedVariable.ANGLE.getName(),
 			Value.Get("angle"),
@@ -68,27 +67,31 @@ public final class JScratch {
 
 				return (float) Math.toDegrees(Math.atan2(dy, dx));
 			},
-			frames,
-			Easing.LINEAR
+			frames, Easing.LINEAR, TweenMode.CHASING
 		);
 	}
 	public static Action Look(Object angle, int frames) {
 		return new TweenAction(ReservedVariable.ANGLE.getName(),
-			angle, frames,
-			Easing.LINEAR
+			angle, frames, Easing.LINEAR, TweenMode.SNAPSHOT
 		);
 	}
 	public static Action Look(Object start, Object end, int frames) {
 		return new TweenAction(ReservedVariable.ANGLE.getName(),
 			start, end, frames,
-			Easing.LINEAR
+			Easing.LINEAR, TweenMode.SNAPSHOT
 		);
 	}
-	public static Action Turn(Object angle, int frames) { return Look(Value.Get("angle"), angle, frames); }
+	public static Action Turn(Object angle, int frames) {
+		return new TweenAction(
+			ReservedVariable.ANGLE.getName(),
+			(Value) action -> Value.Get("angle"),
+			(Value) action -> Add(Value.Get("angle"), angle),
+			frames, Easing.LINEAR, TweenMode.SNAPSHOT
+		);
+	}
 	
 	public static Action SetTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.SET, angle); }
 	public static Action ChangeTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.CHANGE, angle); }
-	// ONLY FOR ENTITY, WARNING FOR USAGE UPON THING
 	public static Action SetAppearAngle(Object angle) { return new AngleAction(Angle.APPEAR, Operation.SET, angle); }
 	public static Action ChangeAppearAngle(Object angle) { return new AngleAction(Angle.APPEAR, Operation.CHANGE, angle); }
 	public static Action EnableAngleOverride() { return new AngleOverrideAction(true); }
@@ -125,9 +128,8 @@ public final class JScratch {
 	
 	// SOUND
 	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
-	public static SoundValue GetSound(String name) { return new SoundValue(name); }
-	public static Action SetSoundVolume(String name, float volume) { return GetSound(name).setVolume(volume); }
-	public static Action PlaySound(String name) { return GetSound(name).play(); }
+	public static Action SetSoundVolume(String name, Object volume) { return new SetSoundVolumeAction(name, volume); }
+	public static Action PlaySound(String name) { return new PlaySoundAction(name); }
 	
 	// VARIABLE
 	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
@@ -156,7 +158,7 @@ public final class JScratch {
 	public static Action Sequence(Action... actions) { return new Sequence(actions); }
 
 	public static Action Paralell(Action... actions) {
-		JDebug.log("Warning, you're mispelling \"Parallel\"...");
+		JSCDebug.log("Warning, you're mispelling \"Parallel\"...");
 		return Parallel(actions);
 	}
 	public static Action Par(Action... actions) { return Parallel(actions); }
@@ -196,8 +198,8 @@ public final class JScratch {
 		}
 
 		if (container == null) {
-			JDebug.log(String.format("[JScratch] Warning, unknown Forever mode: \"%s\"", type));
-			JDebug.log("Try be sober. Defaulting to Sequence.");
+			JSCDebug.log(String.format("[JScratch] Warning, unknown Forever mode: \"%s\"", type));
+			JSCDebug.log("Try be sober. Defaulting to Sequence.");
 
 			container = new Sequence(actions);
 		}
@@ -220,6 +222,7 @@ public final class JScratch {
 	
 	public static Value Random() { return MathValue.Random(); }
 	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
+	public static Value RandomSign() { return MathValue.RandomSign(); }
 	
 	// TWEENSERVICE, SYNTAX SUGAR TWEEN
 	public static Action Tween(Object... args) {
@@ -230,7 +233,7 @@ public final class JScratch {
 			args = Arrays.copyOf(args, args.length - 1);
 		}
 
-		int frames = ((Number) args[args.length - 1]).intValue();
+		Object frames = args[args.length - 1];
 		args = Arrays.copyOf(args, args.length - 1);
 
 		ArrayList<Action> tweens = new ArrayList<>();
@@ -288,4 +291,34 @@ public final class JScratch {
 	// PRINT
 	public static Action Print(Object message) { return new PrintAction(message); }
 	public static Action LuaPrint(Object message) { return new JSLPrintAction(message); }
+}
+
+final class JSCDebug {
+	private JSCDebug() {}
+
+	public static void log(Class<?> source, String message) {
+		print("[JScratch " + source.getSimpleName() + "] " + message);
+	}
+	public static void log(Object source, String message) {
+		print("[JScratch " + source.getClass().getSimpleName() + "] " + message);
+	}
+	public static void log(String message) {
+		print("[JScratch] " + message);
+	}
+	private static void print(String message) {
+		System.out.println(message);
+	}
+	
+	public static RuntimeException error(Class<?> source, String message) {
+		return fail("[JScratch " + source.getSimpleName() + "] " + message);
+	}
+	public static RuntimeException error(Object source, String message) {
+		return fail("[JScratch " + source.getClass().getSimpleName() + "] " + message);
+	}
+	public static RuntimeException error(String message) {
+		return fail("[JScratch] " + message);
+	}
+	private static RuntimeException fail(String message) {
+		throw new IllegalStateException(message);
+	}
 }

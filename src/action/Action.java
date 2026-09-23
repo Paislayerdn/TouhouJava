@@ -41,32 +41,10 @@ public abstract class Action {
 final class ActionUtil {
 	private ActionUtil() {}
 
-	static Entity requireEntity(Action action) {
-		if (!(action.getOwner() instanceof Entity entity)) {
-			throw new IllegalStateException(
-				"[JScratch " + action.getClass().getSimpleName()
-				+ "] Owner must be an Entity"
-			);
+	public static Entity requireEntity(Action action) {
+		if (action.getOwner() instanceof Entity entity) {
+			return entity;
 		}
-		return entity;
+		throw JSCDebug.error(action, "Owner must be an Entity");
 	}
 }
-
-final class JDebug {
-	private JDebug() {}
-
-	public static void log(Class<?> source, String message) {
-		System.out.println(
-			"[JScratch " + source.getSimpleName() + "] " + message
-		);
-	}
-	public static void log(Object source, String message) {
-		System.out.println(
-			"[JScratch " + source.getClass().getSimpleName() + "] " + message
-		);
-	}
-	public static void log(String message) {
-		System.out.println("[JScratch] " + message);
-	}
-}
-

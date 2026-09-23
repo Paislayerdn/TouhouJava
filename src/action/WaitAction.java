@@ -1,29 +1,51 @@
 package action;
 
 final class WaitAction extends Action {
-	private Object duration;
+	private final Object duration;
 	private int timer;
+
 	@Override
 	public boolean consumesFrame() { return true; }
 
 	public WaitAction() {
-		duration = 0;
+		duration = 1;
 		timer = 0;
 	}
+
 	public WaitAction(Object frames) {
-		duration = frames;
+		this.duration = frames;
 		timer = 0;
 	}
 
 	@Override
-	public void start() { timer = 0; }
+	public void start() {
+		timer = 0;
+
+		int intDuration = (int) resolveFloat(duration);
+
+		if (intDuration < 0) {
+			JSCDebug.log(this,
+				"Why would you wait with negative time. "
+				+ "Defaulting to 1 frame. "
+				+ "Are you trying to predict the future?"
+			);
+			intDuration = 1;
+		}
+
+		if (intDuration == 0) {
+			JSCDebug.log(this,
+				"Why would you wait with 0 frames? "
+				+ "Aborting this wait, good luck."
+			);
+			finish();
+		}
+	}
 
 	@Override
 	public void update() {
 		timer++;
-		int intDuration = (int) resolveFloat(duration);
 
-		if (timer >= intDuration) {
+		if (timer >= (int) resolveFloat(duration)) {
 			finish();
 		}
 	}

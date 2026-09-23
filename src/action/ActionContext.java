@@ -1,9 +1,10 @@
 package action;
 
+import java.util.Map;
 import java.util.HashMap;
 
 public final class ActionContext {
-	private final HashMap<String, Object> variables;
+	private final Map<String, Object> variables;
 	private final ActionContext parent;
 
 	public ActionContext() {
@@ -25,7 +26,7 @@ public final class ActionContext {
 	// Declare a variable in THIS context, without conflicting the upper contexts.
 	public void declare(String name, Object value) {
 		if (findContext(name) != null) {
-			throw new IllegalArgumentException("[JScratch ActionContext] Variable already declared: " + name);
+			throw JSCDebug.error(this, "Variable already declared: " + name);
 		}
 
 		variables.put(name, value);
@@ -35,7 +36,7 @@ public final class ActionContext {
 		ActionContext context = findContext(name);
 
 		if (context == null) {
-			throw new IllegalArgumentException( "[JScratch ActionContext] Getting an undeclared variable: " + name );
+			throw JSCDebug.error(this, "Getting an undeclared variable: " + name);
 		}
 
 		return context.variables.get(name);
@@ -45,7 +46,7 @@ public final class ActionContext {
 		ActionContext context = findContext(name);
 
 		if (context == null) {
-			throw new IllegalArgumentException( "[JScratch ActionContext] Setting an undeclared variable: " + name );
+			throw JSCDebug.error(this, "Setting an undeclared variable: " + name);
 		}
 
 		context.variables.put(name, value);

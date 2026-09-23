@@ -1,33 +1,45 @@
 package action;
 
+enum TweenMode {
+	CHASING,
+	SNAPSHOT
+}
+
 public final class TweenAction extends Action {
 	private final Object start;
 	private final Object end;
-	private final int frames;
+	private final Object frames;
 	private final Easing easing;
+	private final TweenMode mode;
 
 	private final ReservedVariable property;
 	private float startValue;
+	private float endValue;
+	private int resolvedFrames;
 	private int elapsed;
 
 	@Override
 	public boolean consumesFrame() { return true; }
 
-	public TweenAction(String propertyName, Object end, int frames, Easing easing) {
-		this(propertyName, Value.Get(propertyName), end, frames, easing);
+	public TweenAction(String propertyName, Object end, Object frames, Easing easing) {
+		this(propertyName, Value.Get(propertyName), end, frames, easing, TweenMode.CHASING);
 	}
-
-	public TweenAction(String propertyName, Object start, Object end, int frames, Easing easing) {
+	public TweenAction(String propertyName, Object end, Object frames, Easing easing, TweenMode mode) {
+		this(propertyName, Value.Get(propertyName), end, frames, easing, mode);
+	}
+	public TweenAction(String propertyName, Object start, Object end, Object frames, Easing easing) {
+		this(propertyName, start, end, frames, easing, TweenMode.CHASING);
+	}
+	public TweenAction(String propertyName, Object start, Object end, Object frames, Easing easing, TweenMode mode) {
 		this.property = ReservedVariable.fromName(propertyName);
 
 		if (property == null) {
-			throw new IllegalArgumentException("Unknown Tween property: " + propertyName);
+			throw JSCDebug.error(this, "Unknown Tween property: " + propertyName);
 		}
 
 		if (property == ReservedVariable.X || property == ReservedVariable.Y) {
-			JDebug.log(
-				"[JScratch] Warning: Tween(\"" + property.getName() + "\", ...) "
-				+ "is discouraged. Use "
+			JSCDebug.log(
+				"Warning: Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
 				+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)")
 				+ " instead."
 			);
@@ -37,23 +49,30 @@ public final class TweenAction extends Action {
 		this.end = end;
 		this.frames = frames;
 		this.easing = easing;
+		this.mode = mode;
 	}
 	
 	public ReservedVariable getProperty() { return property; }
 	
 	@Override
 	public void start() {
-		if (frames < 0) {
-			throw new IllegalArgumentException("[JScratch] Tween frames cannot be negative: " + frames);
+		resolvedFrames = (int) resolveFloat(frames);
+		if (resolvedFrames < 0) {
+			throw JSCDebug.error(this, "Tween frames cannot be negative: " + frames);
 		}
 
 		startValue = resolveFloat(start);
+
+		if (mode == TweenMode.SNAPSHOT) {
+			endValue = resolveFloat(end);
+		}
+
 		elapsed = 0;
 
 		property.set(this, startValue);
 
-		if (frames == 0) {
-			JDebug.log("Warning: Tween with 0 frames. Why the heck are you doing this?");
+		if (resolvedFrames == 0) {
+			JSCDebug.log("Warning: Tween with 0 frames. Why the heck are you doing this?");
 
 			property.set(this, resolveFloat(end));
 			finish();
@@ -64,19 +83,19 @@ public final class TweenAction extends Action {
 	public void update() {
 		elapsed++;
 
-		float endValue = resolveFloat(end);
+		float resolvedEnd = mode == TweenMode.SNAPSHOT? endValue: resolveFloat(end);
 
-		float t = (float) elapsed / frames;
+		float t = (float) elapsed / resolvedFrames;
 		t = Math.min(t, 1.0f);
 
 		float eased = easing.apply(t);
 
-		float value = startValue + (endValue - startValue) * eased;
+		float value = startValue + (resolvedEnd - startValue) * eased;
 
 		property.set(this, value);
 
-		if (elapsed >= frames) {
-			property.set(this, endValue);
+		if (elapsed >= resolvedFrames) {
+			property.set(this, resolvedEnd);
 			finish();
 		}
 	}

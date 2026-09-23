@@ -1,4 +1,4 @@
-package graphics;
+package graphics.java2d;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -7,6 +7,7 @@ import java.awt.Paint;
 import java.awt.GradientPaint;
 import java.awt.RenderingHints;
 
+import graphics.TextAlign;
 import graphics.TextAlign;
 
 public final class TextDrawer {

@@ -1,6 +1,5 @@
 package action;
 
-import entity.Entity;
 import entity.Thing;
 
 public enum ReservedVariable {
@@ -12,6 +11,7 @@ public enum ReservedVariable {
 	ANGLE_OVERRIDE("angleOverride"),
 	SIZE("size"),
 	COLOR("color"),
+	DESATURATION("desaturation"),
 	BRIGHTNESS("brightness"),
 	GHOST("ghost"),
 	PIXELATE("pixelate");
@@ -31,85 +31,63 @@ public enum ReservedVariable {
 			case X: return owner.getX();
 			case Y: return owner.getY();
 			case ANGLE:
-				if (owner instanceof Entity entity && entity.getAngleOverride()) {
-					return entity.getAppearAngle();
-				}
-
-				return owner.getTrueAngle();
+				return owner.getAngleOverride()? owner.getAppearAngle(): owner.getTrueAngle();
 
 			case TRUE_ANGLE: return owner.getTrueAngle();
-			case APPEAR_ANGLE:
-				if (!(owner instanceof Entity entity)) {
-					JDebug.log(
-						"[JScratch] Warning: appearAngle used on a Thing. "
-						+ "Using trueAngle instead."
-					);
-
-					return owner.getTrueAngle();
-				}
-
-				return entity.getAppearAngle();
-
-			case ANGLE_OVERRIDE:
-				if (!(owner instanceof Entity entity)) {
-					JDebug.log(
-						"[JScratch] Warning: angleOverride used on a Thing. "
-						+ "Returning false."
-					);
-
-					return false;
-				}
-
-				return entity.getAngleOverride();
+			case APPEAR_ANGLE: return owner.getAppearAngle();
+			case ANGLE_OVERRIDE: return owner.getAngleOverride();
 
 			case SIZE: return owner.getAppearance().size;
 			case COLOR: return owner.getAppearance().color;
+			case DESATURATION: return owner.getAppearance().desaturation;
 			case BRIGHTNESS: return owner.getAppearance().brightness;
 			case GHOST: return owner.getAppearance().ghost;
 			case PIXELATE: return owner.getAppearance().pixelate;
 		}
 
-		throw new IllegalStateException(
-			"[JScratch] Unhandled reserved property: " + name
-		);
+		throw JSCDebug.error(this, "Unhandled reserved property: " + name);
 	}
 	
 	public final void set(Action action, float value) {
 		Thing owner = action.getOwner();
 
 		switch (this) {
-			case X:
-				owner.setX(value);
-				break;
-			case Y:
-				owner.setY(value);
-				break;
+			case X: owner.setX(value); break;
+			case Y: owner.setY(value); break;
 			case ANGLE:
-				if (owner instanceof Entity entity && entity.getAngleOverride()) {
-					entity.setAppearAngle(value);
-				} else {
-					owner.setTrueAngle(value);
-				}
+				if ( owner.getAngleOverride() ) { owner.setAppearAngle(value); }
+				else { owner.setTrueAngle(value); }
 				break;
 				
-			case SIZE:
-				owner.getAppearance().setSize(value);
-				break;
-			case COLOR:
-				owner.getAppearance().setColor(value);
-				break;
-			case BRIGHTNESS:
-				owner.getAppearance().setBrightness(value);
-				break;
-			case GHOST:
-				owner.getAppearance().setGhost(value);
-				break;
-			case PIXELATE:
-				owner.getAppearance().setPixelate(value);
-				break;
+			case SIZE: owner.getAppearance().setSize(value); break;
+			case COLOR: owner.getAppearance().setColor(value); break;
+			case DESATURATION: owner.getAppearance().setDesaturation(value); break;
+			case BRIGHTNESS: owner.getAppearance().setBrightness(value); break;
+			case GHOST: owner.getAppearance().setGhost(value); break;
+			case PIXELATE: owner.getAppearance().setPixelate(value); break;
 			default:
-				throw new IllegalStateException("[JScratch] Property is not writable/tweenable: " + name);
+				throw JSCDebug.error(this, "Property is not writable/tweenable: " + name);
 		}
+	}
+	
+	public final void warnUsage(String operation) {
+		String replacement;
+
+		switch (this) {
+			case X:
+				replacement = operation.equals("Set")? "SetX(...)": "MoveX(...)"; break;
+			case Y:
+				replacement = operation.equals("Set")? "SetY(...)": "MoveY(...)"; break;
+			case ANGLE:
+				replacement = operation.equals("Set")? "Look(...)": "Turn(...)"; break;
+			default: return;
+		}
+
+		JSCDebug.log(this,
+			"Warning: " + operation
+			+ "(\"" + name + "\", ...) is discouraged. "
+			+ "Use " + replacement + " instead."
+		);
 	}
 	
 	public final static boolean isReserved(String input) { return fromName(input) != null; }
@@ -124,8 +102,8 @@ public enum ReservedVariable {
 		// Wrong capitalization: still works, but warn.
 		for (ReservedVariable property : values()) {
 			if (property.name.equalsIgnoreCase(input)) {
-				JDebug.log(
-					"ReservedProperty Warning: \"" + input
+				JSCDebug.log(property,
+					"Warning: \"" + input
 					+ "\" is a reserved value. "
 					+ "The standard spelling is \""
 					+ property.name + "\". Try to be sober."
@@ -136,32 +114,5 @@ public enum ReservedVariable {
 		}
 
 		return null;
-	}
-	public final void warnUsage(String operation) {
-		switch (this) {
-			case X:
-				JDebug.log(
-					"[JScratch] Warning: " + operation + "(\"x\", ...) is discouraged. "
-					+ "Use " + (operation.equals("Set") ? "SetX(...)" : "MoveX(...)") + " instead."
-				);
-				break;
-
-			case Y:
-				JDebug.log(
-					"[JScratch] Warning: " + operation + "(\"y\", ...) is discouraged. "
-					+ "Use " + (operation.equals("Set") ? "SetY(...)" : "MoveY(...)") + " instead."
-				);
-				break;
-
-			case ANGLE:
-				JDebug.log(
-					"[JScratch] Warning: " + operation + "(\"angle\", ...) is discouraged. "
-					+ "Use " + (operation.equals("Set") ? "Look(...)" : "Turn(...)") + " instead."
-				);
-				break;
-
-			default:
-				break;
-		}
 	}
 }

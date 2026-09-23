@@ -37,7 +37,8 @@ local Lasseree = function()
 				),
 
 				sequence(
-					wait(180),
+					wait( sub(180, mul(get("kndex"), 22)) ),
+					tween("ghost", 100, 30),
 					destroy()
 				)
 			)
@@ -82,6 +83,7 @@ local CasualWalk = function()
 
 				sequence(
 					wait(240),
+					tween("ghost", 100, 30),
 					destroy()
 				)
 			)

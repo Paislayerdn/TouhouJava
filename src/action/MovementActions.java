@@ -1,13 +1,13 @@
 package action;
 
-import entity.Entity;
+import entity.Thing;
 
 final class GoToAction extends Action {
-	private Entity target;
+	private Thing target;
 	@Override
 	public boolean consumesFrame() { return false; }
 
-	public GoToAction(Entity target) {
+	public GoToAction(Thing target) {
 		this.target = target;
 	}
 
@@ -23,11 +23,7 @@ final class GoToAction extends Action {
 }
 
 final class SetAction extends Action {
-	public enum Axis {
-		X,
-		Y,
-		BOTH
-	}
+	public enum Axis { X, Y, BOTH }
 
 	private final Object x;
 	private final Object y;

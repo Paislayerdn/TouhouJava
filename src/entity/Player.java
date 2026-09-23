@@ -3,7 +3,7 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
-import graphics.Depict;
+import graphics.java2d.Depict;
 import main.Input;
 
 import state.gameplay.BulletManager;
@@ -91,8 +91,8 @@ public class Player extends Entity {
 				),
 				Sequence(
 					Sound("fire", "[TH] Fires"),
-					GetSound("fire").setVolume(-5.0f),
-					GetSound("fire").play(),
+					SetSoundVolume("fire", -5.0f),
+					PlaySound("fire"),
 					Wait(300),
 					Destroy()
 				)

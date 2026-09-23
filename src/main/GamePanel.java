@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.RenderingHints;
 
-import graphics.Java2DRenderer;
+import graphics.java2d.Java2DRenderer;
 
 public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;

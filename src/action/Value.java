@@ -7,10 +7,7 @@ public interface Value {
 		return action -> {
 			ReservedVariable property = ReservedVariable.fromName(name);
 
-			if (property != null) {
-				return property.get(action);
-			}
-
+			if (property != null) { return property.get(action); }
 			return action.getVariable(name);
 		};
 	}

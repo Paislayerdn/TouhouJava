@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import main.Game;
 import main.Input;
 
-import graphics.TextDrawer;
+import graphics.java2d.TextDrawer;
 import static graphics.Coordinate.*;
 
 import entity.Player;

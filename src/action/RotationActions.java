@@ -1,13 +1,13 @@
 package action;
 
-import entity.Entity;
+import entity.Thing;
 
 final class LookTowardsAction extends Action {
-	private Entity target;
+	private final Thing target;
 	@Override
 	public boolean consumesFrame() { return false; }
 
-	public LookTowardsAction(Entity target) {
+	public LookTowardsAction(Thing target) {
 		this.target = target;
 	}
 
@@ -18,11 +18,8 @@ final class LookTowardsAction extends Action {
 
 		float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 
-		if (owner instanceof Entity entity && entity.getAngleOverride()) {
-			entity.setAppearAngle(angle);
-		} else {
-			owner.setTrueAngle(angle);
-		}
+		if ( owner.getAngleOverride() ) { owner.setAppearAngle(angle); }
+		else { owner.setTrueAngle(angle); }
 
 		finish();
 	}
@@ -60,11 +57,8 @@ final class AngleAction extends Action {
 	}
 
 	private void applyActiveAngle(float value) {
-		if (owner instanceof Entity entity && entity.getAngleOverride()) {
-			applyAppearAngle(value);
-		} else {
-			applyTrueAngle(value);
-		}
+		if ( owner.getAngleOverride() ) { applyAppearAngle(value); }
+		else { applyTrueAngle(value); }
 	}
 	
 	private void applyTrueAngle(float value) {
@@ -77,21 +71,11 @@ final class AngleAction extends Action {
 	}
 
 	private void applyAppearAngle(float value) {
-		if (!(owner instanceof Entity entity)) {
-			JDebug.log(
-				"[JScratch] Warning: AppearAngle used on a Thing. "
-				+ "Using trueAngle instead."
-			);
-
-			applyTrueAngle(value);
-			return;
-		}
-
 		switch (operation) {
 			case SET:
-				entity.setAppearAngle(value); break;
+				owner.setAppearAngle(value); break;
 			case CHANGE:
-				entity.setAppearAngle(entity.getAppearAngle() + value); break;
+				owner.setAppearAngle(owner.getAppearAngle() + value); break;
 		}
 	}
 }
@@ -107,17 +91,7 @@ final class AngleOverrideAction extends Action {
 
 	@Override
 	public void start() {
-		if (!(owner instanceof Entity entity)) {
-			JDebug.log(
-				"[JScratch] Warning: AngleOverride used on a Thing. "
-				+ "Ignoring."
-			);
-
-			finish();
-			return;
-		}
-
-		entity.setAngleOverride(enabled);
+		owner.setAngleOverride(enabled);
 		finish();
 	}
 }

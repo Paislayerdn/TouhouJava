@@ -1,7 +1,6 @@
 package entity;
 
 import java.util.Locale;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import collision.Hitbox;
@@ -9,9 +8,6 @@ import collision.CollisionResult;
 import graphics.Renderer;
 
 public abstract class Entity extends Thing {
-	protected float appearAngle;
-	protected boolean angleOverride;
-	
 	protected ArrayList<Hitbox> hitboxes;
 
 	public Entity() {
@@ -39,12 +35,6 @@ public abstract class Entity extends Thing {
 			hitbox.drawDebug(renderer);
 		}
 	}
-	
-	public final float getAppearAngle() { return appearAngle; }
-	public final void setAppearAngle(float angle) { this.appearAngle = angle; }
-	
-	public final boolean getAngleOverride() { return angleOverride; }
-	public final void setAngleOverride(boolean state) { this.angleOverride = state; }
 	
 	// the abstracts
 	public void onHit(CollisionResult collisionResult) {}

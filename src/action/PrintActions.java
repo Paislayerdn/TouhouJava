@@ -11,7 +11,7 @@ final class PrintAction extends Action {
 
 	@Override
 	public void start() {
-		JDebug.log(this, String.format(
+		JSCDebug.log(this, String.format(
 			"msg=%s context=%d ",
 			resolve(message),
 			System.identityHashCode(getContext())

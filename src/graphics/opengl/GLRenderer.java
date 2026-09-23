@@ -174,10 +174,11 @@ public class GLRenderer implements Renderer {
 
 		float scale = appearance.size / 100.0f;
 		float alpha = (100.0f - appearance.ghost) / 100.0f;
+		float angle = thing.getAngleOverride()? thing.getAppearAngle(): thing.getTrueAngle();
 
 		drawThing(texture,
 			thing.getX(), thing.getY(),
-			scale, thing.getTrueAngle(),
+			scale, angle,
 			appearance.color, appearance.brightness, alpha
 		);
 	}

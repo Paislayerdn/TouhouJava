@@ -22,7 +22,7 @@ public final class VariableAction extends Action {
 		switch (operation) {
 			case DECLARE:
 				if (property != null) {
-					throw new IllegalArgumentException("[JScratch VariableAction] Cannot declare reserved value: "+ name);
+					throw JSCDebug.error(this, "Cannot declare reserved value: "+ name);
 				}
 
 				declareVariable(name, resolve(value));

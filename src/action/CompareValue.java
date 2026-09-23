@@ -31,9 +31,7 @@ public final class CompareValue {
 		Comparison comparison
 	) {
 		if (values.length < 2) {
-			throw new IllegalArgumentException(
-				"[JScratch CompareValue] Comparison requires at least 2 values"
-			);
+			throw JSCDebug.error(CompareValue.class, "Comparison requires at least 2 values");
 		}
 
 		Object[] resolved = new Object[values.length];
@@ -54,8 +52,8 @@ public final class CompareValue {
 		}
 
 		if (hasString) {
-			JDebug.log(
-				"[JScratch CompareValue] Warning: "
+			JSCDebug.log(CompareValue.class,
+				"Warning: "
 				+ "comparing values involving String; "
 				+ "using lexicographical String comparison."
 			);
@@ -66,8 +64,8 @@ public final class CompareValue {
 				if (!(resolved[i] instanceof String)
 					&& !(resolved[i] instanceof Number)) {
 
-					throw new IllegalArgumentException(
-						"[JScratch CompareValue] Cannot compare "
+					throw JSCDebug.error(CompareValue.class,
+						"Cannot compare "
 						+ resolved[i].getClass().getSimpleName()
 						+ " with String"
 					);
@@ -98,10 +96,7 @@ public final class CompareValue {
 			return true;
 		}
 
-		throw new IllegalArgumentException(
-			"[JScratch CompareValue] Cannot compare values of "
-			+ "different variable types"
-		);
+		throw JSCDebug.error(CompareValue.class, "Cannot compare values of different variable types");
 	}
 
 	private static boolean compareNumbers(float a, float b, Comparison comparison) {

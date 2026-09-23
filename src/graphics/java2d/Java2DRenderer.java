@@ -1,10 +1,12 @@
-package graphics;
+package graphics.java2d;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
 import main.Settings;
 import entity.Thing;
+import graphics.Renderer;
+import graphics.TextAlign;
 
 public class Java2DRenderer implements Renderer {
 	private AffineTransform oldTransform;
@@ -94,10 +96,8 @@ public class Java2DRenderer implements Renderer {
 	@Override
 	public void text(
 		String text,
-		float x,
-		float y,
-		int size,
-		TextAlign align
+		float x, float y,
+		int size, TextAlign align
 	) {
 		TextDrawer.draw(g2, text, x, y, size, align);
 	}

@@ -114,20 +114,24 @@ public final class MathValue {
 
 	public static Value Root(Object value, Object n) {
 		return action -> {
+			float number = action.resolveFloat(value);
 			float degree = action.resolveFloat(n);
 
 			if (degree == 0) {
-				throw new IllegalArgumentException("[JScratch MathValue] Root degree cannot be zero");
+				throw JSCDebug.error(MathValue.class, "Root degree cannot be zero");
 			}
 
-			return Power(value, 1.0 / degree);
+			if (number < 0 && degree == (int) degree && ((int) degree & 1) == 0) {
+				throw JSCDebug.error(MathValue.class, "Cannot take an even root of a negative value");
+			}
+
+			return (float) Math.pow(number, 1.0 / degree);
 		};
 	}
 	
 	public static Value Random() {
 		return action -> Math.random() * Math.nextUp(1.0);
 	}
-
 	public static Value Random(Object a, Object b) {
 		return action -> {
 			int min = (int)action.resolveFloat(a);
@@ -135,5 +139,8 @@ public final class MathValue {
 
 			return min + (int)(Math.random()*(max - min+1));
 		};
+	}
+	public static Value RandomSign() {
+		return action -> (Math.random() < 0.5)? -1 : 1;
 	}
 }

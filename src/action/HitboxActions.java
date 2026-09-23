@@ -20,12 +20,9 @@ final class AddCircleHitbox extends Action {
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
 		
-		if (entity.getHitbox(name) != null) {
-			throw new IllegalArgumentException("[JScratch AddCircleHitbox] Hitbox already exists: " + name);
-		}
+		if (entity.getHitbox(name) != null) throw JSCDebug.error(this, "Hitbox already exists: " + name);
 
 		entity.addHitbox( circleHB(entity, name, resolveFloat(radius)) );
-
 		finish();
 	}
 }
@@ -47,9 +44,7 @@ final class AddRectangleHitbox extends Action {
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
 		
-		if (entity.getHitbox(name) != null) {
-			throw new IllegalArgumentException("[JScratch AddRectangleHitbox] Hitbox already exists: " + name);
-		}
+		if (entity.getHitbox(name) != null) throw JSCDebug.error(this, "Hitbox already exists: " + name);
 
 		entity.addHitbox(
 			rectangleHB(entity, name, resolveFloat(width), resolveFloat(height))
@@ -73,12 +68,9 @@ final class SetHitboxEnabled extends Action {
 	@Override
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
-		
 		Hitbox hitbox = entity.getHitbox(name);
 
-		if (hitbox == null) {
-			throw new IllegalArgumentException("[JScratch SetHitboxEnabled] Hitbox not found: " + name);
-		}
+		if (hitbox == null) throw JSCDebug.error(this, "Hitbox not found: " + name);
 
 		hitbox.setEnabled(enabled);
 		finish();
@@ -102,21 +94,12 @@ final class SetHitboxTag extends Action {
 	@Override
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
-		
 		Hitbox hitbox = entity.getHitbox(hitboxName);
 
-		if (hitbox == null) {
-			throw new IllegalArgumentException(
-				"[JScratch SetHitboxTag] Hitbox not found: " + hitboxName
-			);
-		}
+		if (hitbox == null) throw JSCDebug.error(this, "Hitbox not found: " + hitboxName);
 
-		if (add) {
-			hitbox.addTag(tag);
-		} else {
-			hitbox.removeTag(tag);
-		}
-
+		if (add) { hitbox.addTag(tag); }
+		else { hitbox.removeTag(tag); }
 		finish();
 	}
 }

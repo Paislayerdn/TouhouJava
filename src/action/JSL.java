@@ -1,8 +1,6 @@
 // FACADE and BRIDGE( Java, Lua )
 package action;
 
-import action.Action;
-import action.ActionFactory;
 import static action.JScratch.*;
 
 import entity.Entity;
@@ -19,17 +17,17 @@ public final class JSL {
 	private JSL() {}
 	
 	private static Object toJava( LuaValue value ) {
-		if ( value.isnumber() ) {	return value.tofloat();}
-		if ( value.isstring() ) {	return value.tojstring();}
-		if ( value.isuserdata() ) { return value.touserdata(); }
+		if ( value.isnumber() )		{ return value.tofloat();}
+		if ( value.isstring() )		{ return value.tojstring();}
+		if ( value.isuserdata() )	{ return value.touserdata(); }
 
 		return value;
 	}
 	private static Object[] toJava( Varargs args ) {
 		Object[] values = new Object[args.narg()];
 
-		for ( int i = 0; i < args.narg(); i++ ) {
-			values[i] = toJava( args.arg( i + 1 ) );
+		for (int i = 0; i < args.narg(); i++) {
+			values[i] = toJava( args.arg(i + 1) );
 		}
 
 		return values;
@@ -38,8 +36,8 @@ public final class JSL {
 	private static Action[] toActions( Varargs args ) {
 		Action[] actions = new Action[args.narg()];
 
-		for ( int i = 0; i < args.narg(); i++ ) {
-			actions[i] = ( Action ) args.arg( i + 1 ).checkuserdata( Action.class );
+		for (int i = 0; i < args.narg(); i++) {
+			actions[i] = ( Action ) args.arg(i + 1).checkuserdata( Action.class );
 		}
 
 		return actions;
@@ -75,37 +73,26 @@ public final class JSL {
 				int count = args.narg();
 
 				if (count == 1) {
-					Entity target =
-						(Entity) args.arg(1).checkuserdata(Entity.class);
+					Entity target = (Entity) args.arg(1).checkuserdata(Entity.class);
 
 					return CoerceJavaToLua.coerce(GoTo(target));
 				}
 
 				if (count == 2) {
 					return CoerceJavaToLua.coerce(
-						GoTo(
-							toJava(args.arg(1)),
-							toJava(args.arg(2))
-						)
+						GoTo( toJava(args.arg(1)), toJava(args.arg(2)) )
 					);
 				}
 
 				if (count == 3) {
 					if (args.arg(1).isuserdata()) {
-						Entity target =
-							(Entity) args.arg(1).checkuserdata(Entity.class);
+						Entity target = (Entity) args.arg(1).checkuserdata(Entity.class);
 
-						return CoerceJavaToLua.coerce(
-							GoTo(target, args.arg(2).checkint())
-						);
+						return CoerceJavaToLua.coerce( GoTo(target, args.arg(2).checkint()) );
 					}
 
 					return CoerceJavaToLua.coerce(
-						GoTo(
-							toJava(args.arg(1)),
-							toJava(args.arg(2)),
-							args.arg(3).checkint()
-						)
+						GoTo( toJava(args.arg(1)), toJava(args.arg(2)), args.arg(3).checkint() )
 					);
 				}
 
@@ -123,8 +110,8 @@ public final class JSL {
 
 				throw new IllegalArgumentException(
 					"goTo expects (Entity), (x,y), "
-					+ "(Entity,frames), (x,y,frames), "
-					+ "or (startX,startY,x,y,frames)"
+					+ "(Entity,frames), (endX,endY,frames), "
+					+ "or (startX,startY,endX,endY,frames)"
 				);
 			}
 		});
@@ -134,16 +121,11 @@ public final class JSL {
 			@Override
 			public Varargs invoke(Varargs args) {
 				if (args.narg() == 1) {
-					return CoerceJavaToLua.coerce(
-						SetX(toJava(args.arg(1)))
-					);
+					return CoerceJavaToLua.coerce( SetX( toJava(args.arg(1)) ) );
 				}
 				if (args.narg() == 2) {
 					return CoerceJavaToLua.coerce(
-						SetX(
-							toJava(args.arg(1)),
-							args.arg(2).checkint()
-						)
+						SetX( toJava(args.arg(1)), args.arg(2).checkint() )
 					);
 				}
 				if (args.narg() == 3) {
@@ -157,7 +139,7 @@ public final class JSL {
 				}
 
 				throw new IllegalArgumentException(
-					"setX expects (x), (x, frames), or (start, end, frames)"
+					"setX expects (x), (endX, frames), or (startX, endX, frames)"
 				);
 			}
 		} );
@@ -166,16 +148,11 @@ public final class JSL {
 			@Override
 			public Varargs invoke(Varargs args) {
 				if (args.narg() == 1) {
-					return CoerceJavaToLua.coerce(
-						SetY(toJava(args.arg(1)))
-					);
+					return CoerceJavaToLua.coerce( SetY( toJava(args.arg(1)) ) );
 				}
 				if (args.narg() == 2) {
 					return CoerceJavaToLua.coerce(
-						SetY(
-							toJava(args.arg(1)),
-							args.arg(2).checkint()
-						)
+						SetY( toJava(args.arg(1)), args.arg(2).checkint() )
 					);
 				}
 				if (args.narg() == 3) {
@@ -189,7 +166,7 @@ public final class JSL {
 				}
 
 				throw new IllegalArgumentException(
-					"setY expects (y), (y, frames), or (start, end, frames)"
+					"setY expects (y), (endY, frames), or (startY, endY, frames)"
 				);
 			}
 		} );
@@ -206,17 +183,12 @@ public final class JSL {
 			@Override
 			public Varargs invoke(Varargs args) {
 				if (args.narg() == 1) {
-					return CoerceJavaToLua.coerce(
-						Look(toJava(args.arg(1)))
-					);
+					return CoerceJavaToLua.coerce( Look( toJava(args.arg(1)) ) );
 				}
 
 				if (args.narg() == 2) {
 					return CoerceJavaToLua.coerce(
-						Look(
-							toJava(args.arg(1)),
-							args.arg(2).checkint()
-						)
+						Look( toJava(args.arg(1)), args.arg(2).checkint() )
 					);
 				}
 
@@ -231,8 +203,8 @@ public final class JSL {
 				}
 
 				throw new IllegalArgumentException(
-					"look expects (angle), (angle, frames), "
-					+ "or (start, end, frames)"
+					"look expects (angle), (end angle, frames), "
+					+ "or (start angle, end angle, frames)"
 				);
 			}
 		});
@@ -256,7 +228,7 @@ public final class JSL {
 				}
 
 				throw new IllegalArgumentException(
-					"turn expects (angle) or (angle, frames)"
+					"turn expects (angle) or (end angle, frames)"
 				);
 			}
 		});
@@ -408,10 +380,7 @@ public final class JSL {
 			@Override
 			public LuaValue call( LuaValue name, LuaValue radius ) {
 				return CoerceJavaToLua.coerce( 
-					AddCircleHitbox( 
-						name.tojstring(),
-						toJava( radius )
-					 )
+					AddCircleHitbox( name.tojstring(), toJava( radius ) )
 				 );
 			}
 		} );
@@ -420,9 +389,9 @@ public final class JSL {
 			public Varargs invoke( Varargs args ) {
 				return CoerceJavaToLua.coerce( 
 					AddRectangleHitbox( 
-						args.arg( 1 ).tojstring(),
-						toJava( args.arg( 2 ) ),
-						toJava( args.arg( 3 ) )
+						args.arg(1).tojstring(),
+						toJava( args.arg(2) ),
+						toJava( args.arg(3) )
 					 )
 				 );
 			}
@@ -509,8 +478,8 @@ public final class JSL {
 			public Varargs invoke( Varargs args ) {
 				int count = args.narg();
 
-				if ( count == 1 ) {
-					Action action = ( Action ) args.arg( 1 ).checkuserdata( Action.class );
+				if (count == 1) {
+					Action action = ( Action ) args.arg(1).checkuserdata( Action.class );
 					return CoerceJavaToLua.coerce( SpawnBullet( action ) );
 				}
 				
@@ -632,9 +601,9 @@ public final class JSL {
 		globals.set( "jsif", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
-				Object condition = toJava( args.arg( 1 ) );
+				Object condition = toJava( args.arg(1) );
 
-				LuaValue thenFunction = args.arg( 2 );
+				LuaValue thenFunction = args.arg(2);
 				thenFunction.checkfunction();
 
 				ActionFactory thenFactory = () -> {
@@ -643,8 +612,8 @@ public final class JSL {
 					return ( Action ) result.checkuserdata( Action.class );
 				};
 
-				if ( args.narg() >= 3 ) {
-					LuaValue elseFunction = args.arg( 3 );
+				if (args.narg() >= 3) {
+					LuaValue elseFunction = args.arg(3);
 					elseFunction.checkfunction();
 
 					ActionFactory elseFactory = () -> {
@@ -667,11 +636,11 @@ public final class JSL {
 		globals.set( "jsfor", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
-				String variable = args.arg( 1 ).tojstring();
-				Object start = toJava( args.arg( 2 ) );
-				Object end = toJava( args.arg( 3 ) );
+				String variable = args.arg(1).tojstring();
+				Object start = toJava( args.arg(2) );
+				Object end = toJava( args.arg(3) );
 
-				LuaValue function = args.arg( 4 );
+				LuaValue function = args.arg(4);
 				function.checkfunction();
 
 				ActionFactory factory = () -> {
@@ -718,8 +687,8 @@ public final class JSL {
 		globals.set( "forever", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
-				Object type = toJava( args.arg( 1 ) );
-				Varargs actionArgs = args.subargs( 2 );
+				Object type = toJava( args.arg(1) );
+				Varargs actionArgs = args.subargs(2);
 
 				return CoerceJavaToLua.coerce( Forever( type, toActions( actionArgs ) ) );
 			}
@@ -798,19 +767,25 @@ public final class JSL {
 			public Varargs invoke( Varargs args ) {
 				int count = args.narg();
 
-				if ( count == 0 ) {
+				if (count == 0) {
 					return CoerceJavaToLua.coerce( Random() );
 				}
 
-				if ( count == 2 ) {
+				if (count == 2) {
 					return CoerceJavaToLua.coerce( 
-						Random( toJava( args.arg( 1 ) ), toJava( args.arg( 2 ) ) )
+						Random( toJava( args.arg(1) ), toJava( args.arg(2) ) )
 					 );
 				}
 
 				throw new IllegalArgumentException( "random expects () or (a, b)" );
 			}
 		} );
+		globals.set("randomSign", new ZeroArgFunction() {
+			@Override
+			public LuaValue call() {
+				return CoerceJavaToLua.coerce( RandomSign() );
+			}
+		});
 		
 		// TWEENSERVICE
 		LuaTable easing = new LuaTable();

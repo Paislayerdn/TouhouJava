@@ -1,7 +1,7 @@
 package entity;
 
 import java.awt.image.BufferedImage;
-import graphics.AppearanceCache;
+import graphics.java2d.AppearanceCache;
 
 public final class Appearance {
 	public BufferedImage costume;
@@ -34,11 +34,11 @@ public final class Appearance {
 	public void setCostume(BufferedImage costume) { this.costume = costume; }
 	public void setColor(float color) { this.color = ((color % 256) + 256) % 256; }
 	public void changeColor(float amount) { setColor(color + amount); }
-	public void setDesaturation(float desat) { this.desaturation = Math.max(0, Math.min(100, desat)); }
+	public void setDesaturation(float dst) { this.desaturation = Math.max(0, Math.min(100, dst)); }
 	public void changeDesaturation(float desat) { setDesaturation(desaturation + desat); }
-	public void setPixelate(float pixelate) { this.pixelate = Math.max(0, pixelate); }
+	public void setPixelate(float pxl) { this.pixelate = Math.max(0, pxl); }
 	public void changePixelate(float amount) { setPixelate(pixelate + amount); }
-	public void setBrightness(float brightness) { this.brightness = Math.max(-100, Math.min(100, brightness)); }
+	public void setBrightness(float brt) { this.brightness = Math.max(-100, Math.min(100, brt)); }
 	public void changeBrightness(float amount) { setBrightness(brightness + amount); }
 	// These do NOT require regenerating the image.
 	public void setGhost(float ghost) { this.ghost = Math.max(0, Math.min(100, ghost)); }
