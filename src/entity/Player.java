@@ -164,7 +164,7 @@ public class Player extends Entity {
 	}
 	
 	public void onDeath(Hitbox mine, Hitbox other) {
-		System.out.println("[Player] Died.");
+		System.out.println("[Player] Pichu'd.");
 	}
 	
 	@Override

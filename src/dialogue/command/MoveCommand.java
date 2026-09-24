@@ -1,9 +1,9 @@
 package dialogue.command;
 
-import dialogue.DialogueCommand;
-import dialogue.DialogueDebug;
-import dialogue.DialogueRunner;
-import dialogue.DialogueThing;
+import action.Action;
+import static action.JScratch.*;
+
+import dialogue.*;
 
 public final class MoveCommand implements DialogueCommand {
 	private final float x;
@@ -24,6 +24,12 @@ public final class MoveCommand implements DialogueCommand {
 	@Override
 	public void execute(DialogueRunner runner) {
 		DialogueThing speaker = runner.getCurrentSpeaker();
+
+		Action movement = GoTo(x, y, duration);
+
+		speaker.run(movement);
+
+		if (blocking) runner.waitForMovement(movement);
 
 		DialogueDebug.log(this,
 			"Move to (" + x + ", " + y

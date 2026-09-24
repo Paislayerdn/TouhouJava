@@ -2,6 +2,7 @@ package dialogue;
 
 import graphics.Renderer;
 
+import action.Action;
 import resource.ResourceLoader;
 
 import main.Input;
@@ -15,7 +16,7 @@ public final class DialogueRunner {
 	private String currentText;
 
 	private boolean waitingForInput;
-	private boolean waitingForMovement;
+	private Action waitingMovement;
 	private boolean previousZ;
 	private boolean previousMousePressed;
 	
@@ -39,6 +40,10 @@ public final class DialogueRunner {
 	public void setCurrentSpeakerName(String displayName) {
 		currentSpeaker.setDisplayName(displayName);
 	}
+
+	public void waitForMovement(Action action) {
+		waitingMovement = action;
+	}
 	
 	public String getCurrentText() { return currentText; }
 	public void setCurrentText(String text) { currentText = text; }
@@ -46,23 +51,38 @@ public final class DialogueRunner {
 	public void waitForAdvance() { waitingForInput = true; }
 
 	public void update() {
-		if (waitingForMovement) return;
+		for (DialogueThing speaker : dialogue.getSpeakers()) {
+			speaker.update();
+		}
+
+		if (waitingMovement != null) {
+			if (!waitingMovement.isFinished())
+				return;
+
+			waitingMovement = null;
+		}
+
 		if (waitingForInput) {
 			if (!advancePressed()) return;
 
 			waitingForInput = false;
-		} while (!waitingForInput
-				&& !waitingForMovement
+		}
+
+		while (!waitingForInput
+				&& waitingMovement == null
 				&& commandIndex < dialogue.getCommands().size()) {
 
-			DialogueCommand command = dialogue.getCommands().get(commandIndex++);
+			DialogueCommand command =
+				dialogue.getCommands().get(commandIndex++);
 
 			command.execute(this);
 		}
 	}
 	
 	public void draw(Renderer renderer) {
-		DialogueRenderer.draw(renderer, this);
+		for (DialogueThing speaker : dialogue.getSpeakers()) {
+			speaker.draw(renderer);
+		}
 	}
 	
 	private boolean advancePressed() {
@@ -81,7 +101,7 @@ public final class DialogueRunner {
 
 	public boolean isFinished() {
 		return commandIndex >= dialogue.getCommands().size()
-			&& !waitingForInput && !waitingForMovement;
+			&& !waitingForInput && waitingMovement == null;
 	}
 
 }
