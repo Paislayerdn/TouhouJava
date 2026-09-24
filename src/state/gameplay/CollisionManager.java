@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static collision.CollisionChecker.*;
+import static collision.CollisionTag.*;
 import collision.CollisionResult;
 import collision.Hitbox;
 
@@ -64,6 +65,24 @@ public final class CollisionManager {
 					if (collision != null) {
 						player.onHit(collision);
 						bullet.onHit(collision);
+					}
+				}
+			}
+		}
+		
+		for (Bullet playerBullet : BulletManager.getPlayerBullets()) {
+			for (Hitbox playerBulletHitbox : playerBullet.getHitboxes()) {
+				if (!playerBulletHitbox.hasTag(BOMB)) continue;
+
+				for (Bullet enemyBullet : BulletManager.getEnemyBullets()) {
+					for (Hitbox enemyBulletHitbox : enemyBullet.getHitboxes()) {
+						if (!enemyBulletHitbox.hasTag(CLEARABLE)) continue;
+
+						CollisionResult collision = check(playerBulletHitbox, enemyBulletHitbox);
+
+						if (collision != null) {
+							enemyBullet.destroy();
+						}
 					}
 				}
 			}

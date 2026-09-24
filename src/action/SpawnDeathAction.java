@@ -19,8 +19,8 @@ final class SpawnBulletAction extends Action {
 		ActionContext bulletContext = new ActionContext(getContext());
 		bullet.setActionContext(bulletContext);
 
-		BulletManager.spawnEnemy(bullet);
 		bullet.run(bulletAction);
+		BulletManager.spawn(bullet);
 
 		finish();
 	}

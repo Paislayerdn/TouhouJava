@@ -33,6 +33,7 @@ return sequence(
 						setColor(5),
 						addCircleHitbox("bulletHB", 16),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
+						addHitboxTag("bulletHB", "CLEARABLE"),
 						var("speed", 3),
 						change("speed", mul(0.15, random(-10,10))),
 						playSound("shot"),
@@ -81,6 +82,7 @@ return jsfor("m", 1, w2spike, function()
 			setBrightness(100),
 			addCircleHitbox("bulletHB", 7),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
+			addHitboxTag("bulletHB", "CLEARABLE"),
 			var("speed", 6.5),
 			change("speed", mul(get("mirror"), 0.34)),
 
@@ -143,6 +145,7 @@ return sequence(
 						setColor(70),
 						addCircleHitbox("bulletHB", 15),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
+						addHitboxTag("bulletHB", "CLEARABLE"),
 						var("speed", 7),
 						playSound("shot"),
 
@@ -189,6 +192,7 @@ return sequence(
 						setColor(210),
 						addCircleHitbox("bulletHB", 13),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
+						addHitboxTag("bulletHB", "CLEARABLE"),
 						var("speed", add( -1, mul(8, random()) )  ),
 						playSound("shot"),
 

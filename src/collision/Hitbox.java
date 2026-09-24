@@ -1,8 +1,9 @@
 package collision;
 
-import graphics.Renderer;
 import java.util.Locale;
+import java.util.Set;
 import java.util.HashSet;
+import graphics.Renderer;
 
 import entity.Entity;
 
@@ -13,7 +14,7 @@ public abstract class Hitbox {
 	private float offsetX;
 	private float offsetY;
 
-	private final HashSet<String> tags = new HashSet<>();
+	private final Set<CollisionTag> tags = new HashSet<>();
 
 	private boolean enabled = true;
 
@@ -49,20 +50,20 @@ public abstract class Hitbox {
 	public final boolean isEnabled() { return enabled; }
 	public final void setEnabled(boolean value) { enabled = value; }
 
-	public final void addTag(String tag) { tags.add( tag.toUpperCase( Locale.ROOT ) ); }
-	public final void removeTag(String tag) { tags.remove( tag.toUpperCase( Locale.ROOT ) ); }
+	public final void addTag(CollisionTag tag) { tags.add(tag); }
+	public final void removeTag(CollisionTag tag) { tags.remove(tag); }
 	public final void clearTags() { tags.clear(); }
-	public final boolean hasTag(String tag) { return tags.contains( tag.toUpperCase( Locale.ROOT ) ); }
-	public final boolean hasAnyTag(String... tags) {
-		for (String tag : tags) {
+	public final boolean hasTag(CollisionTag tag) {
+		return tags.contains(tag);
+	}
+	public final boolean hasAnyTag(CollisionTag... tags) {
+		for (CollisionTag tag : tags) {
 			if (hasTag(tag)) {
 				return true;
 			}
 		}
-
 		return false;
 	}
-	public final HashSet<String> getTags() { return tags; }
 	
 	public abstract void drawDebug(Renderer renderer);
 }

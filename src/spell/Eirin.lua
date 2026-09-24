@@ -30,6 +30,7 @@ local bullette = function()
 			setCostume("OvalBullet"),
 			addCircleHitbox("bulletHB", 5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
+			addHitboxTag("bulletHB", "CLEARABLE"),
 			setColor( random(40, 210) ),
 			warp(999, 999),
 

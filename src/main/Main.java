@@ -33,7 +33,6 @@ public class Main {
 		GLWindow window = new GLWindow(
 				Settings.getWindowWidth(), Settings.getWindowHeight(), "Touhou JaVA"
 		);
-
 		window.setIcon(ResourceLoader.image("Icon"));
 
 		GLRenderer renderer = new GLRenderer(

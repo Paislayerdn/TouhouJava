@@ -51,23 +51,7 @@ public class GLWindow {
 		GLFW.glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		
-		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			boolean pressed = action != GLFW.GLFW_RELEASE;
-
-			switch (key) {
-				case GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_UP -> Input.W = pressed;
-				case GLFW.GLFW_KEY_S, GLFW.GLFW_KEY_DOWN -> Input.S = pressed;
-
-				case GLFW.GLFW_KEY_A, GLFW.GLFW_KEY_LEFT -> Input.A = pressed;
-				case GLFW.GLFW_KEY_D, GLFW.GLFW_KEY_RIGHT -> Input.D = pressed;
-
-				case GLFW.GLFW_KEY_SPACE -> Input.SPACE = pressed;
-				case GLFW.GLFW_KEY_Z -> Input.Z = pressed;
-
-				case GLFW.GLFW_KEY_PAGE_UP -> Input.PAGEUP = pressed;
-				case GLFW.GLFW_KEY_P -> Input.P = pressed;
-			}
-		});
+		GLFW.glfwSetKeyCallback(window, new GLInput());
 
 		GLFW.glfwSwapInterval(0);
 	}

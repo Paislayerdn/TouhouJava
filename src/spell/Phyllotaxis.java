@@ -65,6 +65,7 @@ public final class Phyllotaxis extends Spell {
 				SetCostume("OvalBullet"),
 				AddCircleHitbox("bulletHB", 5),
 				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+				AddHitboxTag("bulletHB", "CLEARABLE"),
 				DisableHitbox("bulletHB"),
 				Wait(Add(Mul(Get("index"), waitIteration), 1) ),
 				Parallel(

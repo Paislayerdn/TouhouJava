@@ -1,9 +1,12 @@
 package state.gameplay;
 
-import graphics.Renderer;
-
 import java.util.List;
 import java.util.ArrayList;
+
+import graphics.Renderer;
+
+import collision.Hitbox;
+import static collision.CollisionTag.*;
 
 import entity.Bullet;
 
@@ -26,6 +29,19 @@ public final class BulletManager {
 		}
 	}
 	
+	public static void spawn(Bullet bullet) {
+		synchronized (bulletLock) {
+			for (Hitbox hb : bullet.getHitboxes()) {
+				if (hb.hasTag(PLAYER_BULLET)) {
+					playerBullets.add(bullet);
+					return;
+				} else {
+					enemyBullets.add(bullet);
+					return;
+				}
+			}
+		}
+	}
 	public static void spawnPlayer(Bullet bullet) {
 		synchronized (bulletLock) {
 			playerBullets.add(bullet);
@@ -59,6 +75,18 @@ public final class BulletManager {
 		synchronized (bulletLock) {
 			playerBullets.removeIf(bullet -> !bullet.isAlive());
 			enemyBullets.removeIf(bullet -> !bullet.isAlive());
+		}
+	}
+	public static void clearBomb() {
+		synchronized (bulletLock) {
+			for (Bullet bullet : enemyBullets) {
+				for (Hitbox hitbox : bullet.getHitboxes()) {
+					if (hitbox.hasTag(CLEARABLE)) {
+						bullet.destroy();
+						break;
+					}
+				}
+			}
 		}
 	}
 

@@ -1,6 +1,5 @@
 package action;
 
-import state.gameplay.SCTType;
 import entity.Boss;
 import entity.Player;
 import resource.ResourceLoader;
@@ -52,7 +51,6 @@ public abstract class Spell extends Action {
 	@Override
 	public final void start() {
 		action = buildAction();
-//		action.setOwner(boss);
 		action.setContext(getContext());
 		action.start();
 		onStart();

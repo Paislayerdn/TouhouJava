@@ -1,6 +1,6 @@
 package collision;
 
-import static collision.CollisionTags.*;
+import static collision.CollisionTag.*;
 
 public final class CollisionSemantics {
 	private CollisionSemantics() {}
@@ -33,8 +33,8 @@ public final class CollisionSemantics {
 		return null;
 	}
 
-	private static boolean hasTags(Hitbox hitbox, String... tags) {
-		for (String tag : tags) {
+	private static boolean hasTags(Hitbox hitbox, CollisionTag... tags) {
+		for (CollisionTag tag : tags) {
 			if (!hitbox.hasTag(tag))
 				return false;
 		}

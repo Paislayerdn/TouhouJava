@@ -1,17 +1,17 @@
 package entity;
 
-import java.awt.Graphics2D;
-import java.awt.Color;
-
-import graphics.java2d.Depict;
+import graphics.Renderer;
 import main.Input;
 
-import state.gameplay.BulletManager;
-import static collision.Hitboxes.*;
-import static collision.CollisionTags.*;
-
 import static action.JScratch.*;
-import graphics.Renderer;
+
+import collision.Hitbox;
+import collision.CollisionResult;
+import static collision.CollisionTag.*;
+import static collision.CollisionType.*;
+
+import state.gameplay.HUD;
+import state.gameplay.PlayingStats;
 
 public class Player extends Entity {
 	private boolean focusing = false;
@@ -21,6 +21,7 @@ public class Player extends Entity {
 	private boolean lastPageUp = false;
 
 	private static final int SHOOT_INTERVAL = 6;
+	private boolean lastX = false;
 	
 	public Player() {
 		name = "Player";
@@ -35,9 +36,11 @@ public class Player extends Entity {
 				AddCircleHitbox("grazeHB", 7),
 				AddHitboxTag("grazeHB", PGRAZE),
 
-				AddCircleHitbox("deathHB", 4),
+				AddCircleHitbox("deathHB", 2.5),
 				AddHitboxTag("deathHB", PDEATH),
-				DisableHitbox("deathHB")
+				
+				Sound("fire", "[TH] Fires"),
+				SetSoundVolume("fire", -12.0f)
 			)
 		);
 	}
@@ -65,6 +68,12 @@ public class Player extends Entity {
 		if (pageUpPressed) { autoFire = !autoFire;}
 		lastPageUp = Input.PAGEUP;
 		
+		boolean bombPressed = Input.X && !lastX;
+		if (bombPressed) {
+			bomb();
+		}
+		lastX = Input.X;
+		
 		if (shootCooldown > 0) { shootCooldown--; }
 		boolean firing = Input.Z || autoFire;
 		if (firing && shootCooldown <= 0) {
@@ -72,45 +81,91 @@ public class Player extends Entity {
 			shootCooldown = SHOOT_INTERVAL;
 		}
 	}
-	
-	private void shoot() {
-		Bullet bullet = new Bullet(x, y + 12);
+	private void bomb() {
+		HUD.showSCT("REIMU");
+		int total = 12;
+		run( Sequence(
+			Wait(60),
+			For("i", 1, total, 
+				() -> Sequence(
+					SpawnBullet(
+						Parallel(
+							Var("index", Get("i")),
+							Warp(this),
+							SetCostume("CircleBullet"),
+							SetSize(120),
+							SetBrightness(60),
+							AddCircleHitbox("bulletHB", 70),
+							AddHitboxTag("bulletHB", PLAYER_BULLET),
+							AddHitboxTag("bulletHB", BOMB),
+							Look( Random(1,360) ),
 
-		bullet.run(
-			Parallel(
-				SetCostume("OvalBullet"),
-				SetSize(9),
-				SetColor(15),
-				AddCircleHitbox("bulletHB", 6),
-				AddHitboxTag("bulletHB", PLAYER_BULLET),
-				Look(90),
-				MoveX( Mul( Random(), 15) ),
-				MoveY( Mul( Random(), 3) ),
-				Forever("Sequence",
-					Forward(10)
-				),
-				Sequence(
-					Sound("fire", "[TH] Fires"),
-					SetSoundVolume("fire", -5.0f),
-					PlaySound("fire"),
-					Wait(300),
-					Destroy()
+							Forever("Sequence",
+								Forward(5),
+								ChangeColor(2)
+							),
+							Sequence(
+								PlaySound("fire"),
+								Wait(300),
+								Destroy()
+							)
+						)
+					),
+					Wait(15)
 				)
 			)
-		);
-
-		BulletManager.spawnPlayer(bullet);
+		) );
 	}
 	
-//	@Override
-//	public void onHit(Hitbox mine, Hitbox other) {
-//		System.out.println(
-//			"[Player] "
-//			+ mine.getName()
-//			+ " was hit by "
-//			+ other.getName()
-//		);
-//	}
+	private void shoot() {
+		int total = 4;
+		run( Sequence (
+			For("i", 1, total, 
+				() -> SpawnBullet(
+					Parallel(
+						Var("index", Get("i")),
+						Warp(this),
+						MoveX( Mul( 15, Sub( Get("index"), (total+1.0)/2.0  )) ),
+						MoveY(5),
+						SetCostume("OvalBullet"),
+						SetSize(9),
+						SetColor(15),
+						AddCircleHitbox("bulletHB", 6),
+						AddHitboxTag("bulletHB", PLAYER_BULLET),
+						Look(90),
+						
+						Forever("Sequence",
+							Forward(10)
+						),
+						Sequence(
+							PlaySound("fire"),
+							Wait(300),
+							Destroy()
+						)
+					)
+				)
+			)
+		) );
+	}
+	
+	@Override
+	public void onHit(CollisionResult collision) {
+		if (collision.getType() == DEATH) {
+			onDeath(
+				collision.getSelf(this),
+				collision.getOther(this)
+			);
+			return;
+		}
+
+		if (collision.getType() == DAMAGE) {
+			alive = false;
+		}
+	}
+	
+	public void onDeath(Hitbox mine, Hitbox other) {
+		System.out.println("[Player] Died.");
+	}
 	
 	@Override
 	public void draw(Renderer renderer) {

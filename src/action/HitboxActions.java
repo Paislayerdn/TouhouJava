@@ -1,5 +1,6 @@
 package action;
 
+import collision.CollisionTag;
 import collision.Hitbox;
 import static collision.Hitboxes.*;
 
@@ -79,13 +80,13 @@ final class SetHitboxEnabled extends Action {
 
 final class SetHitboxTag extends Action {
 	private final String hitboxName;
-	private final String tag;
+	private final CollisionTag tag;
 	private final boolean add;
 
 	@Override
 	public boolean consumesFrame() { return false; }
 
-	public SetHitboxTag(String hitboxName, String tag, boolean add) {
+	public SetHitboxTag(String hitboxName, CollisionTag tag, boolean add) {
 		this.hitboxName = hitboxName;
 		this.tag = tag;
 		this.add = add;

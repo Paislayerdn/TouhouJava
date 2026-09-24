@@ -1,11 +1,13 @@
 // FACADE
 package action;
 
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.image.BufferedImage;
 
 import static action.AngleAction.*;
+import collision.CollisionTag;
 
 import entity.Thing;
 
@@ -123,8 +125,15 @@ public final class JScratch {
 	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
 	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
 
-	public static Action AddHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, true); }
-	public static Action RemoveHitboxTag(String name, String tag) { return new SetHitboxTag(name, tag, false); }
+	public static Action AddHitboxTag(String name, Object tag) { return AdmitHitboxTag(name, tag, true); }
+	public static Action RemoveHitboxTag(String name, Object tag) { return AdmitHitboxTag(name, tag, false); }
+	private static Action AdmitHitboxTag(String name, Object tag, boolean state) {
+		return new SetHitboxTag(
+			name,
+			CollisionTag.valueOf(tag.toString().toUpperCase(Locale.ROOT)),
+			state
+		);
+	}
 	
 	// SOUND
 	public static Action Sound(String name, String path) { return new SoundAction(name, path); }

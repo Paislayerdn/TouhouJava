@@ -46,7 +46,6 @@ public final class SCT extends Thing {
 
 	private Action initiation() {
 		return Sequence(
-			Wait(30),
 			Sound("spell", "[TH] Spellcard"),
 			SetSoundVolume("spell", -6.0f),
 			PlaySound("spell")
@@ -68,9 +67,9 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -100, 0, "ghost", 100, 0, 60),
-					Tween("speed", -1, 30),
-					Tween("speed", -5, 30),
+					Tween("brightness", -100, 0, "ghost", 100, 0, 30),
+					Tween("speed", -1, 15),
+					Tween("speed", -5, 15),
 					Tween("size", 45,"ghost", 100, 30),
 					Set("exit", 1)
 				)
@@ -93,9 +92,9 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -100, 0, "ghost", 100, 0, 60),
-					Tween("speed", 1, 30),
-					Tween("speed", 5, 30),
+					Tween("brightness", -100, 0, "ghost", 100, 0, 30),
+					Tween("speed", 1, 15),
+					Tween("speed", 5, 15),
 					Tween("size", 45,"ghost", 100, 30),
 					Set("exit", 1)
 				)

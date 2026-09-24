@@ -39,7 +39,7 @@ public class Bullet extends Entity {
 		if (collision.getType() == DAMAGE) {
 			alive = false;
 		}
-}
+	}
 	
 	public void onGraze(Hitbox mine, Hitbox other) {
 		if (grazable) {

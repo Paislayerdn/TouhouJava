@@ -5,7 +5,7 @@ import resource.Sound;
 
 import collision.CollisionResult;
 import static collision.CollisionType.*;
-import static collision.CollisionTags.*;
+import static collision.CollisionTag.*;
 
 import static action.JScratch.*;
 

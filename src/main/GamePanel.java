@@ -7,12 +7,11 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.RenderingHints;
 
-import graphics.java2d.Java2DRenderer;
+import graphics.java2d.*;
 
 public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
 	private Game game;
-	private Input input;
 	
 	public void startGameThread() {
 		gameThread = new Thread(this);
@@ -31,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setBackground(Color.BLACK);
 		
 		game = new Game();
-		input = new Input();
+		Java2DInput input = new Java2DInput();
 		
 		this.addKeyListener(input);
 		this.addMouseMotionListener(input);
