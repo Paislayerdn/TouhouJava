@@ -8,7 +8,7 @@ import java.util.HashMap;
 public final class ActionRunner {
 	private final ActionContext context;
 	private final ArrayList<Action> actions;
-	private final HashMap<ReservedVariable, TweenAction> tweens;
+	private final HashMap<String, TweenAction> tweens;
 
 	public ActionRunner() {
 		actions = new ArrayList<>();
@@ -38,11 +38,13 @@ public final class ActionRunner {
 		action.start();
 	}
 	private void registerTween(TweenAction tween) {
-		ReservedVariable property = tween.getProperty();
+		String property = tween.getPropertyName();
 
 		TweenAction old = tweens.put(property, tween);
 
-		if (old != null && old != tween) { old.finish(); }
+		if (old != null && old != tween) {
+			old.finish();
+		}
 	}
 
 	public void update() {

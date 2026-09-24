@@ -11,7 +11,8 @@ spellData.config = {
 	name = "Touhou 20 Stage 5 Midboss bs idk wth is that holy cow",
 	timer = 60*60,
 	playerCandidateRadius = 70,
-	isSpell = false
+	isSpell = false,
+	caster = "LAMBDA"
 }
 
 spellData.onStart = function()

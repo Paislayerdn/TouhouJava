@@ -3,12 +3,16 @@ package state.gameplay;
 import graphics.Renderer;
 import java.awt.image.BufferedImage;
 
+import java.util.ArrayList;
+
+import entity.Thing;
 import action.Spell;
 import graphics.TextAlign;
 
 import resource.ResourceLoader;
 
 public final class HUD {
+	private static final ArrayList<Thing> SCTs = new ArrayList<>();
 	private static Spell spell;
 	private static final int LABEL_OFFSET = 22;
 	private static final int BUFFER_ZERO = 9;
@@ -23,12 +27,20 @@ public final class HUD {
 	public static void setSpell(Spell spell) {
 		HUD.spell = spell;
 	}
+	public static void showSCT(String caster) {
+		SCTs.add(new SCT(caster));
+	}
 
 	public static void update() {
+		for (Thing portrait : new ArrayList<>(SCTs)) {
+			portrait.update();
+		}
 
+		SCTs.removeIf(thing -> !thing.isAlive());
 	}
 
 	public static void drawPlayfield(Renderer renderer) {
+		drawSCTs(renderer);
 		drawSpellTimer(renderer);
 	}
 
@@ -49,6 +61,12 @@ public final class HUD {
 	public static void drawOverlay(Renderer renderer) {
 		drawForeground(renderer);
 		drawPlayerStats(renderer);
+	}
+
+	private static void drawSCTs(Renderer renderer) {
+		for (Thing thing : SCTs) {
+			thing.draw(renderer);
+		}
 	}
 
 	private static void drawForeground(Renderer renderer) {

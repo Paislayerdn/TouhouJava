@@ -18,7 +18,9 @@ public final class Phyllotaxis extends Spell {
 		name = "Replication Sign \"Digitalized Pebbles\"";
 		playerCandidateRadius = 40;
 		timer = 3600;
+		countableTime = timer;
 		isSpell = true;
+		caster = "LAMBDA";
 	}
 	
 	@Override

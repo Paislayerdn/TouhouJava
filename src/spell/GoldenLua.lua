@@ -8,7 +8,8 @@ spellData.config = {
 	name = "[Lua Debug] Replication Sign \"Digitalized Pebbles\"",
 	timer = 3600,
 	playerCandidateRadius = 40,
-	isSpell = true
+	isSpell = true,
+	caster = "LAMBDA"
 }
 
 spellData.onStart = function()

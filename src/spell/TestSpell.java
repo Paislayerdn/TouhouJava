@@ -19,6 +19,7 @@ public final class TestSpell extends Spell {
 		playerCandidateRadius = 60;
 		timer = 3000;
 		isSpell = true;
+		caster = "LAMBDA";
 	}
 	
 	

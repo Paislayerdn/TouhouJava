@@ -1,5 +1,6 @@
 package action;
 
+import state.gameplay.SCTType;
 import entity.Boss;
 import entity.Player;
 import resource.ResourceLoader;
@@ -15,6 +16,10 @@ public abstract class Spell extends Action {
 	protected String name = "[SPELL UNNAMED]";
 	protected float playerCandidateRadius = 50.0f;
 	protected boolean isSpell = false;
+	protected String caster = null;
+
+	public final boolean isSpell() { return isSpell; }
+	public final String getCaster() { return caster; }
 	
 	protected float timer = 1770.0f; // 29.5 seconds
 	protected float countableTime;

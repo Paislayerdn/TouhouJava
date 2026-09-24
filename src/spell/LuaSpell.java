@@ -76,6 +76,14 @@ public final class LuaSpell extends Spell {
 		} else {
 			System.out.println("[LuaSpell] isSpell = " + isSpell + " (default)");
 		}
+		
+		value = config.get("caster");
+		if (!value.isnil()) {
+			caster = value.tojstring();
+			System.out.println("[LuaSpell] caster = " + caster);
+		} else {
+			System.out.println("[LuaSpell] caster = " + caster + " (default)");
+		}
 	}
 	
 	@Override

@@ -43,6 +43,10 @@ public class Playing implements GameState {
 	public void run(Spell spell) {
 		actions.add((Action) spell);
 		HUD.setSpell(spell);
+		
+		if (spell.isSpell() && spell.getCaster() != null) {
+			HUD.showSCT(spell.getCaster());
+		}
 	}
 	public void run(DialogueRunner dialogueRunner) {
 		this.dialogueRunner = dialogueRunner;

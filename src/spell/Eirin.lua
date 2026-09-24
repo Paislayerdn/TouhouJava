@@ -10,7 +10,8 @@ spellData.config = {
 	name = "Eirin",
 	timer = 120*60,
 	playerCandidateRadius = 35,
-	isSpell = false
+	isSpell = false,
+	caster = "LAMBDA"
 }
 
 spellData.onStart = function()

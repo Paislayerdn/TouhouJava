@@ -12,6 +12,7 @@ public final class TweenAction extends Action {
 	private final Easing easing;
 	private final TweenMode mode;
 
+	private final String propertyName;
 	private final ReservedVariable property;
 	private float startValue;
 	private float endValue;
@@ -31,18 +32,17 @@ public final class TweenAction extends Action {
 		this(propertyName, start, end, frames, easing, TweenMode.CHASING);
 	}
 	public TweenAction(String propertyName, Object start, Object end, Object frames, Easing easing, TweenMode mode) {
+		this.propertyName = propertyName;
 		this.property = ReservedVariable.fromName(propertyName);
 
-		if (property == null) {
-			throw JSCDebug.error(this, "Unknown Tween property: " + propertyName);
-		}
-
-		if (property == ReservedVariable.X || property == ReservedVariable.Y) {
-			JSCDebug.log(
-				"Warning: Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
-				+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)")
-				+ " instead."
-			);
+		if (property != null) {
+			if (property == ReservedVariable.X || property == ReservedVariable.Y) {
+				JSCDebug.log(
+					"Warning: Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
+					+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)")
+					+ " instead."
+				);
+			}
 		}
 
 		this.start = start;
@@ -52,7 +52,24 @@ public final class TweenAction extends Action {
 		this.mode = mode;
 	}
 	
+	public String getPropertyName() { return propertyName; }
 	public ReservedVariable getProperty() { return property; }
+	private float getValue() {
+		if (property != null) {
+			return resolveFloat(property.get(this));
+		}
+
+		return resolveFloat(getVariable(propertyName));
+	}
+
+	private void setValue(float value) {
+		if (property != null) {
+			property.set(this, value);
+		}
+		else {
+			setVariable(propertyName, value);
+		}
+	}
 	
 	@Override
 	public void start() {
@@ -69,12 +86,12 @@ public final class TweenAction extends Action {
 
 		elapsed = 0;
 
-		property.set(this, startValue);
+		setValue(startValue);
 
 		if (resolvedFrames == 0) {
 			JSCDebug.log("Warning: Tween with 0 frames. Why the heck are you doing this?");
 
-			property.set(this, resolveFloat(end));
+			setValue(resolveFloat(end));
 			finish();
 		}
 	}
@@ -92,10 +109,10 @@ public final class TweenAction extends Action {
 
 		float value = startValue + (resolvedEnd - startValue) * eased;
 
-		property.set(this, value);
+		setValue(value);
 
 		if (elapsed >= resolvedFrames) {
-			property.set(this, resolvedEnd);
+			setValue(resolvedEnd);
 			finish();
 		}
 	}

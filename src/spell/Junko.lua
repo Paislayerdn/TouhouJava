@@ -10,7 +10,8 @@ spellData.config = {
 	name = "Junko",
 	timer = 120*60,
 	playerCandidateRadius = 30,
-	isSpell = false
+	isSpell = false,
+	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
