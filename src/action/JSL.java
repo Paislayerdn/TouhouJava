@@ -2,6 +2,8 @@
 package action;
 
 import java.util.function.Function;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaTable;
@@ -45,10 +47,65 @@ public final class JSL {
 		return actions;
 	}
 	
-	private static void registerOneArgAction(
-		Globals globals,
-		String name,
-		Function<Object, Action> function
+	private static void registerZeroArgAction(Globals globals,
+		String name, Supplier<Action> function
+	) {
+		globals.set(name, new ZeroArgFunction() {
+			@Override
+			public LuaValue call() {
+				return CoerceJavaToLua.coerce(function.get());
+			}
+		});
+	}
+	private static void registerOneArgAction(Globals globals,
+		String name, Function<Object, Action> function
+	) {
+		globals.set(name, new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce(
+					function.apply(toJava(value))
+				);
+			}
+		});
+	}
+	private static void registerTwoArgAction(Globals globals,
+		String name, BiFunction<Object, Object, Action> function
+	) {
+		globals.set(name, new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue a, LuaValue b) {
+				return CoerceJavaToLua.coerce(
+					function.apply(toJava(a), toJava(b))
+				);
+			}
+		});
+	}
+	private static void registerVarArgAction(Globals globals,
+		String name, Function<Object[], Action> function
+	) {
+		globals.set(name, new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				return CoerceJavaToLua.coerce(
+					function.apply(toJava(args))
+				);
+			}
+		});
+	}
+	private static <T> void registerZeroArg(Globals globals,
+		String name, Supplier<T> function
+	) {
+		globals.set(name, new ZeroArgFunction() {
+			@Override
+			public LuaValue call() {
+				return CoerceJavaToLua.coerce(function.get());
+			}
+		});
+	}
+
+	private static <T> void registerOneArg(Globals globals,
+		String name, Function<Object, T> function
 	) {
 		globals.set(name, new OneArgFunction() {
 			@Override
@@ -60,29 +117,77 @@ public final class JSL {
 		});
 	}
 
+	private static <T> void registerTwoArg(Globals globals,
+		String name, BiFunction<Object, Object, T> function
+	) {
+		globals.set(name, new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue a, LuaValue b) {
+				return CoerceJavaToLua.coerce(
+					function.apply(toJava(a), toJava(b))
+				);
+			}
+		});
+	}
+
+	private static <T> void registerVarArg(Globals globals,
+		String name, Function<Object[], T> function
+	) {
+		globals.set(name, new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				return CoerceJavaToLua.coerce(
+					function.apply(toJava(args))
+				);
+			}
+		});
+	}
+	private static <T> void registerStringObject(Globals globals,
+		String name, BiFunction<String, Object, T> function
+	) {
+		globals.set(name, new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue a, LuaValue b) {
+				return CoerceJavaToLua.coerce(
+					function.apply(a.tojstring(), toJava(b))
+				);
+			}
+		});
+	}
+	private static <T> void registerStringArg(Globals globals,
+		String name, Function<String, T> function
+	) {
+		globals.set(name, new OneArgFunction() {
+			@Override
+			public LuaValue call(LuaValue value) {
+				return CoerceJavaToLua.coerce(
+					function.apply(value.tojstring())
+				);
+			}
+		});
+	}
+	private static <T> void registerStringString(Globals globals,
+		String name,
+		BiFunction<String, String, T> function
+	) {
+		globals.set(name, new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue a, LuaValue b) {
+				return CoerceJavaToLua.coerce(
+					function.apply(a.tojstring(), b.tojstring())
+				);
+			}
+		});
+	}
+
 	public static Globals registerJScratch() {
 		Globals globals = JsePlatform.standardGlobals();
 		
 		// POSITION
-		globals.set( "moveX", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue x ) {
-				return CoerceJavaToLua.coerce( MoveX( toJava(x) ) );
-			}
-		} );
-		
-		globals.set( "moveY", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue y ) {
-				return CoerceJavaToLua.coerce( MoveY( toJava(y) ) );
-			}
-		} );
-		globals.set( "move", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue x, LuaValue y ) {
-				return CoerceJavaToLua.coerce( Move( toJava(x), toJava(y) ) );
-			}
-		} );
+		registerOneArgAction(globals, "moveX", JScratch::MoveX);
+		registerOneArgAction(globals, "moveY", JScratch::MoveY);
+		registerTwoArgAction(globals, "move", JScratch::Move);
+		registerOneArgAction(globals, "forward", JScratch::Forward);
 		
 		globals.set("goTo", new VarArgFunction() {
 			@Override
@@ -188,12 +293,6 @@ public final class JSL {
 			}
 		} );
 		
-		globals.set( "forward", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue distance ) {
-				return CoerceJavaToLua.coerce( Forward( toJava( distance ) ) );
-			}
-		} );
 		
 		// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
 		globals.set("look", new VarArgFunction() {
@@ -277,66 +376,23 @@ public final class JSL {
 			}
 		});
 		
-		globals.set( "setTrueAngle", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( SetTrueAngle( toJava( value ) ) );
-			}
-		} );
-
-		globals.set( "changeTrueAngle", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( ChangeTrueAngle( toJava( value ) ) );
-			}
-		} );
-		
-		// ONLY FOR ENTITY, WARNING FOR USAGE UPON THING
-		globals.set( "setAppearAngle", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( SetAppearAngle( toJava( value ) ) );
-			}
-		} );
-		globals.set( "changeAppearAngle", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( ChangeAppearAngle( toJava( value ) ) );
-			}
-		} );
-		globals.set( "enableAngleOverride", new ZeroArgFunction() {
-			@Override
-			public LuaValue call() {
-				return CoerceJavaToLua.coerce( EnableAngleOverride() );
-			}
-		} );
-		globals.set( "disableAngleOverride", new ZeroArgFunction() {
-			@Override
-			public LuaValue call() {
-				return CoerceJavaToLua.coerce( DisableAngleOverride() );
-			}
-		} );
+		registerOneArgAction(globals, "setTrueAngle", JScratch::SetTrueAngle);
+		registerOneArgAction(globals, "changeTrueAngle", JScratch::ChangeTrueAngle);
+		registerOneArgAction(globals, "setAppearAngle", JScratch::SetAppearAngle);
+		registerOneArgAction(globals, "changeAppearAngle", JScratch::ChangeAppearAngle);
+		registerZeroArgAction(globals, "enableAngleOverride", JScratch::EnableAngleOverride);
+		registerZeroArgAction(globals, "disableAngleOverride", JScratch::DisableAngleOverride);
 		
 		// APPEARANCE
-		globals.set("setCostume", new OneArgFunction() {
-			@Override // ONLY FOR STRING
-			public LuaValue call(LuaValue name) {
-				return CoerceJavaToLua.coerce(SetCostume(name.tojstring()));
-			}
-		});
-
+		registerStringArg(globals, "setCostume", JScratch::SetCostume);
 		registerOneArgAction(globals, "setColor", JScratch::SetColor);
 		registerOneArgAction(globals, "changeColor", JScratch::ChangeColor);
-
 		registerOneArgAction(globals, "setPixelate", JScratch::SetPixelate);
 		registerOneArgAction(globals, "changePixelate", JScratch::ChangePixelate);
-
 		registerOneArgAction(globals, "setBrightness", JScratch::SetBrightness);
 		registerOneArgAction(globals, "changeBrightness", JScratch::ChangeBrightness);
-
 		registerOneArgAction(globals, "setGhost", JScratch::SetGhost);
 		registerOneArgAction(globals, "changeGhost", JScratch::ChangeGhost);
-
 		registerOneArgAction(globals, "setSize", JScratch::SetSize);
 		registerOneArgAction(globals, "changeSize", JScratch::ChangeSize);
 		
@@ -346,178 +402,61 @@ public final class JSL {
 			public LuaValue call( LuaValue name, LuaValue radius ) {
 				return CoerceJavaToLua.coerce( 
 					AddCircleHitbox( name.tojstring(), toJava( radius ) )
-				 );
+				);
 			}
 		} );
-		globals.set( "addRectangleHitbox", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( 
-					AddRectangleHitbox( 
-						args.arg(1).tojstring(),
-						toJava( args.arg(2) ),
-						toJava( args.arg(3) )
-					 )
-				 );
-			}
-		} );
-		
-		globals.set( "enableHitbox", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name ) {
-				return CoerceJavaToLua.coerce( EnableHitbox( name.tojstring() ) );
-			}
-		} );
+		registerVarArg(globals, "addRectangleHitbox", args -> 
+			AddRectangleHitbox((String) args[0], args[1], args[2])
+		);
 
-		globals.set( "disableHitbox", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name ) {
-				return CoerceJavaToLua.coerce( DisableHitbox( name.tojstring() ) );
-			}
-		} );
-		
-		globals.set( "addHitboxTag", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue tag ) {
-				return CoerceJavaToLua.coerce( AddHitboxTag( name.tojstring(), tag.tojstring() ) );
-			}
-		} );
+		registerStringArg(globals, "enableHitbox", JScratch::EnableHitbox);
+		registerStringArg(globals, "disableHitbox", JScratch::DisableHitbox);
 
-		globals.set( "removeHitboxTag", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue tag ) {
-				return CoerceJavaToLua.coerce( RemoveHitboxTag( name.tojstring(), tag.tojstring() ) );
-			}
-		} );
+		registerStringString(globals, "addHitboxTag", JScratch::AddHitboxTag);
+		registerStringString(globals, "removeHitboxTag", JScratch::RemoveHitboxTag);
 
 		// SOUND
-		globals.set( "sound", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue path ) {
-				return CoerceJavaToLua.coerce( Sound( name.tojstring(), path.tojstring() ) );
-			}
-		} );
+		registerStringString(globals, "sound", JScratch::Sound);
 		globals.set( "setSoundVolume", new TwoArgFunction() {
 			@Override
 			public LuaValue call( LuaValue name, LuaValue volume ) {
 				return CoerceJavaToLua.coerce( SetSoundVolume( name.tojstring(), ( ( Number ) toJava( volume ) ).floatValue() ) );
 			}
 		} );
-		globals.set( "playSound", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name ) {
-				return CoerceJavaToLua.coerce( PlaySound( name.tojstring() ) );
-			}
-		} );
+		registerStringArg(globals, "playSound", JScratch::PlaySound);
 		
 		// VARIABLE
-		globals.set( "var", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue value ) {
-				return CoerceJavaToLua.coerce( Declare( name.tojstring(), toJava( value ) ) );
-			}
-		} );
-		globals.set( "declare", globals.get( "var" ) );
-		globals.set( "set", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue value ) {
-				return CoerceJavaToLua.coerce( Set( name.tojstring(), toJava( value ) ) );
-			}
-		} );
-		globals.set( "change", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name, LuaValue value ) {
-				return CoerceJavaToLua.coerce( Change( name.tojstring(), toJava( value ) ) );
-			}
-		} );
-		globals.set( "get", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue name ) {
-				return CoerceJavaToLua.coerce( Get( name.tojstring() ) );
-			}
-		} );
+		registerStringObject(globals, "var", JScratch::Declare);
+		globals.set("declare", globals.get("var"));
+
+		registerStringObject(globals, "set", JScratch::Set);
+		registerStringObject(globals, "change", JScratch::Change);
+		registerStringArg(globals, "get", JScratch::Get);
 		
 		// BULLET LIFE
-		globals.set( "spawnBullet", new VarArgFunction() {
+		globals.set("spawnBullet", new OneArgFunction() {
 			@Override
-			public Varargs invoke( Varargs args ) {
-				int count = args.narg();
+			public LuaValue call(LuaValue value) {
+				Action action = (Action) value.checkuserdata(Action.class);
 
-				if (count == 1) {
-					Action action = ( Action ) args.arg(1).checkuserdata( Action.class );
-					return CoerceJavaToLua.coerce( SpawnBullet( action ) );
-				}
-				
-				throw new IllegalArgumentException( "SpawnBullet expects (action)" );
+				return CoerceJavaToLua.coerce(
+					SpawnBullet(action)
+				);
 			}
-		} );
-		globals.set( "destroy", new ZeroArgFunction() {
-			@Override
-			public LuaValue call() {
-				return CoerceJavaToLua.coerce( Destroy() );
-			}
-		} );
+		});
+		registerZeroArgAction(globals, "destroy", JScratch::Destroy);
 		
 		// LOGIC
-		globals.set( "jsand", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( And( values ) );
-			}
-		} );
-
-		globals.set( "jsor", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( Or( values ) );
-			}
-		} );
-
-		globals.set( "jsnot", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( Not( toJava( value ) ) );
-			}
-		} );
+		registerVarArg(globals, "jsand", JScratch::And);
+		registerVarArg(globals, "jsor", JScratch::Or);
+		registerOneArg(globals, "jsnot", JScratch::Not);
 
 		// COMPARISON
-		globals.set( "greater", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( Greater( values ) );
-			}
-		} );
-		globals.set( "greaterEqual", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( GreaterEqual( values ) );
-			}
-		} );
-		globals.set( "less", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( Less( values ) );
-			}
-		} );
-		globals.set( "lessEqual", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( LessEqual( values ) );
-			}
-		} );
-		globals.set( "equal", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				Object[] values = toJava( args );
-				return CoerceJavaToLua.coerce( Equal( values ) );
-			}
-		} );
+		registerVarArg(globals, "greater", JScratch::Greater);
+		registerVarArg(globals, "greaterEqual", JScratch::GreaterEqual);
+		registerVarArg(globals, "less", JScratch::Less);
+		registerVarArg(globals, "lessEqual", JScratch::LessEqual);
+		registerVarArg(globals, "equal", JScratch::Equal);
 		
 		// PROCESS CONTROL
 		LuaValue sequence = new VarArgFunction() {
@@ -555,14 +494,7 @@ public final class JSL {
 				return CoerceJavaToLua.coerce( Wait( toJava( args.arg1() ) ) );
 			}
 		} );
-		globals.set( "waitUntil", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue condition ) {
-				return CoerceJavaToLua.coerce( 
-					WaitUntil( toJava( condition ) )
-				 );
-			}
-		} );
+		registerOneArgAction(globals, "waitUntil", JScratch::WaitUntil);
 		globals.set( "jsif", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
@@ -661,102 +593,34 @@ public final class JSL {
 		
 		
 		// MATH
-		globals.set( "add", new VarArgFunction() {
+		registerVarArg(globals, "add", JScratch::Add);
+		registerVarArg(globals, "sub", JScratch::Sub);
+		registerVarArg(globals, "mul", JScratch::Mul);
+		registerVarArg(globals, "div", JScratch::Div);
+		registerVarArg(globals, "mod", JScratch::Mod);
+		registerTwoArg(globals, "power", JScratch::Power);
+		globals.set("pow", globals.get("power"));
+		registerTwoArg(globals, "root", JScratch::Root);
+		registerOneArg(globals, "abs", JScratch::Abs);
+		registerVarArg(globals, "min", JScratch::Min);
+		registerVarArg(globals, "max", JScratch::Max);
+		globals.set("random", new VarArgFunction() {
 			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Add( toJava( args ) ) );
-			}
-		} );
-
-		globals.set( "sub", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Sub( toJava( args ) ) );
-			}
-		} );
-
-		globals.set( "mul", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Mul( toJava( args ) ) );
-			}
-		} );
-
-		globals.set( "div", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Div( toJava( args ) ) );
-			}
-		} );
-		
-		globals.set( "mod", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Mod( toJava( args ) ) );
-			}
-		} );
-
-		globals.set( "power", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue a, LuaValue b ) {
-				return CoerceJavaToLua.coerce( Power( toJava( a ), toJava( b ) ) );
-			}
-		} );
-		globals.set( "pow", globals.get( "power" ) );
-
-		globals.set( "root", new TwoArgFunction() {
-			@Override
-			public LuaValue call( LuaValue a, LuaValue b ) {
-				return CoerceJavaToLua.coerce( 
-					Root( toJava( a ), toJava( b ) )
-				 );
-			}
-		} );
-
-		globals.set( "abs", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue a ) {
-				return CoerceJavaToLua.coerce( Abs( toJava( a ) ) );
-			}
-		} );
-		globals.set( "min", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Min( toJava( args ) ) );
-			}
-		} );
-
-		globals.set( "max", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				return CoerceJavaToLua.coerce( Max( toJava( args ) ) );
-			}
-		} );
-		
-		globals.set( "random", new VarArgFunction() {
-			@Override
-			public Varargs invoke( Varargs args ) {
-				int count = args.narg();
-
-				if (count == 0) {
-					return CoerceJavaToLua.coerce( Random() );
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 0) {
+					return CoerceJavaToLua.coerce(Random());
 				}
 
-				if (count == 2) {
-					return CoerceJavaToLua.coerce( 
-						Random( toJava( args.arg(1) ), toJava( args.arg(2) ) )
-					 );
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						Random(toJava(args.arg(1)), toJava(args.arg(2)))
+					);
 				}
 
-				throw new IllegalArgumentException( "random expects () or (a, b)" );
-			}
-		} );
-		globals.set("randomSign", new ZeroArgFunction() {
-			@Override
-			public LuaValue call() {
-				return CoerceJavaToLua.coerce( RandomSign() );
+				throw new IllegalArgumentException("random expects () or (a, b)");
 			}
 		});
+		registerZeroArg(globals, "randomSign", JScratch::RandomSign);
 		
 		// TWEENSERVICE
 		LuaTable easing = new LuaTable();
@@ -767,26 +631,10 @@ public final class JSL {
 		easing.set("quadInOut", CoerceJavaToLua.coerce(Easing.QUAD_IN_OUT));
 		
 		globals.set("easing", easing);
-		globals.set("tween", new VarArgFunction() {
-			@Override
-			public Varargs invoke(Varargs args) {
-				Object[] values = new Object[args.narg()];
-
-				for (int i = 0; i < args.narg(); i++) {
-					values[i] = toJava(args.arg(i + 1));
-				}
-
-				return CoerceJavaToLua.coerce(Tween(values));
-			}
-		});
+		registerVarArg(globals, "tween", JScratch::Tween);
 		
 		// PRINT
-		globals.set( "jsprint", new OneArgFunction() {
-			@Override
-			public LuaValue call( LuaValue value ) {
-				return CoerceJavaToLua.coerce( LuaPrint( toJava( value ) ) );
-			}
-		} );
+		registerOneArg(globals, "jsprint", JScratch::LuaPrint);
 		
 		// LUA SPECIFIC STUFFS
 		globals.set("at", new VarArgFunction() {

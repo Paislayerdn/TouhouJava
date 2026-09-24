@@ -65,8 +65,7 @@ public final class TweenAction extends Action {
 	private void setValue(float value) {
 		if (property != null) {
 			property.set(this, value);
-		}
-		else {
+		} else {
 			setVariable(propertyName, value);
 		}
 	}
