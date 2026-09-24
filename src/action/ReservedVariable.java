@@ -55,8 +55,7 @@ public enum ReservedVariable {
 			case X: owner.setX(value); break;
 			case Y: owner.setY(value); break;
 			case ANGLE:
-				if ( owner.getAngleOverride() ) { owner.setAppearAngle(value); }
-				else { owner.setTrueAngle(value); }
+				if ( owner.getAngleOverride() ) { owner.setAppearAngle(value); } else { owner.setTrueAngle(value); }
 				break;
 				
 			case SIZE: owner.getAppearance().setSize(value); break;

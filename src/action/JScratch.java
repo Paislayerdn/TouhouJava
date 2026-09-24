@@ -44,9 +44,9 @@ public final class JScratch {
 			TweenY(startY, y, frames)
 		);
 	}
-	public static Action SetX(Object x, int frames) { return TweenX(x, frames); }
+	public static Action SetX(Object x, Object frames) { return TweenX(x, frames); }
 	public static Action SetX(Object start, Object end, int frames) { return TweenX(start, end, frames); }
-	public static Action SetY(Object y, int frames) { return TweenY(y, frames); }
+	public static Action SetY(Object y, Object frames) { return TweenY(y, frames); }
 	public static Action SetY(Object start, Object end, int frames) { return TweenY(start, end, frames); }
 	
 
@@ -217,6 +217,7 @@ public final class JScratch {
 	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
 	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
 	
+	public static Value Abs(Object value) { return MathValue.Abs(value); }
 	public static Value Min(Object... values) { return MathValue.Min(values); }
 	public static Value Max(Object... values) { return MathValue.Max(values); }
 	
@@ -262,25 +263,25 @@ public final class JScratch {
 	}
 	
 	// TWEENSERVICE: POSITION HELPER
-	private static Action TweenX(Object end, int frames) {
+	private static Action TweenX(Object end, Object frames) {
 		return new TweenAction(ReservedVariable.X.getName(),
 			Value.Get("x"), end, frames,
 			Easing.LINEAR
 		);
 	}
-	private static Action TweenX(Object start, Object end, int frames) {
+	private static Action TweenX(Object start, Object end, Object frames) {
 		return new TweenAction(ReservedVariable.X.getName(),
 			start, end, frames,
 			Easing.LINEAR
 		);
 	}
-	private static Action TweenY(Object end, int frames) {
+	private static Action TweenY(Object end, Object frames) {
 		return new TweenAction(ReservedVariable.Y.getName(),
 			Value.Get("y"), end, frames,
 			Easing.LINEAR
 		);
 	}
-	private static Action TweenY(Object start, Object end, int frames) {
+	private static Action TweenY(Object start, Object end, Object frames) {
 		return new TweenAction(ReservedVariable.Y.getName(),
 			start, end, frames,
 			Easing.LINEAR
@@ -314,6 +315,9 @@ final class JSCDebug {
 	}
 	public static RuntimeException error(Object source, String message) {
 		return fail("[JScratch " + source.getClass().getSimpleName() + "] " + message);
+	}
+	public static RuntimeException error(String type, String message) {
+		return fail("[JScratch " + type + "] " + message);
 	}
 	public static RuntimeException error(String message) {
 		return fail("[JScratch] " + message);

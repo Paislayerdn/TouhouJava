@@ -98,8 +98,8 @@ final class SetHitboxTag extends Action {
 
 		if (hitbox == null) throw JSCDebug.error(this, "Hitbox not found: " + hitboxName);
 
-		if (add) { hitbox.addTag(tag); }
-		else { hitbox.removeTag(tag); }
+		if (add) hitbox.addTag(tag);
+		else hitbox.removeTag(tag);
 		finish();
 	}
 }

@@ -12,8 +12,8 @@ public final class GameplayScript {
 	}
 
 	public void start() {
-//		parent.run(new Phyllotaxis( parent.getBoss(), parent.getPlayer() ));
-		parent.run(new LuaSpell( parent.getBoss(), parent.getPlayer(), "Eirin"));
+//		parent.run( new Phyllotaxis( parent.getBoss(), parent.getPlayer() ) );
+		parent.run( new LuaSpell( parent.getBoss(), parent.getPlayer(), "Madness20") );
 //		parent.run( new DialogueRunner("Test") );
 	}
 }	

@@ -55,6 +55,11 @@ public final class MathValue {
 		};
 	}
 
+	public static Value Abs(Object value) {
+		return action -> Math.abs(
+			action.resolveFloat(value)
+		);
+	}
 	public static Value Min(Object... values) {
 		return action -> {
 			if (values.length == 0) return 0.0;
@@ -71,7 +76,6 @@ public final class MathValue {
 			return result;
 		};
 	}
-
 	public static Value Max(Object... values) {
 		return action -> {
 			if (values.length == 0) return 0.0;

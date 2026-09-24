@@ -18,8 +18,7 @@ final class LookTowardsAction extends Action {
 
 		float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 
-		if ( owner.getAngleOverride() ) { owner.setAppearAngle(angle); }
-		else { owner.setTrueAngle(angle); }
+		if ( owner.getAngleOverride() ) { owner.setAppearAngle(angle); } else { owner.setTrueAngle(angle); }
 
 		finish();
 	}
@@ -57,8 +56,7 @@ final class AngleAction extends Action {
 	}
 
 	private void applyActiveAngle(float value) {
-		if ( owner.getAngleOverride() ) { applyAppearAngle(value); }
-		else { applyTrueAngle(value); }
+		if ( owner.getAngleOverride() ) { applyAppearAngle(value); } else { applyTrueAngle(value); }
 	}
 	
 	private void applyTrueAngle(float value) {

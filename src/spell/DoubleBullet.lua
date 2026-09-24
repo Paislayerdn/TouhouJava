@@ -56,7 +56,6 @@ local CasualWalk = function()
 			setSize(40),
 			setBrightness(40),
 			setGhost(40),
-			warp(999,999),
 
 			parallel(
 				sequence(

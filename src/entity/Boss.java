@@ -10,7 +10,7 @@ import static collision.CollisionTags.*;
 import static action.JScratch.*;
 
 public class Boss extends Entity {
-	private Sound lowHP;
+	private final Sound lowHP;
 	private Player player;
 	
 	private float maxHP=0;

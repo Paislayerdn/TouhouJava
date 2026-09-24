@@ -17,9 +17,9 @@ public final class JSL {
 	private JSL() {}
 	
 	private static Object toJava( LuaValue value ) {
-		if ( value.isnumber() )		{ return value.tofloat();}
-		if ( value.isstring() )		{ return value.tojstring();}
-		if ( value.isuserdata() )	{ return value.touserdata(); }
+		if ( value.isnumber() ) { return value.tofloat();}
+		if ( value.isstring() ) { return value.tojstring();}
+		if ( value.isuserdata() ) { return value.touserdata(); }
 
 		return value;
 	}
@@ -748,6 +748,12 @@ public final class JSL {
 			}
 		} );
 
+		globals.set( "abs", new OneArgFunction() {
+			@Override
+			public LuaValue call( LuaValue a ) {
+				return CoerceJavaToLua.coerce( Abs( toJava( a ) ) );
+			}
+		} );
 		globals.set( "min", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
@@ -816,6 +822,43 @@ public final class JSL {
 				return CoerceJavaToLua.coerce( LuaPrint( toJava( value ) ) );
 			}
 		} );
+		
+		// LUA SPECIFIC STUFFS
+		globals.set("at", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				LuaValue table = args.arg(1);
+				Object index = toJava(args.arg(2));
+
+				Value value = action -> {
+					Object resolvedIndex = index instanceof Value? ((Value) index).get(action): index;
+
+					if (!(resolvedIndex instanceof Number)) {
+						throw JSCDebug.error("Lua",
+							"Lua table index must resolve to a number: " + resolvedIndex
+						);
+					}
+
+					int i = ((Number) resolvedIndex).intValue();
+
+					return toJava(table.get(i));
+				};
+
+				return CoerceJavaToLua.coerce(value);
+			}
+		} );
+		globals.set("callAt", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				LuaValue table = args.arg(1);
+				Object index = toJava(args.arg(2));
+
+				return CoerceJavaToLua.coerce(
+					new LuaCallAction(table, index)
+				);
+			}
+		} );
+		
 		return globals;
 	}
 }
