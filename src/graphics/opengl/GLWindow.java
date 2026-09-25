@@ -8,7 +8,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 
-import main.Input;
 import org.lwjgl.glfw.GLFWVidMode;
 
 public class GLWindow {
@@ -52,6 +51,8 @@ public class GLWindow {
 		GL.createCapabilities();
 		
 		GLFW.glfwSetKeyCallback(window, new GLInput());
+		GLFW.glfwSetCursorPosCallback(window, new GLMouse());
+		GLFW.glfwSetMouseButtonCallback(window, new GLMouseButton());
 
 		GLFW.glfwSwapInterval(0);
 	}

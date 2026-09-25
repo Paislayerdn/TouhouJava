@@ -2,6 +2,7 @@ package dialogue.command;
 
 import dialogue.DialogueCommand;
 import dialogue.DialogueDebug;
+import dialogue.DialogueLexer;
 import dialogue.DialogueRunner;
 
 public final class TextCommand implements DialogueCommand {
@@ -13,12 +14,13 @@ public final class TextCommand implements DialogueCommand {
 
 	@Override
 	public void execute(DialogueRunner runner) {
-		runner.setCurrentText(text);
+		String resolved = DialogueLexer.substitute(runner, text);
+
+		runner.setCurrentText(resolved);
 		runner.waitForAdvance();
-		DialogueDebug.log(this, "Text: " + text);
+
+		DialogueDebug.log(this, "Text: " + resolved);
 	}
 
-	public String getText() {
-		return text;
-	}
+	public String getText() { return text; }
 }

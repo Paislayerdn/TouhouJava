@@ -1,92 +1,165 @@
 package state.gameplay;
 
 import graphics.Renderer;
-import java.awt.image.BufferedImage;
+import graphics.TextAlign;
+import graphics.TextBox;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import entity.Thing;
 import action.Spell;
-import graphics.TextAlign;
 
 import resource.ResourceLoader;
 
 public final class HUD {
-	private static final ArrayList<Thing> SCTs = new ArrayList<>();
-	private static Spell spell;
 	private static final int LABEL_OFFSET = 22;
 	private static final int BUFFER_ZERO = 9;
+	
+	private final ArrayList<TextBox> PLAYFIELD_TEXTS = new ArrayList<>();
+	private final ArrayList<TextBox> OVERLAY_TEXTS = new ArrayList<>();
 
-	private static BufferedImage foreground;
+	private TextBox spellWhole;
+	private TextBox spellDecimal;
 
-	private HUD() {}
+	private final TextBox scoreValue;
+	private final TextBox grazeValue;
+	private final TextBox powerValue;
+	private final TextBox livesValue;
+	private final TextBox bombsValue;
+	
+	private BufferedImage foreground;
+	
+	private final ArrayList<Thing> SCTs = new ArrayList<>();
+	private Spell currentSpell;
 
-	public static void init() {
-		HUD.foreground = ResourceLoader.image("Foreground");
+	public HUD() {
+		this.foreground = ResourceLoader.image("Foreground");
+		
+		this.spellWhole = addText(PLAYFIELD_TEXTS, "0",0,300,200,100,TextAlign.RIGHT);
+		this.spellWhole.setGlyphSize(50.0f);
+		this.spellDecimal = addText(PLAYFIELD_TEXTS, ".00",0,300,200,100,TextAlign.LEFT);
+		this.spellDecimal.setGlyphSize(31.25f);
+		
+		TextBox temp;
+		temp = addText(OVERLAY_TEXTS, "SCORE", 260, 290, 300, 100, TextAlign.LEFT);
+		temp.setGlyphSize(28.125f);
+		this.scoreValue = addText(OVERLAY_TEXTS, "", 260, 290 - LABEL_OFFSET, 300, 100, TextAlign.LEFT);
+		this.scoreValue.setGlyphSize(28.125f);
+		
+		temp = addText(OVERLAY_TEXTS, "GRAZE", 260, 215, 300, 100, TextAlign.LEFT);
+		temp.setGlyphSize(28.125f);
+		this.grazeValue = addText(OVERLAY_TEXTS, "", 260, 215 - LABEL_OFFSET, 300, 100, TextAlign.LEFT);
+		this.grazeValue.setGlyphSize(28.125f);
+		
+		temp = addText(OVERLAY_TEXTS, "POWER", 260, 140, 300, 100, TextAlign.LEFT);
+		temp.setGlyphSize(28.125f);
+		this.powerValue = addText(OVERLAY_TEXTS, "", 260, 140 - LABEL_OFFSET, 300, 100, TextAlign.LEFT);
+		this.powerValue.setGlyphSize(28.125f);
+		
+		temp = addText(OVERLAY_TEXTS, "LIVES", 260, 65, 300, 100, TextAlign.LEFT);
+		temp.setGlyphSize(28.125f);
+		this.livesValue = addText(OVERLAY_TEXTS, "", 260, 65 - LABEL_OFFSET, 300, 100, TextAlign.LEFT);
+		this.livesValue.setGlyphSize(28.125f);
+		
+		temp = addText(OVERLAY_TEXTS, "BOMBS", 260, -10, 300, 100, TextAlign.LEFT);
+		temp.setGlyphSize(28.125f);
+		this.bombsValue = addText(OVERLAY_TEXTS, "", 260, -10 - LABEL_OFFSET, 300, 100, TextAlign.LEFT);
+		this.bombsValue.setGlyphSize(28.125f);
 	}
-	public static void setSpell(Spell spell) {
-		HUD.spell = spell;
+	private TextBox addText(
+		ArrayList<TextBox> texts,
+		String text,
+		float x, float y,
+		float width, float height,
+		TextAlign align
+	) {
+		TextBox box = new TextBox(
+			text, x, y, width, height, align
+		);
+
+		texts.add(box);
+		return box;
 	}
-	public static void showSCT(String caster) {
+
+	public void setCurrentSpell(Spell cS) { this.currentSpell = cS; }
+
+	public void showSCT(String caster) {
 		SCTs.add(new SCT(caster));
 	}
 
-	public static void update() {
-		for (Thing portrait : new ArrayList<>(SCTs)) {
+	public void update() {
+		for (Thing portrait : new ArrayList<>(SCTs))
 			portrait.update();
-		}
 
 		SCTs.removeIf(thing -> !thing.isAlive());
+
+		updateSpellTimer();
+		updatePlayerStats();
+
+		for (TextBox text : PLAYFIELD_TEXTS)
+			text.update();
+
+		for (TextBox text : OVERLAY_TEXTS)
+			text.update();
 	}
+	private void updateSpellTimer() {
+		if (currentSpell == null)
+			return;
 
-	public static void drawPlayfield(Renderer renderer) {
-		drawSCTs(renderer);
-		drawSpellTimer(renderer);
-	}
-
-	private static void drawSpellTimer(Renderer renderer) {
-		if (spell == null) return;
-
-		float seconds = spell.getTimer() / 60.0f;
+		float seconds = currentSpell.getTimer() / 60.0f;
 
 		int whole = (int) seconds;
 		int decimal = (int) ((seconds - whole) * 100);
 
-		String wholePart = String.valueOf(whole);
-		String decimalPart = String.format(".%02d", decimal);
-
-		renderer.text(wholePart, 0, 300, 32, TextAlign.RIGHT);
-		renderer.text(decimalPart, 0, 300, 20, TextAlign.LEFT);
-	}
-	public static void drawOverlay(Renderer renderer) {
-		drawForeground(renderer);
-		drawPlayerStats(renderer);
+		spellWhole.setText(String.valueOf(whole));
+		spellDecimal.setText(String.format(".%02d", decimal));
 	}
 
-	private static void drawSCTs(Renderer renderer) {
+	private void updatePlayerStats() {
+		scoreValue.setText(
+			pad(PlayingStats.getScore(), BUFFER_ZERO)
+		);
+
+		grazeValue.setText(
+			pad(PlayingStats.getGraze(), 6)
+		);
+
+		powerValue.setText(
+			String.valueOf(PlayingStats.getPower())
+		);
+
+		livesValue.setText(
+			String.valueOf(PlayingStats.getLives())
+		);
+
+		bombsValue.setText(
+			String.valueOf(PlayingStats.getBombs())
+		);
+	}
+
+
+	public void drawPlayfield(Renderer renderer) {
+		drawSCTs(renderer);
+
+		for (TextBox text : PLAYFIELD_TEXTS)
+			text.draw(renderer);
+	}
+
+	public void drawOverlay(Renderer renderer) {
+		renderer.image(foreground, 0, 0, 960, 720);
+
+		for (TextBox text : OVERLAY_TEXTS)
+			text.draw(renderer);
+	}
+
+	private void drawSCTs(Renderer renderer) {
 		for (Thing thing : SCTs) {
 			thing.draw(renderer);
 		}
 	}
-
-	private static void drawForeground(Renderer renderer) {
-		renderer.image(foreground, 0, 0, 960, 720);
-	}
-
-	private static void drawPlayerStats(Renderer renderer) {
-		drawStat(renderer,	"SCORE",	pad(PlayingStats.getScore(), BUFFER_ZERO),	260, 290);
-		drawStat(renderer,	"GRAZE",	pad(PlayingStats.getGraze(), 6),			260, 215);
-		drawStat(renderer,	"POWER",	String.valueOf(PlayingStats.getPower()),	260, 140);
-		drawStat(renderer,	"LIVES",	String.valueOf(PlayingStats.getLives()),	260, 65);
-		drawStat(renderer,	"BOMBS",	String.valueOf(PlayingStats.getBombs()),	260, -10);
-	}
-
-	private static String pad(long value, int digits) {
+	
+	private String pad(long value, int digits) {
 		return String.format("%0" + digits + "d", value);
-	}
-
-	private static void drawStat(Renderer renderer, String label, String value, int x, int y) {
-		renderer.text(label, x, y);
-		renderer.text(value, x, y - LABEL_OFFSET);
 	}
 }

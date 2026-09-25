@@ -11,9 +11,10 @@ import static collision.CollisionTag.*;
 import static collision.CollisionType.*;
 
 import state.gameplay.HUD;
-import state.gameplay.PlayingStats;
 
 public class Player extends Entity {
+	private final HUD hud;
+	
 	private boolean focusing = false;
 
 	private int shootCooldown = 0;
@@ -23,11 +24,12 @@ public class Player extends Entity {
 	private static final int SHOOT_INTERVAL = 6;
 	private boolean lastX = false;
 	
-	public Player() {
-		name = "Player";
+	public Player(HUD hud) {
+		this.hud = hud;
+		this.name = "Player";
 		
-		x = 0;
-		y = -80;
+		this.x = 0;
+		this.y = -80;
 		
 		this.run(
 			Sequence(
@@ -82,7 +84,7 @@ public class Player extends Entity {
 		}
 	}
 	private void bomb() {
-		HUD.showSCT("REIMU");
+		hud.showSCT("REIMU");
 		int total = 12;
 		run( Sequence(
 			Wait(60),
@@ -127,12 +129,11 @@ public class Player extends Entity {
 						Warp(this),
 						MoveX( Mul( 15, Sub( Get("index"), (total+1.0)/2.0  )) ),
 						MoveY(5),
+						Look(90),
 						SetCostume("OvalBullet"),
-						SetSize(9),
-						SetColor(15),
+						SetSize(9), SetColor(15),
 						AddCircleHitbox("bulletHB", 6),
 						AddHitboxTag("bulletHB", PLAYER_BULLET),
-						Look(90),
 						
 						Forever("Sequence",
 							Forward(10)

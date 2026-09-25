@@ -15,7 +15,5 @@ public final class SFXCommand implements DialogueCommand {
 		runner.playSound(filename);
 	}
 
-	public String getFilename() {
-		return filename;
-	}
+	public String getFilename() { return filename; }
 }

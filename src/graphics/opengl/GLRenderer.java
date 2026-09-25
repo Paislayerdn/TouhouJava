@@ -2,7 +2,6 @@ package graphics.opengl;
 
 import graphics.Renderer;
 import org.lwjgl.opengl.GL11;
-import graphics.TextAlign;
 
 import java.awt.image.BufferedImage;
 
@@ -314,26 +313,5 @@ public class GLRenderer implements Renderer {
 
 		GL11.glEnd();
 		endDebug();
-	}
-
-	@Override
-	public void text(String text, float x, float y) {
-		GLText.draw(this, text, x, y);
-	}
-
-	@Override
-	public void text(String text, float x, float y, int size) {
-		GLText.draw(this, text, x, y, size);
-	}
-
-	@Override
-	public void text(
-		String text,
-		float x,
-		float y,
-		int size,
-		TextAlign align
-	) {
-		GLText.draw(this, text, x, y, size, align);
 	}
 }

@@ -1,0 +1,15 @@
+/>/nMarisa/n/e/nMarisa01/n/@/n170,-50,0,0/n
+/@/n150,-60,1,0/n
+/>/nReimu/n/e/nReimu01/n/@/n-160,-50,0,0/n
+/@/n-140,-60,1,0/n/d/nMarisa...?/n
+/>/nMarisa/n/f/n[TH] Laser/n/d/nAhh! Reimu!/n
+/d/nWhat are you doing here?/n
+/>/nReimu/n/d/nNo u/n
+/e/nReimu03/n/d/nmy spell.../n
+/d/n%/%thing%/% it works 100%%, doesn't it?/n
+/d/nis the time.. %hour%:%minute%:%second%?/n
+/d/ndate.. %month% %dayth% %year%??/n
+/>/nMarisa/n/e/nMarisa02/n/d/n.../n
+/>/nReimu/n/d/nWhy aren't you saying anything??/n
+/>/nMarisa/n/@/n170,-50,30,0/n/x/nkill/n
+/>/nReimu/n/@/n-160,-50,30,0/n/x/nkill/n

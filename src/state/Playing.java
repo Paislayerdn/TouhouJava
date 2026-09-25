@@ -17,6 +17,8 @@ public class Playing implements GameState {
 	private Music bgm;
 	private Player player;
 	private Boss boss;
+	private final HUD hud;
+	private final Debug debug;
 	private GameplayScript gameScript;
 	private final ActionRunner actions;
 	private DialogueRunner dialogueRunner;
@@ -24,32 +26,34 @@ public class Playing implements GameState {
 	private boolean lastDebugKey = false;
 
 	public Playing() {
-		player = new Player();
-		boss = new Boss(player);
 		actions = new ActionRunner();
 		
-		gameScript = new GameplayScript(this);
-		gameScript.start();
-
-		HUD.init();
-		Debug.init(player, boss);
+		hud = new HUD();
+		
+		player = new Player(hud);
+		boss = new Boss(player);
+		
+		debug = new Debug(player, boss);
 		CollisionManager.init(player, boss);
 		
 		bgm = ResourceLoader.music("PACHAD");
 		bgm.setVolume(-15.0f);
 		bgm.play();
+		
+		gameScript = new GameplayScript(this);
+		gameScript.start();
 	}
 	
 	public void run(Spell spell) {
 		actions.add((Action) spell);
-		if (spell.getCaster() == "LAMBDA") HUD.setSpell(spell);
+		if (spell.getCaster() == "LAMBDA") hud.setCurrentSpell(spell);
 		
 		if (spell.isSpell() && spell.getCaster() != null) {
-			HUD.showSCT(spell.getCaster());
+			hud.showSCT(spell.getCaster());
 		}
 	}
-	public void run(DialogueRunner dialogueRunner) {
-		this.dialogueRunner = dialogueRunner;
+	public void converse(String file) {
+		this.dialogueRunner = new DialogueRunner(this, file);
 	}
 	
 	@Override
@@ -71,8 +75,8 @@ public class Playing implements GameState {
 		
 		CollisionManager.update();
 		
-		HUD.update();
-		Debug.update();
+		hud.update();
+		debug.update();
 	}
 	
 	@Override
@@ -83,23 +87,23 @@ public class Playing implements GameState {
 		player.draw(renderer);
 		BulletManager.draw(renderer);
 
-		if (Debug.isShowHitboxes()) {
+		if (debug.isShowHitboxes()) {
 			BulletManager.drawHitboxes(renderer);
 			boss.drawHitboxes(renderer);
 			player.drawHitboxes(renderer);
 		}
 
-		HUD.drawPlayfield(renderer);
+		hud.drawPlayfield(renderer);
 
 		renderer.endPlayfield();
 
-		HUD.drawOverlay(renderer);
+		hud.drawOverlay(renderer);
 		
 		if (dialogueRunner != null) {
 			dialogueRunner.draw(renderer);
 		}
 		
-		Debug.draw(renderer);
+		debug.draw(renderer);
 	}
 	public Music getBGM() { return bgm; }
 	public Player getPlayer() { return player; }

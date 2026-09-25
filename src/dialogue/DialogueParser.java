@@ -3,23 +3,15 @@ package dialogue;
 import static dialogue.DialogueCommand.*;
 import dialogue.command.*;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 
 public final class DialogueParser {
 	private DialogueParser() {}
 
 	public static Dialogue parse(String source) {
-		source = source.replace("\r\n", "/n");
-		source = source.replace("\n", "/n");
-		source = source.replace("\r", "/n");
-
 		Dialogue dialogue = new Dialogue();
 
-		Deque<String> tokens = new ArrayDeque<>(
-			Arrays.asList(source.split("/n", -1))
-		);
+		Deque<String> tokens = DialogueLexer.tokenize(source);
 
 		while (!tokens.isEmpty()) {
 			String token = tokens.poll();
@@ -41,8 +33,7 @@ public final class DialogueParser {
 					dialogue.addCommand( new SFXCommand(tokens.poll()) );
 
 				case TEXT ->
-					dialogue.addCommand(
-						new TextCommand( tokens.poll()) );
+					dialogue.addCommand( new TextCommand( tokens.poll()) );
 
 				case MISC ->
 					dialogue.addCommand( parseMisc(tokens) );

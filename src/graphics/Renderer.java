@@ -20,8 +20,4 @@ public interface Renderer {
 	void image(BufferedImage image,	float x, float y,	float width, float height);
 	void rectangleOutline(float x,	float y, float width, float height);
 	void circleOutline(float x,	float y, float radius);
-	
-	void text(String text, float x, float y);
-	void text(String text, float x, float y, int size);
-	void text(String text, float x, float y, int size, TextAlign align);
 }

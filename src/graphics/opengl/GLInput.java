@@ -2,10 +2,13 @@ package graphics.opengl;
 
 import static main.Input.*;
 
-import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;
 
-public final class GLInput extends GLFWKeyCallback {
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+
+final class GLInput extends GLFWKeyCallback {
 	@Override
 	public void invoke(long window, int key, int scancode, int action, int mods) {
 		boolean pressed = action != GLFW_RELEASE;
@@ -25,5 +28,23 @@ public final class GLInput extends GLFWKeyCallback {
 
 			case GLFW_KEY_P -> P = pressed;
 		}
+	}
+}
+
+final class GLMouse extends GLFWCursorPosCallback {
+	@Override
+	public void invoke(long window, double xpos, double ypos) {
+		mouseX = (float) xpos;
+		mouseY = (float) ypos;
+	}
+}
+
+final class GLMouseButton extends GLFWMouseButtonCallback {
+	@Override
+	public void invoke(long window, int button, int action, int mods) {
+		boolean pressed = action != GLFW_RELEASE;
+
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+			mousePressed = pressed;
 	}
 }

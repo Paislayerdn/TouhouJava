@@ -6,7 +6,6 @@ import java.awt.geom.AffineTransform;
 import main.Settings;
 import entity.Thing;
 import graphics.Renderer;
-import graphics.TextAlign;
 
 public class Java2DRenderer implements Renderer {
 	private AffineTransform oldTransform;
@@ -81,24 +80,5 @@ public class Java2DRenderer implements Renderer {
 	@Override
 	public void endTitle() {
 		g2.setTransform(oldTransform);
-	}
-
-	@Override
-	public void text(String text, float x, float y) {
-		text(text, x, y, 18, TextAlign.LEFT);
-	}
-
-	@Override
-	public void text(String text, float x, float y, int size) {
-		text(text, x, y, size, TextAlign.LEFT);
-	}
-
-	@Override
-	public void text(
-		String text,
-		float x, float y,
-		int size, TextAlign align
-	) {
-		TextDrawer.draw(g2, text, x, y, size, align);
 	}
 }
