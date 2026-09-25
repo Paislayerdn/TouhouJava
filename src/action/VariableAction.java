@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 public final class VariableAction extends Action {
 	public enum Operation { DECLARE, SET, CHANGE }
 
@@ -22,7 +24,7 @@ public final class VariableAction extends Action {
 		switch (operation) {
 			case DECLARE:
 				if (property != null) {
-					throw JSCDebug.error(this, "Cannot declare reserved value: "+ name);
+					throw Debug.terminate("JScratch", this, "Cannot declare reserved value: "+ name);
 				}
 
 				declareVariable(name, resolve(value));

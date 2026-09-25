@@ -10,6 +10,7 @@ import static action.AngleAction.*;
 import collision.CollisionTag;
 
 import entity.Thing;
+import main.Debug;
 
 public final class JScratch {
 	
@@ -167,7 +168,7 @@ public final class JScratch {
 	public static Action Sequence(Action... actions) { return new Sequence(actions); }
 
 	public static Action Paralell(Action... actions) {
-		JSCDebug.log("Warning, you're mispelling \"Parallel\"...");
+		Debug.warn("JScratch", "you're mispelling \"Parallel\"... Can't you spell?");
 		return Parallel(actions);
 	}
 	public static Action Par(Action... actions) { return Parallel(actions); }
@@ -207,8 +208,9 @@ public final class JScratch {
 		}
 
 		if (container == null) {
-			JSCDebug.log(String.format("[JScratch] Warning, unknown Forever mode: \"%s\"", type));
-			JSCDebug.log("Try be sober. Defaulting to Sequence.");
+			String temp = String.format(
+					"unknown Forever mode: \"%s\"\nTry be sober. Defaulting to Sequence.", type);
+			Debug.warn("JScratch", temp);
 
 			container = new Sequence(actions);
 		}
@@ -299,39 +301,6 @@ public final class JScratch {
 	
 	
 	// PRINT
-	public static Action Print(Object message) { return new PrintAction(message); }
-	public static Action LuaPrint(Object message) { return new JSLPrintAction(message); }
-}
-
-final class JSCDebug {
-	private JSCDebug() {}
-
-	public static void log(Class<?> source, String message) {
-		print("[JScratch " + source.getSimpleName() + "] " + message);
-	}
-	public static void log(Object source, String message) {
-		print("[JScratch " + source.getClass().getSimpleName() + "] " + message);
-	}
-	public static void log(String message) {
-		print("[JScratch] " + message);
-	}
-	private static void print(String message) {
-		System.out.println(message);
-	}
-	
-	public static RuntimeException error(Class<?> source, String message) {
-		return fail("[JScratch " + source.getSimpleName() + "] " + message);
-	}
-	public static RuntimeException error(Object source, String message) {
-		return fail("[JScratch " + source.getClass().getSimpleName() + "] " + message);
-	}
-	public static RuntimeException error(String type, String message) {
-		return fail("[JScratch " + type + "] " + message);
-	}
-	public static RuntimeException error(String message) {
-		return fail("[JScratch] " + message);
-	}
-	private static RuntimeException fail(String message) {
-		throw new IllegalStateException(message);
-	}
+	public static Action Print(Object message) { return new PrintAction(message, true); }
+	public static Action LuaPrint(Object message) { return new PrintAction(message, false); }
 }

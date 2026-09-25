@@ -1,7 +1,7 @@
 package dialogue.command;
 
+import main.Debug;
 import dialogue.DialogueCommand;
-import dialogue.DialogueDebug;
 import dialogue.DialogueLexer;
 import dialogue.DialogueRunner;
 
@@ -19,7 +19,7 @@ public final class TextCommand implements DialogueCommand {
 		runner.setCurrentText(resolved);
 		runner.waitForAdvance();
 
-		DialogueDebug.log(this, "Text: " + resolved);
+		Debug.log(this, "Text: " + resolved);
 	}
 
 	public String getText() { return text; }

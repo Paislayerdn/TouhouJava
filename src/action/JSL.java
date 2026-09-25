@@ -13,8 +13,8 @@ import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import main.Debug;
 import static action.JScratch.*;
-
 import entity.Entity;
 
 public final class JSL {
@@ -230,7 +230,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL",
 					"goTo expects (Entity), (x,y), "
 					+ "(Entity,frames), (endX,endY,frames), "
 					+ "or (startX,startY,endX,endY,frames)"
@@ -260,7 +260,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL", 
 					"setX expects (x), (endX, frames), or (startX, endX, frames)"
 				);
 			}
@@ -287,7 +287,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL", 
 					"setY expects (y), (endY, frames), or (startY, endY, frames)"
 				);
 			}
@@ -318,7 +318,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL", 
 					"look expects (angle), (end angle, frames), "
 					+ "or (start angle, end angle, frames)"
 				);
@@ -343,7 +343,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL", 
 					"turn expects (angle) or (end angle, frames)"
 				);
 			}
@@ -370,7 +370,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException(
+				throw Debug.terminate("JSL", 
 					"lookTowards expects (Entity) or (Entity, frames)"
 				);
 			}
@@ -617,7 +617,7 @@ public final class JSL {
 					);
 				}
 
-				throw new IllegalArgumentException("random expects () or (a, b)");
+				throw Debug.terminate("JSL", "random expects () or (a, b)");
 			}
 		});
 		registerZeroArg(globals, "randomSign", JScratch::RandomSign);
@@ -647,7 +647,7 @@ public final class JSL {
 					Object resolvedIndex = index instanceof Value? ((Value) index).get(action): index;
 
 					if (!(resolvedIndex instanceof Number)) {
-						throw JSCDebug.error("Lua",
+						throw Debug.terminate("Lua",
 							"Lua table index must resolve to a number: " + resolvedIndex
 						);
 					}

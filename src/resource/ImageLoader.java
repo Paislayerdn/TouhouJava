@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import main.Debug;
 
 public final class ImageLoader {
 	private static final String[] EXTENSIONS = {
@@ -27,22 +28,17 @@ public final class ImageLoader {
 		URL url = ResourceFinder.find(ResourceFinder.IMAGE, name, EXTENSIONS);
 
 		if (url == null) {
-			throw new RuntimeException("Image not found: " + name);
+			throw Debug.terminate("Image not found: " + name);
 		}
 
 		try {
 			image = ImageIO.read(url);
 			cache.put(name, image);
-			System.out.println("[ImageLoader] Loaded " + name);
+			Debug.log(ImageLoader.class, "Loaded " + name);
 			return image;
 
 		} catch (IOException e) {
-			throw new RuntimeException(
-					"Failed to load image: " + name,
-					e
-			);
-
+			throw Debug.terminate(ImageLoader.class, "Failed to load image: " + name + ", " + e);
 		}
-
 	}
 }

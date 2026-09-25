@@ -1,12 +1,14 @@
 package action;
 
+import main.Debug;
+
 public final class LogicValue {
 	private LogicValue() {}
 
 	public static Value And(Object... values) {
 		return action -> {
 			if (values.length == 0) {
-				throw JSCDebug.error(LogicValue.class, "And requires at least 1 value");
+				throw Debug.terminate("JScratch", LogicValue.class, "And requires at least 1 value");
 			}
 
 			for (Object value : values) {
@@ -22,7 +24,7 @@ public final class LogicValue {
 	public static Value Or(Object... values) {
 		return action -> {
 			if (values.length == 0) {
-				throw JSCDebug.error(LogicValue.class, "Or requires at least 1 value");
+				throw Debug.terminate("JScratch", LogicValue.class, "Or requires at least 1 value");
 			}
 
 			for (Object value : values) {
@@ -45,16 +47,16 @@ public final class LogicValue {
 			float n = number.floatValue();
 
 			if (n == 1) {
-				JSCDebug.log(LogicValue.class, "Warning: using Number 1 as true.");
+				Debug.log("JScratch", LogicValue.class, "Warning: using Number 1 as true.");
 				return true;
 			}
 			if (n == 0) {
-				JSCDebug.log(LogicValue.class, "Warning: using Number 0 as false.");
+				Debug.log("JScratch", LogicValue.class, "Warning: using Number 0 as false.");
 				return false;
 			}
 		}
 
-		throw JSCDebug.error(LogicValue.class,
+		throw Debug.terminate("JScratch", LogicValue.class,
 				"Expected Boolean or 0/1, got: " + String.valueOf(value));
 	}
 }

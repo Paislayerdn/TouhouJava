@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 import collision.CollisionTag;
 import collision.Hitbox;
 import static collision.Hitboxes.*;
@@ -21,7 +23,7 @@ final class AddCircleHitbox extends Action {
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
 		
-		if (entity.getHitbox(name) != null) throw JSCDebug.error(this, "Hitbox already exists: " + name);
+		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
 		entity.addHitbox( circleHB(entity, name, resolveFloat(radius)) );
 		finish();
@@ -45,7 +47,7 @@ final class AddRectangleHitbox extends Action {
 	public void start() {
 		Entity entity = ActionUtil.requireEntity(this);
 		
-		if (entity.getHitbox(name) != null) throw JSCDebug.error(this, "Hitbox already exists: " + name);
+		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
 		entity.addHitbox(
 			rectangleHB(entity, name, resolveFloat(width), resolveFloat(height))
@@ -71,7 +73,7 @@ final class SetHitboxEnabled extends Action {
 		Entity entity = ActionUtil.requireEntity(this);
 		Hitbox hitbox = entity.getHitbox(name);
 
-		if (hitbox == null) throw JSCDebug.error(this, "Hitbox not found: " + name);
+		if (hitbox == null) throw Debug.terminate("JScratch", this, "Hitbox not found: " + name);
 
 		hitbox.setEnabled(enabled);
 		finish();
@@ -97,7 +99,7 @@ final class SetHitboxTag extends Action {
 		Entity entity = ActionUtil.requireEntity(this);
 		Hitbox hitbox = entity.getHitbox(hitboxName);
 
-		if (hitbox == null) throw JSCDebug.error(this, "Hitbox not found: " + hitboxName);
+		if (hitbox == null) throw Debug.terminate("JScratch", this, "Hitbox not found: " + hitboxName);
 
 		if (add) hitbox.addTag(tag);
 		else hitbox.removeTag(tag);

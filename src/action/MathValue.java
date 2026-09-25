@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 public final class MathValue {
 	private MathValue() {}
 
@@ -122,11 +124,11 @@ public final class MathValue {
 			float degree = action.resolveFloat(n);
 
 			if (degree == 0) {
-				throw JSCDebug.error(MathValue.class, "Root degree cannot be zero");
+				throw Debug.terminate("JScratch", MathValue.class, "Root degree cannot be zero");
 			}
 
 			if (number < 0 && degree == (int) degree && ((int) degree & 1) == 0) {
-				throw JSCDebug.error(MathValue.class, "Cannot take an even root of a negative value");
+				throw Debug.terminate("JScratch", MathValue.class, "Cannot take an even root of a negative value");
 			}
 
 			return (float) Math.pow(number, 1.0 / degree);

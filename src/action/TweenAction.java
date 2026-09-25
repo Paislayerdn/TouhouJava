@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 enum TweenMode {
 	CHASING,
 	SNAPSHOT
@@ -37,10 +39,9 @@ public final class TweenAction extends Action {
 
 		if (property != null) {
 			if (property == ReservedVariable.X || property == ReservedVariable.Y) {
-				JSCDebug.log(
-					"Warning: Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
-					+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)")
-					+ " instead."
+				Debug.warn("JScratch", this,
+					"Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
+					+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)") + " instead."
 				);
 			}
 		}
@@ -74,7 +75,7 @@ public final class TweenAction extends Action {
 	public void start() {
 		resolvedFrames = (int) resolveFloat(frames);
 		if (resolvedFrames < 0) {
-			throw JSCDebug.error(this, "Tween frames cannot be negative: " + frames);
+			throw Debug.terminate("JScratch", this, "Tween frames cannot be negative: " + frames);
 		}
 
 		startValue = resolveFloat(start);
@@ -88,7 +89,7 @@ public final class TweenAction extends Action {
 		setValue(startValue);
 
 		if (resolvedFrames == 0) {
-			JSCDebug.log("Warning: Tween with 0 frames. Why the heck are you doing this?");
+			Debug.log("JScratch", this, "Tween with 0 frames. Immediately finishing...");
 
 			setValue(resolveFloat(end));
 			finish();

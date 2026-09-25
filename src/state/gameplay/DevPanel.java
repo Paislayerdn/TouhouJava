@@ -11,7 +11,7 @@ import static graphics.Coordinate.*;
 import entity.Player;
 import entity.Boss;
 
-public final class Debug {
+public final class DevPanel {
 	private static final int PLAYER_PRECISION = 2;
 	private static final int MOUSE_PRECISION = 0;
 	
@@ -25,7 +25,7 @@ public final class Debug {
 		900, 900, TextAlign.LEFT
 	);
 
-	public Debug(Player player, Boss boss) {
+	public DevPanel(Player player, Boss boss) {
 		this.player = player;
 		this.boss = boss;
 		

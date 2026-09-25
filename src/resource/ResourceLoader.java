@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import main.Debug;
 
 public final class ResourceLoader {
 	private static final Map<String, BufferedImage> images = new HashMap<>();
@@ -55,7 +56,7 @@ public final class ResourceLoader {
 		URL url = ResourceFinder.find(folder, name);
 
 		if (url == null) {
-			throw new RuntimeException("Text resource not found: " + name);
+			throw Debug.terminate(ResourceLoader.class, "Text resource not found: " + name);
 		}
 
 		try (InputStream in = url.openStream()) {
@@ -64,7 +65,7 @@ public final class ResourceLoader {
 				StandardCharsets.UTF_8
 			);
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load text resource: " + name, e);
+			throw Debug.terminate(ResourceLoader.class, "Failed to load text resource: " + name + ", " + e);
 		}
 	}
 	public static String lua(String name) {
@@ -78,7 +79,7 @@ public final class ResourceLoader {
 		URL url = ResourceFinder.find(folder, name, extensions);
 
 		if (url == null) {
-			throw new RuntimeException("Text resource not found: " + name);
+			throw Debug.terminate("Text resource not found: " + name);
 		}
 
 		try (InputStream in = url.openStream()) {
@@ -87,7 +88,7 @@ public final class ResourceLoader {
 				StandardCharsets.UTF_8
 			);
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load text resource: " + name, e);
+			throw Debug.terminate(ResourceLoader.class, "Failed to load text resource: " + name + ", " + e);
 		}
 	}	
 }

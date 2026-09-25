@@ -1,5 +1,6 @@
 package action;
 
+import main.Debug;
 import entity.Thing;
 
 public enum ReservedVariable {
@@ -45,7 +46,7 @@ public enum ReservedVariable {
 			case PIXELATE: return owner.getAppearance().pixelate;
 		}
 
-		throw JSCDebug.error(this, "Unhandled reserved property: " + name);
+		throw Debug.terminate("JScratch", this, "Unhandled reserved property: " + name);
 	}
 	
 	public final void set(Action action, float value) {
@@ -65,7 +66,7 @@ public enum ReservedVariable {
 			case GHOST: owner.getAppearance().setGhost(value); break;
 			case PIXELATE: owner.getAppearance().setPixelate(value); break;
 			default:
-				throw JSCDebug.error(this, "Property is not writable/tweenable: " + name);
+				throw Debug.terminate("JScratch", this, "Property is not writable/tweenable: " + name);
 		}
 	}
 	
@@ -82,9 +83,8 @@ public enum ReservedVariable {
 			default: return;
 		}
 
-		JSCDebug.log(this,
-			"Warning: " + operation
-			+ "(\"" + name + "\", ...) is discouraged. "
+		Debug.log("JScratch", this,
+			operation + "(\"" + name + "\", ...) is discouraged. "
 			+ "Use " + replacement + " instead."
 		);
 	}
@@ -101,9 +101,8 @@ public enum ReservedVariable {
 		// Wrong capitalization: still works, but warn.
 		for (ReservedVariable property : values()) {
 			if (property.name.equalsIgnoreCase(input)) {
-				JSCDebug.log(property,
-					"Warning: \"" + input
-					+ "\" is a reserved value. "
+				Debug.log("JScratch", property,
+					input + "\" is a reserved value. "
 					+ "The standard spelling is \""
 					+ property.name + "\". Try to be sober."
 				);

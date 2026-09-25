@@ -3,6 +3,7 @@ package collision;
 import java.util.Locale;
 import java.util.Set;
 import java.util.HashSet;
+import main.Debug;
 import graphics.Renderer;
 
 import entity.Entity;
@@ -20,7 +21,8 @@ public abstract class Hitbox {
 
 	public Hitbox(Entity owner) {
 		this.owner = owner;
-		System.out.printf("[Collision] %s created a new hitbox without a name.\n", owner.getName() );
+		String temp = String.format("%s created a new hitbox without a name.", owner.getName() );
+		Debug.warn(this, temp);
 	}
 	public Hitbox(Entity owner, String name) {
 		this.owner = owner;

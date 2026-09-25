@@ -1,7 +1,7 @@
 package dialogue.command;
 
+import main.Debug;
 import dialogue.DialogueCommand;
-import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 import dialogue.DialogueThing;
 
@@ -16,6 +16,6 @@ public final class SpeakerCommand implements DialogueCommand {
 	public void execute(DialogueRunner runner) {
 		DialogueThing speaker = runner.getDialogue().getOrCreateSpeaker(name);
 		runner.setCurrentSpeaker(speaker);
-		DialogueDebug.log(this, "Speaker: " + name);
+		Debug.log(this, "Speaker: " + name);
 	}
 }

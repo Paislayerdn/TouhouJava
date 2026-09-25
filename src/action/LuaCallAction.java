@@ -1,6 +1,7 @@
 package action;
 
 import org.luaj.vm2.LuaValue;
+import main.Debug;
 
 public final class LuaCallAction extends Action {
 	private final LuaValue table;
@@ -23,8 +24,7 @@ public final class LuaCallAction extends Action {
 		Object resolvedIndex = resolve(index);
 
 		if (!(resolvedIndex instanceof Number)) {
-			throw JSCDebug.error(
-				this,
+			throw Debug.terminate("JSL", this,
 				"Lua table index must resolve to a number: " + resolvedIndex
 			);
 		}

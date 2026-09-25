@@ -1,8 +1,9 @@
 package dialogue.command;
 
+import main.Debug;
+
 import action.Action;
 import static action.JScratch.*;
-
 import dialogue.*;
 
 public final class MoveCommand implements DialogueCommand {
@@ -31,7 +32,7 @@ public final class MoveCommand implements DialogueCommand {
 
 		if (blocking) runner.waitForMovement(movement);
 
-		DialogueDebug.log(this,
+		Debug.log(this,
 			"Move to (" + x + ", " + y
 			+ ") over " + duration
 			+ " frames"

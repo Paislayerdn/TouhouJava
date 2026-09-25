@@ -3,6 +3,7 @@ package spell;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
+import main.Debug;
 import action.JSL;
 
 import resource.ResourceLoader;
@@ -39,7 +40,7 @@ public final class LuaSpell extends Spell {
 		LuaValue config = luaSpell.get("config");
 
 		if (config.isnil()) {
-			System.out.println("[LuaSpell] No config found, using default values.");
+			Debug.log(this, "No config found, using default values.");
 			return;
 		}
 
@@ -48,41 +49,41 @@ public final class LuaSpell extends Spell {
 		value = config.get("name");
 		if (!value.isnil()) {
 			name = value.tojstring();
-			System.out.println("[LuaSpell] name = " + name);
+			Debug.log(this, "name = " + name);
 		} else {
-			System.out.println("[LuaSpell] name = " + name + " (default)");
+			Debug.log(this, "name = " + name + " (default)");
 		}
 
 		value = config.get("playerCandidateRadius");
 		if (!value.isnil()) {
 			playerCandidateRadius = value.tofloat();
-			System.out.println("[LuaSpell] playerCandidateRadius = " + playerCandidateRadius);
+			Debug.log(this, "playerCandidateRadius = " + playerCandidateRadius);
 		} else {
-			System.out.println("[LuaSpell] playerCandidateRadius = " + playerCandidateRadius + " (default)");
+			Debug.log(this, "playerCandidateRadius = " + playerCandidateRadius + " (default)");
 		}
 
 		value = config.get("timer");
 		if (!value.isnil()) {
 			timer = value.tofloat();
-			System.out.println("[LuaSpell] timer = " + timer);
+			Debug.log(this, "timer = " + timer);
 		} else {
-			System.out.println("[LuaSpell] timer = " + timer + " (default)");
+			Debug.log(this, "timer = " + timer + " (default)");
 		}
 
 		value = config.get("isSpell");
 		if (!value.isnil()) {
 			isSpell = value.toboolean();
-			System.out.println("[LuaSpell] isSpell = " + isSpell);
+			Debug.log(this, "isSpell = " + isSpell);
 		} else {
-			System.out.println("[LuaSpell] isSpell = " + isSpell + " (default)");
+			Debug.log(this, "isSpell = " + isSpell + " (default)");
 		}
 		
 		value = config.get("caster");
 		if (!value.isnil()) {
 			caster = value.tojstring();
-			System.out.println("[LuaSpell] caster = " + caster);
+			Debug.log(this, "caster = " + caster);
 		} else {
-			System.out.println("[LuaSpell] caster = " + caster + " (default)");
+			Debug.log(this, "caster = " + caster + " (default)");
 		}
 	}
 	

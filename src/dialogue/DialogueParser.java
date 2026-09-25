@@ -1,5 +1,6 @@
 package dialogue;
 
+import main.Debug;
 import static dialogue.DialogueCommand.*;
 import dialogue.command.*;
 
@@ -38,7 +39,7 @@ public final class DialogueParser {
 				case MISC ->
 					dialogue.addCommand( parseMisc(tokens) );
 
-				default -> DialogueDebug.log("Unknown token: " + token);
+				default -> Debug.log("Unknown token: " + token);
 			}
 		}
 

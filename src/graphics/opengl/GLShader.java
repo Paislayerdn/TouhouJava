@@ -1,6 +1,7 @@
 package graphics.opengl;
 
 import org.lwjgl.opengl.GL20;
+import main.Debug;
 
 public class GLShader {
 	private final int programId;
@@ -24,9 +25,7 @@ public class GLShader {
 
 		if (GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == 0) {
 			String log = GL20.glGetProgramInfoLog(programId);
-			throw new RuntimeException(
-				"Failed to link shader program:\n" + log
-			);
+			throw Debug.terminate(this, "Failed to link shader program:\n" + log);
 		}
 
 		GL20.glDeleteShader(vertexShader);
@@ -41,7 +40,7 @@ public class GLShader {
 
 		if (GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == 0) {
 			String log = GL20.glGetShaderInfoLog(shader);
-			throw new RuntimeException("Failed to compile shader:\n" + log);
+			throw Debug.terminate(this, "Failed to compile shader:\n" + log);
 		}
 
 		return shader;

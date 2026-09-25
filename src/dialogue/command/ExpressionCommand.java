@@ -1,7 +1,7 @@
 package dialogue.command;
 
+import main.Debug;
 import dialogue.DialogueCommand;
-import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 
 import resource.ResourceLoader;
@@ -19,6 +19,6 @@ public final class ExpressionCommand implements DialogueCommand {
 			.getAppearance()
 			.setCostume(ResourceLoader.image(expression));
 
-		DialogueDebug.log(this, "Expression: " + expression);
+		Debug.log(this, "Expression: " + expression);
 	}
 }

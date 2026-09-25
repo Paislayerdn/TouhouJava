@@ -7,8 +7,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
-
 import org.lwjgl.glfw.GLFWVidMode;
+
+import main.Debug;
 
 public class GLWindow {
 	private final long window;
@@ -19,7 +20,7 @@ public class GLWindow {
 		this.width = width;
 		this.height = height;
 
-		if (!GLFW.glfwInit()) { throw new IllegalStateException("Unable to initialize GLFW"); }
+		if (!GLFW.glfwInit()) { throw Debug.terminate(this, "Unable to initialize GLFW"); }
 
 		GLFW.glfwWindowHint(
 			GLFW.GLFW_RESIZABLE,
@@ -34,7 +35,7 @@ public class GLWindow {
 
 		if (window == 0) {
 			GLFW.glfwTerminate();
-			throw new IllegalStateException("Unable to create GLFW window");
+			throw Debug.terminate(this, "Unable to create GLFW window");
 		}
 		
 		GLFWVidMode videoMode = GLFW.glfwGetVideoMode(

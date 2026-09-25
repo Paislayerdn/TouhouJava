@@ -18,7 +18,7 @@ public class Playing implements GameState {
 	private Player player;
 	private Boss boss;
 	private final HUD hud;
-	private final Debug debug;
+	private final DevPanel devPanel;
 	private GameplayScript gameScript;
 	private final ActionRunner actions;
 	private DialogueRunner dialogueRunner;
@@ -33,7 +33,7 @@ public class Playing implements GameState {
 		player = new Player(hud);
 		boss = new Boss(player);
 		
-		debug = new Debug(player, boss);
+		devPanel = new DevPanel(player, boss);
 		CollisionManager.init(player, boss);
 		
 		bgm = ResourceLoader.music("PACHAD");
@@ -76,7 +76,7 @@ public class Playing implements GameState {
 		CollisionManager.update();
 		
 		hud.update();
-		debug.update();
+		devPanel.update();
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class Playing implements GameState {
 		player.draw(renderer);
 		BulletManager.draw(renderer);
 
-		if (debug.isShowHitboxes()) {
+		if (devPanel.isShowHitboxes()) {
 			BulletManager.drawHitboxes(renderer);
 			boss.drawHitboxes(renderer);
 			player.drawHitboxes(renderer);
@@ -103,7 +103,7 @@ public class Playing implements GameState {
 			dialogueRunner.draw(renderer);
 		}
 		
-		debug.draw(renderer);
+		devPanel.draw(renderer);
 	}
 	public Music getBGM() { return bgm; }
 	public Player getPlayer() { return player; }

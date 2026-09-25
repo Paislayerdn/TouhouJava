@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import main.Debug;
 
 public final class AudioLoader {
 
@@ -34,7 +35,7 @@ public final class AudioLoader {
 			);
 
 			if (url == null) {
-				System.out.println("[AudioLoader] Cannot find audio: " + path + name);
+				Debug.warn(AudioLoader.class, "Cannot find audio: " + path + name);
 				return null;
 			}
 

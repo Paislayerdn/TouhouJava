@@ -1,8 +1,8 @@
 package resource;
 
-import java.io.IOException;
 import java.net.URL;
 import java.awt.Font;
+import main.Debug;
 
 public final class FontLoader {
 	private static final String[] EXTENSIONS = {
@@ -16,9 +16,7 @@ public final class FontLoader {
 		URL url = ResourceFinder.find(ResourceFinder.FONT, name, EXTENSIONS);
 
 		if (url == null) {
-			throw new RuntimeException(
-				"Font not found: " + name
-			);
+			throw Debug.terminate(FontLoader.class, "Font not found: " + name);
 		}
 
 		try {
@@ -28,14 +26,7 @@ public final class FontLoader {
 			);
 
 		} catch (Exception e) {
-
-			throw new RuntimeException(
-				"Failed to load font: " + name,
-				e
-			);
-
+			throw Debug.terminate(FontLoader.class,  "Failed to load font: " + name + ", " + e);
 		}
-
 	}
-
 }

@@ -1,8 +1,9 @@
 package state.gameplay;
 
+import main.Debug;
+
 import action.Action;
 import static action.JScratch.*;
-
 import entity.Thing;
 
 public final class SCT extends Thing {
@@ -24,7 +25,7 @@ public final class SCT extends Thing {
 
 		for (SCTType type : SCTType.values()) {
 			if (type.name().equals(upper)) {
-				System.out.println("SCT caster \"" + caster
+				Debug.log(SCT.class, "caster \"" + caster
 					+ "\" should be written as \""
 					+ upper + "\"."
 				);
@@ -32,7 +33,7 @@ public final class SCT extends Thing {
 			}
 		}
 
-		throw new IllegalStateException("Unknown SCT caster: " + caster);
+		throw Debug.terminate(SCT.class, "Unknown SCT caster: " + caster);
 	}
 
 	private void setup() {

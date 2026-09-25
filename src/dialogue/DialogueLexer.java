@@ -3,6 +3,7 @@ package dialogue;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import main.Debug;
 
 public final class DialogueLexer {
 	private DialogueLexer() {}
@@ -48,9 +49,7 @@ public final class DialogueLexer {
 			Object value = runner.resolveVariable(name);
 
 			if (value == null) {
-				throw new IllegalArgumentException(
-					"[DialogueLexer] Unknown dialogue variable: " + name
-				);
+				throw Debug.terminate(DialogueLexer.class, "Unknown dialogue variable: " + name);
 			}
 
 			result.append(value);

@@ -1,7 +1,7 @@
 package dialogue.command;
 
+import main.Debug;
 import dialogue.DialogueCommand;
-import dialogue.DialogueDebug;
 import dialogue.DialogueRunner;
 
 public final class MiscCommand implements DialogueCommand {
@@ -16,10 +16,10 @@ public final class MiscCommand implements DialogueCommand {
 	@Override
 	public void execute(DialogueRunner runner) {
 		switch (command) {
-			case "print" -> DialogueDebug.log(argument);
+			case "print" -> Debug.log(argument);
 			case "kill" -> runner.removeCurrentSpeaker();
 			case "name" -> runner.setCurrentSpeakerName(argument);
-			default -> DialogueDebug.log(this, "Unknown misc command: " + command);
+			default -> Debug.log(this, "Unknown misc command: " + command);
 		}
 	}
 

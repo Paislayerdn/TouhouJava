@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 import entity.Thing;
 import entity.Entity;
 
@@ -45,6 +47,6 @@ final class ActionUtil {
 		if (action.getOwner() instanceof Entity entity) {
 			return entity;
 		}
-		throw JSCDebug.error(action, "Owner must be an Entity");
+		throw Debug.terminate("JScratch", action, "Owner must be an Entity");
 	}
 }

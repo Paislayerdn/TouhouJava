@@ -1,5 +1,7 @@
 package action;
 
+import main.Debug;
+
 final class WaitAction extends Action {
 	private final Object duration;
 	private int timer;
@@ -24,7 +26,7 @@ final class WaitAction extends Action {
 		int intDuration = (int) resolveFloat(duration);
 
 		if (intDuration < 0) {
-			JSCDebug.log(this,
+			Debug.warn("JScratch", this,
 				"Why would you wait with negative time. "
 				+ "Defaulting to 1 frame. "
 				+ "Are you trying to predict the future?"
@@ -33,10 +35,7 @@ final class WaitAction extends Action {
 		}
 
 		if (intDuration == 0) {
-			JSCDebug.log(this,
-				"Why would you wait with 0 frames? "
-				+ "Aborting this wait, good luck."
-			);
+			Debug.log("JScratch", this, "Waiting for 0 frames, aborting this wait.");
 			finish();
 		}
 	}
