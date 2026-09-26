@@ -3,16 +3,20 @@ package graphics.java2d;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
+import graphics.Renderer;
+
 import main.Settings;
 import entity.Thing;
-import graphics.Renderer;
+import background3d.Background3D;
 
 public class Java2DRenderer implements Renderer {
 	private AffineTransform oldTransform;
 	private final Graphics2D g2;
+	private final JavaB3D b3d;
 
 	public Java2DRenderer(Graphics2D g2) {
 		this.g2 = g2;
+		this.b3d = new JavaB3D(g2);
 	}
 
 	@Override
@@ -27,6 +31,11 @@ public class Java2DRenderer implements Renderer {
 	@Override
 	public void thing(Thing thing) {
 		Depict.thing(g2, thing);
+	}
+	
+	@Override
+	public void background3D(Background3D background) {
+		b3d.render(background);
 	}
 
 	@Override

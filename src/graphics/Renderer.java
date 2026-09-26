@@ -1,7 +1,9 @@
 package graphics;
 
 import java.awt.image.BufferedImage;
+
 import entity.Thing;
+import background3d.Background3D;
 
 public interface Renderer {
 	void clear();
@@ -15,6 +17,8 @@ public interface Renderer {
 	void endTitle();
 
 	void thing(Thing thing);
+	
+	void background3D(Background3D background);
 
 	void image(BufferedImage image, float x, float y);
 	void image(BufferedImage image,	float x, float y,	float width, float height);

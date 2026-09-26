@@ -11,12 +11,14 @@ import resource.ResourceLoader;
 
 import entity.Appearance;
 import entity.Thing;
+import background3d.Background3D;
 
 public class GLRenderer implements Renderer {
 	private static final String VERTEX_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.vert");
 	private static final String FRAGMENT_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.frag");
 	private final int width;
 	private final int height;
+	private final GLB3D b3d;
 	
 	private final GLShader shader;
 	private GLTexture currentTexture;
@@ -47,11 +49,11 @@ public class GLRenderer implements Renderer {
 	}
 	
 	public GLRenderer(int width, int height) {
-		shader = new GLShader(VERTEX_SHADER, FRAGMENT_SHADER);
-
+		this.shader = new GLShader(VERTEX_SHADER, FRAGMENT_SHADER);
 		this.width = width;
 		this.height = height;
-
+		this.b3d = new GLB3D();
+		
 		GL11.glViewport(0, 0, width, height);
 
 		// Game coordinate system:
@@ -220,6 +222,11 @@ public class GLRenderer implements Renderer {
 			x3, y3,
 			x4, y4
 		);
+	}
+	
+	@Override
+	public void background3D(Background3D background) {
+		b3d.render(background);
 	}
 
 	@Override

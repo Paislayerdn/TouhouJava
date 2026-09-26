@@ -68,7 +68,7 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -100, 0, "ghost", 100, 0, 30),
+					Tween("brightness", -0, 0, "ghost", 100, 0, 30),
 					Tween("speed", -1, 15),
 					Tween("speed", -5, 15),
 					Tween("size", 45,"ghost", 100, 30),
@@ -93,7 +93,7 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -100, 0, "ghost", 100, 0, 30),
+					Tween("brightness", -0, 0, "ghost", 100, 0, 30),
 					Tween("speed", 1, 15),
 					Tween("speed", 5, 15),
 					Tween("size", 45,"ghost", 100, 30),
