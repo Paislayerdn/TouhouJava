@@ -37,7 +37,7 @@ public final class LuaSpell extends Spell {
 	
 	@Override
 	protected void configure() {
-		LuaValue config = luaSpell.get("config");
+		LuaValue config = luaSpell.get("configure");
 
 		if (config.isnil()) {
 			Debug.log(this, "No config found, using default values.");

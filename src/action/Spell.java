@@ -17,15 +17,21 @@ public abstract class Spell extends Action {
 	protected boolean isSpell = false;
 	protected String caster = null;
 
-	public final boolean isSpell() { return isSpell; }
-	public final String getCaster() { return caster; }
-	
 	protected float timer = 1770.0f; // 29.5 seconds
 	protected float countableTime;
 	private boolean timerStarted;
 	private boolean counting;
 	private int lastSecond;
 	private final Sound LS;
+	
+	public String getName() { return name; }
+	public float getPlayerCandidateRadius() { return playerCandidateRadius; }
+	public final boolean isSpell() { return isSpell; }
+	public float getCountableTime() { return countableTime; }
+	public boolean isTimerStarted() { return timerStarted; }
+	public int getLastSecond() { return lastSecond; }
+	public final String getCaster() { return caster; }
+	
 	public final float getTimer() { return timer; }
 	public final void startTimer() {
 		lastSecond = (int) Math.ceil(timer / 60.0f);
@@ -43,7 +49,6 @@ public abstract class Spell extends Action {
 	}
 
 	public void onEnd() {}
-
 	protected abstract void configure();
 	protected abstract void onStart();
 	protected abstract Action buildAction();

@@ -7,11 +7,11 @@ local w2mid = (w2spike+1)/2
 local w3bloom = 29
 local cooldowns = {20, 5, 15, 10}
 
-spellData.config = {
+spellData.configure = {
 	name = "Touhou 20 Stage 5 Midboss bs idk wth is that holy cow",
 	timer = 60*60,
 	playerCandidateRadius = 70,
-	isSpell = false,
+	isSpell = true,
 	caster = "LAMBDA"
 }
 

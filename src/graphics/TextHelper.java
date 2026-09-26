@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import main.Debug;
 
 public final class TextHelper {
 	private static final Font FONT = new Font("Arial", Font.PLAIN, 64);
@@ -41,8 +42,7 @@ public final class TextHelper {
 	}
 
 	private static BufferedImage createGlyphImage(int codePoint) {
-		String text =
-			new String(Character.toChars(codePoint));
+		String text = new String(Character.toChars(codePoint));
 
 		BufferedImage temporary = new BufferedImage(
 			1,
@@ -108,17 +108,13 @@ public final class TextHelper {
 
 	public static List<Glyph> createGlyphs(
 		String text,
-		float x,
-		float y,
-		float width,
-		float height,
-		TextAlign align,
-		float size
+		float x, float y,
+		float width, float height,
+		TextAlign align, float size
 	) {
 		List<Glyph> glyphs = new ArrayList<>();
 
-		if (text == null || text.isEmpty())
-			return glyphs;
+		if (text == null || text.isEmpty()) return glyphs;
 
 		float scale = size / 100.0f;
 		float lineHeight = getLineHeight() * scale;
@@ -127,17 +123,12 @@ public final class TextHelper {
 		int paragraphStart = 0;
 
 		for (int i = 0; i <= text.length(); i++) {
-			boolean end =
-				i == text.length();
+			boolean end = i == text.length();
+			boolean newline = !end && text.charAt(i) == '\n';
 
-			boolean newline =
-				!end && text.charAt(i) == '\n';
+			if (!end && !newline) continue;
 
-			if (!end && !newline)
-				continue;
-
-			String paragraph =
-				text.substring(paragraphStart, i);
+			String paragraph = text.substring(paragraphStart, i);
 
 			layoutParagraph(
 				paragraph,
@@ -149,24 +140,17 @@ public final class TextHelper {
 				glyphs
 			);
 
-			int lineCount =
-				getLineCount(paragraph, width, size);
+			int lineCount = getLineCount(paragraph, width, size);
 
 			cursorY -= lineCount * lineHeight;
 
 			if (newline) {
-				if (paragraph.isEmpty())
-					cursorY -= lineHeight;
-
+				if (paragraph.isEmpty()) cursorY -= lineHeight;
 				paragraphStart = i + 1;
 			}
 		}
 
-		if (y - cursorY > height) {
-			System.err.println(
-				"[TextHelper] Text exceeds TextBox height."
-			);
-		}
+		if (y - cursorY > height) Debug.warn(TextHelper.class, text + " exceeds TextBox height.");
 
 		return glyphs;
 	}

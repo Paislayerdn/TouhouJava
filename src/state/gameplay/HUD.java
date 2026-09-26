@@ -21,6 +21,7 @@ public final class HUD {
 
 	private TextBox spellWhole;
 	private TextBox spellDecimal;
+	private TextBox spellName;
 
 	private final TextBox scoreValue;
 	private final TextBox grazeValue;
@@ -28,7 +29,7 @@ public final class HUD {
 	private final TextBox livesValue;
 	private final TextBox bombsValue;
 	
-	private BufferedImage foreground;
+	private final BufferedImage foreground;
 	
 	private final ArrayList<Thing> SCTs = new ArrayList<>();
 	private Spell currentSpell;
@@ -36,10 +37,12 @@ public final class HUD {
 	public HUD() {
 		this.foreground = ResourceLoader.image("Foreground");
 		
-		this.spellWhole = addText(PLAYFIELD_TEXTS, "0",0,300,200,100,TextAlign.RIGHT);
-		this.spellWhole.setGlyphSize(50.0f);
-		this.spellDecimal = addText(PLAYFIELD_TEXTS, ".00",0,300,200,100,TextAlign.LEFT);
-		this.spellDecimal.setGlyphSize(31.25f);
+		this.spellWhole = addText(PLAYFIELD_TEXTS, "",0,260, 180,100,TextAlign.RIGHT);
+		this.spellWhole.setGlyphSize(45.0f);
+		this.spellDecimal = addText(PLAYFIELD_TEXTS, "",0,260, 180,100,TextAlign.LEFT);
+		this.spellDecimal.setGlyphSize(25.0f);
+		this.spellName = addText(PLAYFIELD_TEXTS, "", 280,315, 600,200,TextAlign.RIGHT);
+		this.spellName.setGlyphSize(29.0f);
 		
 		TextBox temp;
 		temp = addText(OVERLAY_TEXTS, "SCORE", 260, 290, 300, 100, TextAlign.LEFT);
@@ -82,7 +85,11 @@ public final class HUD {
 		return box;
 	}
 
-	public void setCurrentSpell(Spell cS) { this.currentSpell = cS; }
+	public void setCurrentSpell(Spell cS) {
+		this.currentSpell = cS;
+		System.out.println( cS.getName() );
+		this.spellName.setText( cS.getName() );
+	}
 
 	public void showSCT(String caster) {
 		SCTs.add(new SCT(caster));
@@ -154,9 +161,8 @@ public final class HUD {
 	}
 
 	private void drawSCTs(Renderer renderer) {
-		for (Thing thing : SCTs) {
+		for (Thing thing : new ArrayList<>(SCTs))
 			thing.draw(renderer);
-		}
 	}
 	
 	private String pad(long value, int digits) {

@@ -6,7 +6,7 @@ local density = 107
 local angle = 360/density
 local step = -20
 
-spellData.config = {
+spellData.configure = {
 	name = "Junko",
 	timer = 120*60,
 	playerCandidateRadius = 30,

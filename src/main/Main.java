@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import resource.ResourceLoader;
 
 public class Main {
-	private static final boolean OPENGL = true;
+	private static final boolean OPENGL = false;
 	
 	public static void main(String[] args) {
 		if (OPENGL) { runOpenGL(); } else { runJava2D(); }

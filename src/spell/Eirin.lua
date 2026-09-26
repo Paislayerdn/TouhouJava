@@ -6,7 +6,7 @@ local initialSpeed = 1.25
 local angle1, angle2 = 360/rings, 360/density
 local cooldown = 175
 
-spellData.config = {
+spellData.configure = {
 	name = "Eirin",
 	timer = 120*60,
 	playerCandidateRadius = 35,

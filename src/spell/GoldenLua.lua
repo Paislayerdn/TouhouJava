@@ -4,7 +4,7 @@ local count = 350
 local step = 2.25
 local goldenAngle = 360 * (1 - 2 / (1 + math.sqrt(5)))
 
-spellData.config = {
+spellData.configure = {
 	name = "[Lua Debug] Replication Sign \"Digitalized Pebbles\"",
 	timer = 3600,
 	playerCandidateRadius = 40,
