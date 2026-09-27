@@ -34,11 +34,18 @@ public class Java2DRenderer implements Renderer {
 	}
 	
 	@Override
-	public void backgroundObject(
-		BackgroundObject object,
-		BackgroundCamera camera
-	) {
-		b3d.render(object, camera);
+	public void beginBackground(BackgroundCamera camera) {
+		b3d.beginBackground(camera);
+	}
+
+	@Override
+	public void backgroundObject(BackgroundObject object) {
+		b3d.render(object);
+	}
+
+	@Override
+	public void endBackground() {
+		b3d.endBackground();
 	}
 
 	@Override

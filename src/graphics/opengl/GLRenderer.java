@@ -225,13 +225,126 @@ public class GLRenderer implements Renderer {
 	}
 	
 	@Override
-	public void backgroundObject(
-		BackgroundObject object,
-		BackgroundCamera camera
-	) {
-		// move the existing JavaB3D rendering logic here
+	public void beginBackground(BackgroundCamera camera) {
+		endShader();
+
+		int viewportX = (int) (
+			Settings.HALF_WIDTH
+			+ Settings.PLAYFIELD_LEFT
+		);
+
+		int viewportY = (int) (
+			Settings.HALF_HEIGHT
+			+ Settings.PLAYFIELD_BOTTOM
+		);
+
+		GL11.glViewport(
+			viewportX,
+			viewportY,
+			Settings.PLAYFIELD_WIDTH,
+			Settings.PLAYFIELD_HEIGHT
+		);
+
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glPushMatrix();
+		GL11.glLoadIdentity();
+
+		float aspect =
+			(float) Settings.PLAYFIELD_WIDTH
+			/ Settings.PLAYFIELD_HEIGHT;
+
+		float fov = 48.5f;
+		float near = 1.0f;
+		float far = 10000.0f;
+
+		float top = (float) (
+			Math.tan(Math.toRadians(fov / 2.0f)) * near
+		);
+
+		float right = top * aspect;
+
+		GL11.glFrustum(
+			-right, right,
+			-top, top,
+			near, far
+		);
+
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glPushMatrix();
+		GL11.glLoadIdentity();
+
+		// Camera transform.
+		GL11.glScalef(1.0f, 1.0f, -1.0f);
+
+		GL11.glRotatef(
+			-camera.roll,
+			0.0f, 0.0f, 1.0f
+		);
+
+		GL11.glRotatef(
+			-camera.yaw,
+			0.0f, 1.0f, 0.0f
+		);
+
+		GL11.glRotatef(
+			-camera.pitch,
+			1.0f, 0.0f, 0.0f
+		);
+
+		GL11.glTranslatef(
+			-camera.x,
+			-camera.y,
+			-camera.z
+		);
 	}
 
+	@Override
+	public void endBackground() {
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glPopMatrix();
+
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glPopMatrix();
+
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+		GL11.glViewport(
+			0,0,
+			width, height
+		);
+
+		beginShader();
+	}
+	@Override
+	public void backgroundObject(BackgroundObject object) {
+		Appearance appearance = object.appearance;
+
+		shader.setFloat("color", appearance.color);
+		shader.setFloat("brightness", appearance.brightness);
+		shader.setFloat(
+			"alpha",
+			(100.0f - appearance.ghost) / 100.0f
+		);
+
+		b3d.render(object);
+	}
+	
+	@Override
+	public void beginTitle() {
+		GL11.glPushMatrix();
+		beginShader();
+	}
+
+	@Override
+	public void endTitle() {
+		endShader();
+		if (currentTexture != null) {
+			currentTexture.unbind();
+			currentTexture = null;
+		}
+		
+		GL11.glPopMatrix();
+	}
 	@Override
 	public void beginPlayfield() {
 		GL11.glPushMatrix();
@@ -256,22 +369,6 @@ public class GLRenderer implements Renderer {
 		GL11.glPopMatrix();
 	}
 
-	@Override
-	public void beginTitle() {
-		GL11.glPushMatrix();
-		beginShader();
-	}
-
-	@Override
-	public void endTitle() {
-		endShader();
-		if (currentTexture != null) {
-			currentTexture.unbind();
-			currentTexture = null;
-		}
-		
-		GL11.glPopMatrix();
-	}
 
 	private void beginDebug() {
 		endShader();

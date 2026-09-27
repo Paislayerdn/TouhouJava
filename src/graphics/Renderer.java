@@ -10,15 +10,17 @@ public interface Renderer {
 	
 	void scale(float x, float y);
 
-	void beginPlayfield();
-	void endPlayfield();
-
 	void beginTitle();
 	void endTitle();
 
+	void beginPlayfield();
+	void endPlayfield();
+
 	void thing(Thing thing);
 	
-	void backgroundObject(BackgroundObject object, BackgroundCamera camera);
+	void beginBackground(BackgroundCamera camera);
+	void endBackground();
+	void backgroundObject(BackgroundObject object);
 
 	void image(BufferedImage image, float x, float y);
 	void image(BufferedImage image,	float x, float y,	float width, float height);

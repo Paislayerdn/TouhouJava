@@ -28,6 +28,23 @@ public final class Background3D {
 			}
 		}
 	}
+	public void render(Renderer renderer) {
+		renderer.beginBackground(camera);
+
+		for (BackgroundObject object : objects) {
+			if (!object.visible) {
+				continue;
+			}
+
+			renderer.backgroundObject(object);
+		}
+
+		renderer.endBackground();
+	}
+	public void update() {
+		// Nothing yet.
+	}
+	
 	private void loadCamera(JBMLCamera source) {
 		camera.setXYZ(source.x, source.y, source.z);
 		camera.setRotation(source.pitch, source.yaw, source.roll);
@@ -70,17 +87,4 @@ public final class Background3D {
 	public List<BackgroundObject> getObjects() { return objects; }
 	public void add(BackgroundObject object) { objects.add(object); }
 	public void remove(BackgroundObject object) { objects.remove(object); }
-
-	public void render(Renderer renderer) {
-		for (BackgroundObject object : objects) {
-			if (!object.visible) {
-				continue;
-			}
-
-			renderer.backgroundObject(object, camera);
-		}
-	}
-	public void update() {
-		// Nothing yet.
-	}
 }

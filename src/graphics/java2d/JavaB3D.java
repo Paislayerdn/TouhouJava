@@ -1,13 +1,9 @@
 package graphics.java2d;
 
 import java.awt.Graphics2D;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
-import java.awt.Shape;
-import java.awt.geom.Path2D;
 
-import background3d.Background3D;
 import background3d.BackgroundCamera;
 import background3d.BackgroundObject;
 import entity.Appearance;
@@ -17,15 +13,17 @@ public final class JavaB3D {
 	private static final float FOCAL_LENGTH = 500.0f;
 
 	private final Graphics2D g2;
+	private BackgroundCamera camera;
 
 	public JavaB3D(Graphics2D g2) {
 		this.g2 = g2;
 	}
 
-	public void render(
-		BackgroundObject object,
-		BackgroundCamera camera
-	) {
+	public void beginBackground(BackgroundCamera camera) {
+		this.camera = camera;
+	}
+
+	public void render(BackgroundObject object) {
 		if (!object.visible) {
 			return;
 		}
@@ -57,25 +55,25 @@ public final class JavaB3D {
 				object.roll
 			);
 
-			corner.x += object.x - camera.x;
-			corner.y += object.y - camera.y;
-			corner.z += object.z - camera.z;
+			corner.x += object.x;
+			corner.y += object.y;
+			corner.z += object.z;
 		}
 
 		BufferedImage image = appearance.getRenderedCostume();
 
 		drawTexturedPlane(
 			image,
-			object,
-			camera,
 			corners
 		);
 	}
-	
+
+	public void endBackground() {
+		this.camera = null;
+	}
+
 	private void drawTexturedPlane(
 		BufferedImage image,
-		BackgroundObject object,
-		BackgroundCamera camera,
 		Point3[] corners
 	) {
 		int width = image.getWidth();
@@ -90,16 +88,16 @@ public final class JavaB3D {
 				float u1 = (float) (col + 1) / MESH_SIZE;
 
 				Point3 p00 = interpolatePlane(
-					object, camera, corners, u0, v0
+					corners, u0, v0
 				);
 				Point3 p10 = interpolatePlane(
-					object, camera, corners, u1, v0
+					corners, u1, v0
 				);
 				Point3 p11 = interpolatePlane(
-					object, camera, corners, u1, v1
+					corners, u1, v1
 				);
 				Point3 p01 = interpolatePlane(
-					object, camera, corners, u0, v1
+					corners, u0, v1
 				);
 
 				if (p00.z <= 0 || p10.z <= 0
@@ -135,10 +133,8 @@ public final class JavaB3D {
 			}
 		}
 	}
-	
-	private static Point3 interpolatePlane(
-		BackgroundObject object,
-		BackgroundCamera camera,
+
+	private Point3 interpolatePlane(
 		Point3[] corners,
 		float u,
 		float v
@@ -161,9 +157,6 @@ public final class JavaB3D {
 			v
 		);
 
-		point.x += object.x - camera.x;
-		point.y += object.y - camera.y;
-		point.z += object.z - camera.z;
 		rotateCamera(
 			point,
 			camera.pitch,
@@ -173,17 +166,19 @@ public final class JavaB3D {
 
 		return point;
 	}
+
 	private static Point3 interpolate(
-			Point3 a,
-			Point3 b,
-			float t
-		) {
-			return new Point3(
-				a.x + (b.x - a.x) * t,
-				a.y + (b.y - a.y) * t,
-				a.z + (b.z - a.z) * t
-			);
-		}
+		Point3 a,
+		Point3 b,
+		float t
+	) {
+		return new Point3(
+			a.x + (b.x - a.x) * t,
+			a.y + (b.y - a.y) * t,
+			a.z + (b.z - a.z) * t
+		);
+	}
+
 	private void drawTriangle(
 		BufferedImage image,
 		float sx0, float sy0,
@@ -197,20 +192,20 @@ public final class JavaB3D {
 		java.awt.geom.Path2D.Float clip =
 			new java.awt.geom.Path2D.Float();
 
-		clip.moveTo(d0.x, -d0.y);
-		clip.lineTo(d1.x, -d1.y);
-		clip.lineTo(d2.x, -d2.y);
+		clip.moveTo(d0.x, d0.y);
+		clip.lineTo(d1.x, d1.y);
+		clip.lineTo(d2.x, d2.y);
 		clip.closePath();
 
 		g2.clip(clip);
 
 		AffineTransform transform = createAffineTransform(
-			sx0, image.getHeight() - sy0,
-			sx1, image.getHeight() - sy1,
-			sx2, image.getHeight() - sy2,
-			d0.x, -d0.y,
-			d1.x, -d1.y,
-			d2.x, -d2.y
+			sx0, sy0,
+			sx1, sy1,
+			sx2, sy2,
+			d0.x, d0.y,
+			d1.x, d1.y,
+			d2.x, d2.y
 		);
 
 		g2.drawImage(image, transform, null);
@@ -218,6 +213,7 @@ public final class JavaB3D {
 		g2.setClip(oldClip);
 		g2.setTransform(oldTransform);
 	}
+
 	private static AffineTransform createAffineTransform(
 		float sx0, float sy0,
 		float sx1, float sy1,
@@ -263,7 +259,7 @@ public final class JavaB3D {
 			tx, ty
 		);
 	}
-	
+
 	private static void rotate(
 		Point3 p,
 		float pitch,
@@ -274,6 +270,7 @@ public final class JavaB3D {
 		rotateY(p, yaw);
 		rotateZ(p, roll);
 	}
+
 	private static void rotateCamera(
 		Point3 p,
 		float pitch,
@@ -284,6 +281,7 @@ public final class JavaB3D {
 		rotateY(p, -yaw);
 		rotateX(p, -pitch);
 	}
+
 	private static void rotateX(Point3 p, float angle) {
 		float rad = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(rad);
@@ -295,6 +293,7 @@ public final class JavaB3D {
 		p.y = y;
 		p.z = z;
 	}
+
 	private static void rotateY(Point3 p, float angle) {
 		float rad = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(rad);
@@ -306,6 +305,7 @@ public final class JavaB3D {
 		p.x = x;
 		p.z = z;
 	}
+
 	private static void rotateZ(Point3 p, float angle) {
 		float rad = (float) Math.toRadians(angle);
 		float cos = (float) Math.cos(rad);
@@ -330,7 +330,7 @@ public final class JavaB3D {
 			p.y * perspective * zoom
 		);
 	}
-	
+
 	private static final class Point3 {
 		float x;
 		float y;
@@ -342,7 +342,7 @@ public final class JavaB3D {
 			this.z = z;
 		}
 	}
-	
+
 	private static final class Point2 {
 		float x;
 		float y;
