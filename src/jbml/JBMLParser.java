@@ -23,6 +23,7 @@ public final class JBMLParser {
 				case CAMERA -> scene.declarations.add(parseCamera());
 				case WORLD -> scene.declarations.add(parseWorld());
 				case SKY -> scene.declarations.add(parseSky());
+				case EVENT -> scene.events.add(parseEvent());
 
 				default -> error();
 			}
@@ -97,6 +98,63 @@ public final class JBMLParser {
 			transform[4],
 			transform[5]
 		);
+	}
+
+	private JBMLEvent parseEvent() {
+		expect(JBMLTokenType.EVENT);
+
+		String name = expect(JBMLTokenType.IDENTIFIER).text;
+
+		JBMLEvent event = new JBMLEvent(name);
+
+		while (!check(JBMLTokenType.END)) {
+			switch (peek().type) {
+				case SET -> event.commands.addAll(parseSet());
+				default -> error();
+			}
+		}
+
+		expect(JBMLTokenType.END);
+
+		return event;
+	}
+
+	private List<JBMLCommand> parseSet() {
+		expect(JBMLTokenType.SET);
+
+		String target = expect(JBMLTokenType.IDENTIFIER).text;
+		String property = expect(JBMLTokenType.IDENTIFIER).text;
+
+		List<JBMLCommand> commands = new java.util.ArrayList<>();
+
+		if (property.equalsIgnoreCase("XYZ")) {
+			commands.add(new JBMLSet(target, "x", number()));
+			commands.add(new JBMLSet(target, "y", number()));
+			commands.add(new JBMLSet(target, "z", number()));
+			return commands;
+		}
+
+		if (property.equalsIgnoreCase("ROTATION")) {
+			commands.add(new JBMLSet(target, "pitch", number()));
+			commands.add(new JBMLSet(target, "yaw", number()));
+			commands.add(new JBMLSet(target, "roll", number()));
+			return commands;
+		}
+
+		Object value;
+
+		if (check(JBMLTokenType.NUMBER)) {
+			value = number();
+		} else if (check(JBMLTokenType.STRING)) {
+			value = advance().text;
+		} else {
+			error();
+			return null;
+		}
+
+		commands.add(new JBMLSet(target, property, value));
+
+		return commands;
 	}
 
 	private float[] parseTransform() {

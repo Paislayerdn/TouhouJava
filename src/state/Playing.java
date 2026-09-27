@@ -46,7 +46,8 @@ public class Playing implements GameState {
 		bgm.setVolume(-15.0f);
 		bgm.play();
 		
-		background.load("test");
+		background.load("test1");
+		background.event("init");
 		
 //		BackgroundObject object;
 //		object = new BackgroundObject(-60, 0, 150, 200, 200);

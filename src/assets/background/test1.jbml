@@ -1,15 +1,17 @@
 SCENE
-	CAMERA 0 0 -200 15 0 0
+	CAMERA 0 40 -150 10 0 0
 
 	WORLD
-		OBJECT tree1 0 0 200
-		OBJECT LEFT -100 0 300 0 30 0
-		OBJECT RIGHT 100 0 300 0 -30 0
-		PLANE GROUND 0 -200 400 90 0 0
+		plane ground 0 -20 0 90 0 0
+		OBJECT tree1 50 0 0
+		OBJECT tree2 -50 0 0
+		OBJECT tree3 25 0 100
 	END
 
-	SKY
-		OBJECT SKYLEFT -200 100 500 0 45 0
-		OBJECT SKYRIGHT 200 100 500 0 -45 0
+	EVENT init
+		SET tree1 costume "Test2Tree"
+		SET tree2 costume "Test2Tree"
+		SET tree3 costume "Test2Tree"
+		SET ground costume "Test2Ground"
 	END
 END

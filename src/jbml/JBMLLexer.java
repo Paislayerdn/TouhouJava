@@ -163,7 +163,6 @@ public final class JBMLLexer {
 			case "CHANGE" -> JBMLTokenType.CHANGE;
 			case "TWEEN" -> JBMLTokenType.TWEEN;
 			case "CALL" -> JBMLTokenType.CALL;
-			case "PARALLEL" -> JBMLTokenType.PARALLEL;
 			case "FOREVER" -> JBMLTokenType.FOREVER;
 			case "WAIT" -> JBMLTokenType.WAIT;
 

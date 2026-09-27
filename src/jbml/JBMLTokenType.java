@@ -18,7 +18,6 @@ public enum JBMLTokenType {
 	CHANGE,
 	TWEEN,
 	CALL,
-	PARALLEL,
 	FOREVER,
 	WAIT,
 
