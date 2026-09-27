@@ -7,7 +7,7 @@ import graphics.Renderer;
 
 import main.Settings;
 import entity.Thing;
-import background3d.Background3D;
+import background3d.*;
 
 public class Java2DRenderer implements Renderer {
 	private AffineTransform oldTransform;
@@ -34,8 +34,11 @@ public class Java2DRenderer implements Renderer {
 	}
 	
 	@Override
-	public void background3D(Background3D background) {
-		b3d.render(background);
+	public void backgroundObject(
+		BackgroundObject object,
+		BackgroundCamera camera
+	) {
+		b3d.render(object, camera);
 	}
 
 	@Override

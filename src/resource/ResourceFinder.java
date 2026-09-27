@@ -9,6 +9,7 @@ public final class ResourceFinder {
 	public static final String FONT = "/assets/fonts/";
 	public static final String DIALOGUE = "/assets/dialogue/";
 	public static final String SPELL = "/spell/";
+	public static final String BACKGROUND = "/assets/background/";
 	
 	private ResourceFinder() {}
 

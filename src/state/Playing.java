@@ -46,29 +46,30 @@ public class Playing implements GameState {
 		bgm.setVolume(-15.0f);
 		bgm.play();
 		
-		BackgroundObject object;
-		object = new BackgroundObject(-60, 0, 150, 200, 200);
-		object.appearance.setCostume(
-			ResourceLoader.image("Icon")
-		);
-		object.setRotation(0, 90, 0);
-		background.add(object);
-		object = new BackgroundObject(0, 0, 150, 200, 200);
-		object.appearance.setCostume(
-			ResourceLoader.image("Icon")
-		);
-		object.setRotation(0, 0, 90);
-		background.add(object);
-		object = new BackgroundObject(60, 0, 150, 200, 200);
-		object.appearance.setCostume(
-			ResourceLoader.image("Icon")
-		);
-		object.setRotation(90, 0, 0);
-		background.add(object);
-
-
-		background.getCamera().setXYZ(0, 30, 0);
-		background.getCamera().setRotation(0, 0, 0);
+		background.load("test");
+		
+//		BackgroundObject object;
+//		object = new BackgroundObject(-60, 0, 150, 200, 200);
+//		object.appearance.setCostume(
+//			ResourceLoader.image("Icon")
+//		);
+//		object.setRotation(0, 90, 0);
+//		background.add(object);
+//		object = new BackgroundObject(0, 0, 150, 200, 200);
+//		object.appearance.setCostume(
+//			ResourceLoader.image("Icon")
+//		);
+//		object.setRotation(0, 0, 90);
+//		background.add(object);
+//		object = new BackgroundObject(60, 0, 150, 200, 200);
+//		object.appearance.setCostume(
+//			ResourceLoader.image("Icon")
+//		);
+//		object.setRotation(90, 0, 0);
+//		background.add(object);
+//
+//		background.getCamera().setXYZ(0, 30, 0);
+//		background.getCamera().setRotation(0, 0, 0);
 		
 		gameScript = new GameplayScript(this);
 		gameScript.start();
@@ -88,7 +89,6 @@ public class Playing implements GameState {
 	
 	@Override
 	public void update() {
-		background.getCamera().changeRotation(1f,1f,1f);
 		if (Input.P && !lastDebugKey) {
 			PlayingStats.debugMode = !PlayingStats.debugMode;
 		}
@@ -114,7 +114,7 @@ public class Playing implements GameState {
 	public void draw(Renderer renderer) {
 		renderer.beginPlayfield();
 		
-		renderer.background3D(background);
+		background.render(renderer);
 
 		boss.draw(renderer);
 		player.draw(renderer);

@@ -22,56 +22,56 @@ public final class JavaB3D {
 		this.g2 = g2;
 	}
 
-	public void render(Background3D background) {
-		BackgroundCamera camera = background.getCamera();
-
-		for (BackgroundObject object : background.getObjects()) {
-			if (!object.visible) {
-				continue;
-			}
-
-			Appearance appearance = object.appearance;
-
-			if (appearance.costume == null
-				|| appearance.size == 0
-				|| appearance.ghost == 100
-			) {
-				continue;
-			}
-
-			float halfWidth = object.width / 2.0f;
-			float halfHeight = object.height / 2.0f;
-
-			Point3[] corners = {
-				new Point3(-halfWidth,  halfHeight, 0),
-				new Point3( halfWidth,  halfHeight, 0),
-				new Point3( halfWidth, -halfHeight, 0),
-				new Point3(-halfWidth, -halfHeight, 0)
-			};
-
-			for (Point3 corner : corners) {
-				rotate(
-					corner,
-					object.pitch,
-					object.yaw,
-					object.roll
-				);
-
-				corner.x += object.x - camera.x;
-				corner.y += object.y - camera.y;
-				corner.z += object.z - camera.z;
-			}
-			
-			BufferedImage image = appearance.getRenderedCostume();
-			
-			drawTexturedPlane(
-				image,
-				object,
-				camera,
-				corners
-			);
+	public void render(
+		BackgroundObject object,
+		BackgroundCamera camera
+	) {
+		if (!object.visible) {
+			return;
 		}
+
+		Appearance appearance = object.appearance;
+
+		if (appearance.costume == null
+			|| appearance.size == 0
+			|| appearance.ghost == 100
+		) {
+			return;
+		}
+
+		float halfWidth = object.width / 2.0f;
+		float halfHeight = object.height / 2.0f;
+
+		Point3[] corners = {
+			new Point3(-halfWidth,  halfHeight, 0),
+			new Point3( halfWidth,  halfHeight, 0),
+			new Point3( halfWidth, -halfHeight, 0),
+			new Point3(-halfWidth, -halfHeight, 0)
+		};
+
+		for (Point3 corner : corners) {
+			rotate(
+				corner,
+				object.pitch,
+				object.yaw,
+				object.roll
+			);
+
+			corner.x += object.x - camera.x;
+			corner.y += object.y - camera.y;
+			corner.z += object.z - camera.z;
+		}
+
+		BufferedImage image = appearance.getRenderedCostume();
+
+		drawTexturedPlane(
+			image,
+			object,
+			camera,
+			corners
+		);
 	}
+	
 	private void drawTexturedPlane(
 		BufferedImage image,
 		BackgroundObject object,

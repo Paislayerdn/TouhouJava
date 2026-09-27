@@ -3,7 +3,7 @@ package graphics;
 import java.awt.image.BufferedImage;
 
 import entity.Thing;
-import background3d.Background3D;
+import background3d.*;
 
 public interface Renderer {
 	void clear();
@@ -18,7 +18,7 @@ public interface Renderer {
 
 	void thing(Thing thing);
 	
-	void background3D(Background3D background);
+	void backgroundObject(BackgroundObject object, BackgroundCamera camera);
 
 	void image(BufferedImage image, float x, float y);
 	void image(BufferedImage image,	float x, float y,	float width, float height);
