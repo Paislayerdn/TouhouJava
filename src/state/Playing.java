@@ -1,9 +1,9 @@
 package state;
 
 import main.Input;
+import main.Game;
 
 import background3d.Background3D;
-import background3d.BackgroundObject;
 
 import action.*;
 import dialogue.*;
@@ -16,7 +16,7 @@ import resource.ResourceLoader;
 
 import state.gameplay.*;
 
-public class Playing implements GameState {
+public class Playing extends GameState {
 	private Music bgm;
 	private Player player;
 	private Boss boss;
@@ -29,7 +29,8 @@ public class Playing implements GameState {
 	
 	private boolean lastDebugKey = false;
 
-	public Playing() {
+	public Playing(Game game) {
+		super(game);
 		actions = new ActionRunner();
 		
 		hud = new HUD();
@@ -48,29 +49,6 @@ public class Playing implements GameState {
 		
 		background.load("test1");
 		background.event("init");
-		
-//		BackgroundObject object;
-//		object = new BackgroundObject(-60, 0, 150, 200, 200);
-//		object.appearance.setCostume(
-//			ResourceLoader.image("Icon")
-//		);
-//		object.setRotation(0, 90, 0);
-//		background.add(object);
-//		object = new BackgroundObject(0, 0, 150, 200, 200);
-//		object.appearance.setCostume(
-//			ResourceLoader.image("Icon")
-//		);
-//		object.setRotation(0, 0, 90);
-//		background.add(object);
-//		object = new BackgroundObject(60, 0, 150, 200, 200);
-//		object.appearance.setCostume(
-//			ResourceLoader.image("Icon")
-//		);
-//		object.setRotation(90, 0, 0);
-//		background.add(object);
-//
-//		background.getCamera().setXYZ(0, 30, 0);
-//		background.getCamera().setRotation(0, 0, 0);
 		
 		gameScript = new GameplayScript(this);
 		gameScript.start();

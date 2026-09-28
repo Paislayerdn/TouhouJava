@@ -40,10 +40,11 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	@Override
 	public void run() {
-		double frameTime = 1_000_000_000.0 / Settings.FPS;
 		long nextFrame = System.nanoTime();
 
 		while (true) {
+			double frameTime = 1_000_000_000.0 / Settings.FPS;
+
 			game.update();
 			repaint();
 

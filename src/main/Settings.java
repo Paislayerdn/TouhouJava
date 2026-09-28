@@ -40,5 +40,5 @@ public final class Settings {
 	public static final float PLAYFIELD_TOP = PLAYFIELD_CENTER_Y + PLAYFIELD_HALF_HEIGHT;
 	
 	// Target FPS
-	public static final int FPS = 60;
+	public static int FPS = 60;
 }

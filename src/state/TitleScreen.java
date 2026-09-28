@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import resource.ResourceLoader;
 import resource.Music;
 
+import main.Game;
+import main.Input;
+
 import entity.Thing;
 
 import action.Action;
 import static action.JScratch.*;
 import graphics.Renderer;
 
-public class TitleScreen implements GameState {
+public class TitleScreen extends GameState {
+	private boolean lastStartInput = false;
 	private final BufferedImage sakuraImage;
 	private final ArrayList<Thing> sakuras;
 	private final Object sakuraLock = new Object();
@@ -27,7 +31,8 @@ public class TitleScreen implements GameState {
 	
 	private int sakuraSpawnTimer = 0;
 
-	public TitleScreen() {
+	public TitleScreen(Game game) {
+		super(game);
 		background = ResourceLoader.image("TSC1");
 
 		reimu = new Thing();
@@ -82,6 +87,24 @@ public class TitleScreen implements GameState {
 			}
 
 			sakuras.removeIf(sakura -> !sakura.isAlive());
+		}
+
+		if (!parent.isFront(this)) return;
+
+		boolean startPressed = Input.Z && !lastStartInput;
+		lastStartInput = Input.Z;
+
+		if (startPressed) {
+			bgm.stop();
+
+			LoadingState loading = new LoadingState(
+				parent,
+				LoadingState.Route.PLAYING,
+				this
+			);
+			parent.pushState(loading);
+			
+			return;
 		}
 
 		if (sakuraSpawnTimer <= 0) {
@@ -140,7 +163,8 @@ public class TitleScreen implements GameState {
 					)
 				),
 				Sequence(
-					Wait(600),
+					Wait(540),
+					Tween("ghost", 100, 120),
 					Destroy()
 				)
 			)

@@ -42,10 +42,11 @@ public class Main {
 
 		Game game = new Game();
 
-		double frameTime = 1_000_000_000.0 / Settings.FPS;
 		long nextFrame = System.nanoTime();
 
 		while (!window.shouldClose()) {
+			double frameTime = 1_000_000_000.0 / Settings.FPS;
+
 			renderer.clear();
 			
 			game.update();
