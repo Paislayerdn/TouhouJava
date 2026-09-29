@@ -147,6 +147,6 @@ public final class MathValue {
 		};
 	}
 	public static Value RandomSign() {
-		return action -> (Math.random() < 0.5)? -1 : 1;
+		return action -> (Math.random() < 0.5f)? -1 : 1;
 	}
 }

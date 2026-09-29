@@ -1,18 +1,32 @@
 #version 120
 
 uniform sampler2D tex;
+uniform float color;
+uniform float desaturation;
+uniform vec2 texSize;
+uniform float pixelate;
 uniform float brightness;
 uniform float alpha;
-uniform float color;
 
 vec3 rgbToHsv(vec3 c);
 vec3 hsvToRgb(vec3 c);
 
 void main() {
-	vec4 pixel = texture2D(tex, gl_TexCoord[0].st);
+	vec2 uv = gl_TexCoord[0].st;
+
+	if (pixelate > 0.0) {
+		float blockSize = pixelate + 1.0;
+
+		vec2 pixel = floor(uv * texSize);
+		pixel = floor(pixel / blockSize) * blockSize;
+
+		uv = (pixel + 0.5) / texSize;
+	}
+
+	vec4 pixel = texture2D(tex, uv);
 
 	// Hue / Color shifting
-	if (pixel.a > 0.0) {
+	if (color != 0.0 && pixel.a > 0.0) {
 		vec3 hsv = rgbToHsv(pixel.rgb);
 
 		if (hsv.y != 0.0) {
@@ -28,6 +42,10 @@ void main() {
 	} else {
 		pixel.rgb += (1.0 - pixel.rgb) * factor;
 	}
+
+	// Desaturation
+	float gray = dot(pixel.rgb, vec3(0.299, 0.587, 0.114));
+	pixel.rgb = mix(pixel.rgb, vec3(gray), desaturation / 100.0);
 	
 	// Ghost / Transparency
 	pixel.a *= alpha;

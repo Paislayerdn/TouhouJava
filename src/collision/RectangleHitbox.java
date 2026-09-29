@@ -8,12 +8,6 @@ public final class RectangleHitbox extends Hitbox {
 	private float width;
 	private float height;
 
-	public RectangleHitbox(Entity owner, float width, float height) {
-		super(owner);
-		this.width = width;
-		this.height = height;
-	}
-
 	public RectangleHitbox(Entity owner, String name, float width, float height) {
 		super(owner, name);
 		this.width = width;

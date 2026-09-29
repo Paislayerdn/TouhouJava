@@ -387,6 +387,8 @@ public final class JSL {
 		registerStringArg(globals, "setCostume", JScratch::SetCostume);
 		registerOneArgAction(globals, "setColor", JScratch::SetColor);
 		registerOneArgAction(globals, "changeColor", JScratch::ChangeColor);
+		registerOneArgAction(globals, "setDesaturation", JScratch::SetDesaturation);
+		registerOneArgAction(globals, "changeDesaturation", JScratch::ChangeDesaturation);
 		registerOneArgAction(globals, "setPixelate", JScratch::SetPixelate);
 		registerOneArgAction(globals, "changePixelate", JScratch::ChangePixelate);
 		registerOneArgAction(globals, "setBrightness", JScratch::SetBrightness);
@@ -487,10 +489,7 @@ public final class JSL {
 		globals.set( "wait", new VarArgFunction() {
 			@Override
 			public Varargs invoke( Varargs args ) {
-				if ( args.narg() == 0 ) {
-					return CoerceJavaToLua.coerce( Wait() );
-				}
-
+				if ( args.narg() == 0 ) { return CoerceJavaToLua.coerce( Wait() ); }
 				return CoerceJavaToLua.coerce( Wait( toJava( args.arg1() ) ) );
 			}
 		} );

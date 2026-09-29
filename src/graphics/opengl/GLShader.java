@@ -73,6 +73,15 @@ public class GLShader {
 
 		GL20.glUniform1f(location, value);
 	}
+	public void setFloat(String name, float x, float y) {
+		int location = GL20.glGetUniformLocation(programId, name);
+
+		if (location == -1) {
+			return;
+		}
+
+		GL20.glUniform2f(location, x, y);
+	}
 
 	public int getProgramId() {
 		return programId;

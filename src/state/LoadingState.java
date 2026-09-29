@@ -14,7 +14,7 @@ import graphics.Renderer;
 import main.Game;
 import resource.ResourceLoader;
 import main.Settings;
-import state.title.LoadingAssets;
+import state.loading.LoadingAssets;
 
 public final class LoadingState extends GameState {
 	public enum Route {
@@ -23,7 +23,7 @@ public final class LoadingState extends GameState {
 	}
 
 	private final Route route;
-	private static final int MINIMUM_FRAMES = 180;
+	private static final int MINIMUM_FRAMES = 30;
 	private static final int GRID_COLUMNS = 24;
 	private static final int GRID_ROWS = 18;
 	private static final float GRID_X = 80;
@@ -167,8 +167,8 @@ public final class LoadingState extends GameState {
 				Thing tile = new Thing();
 				tile.run(Sequence(
 					SetCostume(gridImage),
-					SetSize(18),
-					SetGhost(65),
+					SetSize(25),
+					SetGhost(0),
 					SetX(-Settings.BASE_WIDTH),
 					SetY(Settings.BASE_HEIGHT),
 					MoveX(-GRID_X + column * GRID_SPACING_X),

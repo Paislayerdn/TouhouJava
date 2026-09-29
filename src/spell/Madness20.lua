@@ -1,11 +1,9 @@
 local spellData = {}
 
-local count = {39, 11, 9, 9}
 local w2bloom = 10
 local w2spike = 9
 local w2mid = (w2spike+1)/2
-local w3bloom = 29
-local cooldowns = {20, 5, 15, 10}
+local w3bloom = 25
 
 spellData.configure = {
 	name = "Touhou 20 Stage 5 Midboss bs idk wth is that holy cow",
@@ -20,6 +18,9 @@ spellData.onStart = function()
 	spell:startTimer()
 	spell:startCounting()
 end
+
+local count = {27, 11, 15, 7}
+local cooldowns = {30, 7, 15, 15}
 local wave = {}
 
 wave[1] = function()
@@ -29,13 +30,13 @@ return sequence(
 			jsfor("k", 1, random(5, 8), function()
 				return spawnBullet(
 					sequence(
-						setCostume("CircleBullet"),
+						setCostume("BulletRinged"),
 						setColor(5),
 						addCircleHitbox("bulletHB", 16),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
 						addHitboxTag("bulletHB", "CLEARABLE"),
-						var("speed", 3),
-						change("speed", mul(0.15, random(-10,10))),
+						var("speed", 6),
+						change("speed", mul(0.30, random(-10,10))),
 						playSound("shot"),
 
 						parallel(
@@ -45,7 +46,8 @@ return sequence(
 								forward(-25),
 								forever("sequence",
 									forward(get("speed")),
-									change("speed", 0.025)
+									change("speed", 0.075),
+									wait()
 								)
 							),
 							tween("size", 60, 25,
@@ -77,13 +79,13 @@ return jsfor("m", 1, w2spike, function()
 			change("mndex", -w2mid),
 			var("mirror", abs(get("mndex"))),
 			set("mirror", sub(w2mid, get("mirror"))),
-			setCostume("OvalBullet"),
+			setCostume("BulletOval"),
 			setColor(130),
 			setBrightness(100),
 			addCircleHitbox("bulletHB", 7),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			addHitboxTag("bulletHB", "CLEARABLE"),
-			var("speed", 6.5),
+			var("speed", 13),
 			change("speed", mul(get("mirror"), 0.34)),
 
 			parallel(
@@ -98,7 +100,8 @@ return jsfor("m", 1, w2spike, function()
 					turn( mul(get("mndex"), 0.9) ),
 					forward(-40),
 					forever("sequence",
-						forward(get("speed"))
+						forward(get("speed")),
+						wait()
 					)
 				),
 				tween("size", 30, 15,
@@ -141,12 +144,12 @@ return sequence(
 					sequence(
 						var("jndex", get("j")),
 						var("kndex", get("k")),
-						setCostume("CircleBullet"),
+						setCostume("BulletHeart"),
 						setColor(70),
-						addCircleHitbox("bulletHB", 15),
+						addCircleHitbox("bulletHB", 14),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
 						addHitboxTag("bulletHB", "CLEARABLE"),
-						var("speed", 7),
+						var("speed", 14),
 						playSound("shot"),
 
 						parallel(
@@ -158,10 +161,11 @@ return sequence(
 								forward(-60),
 								forever("sequence",
 									forward(get("speed")),
-									change("speed", 0.05)
+									change("speed", 0.09),
+									wait()
 								)
 							),
-							tween("size", 60, 35,
+							tween("size", 90, 50,
 								"brightness", -100, 60,
 								"ghost", 100, 0,
 								30, easing.linear),		
@@ -185,10 +189,10 @@ return sequence(
 	jsfor("j", 1, count[4], function()
 		return sequence(
 			set("chosen", mul(360, random())),
-			jsfor("k", 1, 25, function()
+			jsfor("k", 1, 9, function()
 				return spawnBullet(
 					sequence(
-						setCostume("CircleBullet"),
+						setCostume("BulletFog"),
 						setColor(210),
 						addCircleHitbox("bulletHB", 13),
 						addHitboxTag("bulletHB", "ENEMY_BULLET"),
@@ -206,13 +210,17 @@ return sequence(
 								forward(90),
 								forever("sequence",
 									forward(get("speed")),
-									change("speed", 0.025)
+									change("speed", 0.1),
+									wait()
 								)
 							),
-							tween("size", 120, 30,
-								"brightness", -100, 60,
-								"ghost", 100, 0,
-								25, easing.quadInOut),		
+							sequence(
+								tween("size", 120, 50,
+									"brightness", -100, 60,
+									"ghost", 100, 0,
+									25, easing.quadInOut),
+								setCostume("BulletDonut")
+							),
 
 							sequence(
 								wait(180),
@@ -230,27 +238,25 @@ return sequence(
 end
 
 spellData.buildAction = function()
+	return sequence(
+		var("offset", mul(random(), 360)),
+		var("dir", -1),
 
-return sequence(
-	var("offset", mul(random(), 360)),
-	var("dir", -1),
+		sound("jingle", "[TH] Jingle"),
+		setSoundVolume("jingle", -0.25),
 
-	sound("jingle", "[TH] Jingle"),
-	setSoundVolume("jingle", -0.25),
+		sound("shot", "[TH] Shot"),
+		setSoundVolume("shot", -15.5),
 
-	sound("shot", "[TH] Shot"),
-	setSoundVolume("shot", -15.5),
-
-	forever("sequence",
-		jsfor("i", 1, 4,
-			function() return sequence(
-				callAt(wave, get("i")),
-				wait( at(cooldowns, get("i"))  )
-			)
-		end)
+		forever("sequence",
+			jsfor("i", 1, 4,
+				function() return sequence(
+					callAt(wave, get("i")),
+					wait( at(cooldowns, get("i"))  )
+				)
+			end)
+		)
 	)
-)
-
 end
 
 return spellData

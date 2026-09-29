@@ -75,7 +75,7 @@ public final class TweenAction extends Action {
 	public void start() {
 		resolvedFrames = (int) resolveFloat(frames);
 		if (resolvedFrames < 0) {
-			throw Debug.terminate("JScratch", this, "Tween frames cannot be negative: " + frames);
+			throw Debug.terminate("JScratch", this, "Tween frames cannot be negative: " + resolvedFrames);
 		}
 
 		startValue = resolveFloat(start);

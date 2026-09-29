@@ -13,9 +13,9 @@ public enum ReservedVariable {
 	SIZE("size"),
 	COLOR("color"),
 	DESATURATION("desaturation"),
+	PIXELATE("pixelate"),
 	BRIGHTNESS("brightness"),
-	GHOST("ghost"),
-	PIXELATE("pixelate");
+	GHOST("ghost");
 
 	private final String name;
 
@@ -41,9 +41,9 @@ public enum ReservedVariable {
 			case SIZE: return owner.getAppearance().size;
 			case COLOR: return owner.getAppearance().color;
 			case DESATURATION: return owner.getAppearance().desaturation;
+			case PIXELATE: return owner.getAppearance().pixelate;
 			case BRIGHTNESS: return owner.getAppearance().brightness;
 			case GHOST: return owner.getAppearance().ghost;
-			case PIXELATE: return owner.getAppearance().pixelate;
 		}
 
 		throw Debug.terminate("JScratch", this, "Unhandled reserved property: " + name);
@@ -62,9 +62,9 @@ public enum ReservedVariable {
 			case SIZE: owner.getAppearance().setSize(value); break;
 			case COLOR: owner.getAppearance().setColor(value); break;
 			case DESATURATION: owner.getAppearance().setDesaturation(value); break;
+			case PIXELATE: owner.getAppearance().setPixelate(value); break;
 			case BRIGHTNESS: owner.getAppearance().setBrightness(value); break;
 			case GHOST: owner.getAppearance().setGhost(value); break;
-			case PIXELATE: owner.getAppearance().setPixelate(value); break;
 			default:
 				throw Debug.terminate("JScratch", this, "Property is not writable/tweenable: " + name);
 		}

@@ -16,6 +16,10 @@ public final class ActionContext {
 		this.parent = parent;
 		this.variables = new HashMap<>();
 	}
+	
+	public void clear() {
+		variables.clear();
+	}
 
 	// Find the context where this variable was declared.
 	private ActionContext findContext(String name) {

@@ -3,8 +3,6 @@ package resource;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import javax.imageio.ImageIO;
 import main.Debug;
 
@@ -16,15 +14,7 @@ public final class ImageLoader {
 		".gif",
 		".bmp"
 	};
-
-	private static final Map<String, BufferedImage> cache = new HashMap<>();
-
 	public static BufferedImage load(String name) {
-		// Already loaded?
-		BufferedImage image = cache.get(name);
-
-		if (image != null) { return image; }
-
 		URL url = ResourceFinder.find(ResourceFinder.IMAGE, name, EXTENSIONS);
 
 		if (url == null) {
@@ -32,8 +22,7 @@ public final class ImageLoader {
 		}
 
 		try {
-			image = ImageIO.read(url);
-			cache.put(name, image);
+			BufferedImage image = ImageIO.read(url);
 			Debug.log(ImageLoader.class, "Loaded " + name);
 			return image;
 

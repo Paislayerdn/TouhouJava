@@ -1,8 +1,8 @@
 local spellData = {}
 
 local rings = 17
-local density = 29
-local initialSpeed = 1.25
+local density = 19
+local initialSpeed = 2
 local angle1, angle2 = 360/rings, 360/density
 local cooldown = 175
 
@@ -10,7 +10,7 @@ spellData.configure = {
 	name = "Eirin",
 	timer = 120*60,
 	playerCandidateRadius = 35,
-	isSpell = false,
+	isSpell = true,
 	caster = "LAMBDA"
 }
 
@@ -27,12 +27,13 @@ local bullette = function()
 			var("jndex", get("j")),
 			var("speed", initialSpeed),
 			var("colorOffset", add( 120, get("jndex") )  ),
-			setCostume("OvalBullet"),
+
+			setGhost(100),
+			setColor( random(40, 210) ),
+			setCostume("BulletFog"),
 			addCircleHitbox("bulletHB", 5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			addHitboxTag("bulletHB", "CLEARABLE"),
-			setColor( random(40, 210) ),
-			warp(999, 999),
 
 			parallel(
 				sequence(
@@ -45,24 +46,31 @@ local bullette = function()
 					turn(mul(get("jndex"), angle2)),
 					forward(30),
 					forever("sequence",
-						forward(get("speed"))
+						forward(get("speed")),
+						wait()
 					)
 				),
-				tween("size", 20, 9.5,
-					"color", get("colorOffset"),
-					"brightness", 100, 10,
-					"ghost", 100, 0,
-					add(70, mul(get("index"), 5) ,mul(get("jndex"), 1.5)), easing.quadInOut),		
+				sequence(
+					tween("size", 40, 16,
+						"color", get("colorOffset"),
+						"brightness", 100, 10,
+						"ghost", 100, 0,
+						add(70, mul(get("index"), 5) ,mul(get("jndex"), 1.5)), easing.quadInOut),		
+					setCostume("BulletRinged")
+				),
 				sequence(
 					wait(1),
 					turn( mul( get("dir"), 45), 29 ),
 					forever("sequence",
-						change("speed", -0.025)
+						change("speed", -0.1),
+						wait()
 					)
 				),
 
 				sequence(
 					wait(360),
+					disableHitbox("bulletHB"),
+					tween("ghost", 100, 60),
 					destroy()
 				)
 			)
@@ -71,30 +79,28 @@ local bullette = function()
 end
 
 spellData.buildAction = function()
+	return sequence(
+		var("offset", mul(random(), 360)),
+		var("dir", -1),
 
-return sequence(
-	var("offset", mul(random(), 360)),
-	var("dir", -1),
+		sound("jingle", "[TH] Jingle"),
+		setSoundVolume("jingle", -0.25),
 
-	sound("jingle", "[TH] Jingle"),
-	setSoundVolume("jingle", -0.25),
+		sound("shot", "[TH] Shot"),
+		setSoundVolume("shot", -15.5),
 
-	sound("shot", "[TH] Shot"),
-	setSoundVolume("shot", -15.5),
-
-	forever("sequence",
-		playSound("jingle"),
-		playSound("shot"),
-		set("dir", mul(get("dir"), -1) ),
-		jsfor("i", 1, rings, function()
-			return jsfor("j", 1, density, function()
-				return bullette()
-			end)
-		end),
-		wait(cooldown)
+		forever("sequence",
+			playSound("jingle"),
+			playSound("shot"),
+			set("dir", mul(get("dir"), -1) ),
+			jsfor("i", 1, rings, function()
+				return jsfor("j", 1, density, function()
+					return bullette()
+				end)
+			end),
+			wait(cooldown)
+		)
 	)
-)
-
 end
 
 return spellData

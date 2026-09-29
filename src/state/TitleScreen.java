@@ -50,10 +50,11 @@ public class TitleScreen extends GameState {
 		marisa.run(
 			Sequence(
 				SetCostume("TSC3F"),
+				SetDesaturation(30),
 				SetBrightness(100),
 				SetGhost(100),
 				Warp(-400,0),
-				Wait(25),
+				Wait(30),
 				show()
 			)
 		);
@@ -61,7 +62,7 @@ public class TitleScreen extends GameState {
 		game1 = ResourceLoader.image("TSC4");
 		game2 = ResourceLoader.image("TSC5");
 
-		sakuraImage = ResourceLoader.image("CircleBullet");
+		sakuraImage = ResourceLoader.image("BulletCircle");
 		sakuras = new ArrayList<>();
 		
 		bgm = ResourceLoader.music("[TH20] Shrine Maiden Crowned with Glory Slow");
@@ -153,13 +154,14 @@ public class TitleScreen extends GameState {
 					ChangeColor( Random(-5,5) ),
 					SetBrightness( Random(50, 75) ),
 					SetGhost( Random(10, 40) ),
-					Var("dx", Div( Random(-5,45), 20 ) ),
-					Var("dy", Div( Random(15,55), -20 ) ),
+					Var("dx", Div( Random(-5,45), 10 ) ),
+					Var("dy", Div( Random(15,55), -10 ) ),
 					Warp(999, 999),
 					SetX( Random(-520, 440) ),
 					SetY( Random(365, 390) ),
 					Forever("Sequence",
-						Move( Get("dx"), Get("dy") )
+						Move( Get("dx"), Get("dy") ),
+						Wait()
 					)
 				),
 				Sequence(
@@ -176,16 +178,7 @@ public class TitleScreen extends GameState {
 	}
 	
 	private Action show() {
-		int iteration1 = 120;
-		return Par(
-			For("i", 1, iteration1,
-				() -> Sequence(
-					MoveX(400.0/iteration1),
-					ChangeGhost(-100.0/iteration1),
-					ChangeBrightness(-100.0/iteration1),
-					Wait(1)
-				)
-			)
-		);
+		int iteration1 = 100;
+		return Tween("x", 0, "ghost", 0, "brightness", 0, iteration1);
 	}
 }

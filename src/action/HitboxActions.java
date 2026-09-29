@@ -25,7 +25,7 @@ final class AddCircleHitbox extends Action {
 		
 		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
-		entity.addHitbox( circleHB(entity, name, resolveFloat(radius)) );
+		entity.addHitbox( CircleHB(entity, name, resolveFloat(radius)) );
 		finish();
 	}
 }
@@ -50,7 +50,7 @@ final class AddRectangleHitbox extends Action {
 		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
 		entity.addHitbox(
-			rectangleHB(entity, name, resolveFloat(width), resolveFloat(height))
+			RectangleHB(entity, name, resolveFloat(width), resolveFloat(height))
 		);
 
 		finish();

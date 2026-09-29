@@ -5,38 +5,6 @@ import java.awt.image.BufferedImage;
 public final class DepictUtility {
 	private DepictUtility() {}
 
-	public static BufferedImage pixelate(BufferedImage source, float amount) {
-		if (amount <= 0) {
-			return source;
-		}
-
-		float blockSize = amount + 1;
-
-		BufferedImage result = new BufferedImage(
-			source.getWidth(),
-			source.getHeight(),
-			BufferedImage.TYPE_INT_ARGB
-		);
-
-		for (int y = 0; y < source.getHeight(); y += blockSize) {
-			for (int x = 0; x < source.getWidth(); x += blockSize) {
-
-				int sample = source.getRGB(x, y);
-
-				float maxX = Math.min(x + blockSize, source.getWidth());
-				float maxY = Math.min(y + blockSize, source.getHeight());
-
-				for (int py = y; py < maxY; py++) {
-					for (int px = x; px < maxX; px++) {
-						result.setRGB(px, py, sample);
-					}
-				}
-			}
-		}
-
-		return result;
-	}
-
 	public static BufferedImage color(BufferedImage source, float amount) {
 		if (amount == 0) {
 			return source;
@@ -86,7 +54,90 @@ public final class DepictUtility {
 
 		return result;
 	}
+	
+	public static BufferedImage desaturation(BufferedImage source, float amount) {
+		if (amount <= 0) {
+			return source;
+		}
 
+		BufferedImage result = new BufferedImage(
+			source.getWidth(),
+			source.getHeight(),
+			BufferedImage.TYPE_INT_ARGB
+		);
+
+		float factor = amount / 100.0f;
+
+		for (int y = 0; y < source.getHeight(); y++) {
+			for (int x = 0; x < source.getWidth(); x++) {
+				int argb = source.getRGB(x, y);
+
+				int alpha = (argb >>> 24) & 0xFF;
+
+				if (alpha == 0) {
+					result.setRGB(x, y, argb);
+					continue;
+				}
+
+				int red = (argb >>> 16) & 0xFF;
+				int green = (argb >>> 8) & 0xFF;
+				int blue = argb & 0xFF;
+
+				int gray = (int)(
+					red * 0.299f
+					+ green * 0.587f
+					+ blue * 0.114f
+				);
+
+				red = (int)(red + (gray - red) * factor);
+				green = (int)(green + (gray - green) * factor);
+				blue = (int)(blue + (gray - blue) * factor);
+
+				result.setRGB(
+					x, y,
+					(alpha << 24)
+					| (red << 16)
+					| (green << 8)
+					| blue
+				);
+			}
+		}
+
+		return result;
+	}
+
+	public static BufferedImage pixelate(BufferedImage source, float amount) {
+		if (amount <= 0) {
+			return source;
+		}
+
+		float blockSize = amount + 1;
+
+		BufferedImage result = new BufferedImage(
+			source.getWidth(),
+			source.getHeight(),
+			BufferedImage.TYPE_INT_ARGB
+		);
+
+		for (int y = 0; y < source.getHeight(); y += blockSize) {
+			for (int x = 0; x < source.getWidth(); x += blockSize) {
+
+				int sample = source.getRGB(x, y);
+
+				float maxX = Math.min(x + blockSize, source.getWidth());
+				float maxY = Math.min(y + blockSize, source.getHeight());
+
+				for (int py = y; py < maxY; py++) {
+					for (int px = x; px < maxX; px++) {
+						result.setRGB(px, py, sample);
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+	
 	public static BufferedImage brightness(BufferedImage source, float amount) {
 		if (amount == 0) {
 			return source;

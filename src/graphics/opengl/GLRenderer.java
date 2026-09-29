@@ -120,6 +120,14 @@ public class GLRenderer implements Renderer {
 		float wwidth, float hheight
 	) {
 		shader.setFloat("color", 0.0f);
+		shader.setFloat("desaturation", 0.0f);
+		shader.setFloat("pixelate", 0.0f);
+		shader.setFloat("pixelate", 0.0f);
+		shader.setFloat(
+			"texSize",
+			texture.getWidth(),
+			texture.getHeight()
+		);
 		shader.setFloat("brightness", 0.0f);
 		shader.setFloat("alpha", 1.0f);
 		
@@ -180,14 +188,16 @@ public class GLRenderer implements Renderer {
 		drawThing(texture,
 			thing.getX(), thing.getY(),
 			scale, angle,
-			appearance.color, appearance.brightness, alpha
+			appearance.color, appearance.desaturation, appearance.pixelate,
+			appearance.brightness, alpha
 		);
 	}
 
 	private void drawThing(GLTexture texture,
 		float x, float y,
 		float scale, float angle,
-		float color, float brightness, float alpha
+		float color, float desaturation,
+		float pixelate, float brightness, float alpha
 	) {
 		float radians = (float) Math.toRadians(angle);
 
@@ -211,6 +221,13 @@ public class GLRenderer implements Renderer {
 
 		shader.setInt("tex", 0);
 		shader.setFloat("color", color);
+		shader.setFloat("desaturation", desaturation);
+		shader.setFloat("pixelate", pixelate);
+		shader.setFloat(
+			"texSize",
+			texture.getWidth(),
+			texture.getHeight()
+		);
 		shader.setFloat("brightness", brightness);
 		shader.setFloat("alpha", alpha);
 

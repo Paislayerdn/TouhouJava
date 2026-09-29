@@ -2,7 +2,7 @@ local spellData = {}
 
 local cooldown = 30
 local startAmount = 3
-local density = 107
+local density = 77
 local angle = 360/density
 local step = -20
 
@@ -25,11 +25,11 @@ local bulette = function()
 		sequence(
 			var("index", get("i")),
 			var("jndex", get("j")),
-			var("speed", 2.75),
-			setCostume("CircleBullet"),
-			setSize(10),
+			var("speed", 5),
+			setCostume("BulletCircle"),
+			setSize(11.5),
 			setBrightness(100),
-			addCircleHitbox("bulletHB", 8),
+			addCircleHitbox("bulletHB", 4.5),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
 			warp(999, 999),
 
@@ -42,14 +42,16 @@ local bulette = function()
 					forward(step),
 
 					forever("sequence",
-						forward(get("speed"))
+						forward(get("speed")),
+						wait()
 					)
 				),
 
 				sequence(
 					wait(60),
 					forever("sequence",
-						change("speed", 0.005)
+						change("speed", 0.04),
+						wait()
 					)
 				),
 
@@ -63,34 +65,32 @@ local bulette = function()
 end
 
 spellData.buildAction = function()
+	return sequence(
+		var("offset", 0),
+		var("amount", startAmount),
 
-return sequence(
-	var("offset", 0),
-	var("amount", startAmount),
+		sound("jingle", "[TH] Jingle"),
+		setSoundVolume("jingle", -0.25),
 
-	sound("jingle", "[TH] Jingle"),
-	setSoundVolume("jingle", -0.25),
+		sound("shot", "[TH] Shot"),
+		setSoundVolume("shot", -15.5),
 
-	sound("shot", "[TH] Shot"),
-	setSoundVolume("shot", -15.5),
-	
-	forever("sequence",
-		set("offset", mul(random(), 360)),
-		jsfor("i", 1, get("amount"), function()
-			return sequence(
-				playSound("jingle"),
-				playSound("shot"),
-				jsfor("j", 1, density, function()
-					return bulette()
-				end),
-				wait( 12.5 )
-			)
-		end),
-		change("amount", 1),
-		wait(cooldown)
+		forever("sequence",
+			set("offset", mul(random(), 360)),
+			jsfor("i", 1, get("amount"), function()
+				return sequence(
+					playSound("jingle"),
+					playSound("shot"),
+					jsfor("j", 1, density, function()
+						return bulette()
+					end),
+					wait( 12.5 )
+				)
+			end),
+			change("amount", 0.5),
+			wait(cooldown)
+		)
 	)
-)
-
 end
 
 return spellData

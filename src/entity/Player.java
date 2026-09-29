@@ -33,9 +33,10 @@ public class Player extends Entity {
 		
 		this.run(
 			Sequence(
-				SetCostume("CircleBullet"),
-				SetSize(14),
-				AddCircleHitbox("grazeHB", 7),
+				SetCostume("BulletStar"),
+				Look(90),
+				SetSize(26),
+				AddCircleHitbox("grazeHB", 9),
 				AddHitboxTag("grazeHB", PGRAZE),
 
 				AddCircleHitbox("deathHB", 2.5),
@@ -51,7 +52,7 @@ public class Player extends Entity {
 	public void update() {
 		updateActions();
 		
-		float speed = 4.2f;
+		float speed = 4.8f;
 		focusing = Input.SPACE;
 		if (focusing) { speed = 2; }
 
@@ -94,7 +95,7 @@ public class Player extends Entity {
 						Parallel(
 							Var("index", Get("i")),
 							Warp(this),
-							SetCostume("CircleBullet"),
+							SetCostume("BulletCircle"),
 							SetSize(120),
 							SetBrightness(60),
 							AddCircleHitbox("bulletHB", 70),
@@ -103,8 +104,9 @@ public class Player extends Entity {
 							Look( Random(1,360) ),
 
 							Forever("Sequence",
-								Forward(5),
-								ChangeColor(2)
+								Forward(10),
+								ChangeColor(2),
+								Wait()
 							),
 							Sequence(
 								PlaySound("fire"),
@@ -130,13 +132,14 @@ public class Player extends Entity {
 						MoveX( Mul( 15, Sub( Get("index"), (total+1.0)/2.0  )) ),
 						MoveY(5),
 						Look(90),
-						SetCostume("OvalBullet"),
+						SetCostume("BulletOval"),
 						SetSize(9), SetColor(15),
 						AddCircleHitbox("bulletHB", 6),
 						AddHitboxTag("bulletHB", PLAYER_BULLET),
 						
 						Forever("Sequence",
-							Forward(10)
+							Forward(20),
+							Wait()
 						),
 						Sequence(
 							PlaySound("fire"),
@@ -170,8 +173,8 @@ public class Player extends Entity {
 	
 	@Override
 	public void draw(Renderer renderer) {
-		if (!focusing) this.run( SetColor(15) );
-		else this.run( SetColor(40) );
+		if (!focusing) this.run( SetDesaturation(0) );
+		else this.run( SetDesaturation(100) );
 		renderer.thing(this);
 	}
 }

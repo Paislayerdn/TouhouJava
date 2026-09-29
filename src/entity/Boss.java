@@ -26,7 +26,7 @@ public class Boss extends Entity {
 		
 		this.run(
 			Sequence(
-				SetCostume("CircleBullet"),
+				SetCostume("BulletCircle"),
 				SetColor(120),
 				SetBrightness(-20),
 				SetSize(80),

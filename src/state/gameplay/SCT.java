@@ -64,14 +64,14 @@ public final class SCT extends Thing {
 				While( Equal(Get("exit"), 0),
 					() -> Sequence(
 						MoveY(Get("speed")),
-						Wait(1)
+						Wait()
 					)
 				),
 				Sequence(
-					Tween("brightness", -0, 0, "ghost", 100, 0, 30),
-					Tween("speed", -1, 15),
-					Tween("speed", -5, 15),
-					Tween("size", 45,"ghost", 100, 30),
+					Tween("brightness", -0, 0, "ghost", 100, 0, 15),
+					Tween("speed", -2, 8),
+					Tween("speed", -6, 8),
+					Tween("size", 50, "ghost", 100, 15),
 					Set("exit", 1)
 				)
 			)
@@ -89,14 +89,14 @@ public final class SCT extends Thing {
 				While( Equal(Get("exit"), 0),
 					() -> Sequence(
 						MoveY(Get("speed")),
-						Wait(1)
+						Wait()
 					)
 				),
 				Sequence(
 					Tween("brightness", -0, 0, "ghost", 100, 0, 30),
-					Tween("speed", 1, 15),
-					Tween("speed", 5, 15),
-					Tween("size", 45,"ghost", 100, 30),
+					Tween("speed", 2, 8),
+					Tween("speed", 6, 8),
+					Tween("size", 50, "ghost", 100, 15),
 					Set("exit", 1)
 				)
 			)

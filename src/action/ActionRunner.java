@@ -23,10 +23,20 @@ public final class ActionRunner {
 	
 	public ActionContext getContext() { return context; }
 
-	public void add(Action action) {
+	private void registerTween(TweenAction tween) {
+		String property = tween.getPropertyName();
+
+		TweenAction old = tweens.put(property, tween);
+
+		if (old != null && old != tween) {
+			old.finish();
+		}
+	}
+	
+	public synchronized void add(Action action) {
 		add(action, null);
 	}
-	public void add(Action action, Thing owner) {
+	public synchronized void add(Action action, Thing owner) {
 		action.setOwner(owner);
 		action.setContext(context);
 
@@ -37,17 +47,8 @@ public final class ActionRunner {
 		actions.add(action);
 		action.start();
 	}
-	private void registerTween(TweenAction tween) {
-		String property = tween.getPropertyName();
-
-		TweenAction old = tweens.put(property, tween);
-
-		if (old != null && old != tween) {
-			old.finish();
-		}
-	}
-
-	public void update() {
+	
+	public synchronized void update() {
 		ArrayList<Action> snapshot = new ArrayList<>(actions);
 
 		for (Action action : snapshot) {
@@ -61,8 +62,9 @@ public final class ActionRunner {
 		tweens.entrySet().removeIf(entry -> entry.getValue().isFinished());
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		actions.clear();
 		tweens.clear();
+		context.clear();
 	}
 }

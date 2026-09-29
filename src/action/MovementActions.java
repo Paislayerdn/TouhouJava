@@ -52,7 +52,7 @@ final class SetAction extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		switch (axis) {
 			case X:
 				owner.setX(resolveFloat(x));
@@ -86,7 +86,7 @@ final class MoveAction extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		float dx = resolveFloat(x);
 		float dy = resolveFloat(y);
 
@@ -106,7 +106,7 @@ final class ForwardAction extends Action {
 	}
 
 	@Override
-	public void update() {
+	public void start() {
 		float ddDistance = resolveFloat(this.distance);
 
 		float radians = (float) Math.toRadians(owner.getTrueAngle());

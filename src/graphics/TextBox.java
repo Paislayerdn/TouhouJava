@@ -38,6 +38,7 @@ public final class TextBox {
 	}
 
 	public void setText(String text) {
+		if (glyphs != null && this.text.equals(text)) return;
 		this.text = text;
 
 		glyphs = TextHelper.createGlyphs(

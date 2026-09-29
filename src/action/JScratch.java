@@ -104,20 +104,23 @@ public final class JScratch {
 	public static Action SetCostume(String name) { return new SetCostume(name); }
 	public static Action SetCostume(BufferedImage image) { return new SetCostume(image); }
 	
-	public static Action SetColor(Object color) { return new SetColor(color); }
-	public static Action ChangeColor(Object amount) { return new ChangeColor(amount); }
+	public static Action SetColor(Object color) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.SET, color); }
+	public static Action ChangeColor(Object amount) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.CHANGE, amount); }
 
-	public static Action SetPixelate(Object pixelate) { return new SetPixelate(pixelate); }
-	public static Action ChangePixelate(Object amount) { return new ChangePixelate(amount); }
+	public static Action SetDesaturation(Object desat) { return new AppearanceAction(AppearanceAction.Type.DESATURATION, AppearanceAction.Mode.SET, desat); }
+	public static Action ChangeDesaturation(Object amount) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.CHANGE, amount); }
+	
+	public static Action SetPixelate(Object pixelate) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.SET, pixelate); }
+	public static Action ChangePixelate(Object amount) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.CHANGE, amount); }
 
-	public static Action SetBrightness(Object brightness) { return new SetBrightness(brightness); }
-	public static Action ChangeBrightness(Object amount) { return new ChangeBrightness(amount); }
+	public static Action SetBrightness(Object brightness) { return new AppearanceAction(AppearanceAction.Type.BRIGHTNESS, AppearanceAction.Mode.SET, brightness); }
+	public static Action ChangeBrightness(Object amount) { return new AppearanceAction(AppearanceAction.Type.BRIGHTNESS, AppearanceAction.Mode.CHANGE, amount); }
 
-	public static Action SetGhost(Object ghost) { return new SetGhost(ghost); }
-	public static Action ChangeGhost(Object amount) { return new ChangeGhost(amount); }
+	public static Action SetGhost(Object ghost) { return new AppearanceAction(AppearanceAction.Type.GHOST, AppearanceAction.Mode.SET, ghost); }
+	public static Action ChangeGhost(Object amount) { return new AppearanceAction(AppearanceAction.Type.GHOST, AppearanceAction.Mode.CHANGE, amount); }
 
-	public static Action SetSize(Object size) { return new SetSize(size); }
-	public static Action ChangeSize(Object amount) { return new ChangeSize(amount); }
+	public static Action SetSize(Object size) { return new AppearanceAction(AppearanceAction.Type.SIZE, AppearanceAction.Mode.SET, size); }
+	public static Action ChangeSize(Object amount) { return new AppearanceAction(AppearanceAction.Type.SIZE, AppearanceAction.Mode.CHANGE, amount); }
 	
 	// HITBOX, ONLY FOR ENTITY
 	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
@@ -176,7 +179,7 @@ public final class JScratch {
 	
 	// CONTROL FLOW
 	public static Action Wait(Object x) { return new WaitAction(x); }
-	public static Action Wait() { return new WaitAction(); }
+	public static Action Wait() { return new WaitAction(1); }
 	public static Action WaitUntil(Object condition) { return new WaitUntilAction(condition); }
 	
 	public static Action If(Object condition, ActionFactory thenFactory) { return new IfAction(condition, thenFactory); }

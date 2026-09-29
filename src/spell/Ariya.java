@@ -7,8 +7,8 @@ import static action.JScratch.*;
 import entity.Boss;
 import entity.Player;
 
-public final class Phyllotaxis extends Spell {
-	public Phyllotaxis(Boss boss, Player player) {
+public final class Ariya extends Spell {
+	public Ariya(Boss boss, Player player) {
 		super(boss, player);
 		configure();
 	}
@@ -56,13 +56,14 @@ public final class Phyllotaxis extends Spell {
 	}
 	
 	private Action bullete(float goldenAngle, float step, float waitIteration) {
-		float capSpeed = -4.0f;
+		float capSpeed = -7.5f;
 		return SpawnBullet(
 			Sequence(
 				Var("index", Get("i")),
-				Var("speed", 0.15),
+				Var("speed", 0.30f),
 				
-				SetCostume("OvalBullet"),
+				SetGhost(100),
+				SetCostume("BulletOval"),
 				AddCircleHitbox("bulletHB", 5),
 				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
 				AddHitboxTag("bulletHB", "CLEARABLE"),
@@ -75,25 +76,26 @@ public final class Phyllotaxis extends Spell {
 						Forward( Mul(Get("index"), step) ),
 						PlaySound("shot"),
 						Forever("Sequence",
-							Forward( Get("speed") )
+							Forward( Get("speed") ),
+							Wait()
 						)
 					),
+					Tween("color", 240, 130, 90),
 					Sequence(
-						Wait(30),
+						Tween("size", 30, 11, "brightness", 100, 60, "ghost", 90, 0, 45),
+						EnableHitbox("bulletHB"),
 						While( Greater( Get("speed"), capSpeed),
 							() -> Sequence(
-								Change("speed", -0.035),
+								Change("speed", -0.07f),
 								Wait()
 							)
 						)
 					),
 					Sequence(
-						Wait(480), Destroy()
-					),
-					Tween("color", 240, 130, 90),
-					Sequence(
-						Tween("size", 30, 11, "brightness", 100, 60, "ghost", 90, 0, 45),
-						EnableHitbox("bulletHB")
+						Wait(480),
+						DisableHitbox("bulletHB"),
+						Tween("ghost", 100, 60),
+						Destroy()
 					)
 				)
 			)

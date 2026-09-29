@@ -1,4 +1,4 @@
-package state.title;
+package state.loading;
 
 import state.LoadingState;
 
@@ -11,7 +11,7 @@ public final class LoadingAssets {
 	private LoadingAssets() {}
 
 	public static void preload(LoadingState loading, Route route) {
-		loading.preloadImage("CircleBullet");
+		loading.preloadImage("BulletCircle");
 
 		switch (route) {
 			case TITLE -> preloadTitle(loading);
@@ -28,10 +28,11 @@ public final class LoadingAssets {
 	}
 
 	private static void preloadPlaying(LoadingState loading) {
-		loading.preloadImage("OvalBullet");
+		loading.preloadImage("BulletOval");
 		loading.preloadImage("LAMBDASCT");
 		loading.preloadImage("ReimuSCT");
 		loading.preloadSound("[TH] Graze");
 		loading.preloadSound("[TH] Fires");
+		loading.preloadSound("[TH] Spellcard");
 	}
 }

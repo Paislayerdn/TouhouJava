@@ -43,7 +43,7 @@ public final class TestSpell extends Spell {
 						Par(
 							Var("index", Get("i")),
 							Var("speed", 2),
-							SetCostume("OvalBullet"),
+							SetCostume("BulletOval"),
 							SetSize(11),
 							SetBrightness(90),
 							AddCircleHitbox("bulletHB", 7),
@@ -58,7 +58,8 @@ public final class TestSpell extends Spell {
 								Turn( Mul(spread, Sub(Get("index"), (spokes+1)/2) ) ),
 								Forever("Sequence",
 									Forward(Get("speed")),
-									Change("speed", 0.075)
+									Change("speed", 0.075),
+									Wait()
 								)
 							),
 							Seq(

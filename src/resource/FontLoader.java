@@ -6,7 +6,7 @@ import main.Debug;
 
 public final class FontLoader {
 	private static final String[] EXTENSIONS = {
-		".ttd",
+		".ttf",
 		".otf"
 	};
 	private FontLoader() {}

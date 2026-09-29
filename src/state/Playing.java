@@ -56,7 +56,7 @@ public class Playing extends GameState {
 	
 	public void run(Spell spell) {
 		actions.add((Action) spell);
-		if (spell.getCaster() == "LAMBDA") hud.setCurrentSpell(spell);
+		if (spell.getCaster().equalsIgnoreCase("LAMBDA")) hud.setCurrentSpell(spell);
 		
 		if (spell.isSpell() && spell.getCaster() != null) {
 			hud.showSCT(spell.getCaster());

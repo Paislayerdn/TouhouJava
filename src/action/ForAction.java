@@ -5,14 +5,13 @@ public final class ForAction extends Action {
 	private final Object start;
 	private final Object end;
 	private final ActionFactory factory;
-	
+
 	private Action action;
 	private ActionContext loopContext;
+	private boolean consumedFrame;
+
 	@Override
-	public boolean consumesFrame() {
-		if (finished) return false;
-		return action != null && action.consumesFrame();
-	}
+	public boolean consumesFrame() { return consumedFrame; }
 
 	private float current;
 	private float target;
@@ -27,6 +26,8 @@ public final class ForAction extends Action {
 
 	@Override
 	public void start() {
+		consumedFrame = false;
+
 		current = resolveFloat(start);
 		target = resolveFloat(end);
 
@@ -39,19 +40,31 @@ public final class ForAction extends Action {
 		action.setOwner(owner);
 		action.setContext(loopContext);
 		action.start();
+
+		consumedFrame = action.consumesFrame();
 	}
 
 	@Override
 	public void update() {
-		while (!finished) {
-			boolean wasFinished = action.isFinished();
+		while (true) {
+			if (!action.isFinished()) {
+				action.update();
 
-			if (!wasFinished) { action.update(); }
-			if (!action.isFinished()) { return; }
-			if (!wasFinished && action.consumesFrame()) { return; }
+				if (!action.isFinished()) {
+					consumedFrame = action.consumesFrame();
+					return;
+				}
+
+				// The child finished during this update.
+				// Its consumption belongs to the frame it just completed.
+				// For is allowed to continue immediately.
+				consumedFrame = false;
+			}
 
 			current += step;
-			if ((step > 0 && current > target) || (step < 0 && current < target)) {
+
+			if ((step > 0 && current > target)
+					|| (step < 0 && current < target)) {
 				finish();
 				return;
 			}
@@ -62,6 +75,12 @@ public final class ForAction extends Action {
 			action.setOwner(owner);
 			action.setContext(loopContext);
 			action.start();
+
+			consumedFrame = action.consumesFrame();
+
+			if (consumedFrame) {
+				return;
+			}
 		}
 	}
 }

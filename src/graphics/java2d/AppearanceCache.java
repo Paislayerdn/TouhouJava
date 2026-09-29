@@ -21,7 +21,10 @@ public final class AppearanceCache {
 		}
 
 		// No effects? Don't cache anything unnecessarily.
-		if (color == 0 && pixelate == 0 && brightness == 0) {
+		if (color == 0
+			&& desaturation == 0
+			&& pixelate == 0
+			&& brightness == 0) {
 			return costume;
 		}
 
@@ -47,6 +50,10 @@ public final class AppearanceCache {
 
 			if (brightness != 0) {
 				image = DepictUtility.brightness(image, brightness);
+			}
+
+			if (desaturation != 0) {
+				image = DepictUtility.desaturation(image, desaturation);
 			}
 
 			return image;

@@ -41,7 +41,7 @@ public final class HUD {
 		this.spellWhole.setGlyphSize(45.0f);
 		this.spellDecimal = addText(PLAYFIELD_TEXTS, "",0,260, 180,100,TextAlign.LEFT);
 		this.spellDecimal.setGlyphSize(25.0f);
-		this.spellName = addText(PLAYFIELD_TEXTS, "", 280,315, 600,200,TextAlign.RIGHT);
+		this.spellName = addText(PLAYFIELD_TEXTS, "", 275,315, 600,200,TextAlign.RIGHT);
 		this.spellName.setGlyphSize(29.0f);
 		
 		TextBox temp;

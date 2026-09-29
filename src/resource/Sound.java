@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.sound.sampled.*;
+import main.Debug;
 
 public final class Sound {
 	private final AudioData data;
@@ -49,7 +50,6 @@ public final class Sound {
 			clip.open(audio);
 
 			setClipVolume(clip, volume);
-
 			return clip;
 
 		} catch (IOException | LineUnavailableException e) {
