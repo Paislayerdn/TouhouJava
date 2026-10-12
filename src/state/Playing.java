@@ -26,8 +26,6 @@ public class Playing extends GameState {
 	private final ActionRunner actions;
 	private final Background3D background;
 	private DialogueRunner dialogueRunner;
-	
-	private boolean lastDebugKey = false;
 
 	public Playing(Game game) {
 		super(game);
@@ -68,11 +66,7 @@ public class Playing extends GameState {
 	
 	@Override
 	public void update() {
-		if (Input.P && !lastDebugKey) {
-			PlayingStats.debugMode = !PlayingStats.debugMode;
-		}
-
-		lastDebugKey = Input.P;
+		if (Input.tap.P) {PlayingStats.debugMode = !PlayingStats.debugMode;}
 		
 		actions.update();
 		if (dialogueRunner != null) {

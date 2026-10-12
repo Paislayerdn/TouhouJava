@@ -13,8 +13,8 @@ public class Game {
 	private PlayingStats playingStats;
 
 	public Game() {
-		pushState(new Playing(this));
-//		pushState(new TitleScreen(this));
+//		pushState(new Playing(this));
+		pushState(new TitleScreen(this));
 //		pushState(new LoadingState(this, LoadingState.Route.TITLE));
 	}
 

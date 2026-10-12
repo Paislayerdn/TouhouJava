@@ -17,7 +17,6 @@ import static action.JScratch.*;
 import graphics.Renderer;
 
 public class TitleScreen extends GameState {
-	private boolean lastStartInput = false;
 	private final BufferedImage sakuraImage;
 	private final ArrayList<Thing> sakuras;
 	private final Object sakuraLock = new Object();
@@ -92,10 +91,7 @@ public class TitleScreen extends GameState {
 
 		if (!parent.isFront(this)) return;
 
-		boolean startPressed = Input.Z && !lastStartInput;
-		lastStartInput = Input.Z;
-
-		if (startPressed) {
+		if (Input.tap.Z) {
 			bgm.stop();
 
 			LoadingState loading = new LoadingState(
@@ -104,7 +100,7 @@ public class TitleScreen extends GameState {
 				this
 			);
 			parent.pushState(loading);
-			
+
 			return;
 		}
 

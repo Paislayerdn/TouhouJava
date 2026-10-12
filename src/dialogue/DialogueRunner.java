@@ -26,8 +26,6 @@ public final class DialogueRunner {
 
 	private boolean waitingForInput;
 	private Action waitingMovement;
-	private boolean previousZ;
-	private boolean previousMousePressed;
 	
 	public DialogueRunner(Playing parent, String name) {
 		this( parent, DialogueParser.parse( ResourceLoader.dialogue(name) ) );
@@ -148,13 +146,9 @@ public final class DialogueRunner {
 	}
 	
 	private boolean advancePressed() {
-		boolean zPressed = Input.Z && !previousZ;
-		boolean mouseClicked = Input.mousePressed && !previousMousePressed;
-
-		previousZ = Input.Z;
-		previousMousePressed = Input.mousePressed;
-
-		return zPressed || mouseClicked || Input.PAGEUP;
+		return Input.tap.Z
+			|| Input.tap.MOUSE_LEFT
+			|| Input.hold.PAGEUP;
 	}
 
 	public void playSound(String filename) {

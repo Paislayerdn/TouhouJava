@@ -48,10 +48,11 @@ public class Main {
 			double frameTime = 1_000_000_000.0 / Settings.FPS;
 
 			renderer.clear();
-			
+
+			Input.update();
 			game.update();
 			game.draw(renderer);
-			
+
 			window.update();
 
 			nextFrame += (long) frameTime;

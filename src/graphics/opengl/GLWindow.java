@@ -8,6 +8,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowFocusCallback;
+
+import main.Input;
 
 import main.Debug;
 
@@ -54,6 +57,17 @@ public class GLWindow {
 		GLFW.glfwSetKeyCallback(window, new GLInput());
 		GLFW.glfwSetCursorPosCallback(window, new GLMouse());
 		GLFW.glfwSetMouseButtonCallback(window, new GLMouseButton());
+		GLFW.glfwSetWindowFocusCallback(
+			window,
+			new GLFWWindowFocusCallback() {
+				@Override
+				public void invoke(long window, boolean focused) {
+					if (!focused) {
+						Input.clear();
+					}
+				}
+			}
+		);
 
 		GLFW.glfwSwapInterval(0);
 	}

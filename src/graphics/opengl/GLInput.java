@@ -1,6 +1,6 @@
 package graphics.opengl;
 
-import static main.Input.*;
+import main.Input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -11,22 +11,28 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 final class GLInput extends GLFWKeyCallback {
 	@Override
 	public void invoke(long window, int key, int scancode, int action, int mods) {
-		boolean pressed = action != GLFW_RELEASE;
+		if (action == GLFW_REPEAT) return;
 
-		switch (key) {
-			case GLFW_KEY_W, GLFW_KEY_UP -> W = pressed;
-			case GLFW_KEY_S, GLFW_KEY_DOWN -> S = pressed;
+		boolean pressed = action == GLFW_PRESS;
+		Input.Key mappedKey = switch (key) {
+			case GLFW_KEY_W, GLFW_KEY_UP -> Input.Key.W;
+			case GLFW_KEY_S, GLFW_KEY_DOWN -> Input.Key.S;
+			case GLFW_KEY_A, GLFW_KEY_LEFT -> Input.Key.A;
+			case GLFW_KEY_D, GLFW_KEY_RIGHT -> Input.Key.D;
+			case GLFW_KEY_SPACE -> Input.Key.SPACE;
+			case GLFW_KEY_Z -> Input.Key.Z;
+			case GLFW_KEY_X -> Input.Key.X;
+			case GLFW_KEY_PAGE_UP -> Input.Key.PAGEUP;
+			case GLFW_KEY_P -> Input.Key.P;
+			default -> null;
+		};
 
-			case GLFW_KEY_A, GLFW_KEY_LEFT -> A = pressed;
-			case GLFW_KEY_D, GLFW_KEY_RIGHT -> D = pressed;
+		if (mappedKey == null) return;
 
-			case GLFW_KEY_SPACE -> SPACE = pressed;
-
-			case GLFW_KEY_Z -> Z = pressed;
-			case GLFW_KEY_X -> X = pressed;
-			case GLFW_KEY_PAGE_UP -> PAGEUP = pressed;
-
-			case GLFW_KEY_P -> P = pressed;
+		if (pressed) {
+			Input.keyPressed(mappedKey);
+		} else if (action == GLFW_RELEASE) {
+			Input.keyReleased(mappedKey);
 		}
 	}
 }
@@ -34,17 +40,20 @@ final class GLInput extends GLFWKeyCallback {
 final class GLMouse extends GLFWCursorPosCallback {
 	@Override
 	public void invoke(long window, double xpos, double ypos) {
-		mouseX = (float) xpos;
-		mouseY = (float) ypos;
+		Input.mouseX = (float) xpos;
+		Input.mouseY = (float) ypos;
 	}
 }
 
 final class GLMouseButton extends GLFWMouseButtonCallback {
 	@Override
 	public void invoke(long window, int button, int action, int mods) {
-		boolean pressed = action != GLFW_RELEASE;
+		if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
-		if (button == GLFW_MOUSE_BUTTON_LEFT)
-			mousePressed = pressed;
+		if (action == GLFW_PRESS) {
+			Input.keyPressed(Input.Key.MOUSE_LEFT);
+		} else if (action == GLFW_RELEASE) {
+			Input.keyReleased(Input.Key.MOUSE_LEFT);
+		}
 	}
 }

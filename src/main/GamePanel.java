@@ -6,38 +6,49 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.RenderingHints;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import graphics.java2d.*;
 
 public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
 	private Game game;
-	
+
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
-	
+
 	public void initialize() {
 		javax.swing.SwingUtilities.invokeLater(this::requestFocusInWindow);
 		setFocusTraversalKeysEnabled(false);
 	}
-	
+
 	public GamePanel() {
 		this.setPreferredSize( new Dimension(
 			Settings.getWindowWidth(), Settings.getWindowHeight()
 		));
 		this.setBackground(Color.BLACK);
-		
+
 		game = new Game();
 		Java2DInput input = new Java2DInput();
-		
+
 		this.addKeyListener(input);
+		this.addMouseListener(input);
 		this.addMouseMotionListener(input);
+
+		this.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				Input.clear();
+			}
+		});
+
 		this.setFocusable(true);
 		this.initialize();
 	}
-	
+
 	@Override
 	public void run() {
 		long nextFrame = System.nanoTime();
@@ -45,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 		while (true) {
 			double frameTime = 1_000_000_000.0 / Settings.FPS;
 
+			Input.update();
 			game.update();
 			repaint();
 
@@ -68,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

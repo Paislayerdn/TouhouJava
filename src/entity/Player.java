@@ -19,10 +19,8 @@ public class Player extends Entity {
 
 	private int shootCooldown = 0;
 	private boolean autoFire = false;
-	private boolean lastPageUp = false;
 
 	private static final int SHOOT_INTERVAL = 6;
-	private boolean lastX = false;
 	
 	public Player(HUD hud) {
 		this.hud = hud;
@@ -53,32 +51,35 @@ public class Player extends Entity {
 		updateActions();
 		
 		float speed = 4.8f;
-		focusing = Input.SPACE;
+		focusing = Input.hold.SPACE;
 		if (focusing) { speed = 2; }
 
-		float dx = 0;	float dy = 0;
-		if (Input.W) dy++;	if (Input.S) dy--;
-		if (Input.A) dx--;	if (Input.D) dx++;
+		float dx = 0;
+		float dy = 0;
+		if (Input.hold.W) dy++;
+		if (Input.hold.S) dy--;
+		if (Input.hold.A) dx--;
+		if (Input.hold.D) dx++;
 
 		float length = (float) Math.sqrt(dx * dx + dy * dy);
 
 		if (length > 0) {
-			dx /= length;	dy /= length;
-			x += dx * speed;	y += dy * speed;
+			dx /= length;
+			dy /= length;
+			x += dx * speed;
+			y += dy * speed;
 		}
-		
-		boolean pageUpPressed = Input.PAGEUP && !lastPageUp;
-		if (pageUpPressed) { autoFire = !autoFire;}
-		lastPageUp = Input.PAGEUP;
-		
-		boolean bombPressed = Input.X && !lastX;
-		if (bombPressed) {
+
+		if (Input.tap.PAGEUP) {
+			autoFire = !autoFire;
+		}
+
+		if (Input.tap.X) {
 			bomb();
 		}
-		lastX = Input.X;
-		
+
 		if (shootCooldown > 0) { shootCooldown--; }
-		boolean firing = Input.Z || autoFire;
+		boolean firing = Input.hold.Z || autoFire;
 		if (firing && shootCooldown <= 0) {
 			shoot();
 			shootCooldown = SHOOT_INTERVAL;
