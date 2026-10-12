@@ -21,26 +21,25 @@ end
 local Lasseree = function()
 	return spawnBullet(
 		sequence(
-			var("jndex", get("j")),
-			var("kndex", get("k")),
+			replicate("j", "k"),
 
 			setSize(15),
 			setColor(45),
 			setCostume("BulletOval"),
-			jsif( equal( mod(get("jndex"), 2), 1 ),
+			jsif( equal( mod(get("j"), 2), 1 ),
 				function() return setColor(140) end
 			),
 			setBrightness(-30),
-			changeBrightness( mul(get("kndex"), 15) ),
+			changeBrightness( mul(get("k"), 15) ),
 			addCircleHitbox("bulletHB", 7),
 			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			var("localSpeed", add( mul(get("kndex"), 3.5), 4)),
+			var("localSpeed", add( mul(get("k"), 3.5), 4)),
 
 			parallel(
 				sequence(
 					warp(get("rep1x"), get("rep1y")),
 					lookTowards(player),
-					turn( mul(wingAngle, sub(get("jndex"), (wing+1)/2) ) ),
+					turn( mul(wingAngle, sub(get("j"), (wing+1)/2) ) ),
 
 					forever("sequence",
 						forward( get("localSpeed") ),
@@ -49,7 +48,7 @@ local Lasseree = function()
 				),
 
 				sequence(
-					wait( sub(180, mul(get("kndex"), 22)) ),
+					wait( sub(180, mul(get("k"), 22)) ),
 					tween("ghost", 100, 30),
 					destroy()
 				)

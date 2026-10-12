@@ -93,7 +93,7 @@ public class Player extends Entity {
 				() -> Sequence(
 					SpawnBullet(
 						Parallel(
-							Var("index", Get("i")),
+							Replicate("i"),
 							Warp(this),
 							SetCostume("BulletCircle"),
 							SetSize(120),
@@ -127,9 +127,9 @@ public class Player extends Entity {
 			For("i", 1, total, 
 				() -> SpawnBullet(
 					Parallel(
-						Var("index", Get("i")),
+						Replicate("i"),
 						Warp(this),
-						MoveX( Mul( 15, Sub( Get("index"), (total+1.0)/2.0  )) ),
+						MoveX( Mul( 15, Sub( Get("i"), (total+1.0)/2.0  )) ),
 						MoveY(5),
 						Look(90),
 						SetCostume("BulletOval"),

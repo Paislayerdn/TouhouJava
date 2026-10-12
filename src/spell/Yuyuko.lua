@@ -30,8 +30,7 @@ local function wave1bullet()
 	return spawnBullet(
 		sequence(
 			var("type", mod(get("i"), 2) ),
-			var("jndex", get("j")),
-			var("kndex", get("k")),
+			replicate("j", "k"),
 			var("speed", spd),
 			setGhost(100),
 			setColor(165),
@@ -52,7 +51,7 @@ local function wave1bullet()
 					warp(boss),
 					look(0),
 					turn( mul(get("type"), 360/2/count1) ),
-					turn( mul( 360/count1, get("jndex") ) ),
+					turn( mul( 360/count1, get("j") ) ),
 					forever("sequence",
 						forward( get("speed") ),
 						wait()
@@ -64,14 +63,14 @@ local function wave1bullet()
 					45, easing.quadIn),		
 				sequence(
 					wait(120),
-					jsif( equal( get("jndex"), get("kndex"), 0),
+					jsif( equal( get("j"), get("k"), 0),
 						function()
 							return playSound("jingle")
 						end
 					),
-					tween("speed", add(spd, mul(get("kndex"), perAccel) ),
-						"brightness", sub(get("brightness"), mul(get("kndex"), 2.5)),
-						"desaturation", mul(get("kndex"), 10), 90)
+					tween("speed", add(spd, mul(get("k"), perAccel) ),
+						"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
+						"desaturation", mul(get("k"), 10), 90)
 				),
 				sequence(
 					wait(270),
@@ -100,11 +99,9 @@ end
 local function wave2bullet()
 	return spawnBullet(
 		sequence(
-			var("index", mul(mod(get("i"), 2), 2)  ),
-			change("index", -1),
-			var("tndex", get("t")),
-			var("jndex", get("j")),
-			var("kndex", get("k")),
+			replicate("i", "j", "k", "t"),
+			set("i", mul(mod(get("i"), 2), 2)  ),
+			change("i", -1),
 			var("speed", spd),
 			change("speed", mul(get("t"), 1.5)),
 			setGhost(100),
@@ -119,7 +116,7 @@ local function wave2bullet()
 				sequence(
 					warp(boss),
 					look( get("offset") ),
-					turn( mul( 360/count2, get("jndex") ) ),
+					turn( mul( 360/count2, get("j") ) ),
 					forever("sequence",
 						forward( get("speed") ),
 						wait()
@@ -130,17 +127,17 @@ local function wave2bullet()
 					"ghost", 100, 0,
 					30, easing.quadIn),		
 				sequence(
-					turn( mul(45, get("index") ) , 30),
-					turn( mul(22, get("index") ) ),
+					turn( mul(45, get("i") ) , 30),
+					turn( mul(22, get("i") ) ),
 					wait(30),
-					jsif( equal( get("jndex"), get("kndex"), 0),
+					jsif( equal( get("j"), get("k"), 0),
 						function()
 							return playSound("jingle")
 						end
 					),
-					tween("speed", add(spd, mul(get("kndex"), perAccel) ),
-						"brightness", sub(get("brightness"), mul(get("kndex"), 2.5)),
-						"desaturation", mul(get("kndex"), 10), 90)
+					tween("speed", add(spd, mul(get("k"), perAccel) ),
+						"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
+						"desaturation", mul(get("k"), 10), 90)
 				),
 				sequence(
 					wait(270),
@@ -172,8 +169,7 @@ end
 local function wave3bullet()
 	return spawnBullet(
 		sequence(
-			var("jndex", get("j")),
-			var("kndex", get("k")),
+			replicate("j", "k"),
 			var("speed", spd+2),
 			setGhost(100),
 			setColor(0),
@@ -187,7 +183,7 @@ local function wave3bullet()
 				sequence(
 					warp(boss),
 					look( get("offset") ),
-					turn( mul( 360/count3, get("jndex") ) ),
+					turn( mul( 360/count3, get("j") ) ),
 					forever("sequence",
 						forward( get("speed") ),
 						wait()
@@ -199,13 +195,13 @@ local function wave3bullet()
 					30, easing.quadIn),		
 				sequence(
 					wait(80),
-					jsif( equal( get("jndex"), get("kndex"), 0),
+					jsif( equal( get("j"), get("k"), 0),
 						function()
 							return playSound("jingle")
 						end
 					),
-					tween("speed", add(spd+2, mul(get("kndex"), perAccel) ),
-						"desaturation", mul(get("kndex"), 10), 40)
+					tween("speed", add(spd+2, mul(get("k"), perAccel) ),
+						"desaturation", mul(get("k"), 10), 40)
 				),
 				sequence(
 					wait(210),

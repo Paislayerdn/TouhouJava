@@ -73,11 +73,9 @@ local function wave2helper()
 return jsfor("m", 1, w2spike, function()
 	return spawnBullet(
 		sequence(
-			var("jndex", get("j")),
-			var("kndex", get("k")),
-			var("mndex", get("m")),
-			change("mndex", -w2mid),
-			var("mirror", abs(get("mndex"))),
+			replicate("j", "k", "m"),
+			change("m", -w2mid),
+			var("mirror", abs(get("m"))),
 			set("mirror", sub(w2mid, get("mirror"))),
 			setCostume("BulletOval"),
 			setColor(130),
@@ -92,12 +90,12 @@ return jsfor("m", 1, w2spike, function()
 				sequence(
 					warp(boss),
 					look( get("offset") ),
-					turn( mul(get("jndex"), 360/(w2bloom*2)) ),
+					turn( mul(get("j"), 360/(w2bloom*2)) ),
 					forward(40),
 
 					turn( get("offset2") ),
-					turn( mul(get("kndex"), 360/w2bloom) ),
-					turn( mul(get("mndex"), 0.9) ),
+					turn( mul(get("k"), 360/w2bloom) ),
+					turn( mul(get("m"), 0.9) ),
 					forward(-40),
 					forever("sequence",
 						forward(get("speed")),
@@ -142,8 +140,7 @@ return sequence(
 			jsfor("k", 1, w3bloom, function()
 				return spawnBullet(
 					sequence(
-						var("jndex", get("j")),
-						var("kndex", get("k")),
+						replicate("j", "k"),
 						setCostume("BulletHeart"),
 						setColor(70),
 						addCircleHitbox("bulletHB", 14),
@@ -156,8 +153,8 @@ return sequence(
 							sequence(
 								warp(boss),
 								look( get("offset") ),
-								turn( mul(get("kndex"), 360/w3bloom ) ),
-								turn( mul(get("jndex"), 360/(w3bloom*2) ) ),
+								turn( mul(get("k"), 360/w3bloom ) ),
+								turn( mul(get("j"), 360/(w3bloom*2) ) ),
 								forward(-60),
 								forever("sequence",
 									forward(get("speed")),

@@ -29,9 +29,9 @@ public final class ActionContext {
 		return null;
 	}
 	
-	// Declare a variable in THIS context, without conflicting the upper contexts.
+	// Declare a variable in THIS context.
 	public void declare(String name, Object value) {
-		if (findContext(name) != null) {
+		if (variables.containsKey(name)) {
 			throw Debug.terminate("JScratch", this, "Variable already declared: " + name);
 		}
 

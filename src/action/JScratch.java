@@ -150,6 +150,15 @@ public final class JScratch {
 	public static VariableAction Set(String name, Object value) { return new VariableAction(name, VariableAction.Operation.SET, value); }
 	public static VariableAction Change(String name, Object value) { return new VariableAction(name, VariableAction.Operation.CHANGE,value); }
 	public static Value Get(String name) { return Value.Get(name); }
+	public static Action Replicate(String... names) {
+		Action[] actions = new Action[names.length];
+
+		for (int i = 0; i < names.length; i++) {
+			actions[i] = Var(names[i], Get(names[i]));
+		}
+
+		return Sequence(actions);
+	}
 	
 	// BULLET LIFE
 	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }

@@ -23,8 +23,7 @@ end
 local bulette = function()
 	return spawnBullet(
 		sequence(
-			var("index", get("i")),
-			var("jndex", get("j")),
+			replicate("i", "j"),
 			var("speed", 5),
 			setCostume("BulletCircle"),
 			setSize(11.5),
@@ -37,8 +36,8 @@ local bulette = function()
 				sequence(
 					warp(boss),
 					look( get( "offset" ) ),
-					turn(mul(get("index"), angle/2)),
-					turn(mul(get("jndex"), angle)),
+					turn(mul(get("i"), angle/2)),
+					turn(mul(get("j"), angle)),
 					forward(step),
 
 					forever("sequence",

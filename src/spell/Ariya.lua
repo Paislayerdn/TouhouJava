@@ -25,7 +25,7 @@ local bullete = function()
 
 	return spawnBullet(
 		sequence(
-			var("index", get("i")),
+			replicate("i"),
 			var("speed", 0.30),
 
 			setGhost(100),
@@ -35,19 +35,14 @@ local bullete = function()
 			addHitboxTag("bulletHB", "CLEARABLE"),
 			disableHitbox("bulletHB"),
 
-			wait(
-				add(
-					mul(get("index"), waitIteration),
-					1
-				)
-			),
+			wait( add( mul(get("i"), waitIteration), 1 ) ),
 
 			parallel(
 				sequence(
 					goTo(boss),
 					look(get("offset")),
-					turn(mul(get("index"), goldenAngle)),
-					forward(mul(get("index"), step)),
+					turn(mul(get("i"), goldenAngle)),
+					forward(mul(get("i"), step)),
 					playSound("shot"),
 
 					forever("sequence",

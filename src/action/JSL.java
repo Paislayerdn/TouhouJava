@@ -434,6 +434,15 @@ public final class JSL {
 		registerStringObject(globals, "set", JScratch::Set);
 		registerStringObject(globals, "change", JScratch::Change);
 		registerStringArg(globals, "get", JScratch::Get);
+		registerVarArgAction(globals, "replicate", args -> {
+			String[] names = new String[args.length];
+
+			for (int i = 0; i < args.length; i++) {
+				names[i] = (String) args[i];
+			}
+
+			return JScratch.Replicate(names);
+		});
 		
 		// BULLET LIFE
 		globals.set("spawnBullet", new OneArgFunction() {

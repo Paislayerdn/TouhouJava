@@ -23,10 +23,9 @@ end
 local bullette = function()
 	return spawnBullet(
 		sequence(
-			var("index", get("i")),
-			var("jndex", get("j")),
+			replicate("i", "j"),
 			var("speed", initialSpeed),
-			var("colorOffset", add( 120, get("jndex") )  ),
+			var("colorOffset", add( 120, get("j") )  ),
 
 			setGhost(100),
 			setColor( random(40, 210) ),
@@ -39,11 +38,11 @@ local bullette = function()
 				sequence(
 					warp(boss),
 					look( get( "offset" ) ),
-					turn(mul(get("index"), angle1)),
+					turn(mul(get("i"), angle1)),
 					forward(110),
 
 					look(0),
-					turn(mul(get("jndex"), angle2)),
+					turn(mul(get("j"), angle2)),
 					forward(30),
 					forever("sequence",
 						forward(get("speed")),
@@ -55,7 +54,7 @@ local bullette = function()
 						"color", get("colorOffset"),
 						"brightness", 100, 10,
 						"ghost", 100, 0,
-						add(70, mul(get("index"), 5) ,mul(get("jndex"), 1.5)), easing.quadInOut),		
+						add(70, mul(get("i"), 5) ,mul(get("j"), 1.5)), easing.quadInOut),		
 					setCostume("BulletRinged")
 				),
 				sequence(

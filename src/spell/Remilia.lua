@@ -23,7 +23,7 @@ wave[1] = function()
 		jsfor("i", 1, at(count, 1), function()
 			return spawnBullet(
 				sequence(
-					var("index", get("i")),
+					replicate("i"),
 					setGhost(100),
 					setCostume("BulletDonut"),
 					addCircleHitbox("bulletHB", 15),
@@ -35,7 +35,7 @@ wave[1] = function()
 						sequence(
 							warp(boss),
 							look( get("offset") ),
-							turn( mul(get("index"), div( 360, at(count, 1) ) ) ),
+							turn( mul(get("i"), div( 360, at(count, 1) ) ) ),
 							turn( mul(21, get("count"), get("direction")) ),
 							forever("sequence",
 								forward( get("speed") ),
@@ -68,7 +68,7 @@ wave[2] = function()
 		jsfor("i", 1, at(count, 2), function()
 			return spawnBullet(
 				sequence(
-					var("index", get("i")),
+					replicate("i"),
 					setGhost(100),
 					setDesaturation(40),
 					setColor(160),
@@ -81,7 +81,7 @@ wave[2] = function()
 						sequence(
 							warp(boss),
 							look( get("offset") ),
-							turn( mul(get("index"), div( 360, at(count, 2) ) ) ),
+							turn( mul(get("i"), div( 360, at(count, 2) ) ) ),
 							turn( mul(360/8+19, get("count"), get("direction")) ),
 							forever("sequence",
 								forward(5),
@@ -111,7 +111,7 @@ wave[3] = function()
 		jsfor("i", 1, count[3], function()
 			return spawnBullet(
 				sequence(
-					var("index", get("i")),
+					replicate("i"),
 					setGhost(100),
 					setPixelate(5),
 					setColor(190),
@@ -126,7 +126,7 @@ wave[3] = function()
 							warp(boss),
 							look( get("offset") ),
 							turn( mul(get("count"), -360/10, get("direction") ) ),
-							turn( mul(get("index"), 4) ),
+							turn( mul(get("i"), 4) ),
 							forever("sequence",
 								forward(7),
 								wait()

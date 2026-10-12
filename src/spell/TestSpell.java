@@ -41,21 +41,21 @@ public final class TestSpell extends Spell {
 				For("i", 1, spokes, () ->
 					SpawnBullet(
 						Par(
-							Var("index", Get("i")),
+							Replicate("i"),
 							Var("speed", 2),
 							SetCostume("BulletOval"),
 							SetSize(11),
 							SetBrightness(90),
 							AddCircleHitbox("bulletHB", 7),
 							AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-							If( Equal( Mod( Get("index"), 2 ), Get("count") ),
+							If( Equal( Mod( Get("i"), 2 ), Get("count") ),
 								() -> SetColor(50)
 							),
 							
 							Sequence(
 								GoTo(boss),
 								Look( Get("offset") ),
-								Turn( Mul(spread, Sub(Get("index"), (spokes+1)/2) ) ),
+								Turn( Mul(spread, Sub(Get("i"), (spokes+1)/2) ) ),
 								Forever("Sequence",
 									Forward(Get("speed")),
 									Change("speed", 0.075),

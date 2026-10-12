@@ -59,7 +59,7 @@ public final class Ariya extends Spell {
 		float capSpeed = -7.5f;
 		return SpawnBullet(
 			Sequence(
-				Var("index", Get("i")),
+				Replicate("i"),
 				Var("speed", 0.30f),
 				
 				SetGhost(100),
@@ -68,12 +68,12 @@ public final class Ariya extends Spell {
 				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
 				AddHitboxTag("bulletHB", "CLEARABLE"),
 				DisableHitbox("bulletHB"),
-				Wait(Add(Mul(Get("index"), waitIteration), 1) ),
+				Wait(Add(Mul(Get("i"), waitIteration), 1) ),
 				Parallel(
 					Sequence(
 						GoTo(boss), Look( Get("offset") ),
-						Turn(Mul(Get("index"), goldenAngle) ),
-						Forward( Mul(Get("index"), step) ),
+						Turn(Mul(Get("i"), goldenAngle) ),
+						Forward( Mul(Get("i"), step) ),
 						PlaySound("shot"),
 						Forever("Sequence",
 							Forward( Get("speed") ),
