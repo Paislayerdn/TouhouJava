@@ -16,8 +16,7 @@ import main.Debug;
 
 public class GLWindow {
 	private final long window;
-	private final int width;
-	private final int height;
+	private final int width, height;
 
 	public GLWindow(int width, int height, String title) {
 		this.width = width;

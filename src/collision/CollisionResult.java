@@ -3,8 +3,7 @@ package collision;
 import entity.Entity;
 
 public final class CollisionResult {
-	private Hitbox first;
-	private Hitbox second;
+	private Hitbox first, second;
 	private CollisionType type;
 	
 

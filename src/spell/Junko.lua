@@ -22,46 +22,44 @@ spellData.onStart = function()
 end
 
 local bulette = function()
-	return spawnBullet(
-		sequence(
-			replicate("i", "j"),
-			var("speed", 5),
-			setCostume("BulletCircle"),
-			setSize(11.5),
-			setBrightness(100),
-			addCircleHitbox("bulletHB", 4.5),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			warp(999, 999),
+	return spawnBullet( sequence(
+		replicate("i", "j"),
+		var("speed", 5),
+		setCostume("BulletCircle"),
+		setSize(11.5),
+		setBrightness(100),
+		addCircleHitbox("bulletHB", 4.5),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		warp(999, 999),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look( get( "offset" ) ),
-					turn(mul(get("i"), angle/2)),
-					turn(mul(get("j"), angle)),
-					forward(step),
+		parallel(
+			sequence(
+				warp(boss),
+				look( get( "offset" ) ),
+				turn(mul(get("i"), angle/2)),
+				turn(mul(get("j"), angle)),
+				forward(step),
 
-					forever("sequence",
-						forward(get("speed")),
-						wait()
-					)
-				),
-
-				sequence(
-					wait(60),
-					forever("sequence",
-						change("speed", 0.04),
-						wait()
-					)
-				),
-
-				sequence(
-					wait(210),
-					destroy()
+				forever("sequence",
+					forward(get("speed")),
+					wait()
 				)
+			),
+
+			sequence(
+				wait(60),
+				forever("sequence",
+					change("speed", 0.04),
+					wait()
+				)
+			),
+
+			sequence(
+				wait(210),
+				destroy()
 			)
 		)
-	)
+	) )
 end
 
 spellData.buildAction = function()
@@ -69,11 +67,8 @@ spellData.buildAction = function()
 		var("offset", 0),
 		var("amount", startAmount),
 
-		sound("jingle", "[TH] Jingle"),
-		setSoundVolume("jingle", -0.25),
-
-		sound("shot", "[TH] Shot"),
-		setSoundVolume("shot", -15.5),
+		sound("jingle", "[TH] Jingle", -0.25),
+		sound("shot", "[TH] Shot", -15.5),
 
 		forever("sequence",
 			set("offset", mul(random(), 360)),

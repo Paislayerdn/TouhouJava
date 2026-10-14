@@ -40,8 +40,7 @@ public class Player extends Entity {
 				AddCircleHitbox("deathHB", 2.5),
 				AddHitboxTag("deathHB", PDEATH),
 				
-				Sound("fire", "[TH] Fires"),
-				SetSoundVolume("fire", -12.0f)
+				Sound("fire", "[TH] Fires", -12.0f)
 			)
 		);
 	}

@@ -5,8 +5,7 @@ import graphics.Renderer;
 import entity.Entity;
 
 public final class RectangleHitbox extends Hitbox {
-	private float width;
-	private float height;
+	private float width, height;
 
 	public RectangleHitbox(Entity owner, String name, float width, float height) {
 		super(owner, name);

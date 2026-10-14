@@ -21,60 +21,58 @@ spellData.onStart = function()
 end
 
 local bullette = function()
-	return spawnBullet(
-		sequence(
-			replicate("i", "j"),
-			var("speed", initialSpeed),
-			var("colorOffset", add( 120, get("j") )  ),
+	return spawnBullet( sequence(
+		replicate("i", "j"),
+		var("speed", initialSpeed),
+		var("colorOffset", add( 120, get("j") )  ),
 
-			setGhost(100),
-			setColor( random(40, 210) ),
-			setCostume("BulletFog"),
-			addCircleHitbox("bulletHB", 5),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
+		setGhost(100),
+		setColor( random(40, 210) ),
+		setCostume("BulletFog"),
+		addCircleHitbox("bulletHB", 5),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		addHitboxTag("bulletHB", "CLEARABLE"),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look( get( "offset" ) ),
-					turn(mul(get("i"), angle1)),
-					forward(110),
+		parallel(
+			sequence(
+				warp(boss),
+				look( get( "offset" ) ),
+				turn(mul(get("i"), angle1)),
+				forward(110),
 
-					look(0),
-					turn(mul(get("j"), angle2)),
-					forward(30),
-					forever("sequence",
-						forward(get("speed")),
-						wait()
-					)
-				),
-				sequence(
-					tween("size", 40, 16,
-						"color", get("colorOffset"),
-						"brightness", 100, 10,
-						"ghost", 100, 0,
-						add(70, mul(get("i"), 5) ,mul(get("j"), 1.5)), easing.quadInOut),		
-					setCostume("BulletRinged")
-				),
-				sequence(
-					wait(1),
-					turn( mul( get("dir"), 45), 29 ),
-					forever("sequence",
-						change("speed", -0.1),
-						wait()
-					)
-				),
-
-				sequence(
-					wait(360),
-					disableHitbox("bulletHB"),
-					tween("ghost", 100, 60),
-					destroy()
+				look(0),
+				turn(mul(get("j"), angle2)),
+				forward(30),
+				forever("sequence",
+					forward(get("speed")),
+					wait()
 				)
+			),
+			sequence(
+				tween("size", 40, 16,
+					"color", get("colorOffset"),
+					"brightness", 100, 10,
+					"ghost", 100, 0,
+					add(70, mul(get("i"), 5) ,mul(get("j"), 1.5)), easing.quadInOut),		
+				setCostume("BulletRinged")
+			),
+			sequence(
+				wait(1),
+				turn( mul( get("dir"), 45), 29 ),
+				forever("sequence",
+					change("speed", -0.1),
+					wait()
+				)
+			),
+
+			sequence(
+				wait(360),
+				disableHitbox("bulletHB"),
+				tween("ghost", 100, 60),
+				destroy()
 			)
 		)
-	)
+	) )
 end
 
 spellData.buildAction = function()
@@ -82,11 +80,8 @@ spellData.buildAction = function()
 		var("offset", mul(random(), 360)),
 		var("dir", -1),
 
-		sound("jingle", "[TH] Jingle"),
-		setSoundVolume("jingle", -0.25),
-
-		sound("shot", "[TH] Shot"),
-		setSoundVolume("shot", -15.5),
+		sound("jingle", "[TH] Jingle", -0.25),
+		sound("shot", "[TH] Shot", -15.5),
 
 		forever("sequence",
 			playSound("jingle"),

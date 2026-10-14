@@ -15,7 +15,7 @@ public final class Ariya extends Spell {
 	
 	@Override
 	public void configure() {
-		name = "Replication Sign \"Digitalized Pebbles\"";
+		name = "Replicated \"Digitalized Pebbles\"";
 		playerCandidateRadius = 40;
 		timer = 3600;
 		countableTime = timer;
@@ -39,11 +39,8 @@ public final class Ariya extends Spell {
 		return Sequence(
 			Var("offset", Mul(Random(), 360) ),
 			
-			Sound("jingle", "[TH] Jingle"),
-			SetSoundVolume("jingle", -0.25f),
-			
-			Sound("shot", "[TH] Shot"),
-			SetSoundVolume("shot", -17.5f),
+			Sound("jingle", "[TH] Jingle", -0.25f),
+			Sound("shot", "[TH] Shot", -17.5f),
 
 			Forever("Sequence",
 				PlaySound("jingle"),
@@ -57,48 +54,48 @@ public final class Ariya extends Spell {
 	
 	private Action bullete(float goldenAngle, float step, float waitIteration) {
 		float capSpeed = -7.5f;
-		return SpawnBullet(
-			Sequence(
-				Replicate("i"),
-				Var("speed", 0.30f),
-				
-				SetGhost(100),
-				SetCostume("BulletOval"),
-				AddCircleHitbox("bulletHB", 5),
-				AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-				AddHitboxTag("bulletHB", "CLEARABLE"),
-				DisableHitbox("bulletHB"),
-				Wait(Add(Mul(Get("i"), waitIteration), 1) ),
-				Parallel(
-					Sequence(
-						GoTo(boss), Look( Get("offset") ),
-						Turn(Mul(Get("i"), goldenAngle) ),
-						Forward( Mul(Get("i"), step) ),
-						PlaySound("shot"),
-						Forever("Sequence",
-							Forward( Get("speed") ),
+		return SpawnBullet( Sequence(
+			Replicate("i"),
+			Var("speed", 0.30f),
+
+			SetGhost(100),
+			SetCostume("BulletOval"),
+			AddCircleHitbox("bulletHB", 5),
+			AddHitboxTag("bulletHB", "ENEMY_BULLET"),
+			AddHitboxTag("bulletHB", "CLEARABLE"),
+			DisableHitbox("bulletHB"),
+			Wait(Add(Mul(Get("i"), waitIteration), 1) ),
+			Parallel(
+				Sequence(
+					GoTo(boss), Look( Get("offset") ),
+					Turn(Mul(Get("i"), goldenAngle) ),
+					Forward( Mul(Get("i"), step) ),
+					PlaySound("shot"),
+					Forever("Sequence",
+						Forward( Get("speed") ),
+						Wait()
+					)
+				),
+				Tween("color", 240, 130, 180),
+				Sequence(
+					Tween("size", 30, 11,
+						"brightness", 100, 60,
+						"ghost", 90, 0, 45),
+					EnableHitbox("bulletHB"),
+					While( Greater( Get("speed"), capSpeed),
+						() -> Sequence(
+							Change("speed", -0.07f),
 							Wait()
 						)
-					),
-					Tween("color", 240, 130, 180),
-					Sequence(
-						Tween("size", 30, 11, "brightness", 100, 60, "ghost", 90, 0, 45),
-						EnableHitbox("bulletHB"),
-						While( Greater( Get("speed"), capSpeed),
-							() -> Sequence(
-								Change("speed", -0.07f),
-								Wait()
-							)
-						)
-					),
-					Sequence(
-						Wait(480),
-						DisableHitbox("bulletHB"),
-						Tween("ghost", 100, 60),
-						Destroy()
 					)
+				),
+				Sequence(
+					Wait(480),
+					DisableHitbox("bulletHB"),
+					Tween("ghost", 100, 60),
+					Destroy()
 				)
 			)
-		);
+		) );
 	}
 }

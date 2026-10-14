@@ -28,40 +28,38 @@ return sequence(
 	jsfor("j", 1, count[1], function()
 		return sequence(
 			jsfor("k", 1, random(5, 8), function()
-				return spawnBullet(
-					sequence(
-						setCostume("BulletRinged"),
-						setColor(5),
-						addCircleHitbox("bulletHB", 16),
-						addHitboxTag("bulletHB", "ENEMY_BULLET"),
-						addHitboxTag("bulletHB", "CLEARABLE"),
-						var("speed", 6),
-						change("speed", mul(0.30, random(-10,10))),
-						playSound("shot"),
+				return spawnBullet( sequence(
+					setCostume("BulletRinged"),
+					setColor(5),
+					addCircleHitbox("bulletHB", 16),
+					addHitboxTag("bulletHB", "ENEMY_BULLET"),
+					addHitboxTag("bulletHB", "CLEARABLE"),
+					var("speed", 6),
+					change("speed", mul(0.30, random(-10,10))),
+					playSound("shot"),
 
-						parallel(
-							sequence(
-								warp(boss),
-								look( mul(random(), 360) ),
-								forward(-25),
-								forever("sequence",
-									forward(get("speed")),
-									change("speed", 0.075),
-									wait()
-								)
-							),
-							tween("size", 60, 25,
-								"brightness", -100, 10,
-								"ghost", 100, 0,
-								25, easing.linear),		
-
-							sequence(
-								wait(180),
-								destroy()
+					parallel(
+						sequence(
+							warp(boss),
+							look( mul(random(), 360) ),
+							forward(-25),
+							forever("sequence",
+								forward(get("speed")),
+								change("speed", 0.075),
+								wait()
 							)
+						),
+						tween("size", 60, 25,
+							"brightness", -100, 10,
+							"ghost", 100, 0,
+							25, easing.linear),		
+
+						sequence(
+							wait(180),
+							destroy()
 						)
 					)
-				)
+				) )
 			end),
 			wait( 2 )
 		)
@@ -71,49 +69,47 @@ end
 
 local function wave2helper()
 return jsfor("m", 1, w2spike, function()
-	return spawnBullet(
-		sequence(
-			replicate("j", "k", "m"),
-			change("m", -w2mid),
-			var("mirror", abs(get("m"))),
-			set("mirror", sub(w2mid, get("mirror"))),
-			setCostume("BulletOval"),
-			setColor(130),
-			setBrightness(100),
-			addCircleHitbox("bulletHB", 7),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
-			var("speed", 13),
-			change("speed", mul(get("mirror"), 0.34)),
+	return spawnBullet( sequence(
+		replicate("j", "k", "m"),
+		change("m", -w2mid),
+		var("mirror", abs(get("m"))),
+		set("mirror", sub(w2mid, get("mirror"))),
+		setCostume("BulletOval"),
+		setColor(130),
+		setBrightness(100),
+		addCircleHitbox("bulletHB", 7),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		addHitboxTag("bulletHB", "CLEARABLE"),
+		var("speed", 13),
+		change("speed", mul(get("mirror"), 0.34)),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look( get("offset") ),
-					turn( mul(get("j"), 360/(w2bloom*2)) ),
-					forward(40),
+		parallel(
+			sequence(
+				warp(boss),
+				look( get("offset") ),
+				turn( mul(get("j"), 360/(w2bloom*2)) ),
+				forward(40),
 
-					turn( get("offset2") ),
-					turn( mul(get("k"), 360/w2bloom) ),
-					turn( mul(get("m"), 0.9) ),
-					forward(-40),
-					forever("sequence",
-						forward(get("speed")),
-						wait()
-					)
-				),
-				tween("size", 30, 15,
-					"brightness", sub(-30, mul(get("mirror"), -20) ),
-					"ghost", 100, 0,
-					25, easing.linear),		
-
-				sequence(
-					wait(180),
-					destroy()
+				turn( get("offset2") ),
+				turn( mul(get("k"), 360/w2bloom) ),
+				turn( mul(get("m"), 0.9) ),
+				forward(-40),
+				forever("sequence",
+					forward(get("speed")),
+					wait()
 				)
+			),
+			tween("size", 30, 15,
+				"brightness", sub(-30, mul(get("mirror"), -20) ),
+				"ghost", 100, 0,
+				25, easing.linear),		
+
+			sequence(
+				wait(180),
+				destroy()
 			)
 		)
-	)
+	) )
 end)
 end
 
@@ -138,42 +134,40 @@ return sequence(
 	jsfor("j", 1, count[3], function()
 		return sequence(
 			jsfor("k", 1, w3bloom, function()
-				return spawnBullet(
-					sequence(
-						replicate("j", "k"),
-						setCostume("BulletHeart"),
-						setColor(70),
-						addCircleHitbox("bulletHB", 14),
-						addHitboxTag("bulletHB", "ENEMY_BULLET"),
-						addHitboxTag("bulletHB", "CLEARABLE"),
-						var("speed", 14),
-						playSound("shot"),
+				return spawnBullet( sequence(
+					replicate("j", "k"),
+					setCostume("BulletHeart"),
+					setColor(70),
+					addCircleHitbox("bulletHB", 14),
+					addHitboxTag("bulletHB", "ENEMY_BULLET"),
+					addHitboxTag("bulletHB", "CLEARABLE"),
+					var("speed", 14),
+					playSound("shot"),
 
-						parallel(
-							sequence(
-								warp(boss),
-								look( get("offset") ),
-								turn( mul(get("k"), 360/w3bloom ) ),
-								turn( mul(get("j"), 360/(w3bloom*2) ) ),
-								forward(-60),
-								forever("sequence",
-									forward(get("speed")),
-									change("speed", 0.09),
-									wait()
-								)
-							),
-							tween("size", 90, 50,
-								"brightness", -100, 60,
-								"ghost", 100, 0,
-								30, easing.linear),		
-
-							sequence(
-								wait(180),
-								destroy()
+					parallel(
+						sequence(
+							warp(boss),
+							look( get("offset") ),
+							turn( mul(get("k"), 360/w3bloom ) ),
+							turn( mul(get("j"), 360/(w3bloom*2) ) ),
+							forward(-60),
+							forever("sequence",
+								forward(get("speed")),
+								change("speed", 0.09),
+								wait()
 							)
+						),
+						tween("size", 90, 50,
+							"brightness", -100, 60,
+							"ghost", 100, 0,
+							30, easing.linear),		
+
+						sequence(
+							wait(180),
+							destroy()
 						)
 					)
-				)
+				) )
 			end),
 			wait( 15 )
 		)
@@ -187,46 +181,44 @@ return sequence(
 		return sequence(
 			set("chosen", mul(360, random())),
 			jsfor("k", 1, 9, function()
-				return spawnBullet(
-					sequence(
-						setCostume("BulletFog"),
-						setColor(210),
-						addCircleHitbox("bulletHB", 13),
-						addHitboxTag("bulletHB", "ENEMY_BULLET"),
-						addHitboxTag("bulletHB", "CLEARABLE"),
-						var("speed", add( -1, mul(8, random()) )  ),
-						playSound("shot"),
+				return spawnBullet( sequence(
+					setCostume("BulletFog"),
+					setColor(210),
+					addCircleHitbox("bulletHB", 13),
+					addHitboxTag("bulletHB", "ENEMY_BULLET"),
+					addHitboxTag("bulletHB", "CLEARABLE"),
+					var("speed", add( -1, mul(8, random()) )  ),
+					playSound("shot"),
 
-						parallel(
-							sequence(
-								warp(boss),
-								look( get("chosen") ),
-								forward(60),
+					parallel(
+						sequence(
+							warp(boss),
+							look( get("chosen") ),
+							forward(60),
 
-								look( mul(360, random()) ),
-								forward(90),
-								forever("sequence",
-									forward(get("speed")),
-									change("speed", 0.1),
-									wait()
-								)
-							),
-							sequence(
-								tween("size", 120, 50,
-									"brightness", -100, 60,
-									"ghost", 100, 0,
-									25, easing.quadInOut),
-								setCostume("BulletDonut")
-							),
-
-							sequence(
-								wait(180),
-								tween("ghost", 100, 90),
-								destroy()
+							look( mul(360, random()) ),
+							forward(90),
+							forever("sequence",
+								forward(get("speed")),
+								change("speed", 0.1),
+								wait()
 							)
+						),
+						sequence(
+							tween("size", 120, 50,
+								"brightness", -100, 60,
+								"ghost", 100, 0,
+								25, easing.quadInOut),
+							setCostume("BulletDonut")
+						),
+
+						sequence(
+							wait(180),
+							tween("ghost", 100, 90),
+							destroy()
 						)
 					)
-				)
+				) )
 			end),
 			wait( 5 )
 		)
@@ -239,11 +231,8 @@ spellData.buildAction = function()
 		var("offset", mul(random(), 360)),
 		var("dir", -1),
 
-		sound("jingle", "[TH] Jingle"),
-		setSoundVolume("jingle", -0.25),
-
-		sound("shot", "[TH] Shot"),
-		setSoundVolume("shot", -15.5),
+		sound("jingle", "[TH] Jingle", -0.25),
+		sound("shot", "[TH] Shot", -15.5),
 
 		forever("sequence",
 			jsfor("i", 1, 4,

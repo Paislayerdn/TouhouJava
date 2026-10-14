@@ -12,8 +12,7 @@ public class GLTexture {
 	private static final Map<BufferedImage, GLTexture> cache = new IdentityHashMap<>();
 
 	private final int id;
-	private final int width;
-	private final int height;
+	private final int width, height;
 
 	public static GLTexture get(BufferedImage image) {
 		GLTexture texture = cache.get(image);

@@ -69,6 +69,7 @@ public class Playing extends GameState {
 	
 	@Override
 	public void update() {
+		background.getCamera().z += 5.0/60; // camera test
 		if (Input.tap.P) {PlayingStats.debugMode = !PlayingStats.debugMode;}
 		
 		actions.update();

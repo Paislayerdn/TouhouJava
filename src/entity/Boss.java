@@ -13,8 +13,7 @@ public class Boss extends Entity {
 	private final Sound lowHP;
 	private Player player;
 	
-	private float maxHP = 0;
-	private float hp = 0;
+	private float maxHP = 0, hp = 0;
 
 	public Boss(Player player) {
 		name = "Boss";
@@ -47,7 +46,7 @@ public class Boss extends Entity {
 		if (hp <= 0) { hp = 0; } else {
 			hp -= amount;
 			if (hp <= 0.15*maxHP) lowHP.play();
-			System.out.println(hp);
+//			System.out.println(hp);
 		}
 	}
 	@Override

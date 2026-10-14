@@ -28,14 +28,15 @@ public final class GameplayScript {
 		started = true;
 		
 //		events.add(new DialogueEvent(parent, "Test"));
-
-		eventsAddSpell(TestSpell.class);
-		eventsAddSpell("Remilia");
-		eventsAddSpell("Yuyuko");
-		eventsAddSpell("Eirin");
-		eventsAddSpell("Junko");
-		eventsAddSpell("Madness20");
-		eventsAddSpell(Ariya.class);
+		eventsAddSpell("Kanako");
+		if (true) {
+			eventsAddSpell("Remilia");
+			eventsAddSpell("Yuyuko");
+			eventsAddSpell("Eirin");
+			eventsAddSpell("Junko");
+			eventsAddSpell("Madness20");
+			eventsAddSpell(Ariya.class);
+		}
 	}
 	
 	private void eventsAddSpell(String name) {

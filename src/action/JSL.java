@@ -418,7 +418,31 @@ public final class JSL {
 		registerStringString(globals, "removeHitboxTag", JScratch::RemoveHitboxTag);
 
 		// SOUND
-		registerStringString(globals, "sound", JScratch::Sound);
+		globals.set("sound", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						Sound(
+							args.arg(1).tojstring(),
+							args.arg(2).tojstring()
+						)
+					);
+				}
+
+				if (args.narg() == 3) {
+					return CoerceJavaToLua.coerce(
+						Sound(
+							args.arg(1).tojstring(),
+							args.arg(2).tojstring(),
+							(float) toJava(args.arg(3))
+						)
+					);
+				}
+
+				throw Debug.terminate("JSL", "sound expects (name, path) or (name, path, volume)");
+			}
+		});
 		globals.set( "setSoundVolume", new TwoArgFunction() {
 			@Override
 			public LuaValue call( LuaValue name, LuaValue volume ) {

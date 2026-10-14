@@ -3,7 +3,7 @@ package action;
 import state.gameplay.BulletManager;
 import entity.Bullet;
 
-final class SpawnBulletAction extends Action {
+public final class SpawnBulletAction extends Action {
 	@Override
 	public boolean consumesFrame() { return false; }
 	private final Action bulletAction;
@@ -22,17 +22,6 @@ final class SpawnBulletAction extends Action {
 		bullet.run(bulletAction);
 		BulletManager.spawn(bullet);
 
-		finish();
-	}
-}
-
-final class DestroyAction extends Action {
-	@Override
-	public boolean consumesFrame() { return false; }
-
-	@Override
-	public void start() {
-		owner.setAlive(false);
 		finish();
 	}
 }

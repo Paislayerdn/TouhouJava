@@ -16,14 +16,12 @@ import background3d.*;
 public class GLRenderer implements Renderer {
 	private static final String VERTEX_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.vert");
 	private static final String FRAGMENT_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.frag");
-	private final int width;
-	private final int height;
+	private final int width, height;
 	private final GLB3D b3d;
 	
 	private final GLShader shader;
 	private GLTexture currentTexture;
 
-	
 	private boolean shaderActive;
 	private void beginShader() {
 		if (shaderActive) { return; }
@@ -32,7 +30,6 @@ public class GLRenderer implements Renderer {
 		shader.setInt("tex", 0);
 		shaderActive = true;
 	}
-
 	private void endShader() {
 		if (!shaderActive) { return;	}
 

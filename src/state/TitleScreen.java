@@ -21,11 +21,8 @@ public class TitleScreen extends GameState {
 	private final ArrayList<Thing> sakuras;
 	private final Object sakuraLock = new Object();
 
-	private final BufferedImage background;
-	private final Thing reimu;
-	private final Thing marisa;
-	private final BufferedImage game1;
-	private final BufferedImage game2;
+	private final BufferedImage background, game1, game2;
+	private final Thing reimu, marisa;
 	private Music bgm;
 	
 	private int sakuraSpawnTimer = 0;

@@ -8,10 +8,8 @@ public final class TextBox {
 
 	private String text;
 
-	private float x;
-	private float y;
-	private float width;
-	private float height;
+	private float x, y;
+	private float width, height;
 	private TextAlign align;
 	private float glyphSize = 100;
 	

@@ -12,8 +12,7 @@
 		private Entity owner;
 		private String name = "[UNNAMED HITBOX]";
 
-		private float offsetX;
-		private float offsetY;
+		private float offsetX, offsetY;
 
 		private final Set<CollisionTag> tags = new HashSet<>();
 

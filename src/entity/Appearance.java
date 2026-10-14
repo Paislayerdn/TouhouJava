@@ -5,12 +5,8 @@ import graphics.java2d.AppearanceCache;
 
 public final class Appearance {
 	public BufferedImage costume;
-	public float color;
-	public float desaturation;
-	public float pixelate;
-	public float brightness;
-	public float ghost;
-	public float size;
+	public float color, desaturation, pixelate, 
+			brightness, ghost, size;
 
 	public Appearance() {
 		color = 0;

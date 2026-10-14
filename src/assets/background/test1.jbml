@@ -1,5 +1,5 @@
 SCENE
-	CAMERA 0 40 -150 10 0 0
+	CAMERA 0 40 -250 10 0 0
 
 	WORLD
 		plane ground 0 -20 0 90 0 0

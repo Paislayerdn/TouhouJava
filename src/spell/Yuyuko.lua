@@ -10,7 +10,7 @@ local spd = 4
 local perAccel = 3.75
 
 spellData.configure = {
-	name = "Replicated Butterfly -NaN Reflowering-",
+	name = "Replicated [Butterfly -NaN Reflowering-]",
 	timer = 150*60,
 	playerCandidateRadius = 100,
 	isSpell = true,
@@ -27,60 +27,58 @@ local waves = {}
 local cooldowns = {120, 90, 140}
 
 local function wave1bullet()
-	return spawnBullet(
-		sequence(
-			var("type", mod(get("i"), 2) ),
-			replicate("j", "k"),
-			var("speed", spd),
-			setGhost(100),
-			setColor(165),
-			jsif( equal( get("type"), 0),
-				function()
-					return changeColor(40)
-				end
-			),
-			setBrightness(25),
+	return spawnBullet( sequence(
+		var("type", mod(get("i"), 2) ),
+		replicate("j", "k"),
+		var("speed", spd),
+		setGhost(100),
+		setColor(165),
+		jsif( equal( get("type"), 0),
+			function()
+				return changeColor(40)
+			end
+		),
+		setBrightness(25),
 
-			setCostume("BulletButterfly"),
-			addCircleHitbox("bulletHB", 6),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
+		setCostume("BulletButterfly"),
+		addCircleHitbox("bulletHB", 6),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		addHitboxTag("bulletHB", "CLEARABLE"),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look(0),
-					turn( mul(get("type"), 360/2/count1) ),
-					turn( mul( 360/count1, get("j") ) ),
-					forever("sequence",
-						forward( get("speed") ),
-						wait()
-					)
-				),
-				tween("size", 60, 27.5,
-					"brightness", 100, 20,
-					"ghost", 100, 0,
-					45, easing.quadIn),		
-				sequence(
-					wait(120),
-					jsif( equal( get("j"), get("k"), 0),
-						function()
-							return playSound("jingle")
-						end
-					),
-					tween("speed", add(spd, mul(get("k"), perAccel) ),
-						"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
-						"desaturation", mul(get("k"), 10), 90)
-				),
-				sequence(
-					wait(270),
-					disableHitbox("bulletHB"),
-					tween("desaturation", 100, "ghost", 100, 90),
-					destroy()
+		parallel(
+			sequence(
+				warp(boss),
+				look(0),
+				turn( mul(get("type"), 360/2/count1) ),
+				turn( mul( 360/count1, get("j") ) ),
+				forever("sequence",
+					forward( get("speed") ),
+					wait()
 				)
+			),
+			tween("size", 60, 27.5,
+				"brightness", 100, 20,
+				"ghost", 100, 0,
+				45, easing.quadIn),		
+			sequence(
+				wait(120),
+				jsif( equal( get("j"), get("k"), 0),
+					function()
+						return playSound("jingle")
+					end
+				),
+				tween("speed", add(spd, mul(get("k"), perAccel) ),
+					"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
+					"desaturation", mul(get("k"), 10), 90)
+			),
+			sequence(
+				wait(270),
+				disableHitbox("bulletHB"),
+				tween("desaturation", 100, "ghost", 100, 90),
+				destroy()
 			)
 		)
-	)
+	) )
 end
 waves[1] = function()
 	return jsfor("i", 1, 6, function()
@@ -97,57 +95,55 @@ waves[1] = function()
 end
 
 local function wave2bullet()
-	return spawnBullet(
-		sequence(
-			replicate("i", "j", "k", "t"),
-			set("i", mul(mod(get("i"), 2), 2)  ),
-			change("i", -1),
-			var("speed", spd),
-			change("speed", mul(get("t"), 1.5)),
-			setGhost(100),
-			setColor(0),
+	return spawnBullet( sequence(
+		replicate("i", "j", "k", "t"),
+		set("i", mul(mod(get("i"), 2), 2)  ),
+		change("i", -1),
+		var("speed", spd),
+		change("speed", mul(get("t"), 1.5)),
+		setGhost(100),
+		setColor(0),
 
-			setCostume("BulletButterfly"),
-			addCircleHitbox("bulletHB", 6),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
+		setCostume("BulletButterfly"),
+		addCircleHitbox("bulletHB", 6),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		addHitboxTag("bulletHB", "CLEARABLE"),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look( get("offset") ),
-					turn( mul( 360/count2, get("j") ) ),
-					forever("sequence",
-						forward( get("speed") ),
-						wait()
-					)
-				),
-				tween("size", 60, 27.5,
-					"brightness", 100, 20,
-					"ghost", 100, 0,
-					30, easing.quadIn),		
-				sequence(
-					turn( mul(45, get("i") ) , 30),
-					turn( mul(22, get("i") ) ),
-					wait(30),
-					jsif( equal( get("j"), get("k"), 0),
-						function()
-							return playSound("jingle")
-						end
-					),
-					tween("speed", add(spd, mul(get("k"), perAccel) ),
-						"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
-						"desaturation", mul(get("k"), 10), 90)
-				),
-				sequence(
-					wait(270),
-					disableHitbox("bulletHB"),
-					tween("desaturation", 100, "ghost", 100, 90),
-					destroy()
+		parallel(
+			sequence(
+				warp(boss),
+				look( get("offset") ),
+				turn( mul( 360/count2, get("j") ) ),
+				forever("sequence",
+					forward( get("speed") ),
+					wait()
 				)
+			),
+			tween("size", 60, 27.5,
+				"brightness", 100, 20,
+				"ghost", 100, 0,
+				30, easing.quadIn),		
+			sequence(
+				turn( mul(45, get("i") ) , 30),
+				turn( mul(22, get("i") ) ),
+				wait(30),
+				jsif( equal( get("j"), get("k"), 0),
+					function()
+						return playSound("jingle")
+					end
+				),
+				tween("speed", add(spd, mul(get("k"), perAccel) ),
+					"brightness", sub(get("brightness"), mul(get("k"), 2.5)),
+					"desaturation", mul(get("k"), 10), 90)
+			),
+			sequence(
+				wait(270),
+				disableHitbox("bulletHB"),
+				tween("desaturation", 100, "ghost", 100, 90),
+				destroy()
 			)
 		)
-	)
+	) )
 end
 waves[2] = function()
 	return jsfor("i", 1, 6, function()
@@ -167,53 +163,51 @@ waves[2] = function()
 end
 
 local function wave3bullet()
-	return spawnBullet(
-		sequence(
-			replicate("j", "k"),
-			var("speed", spd+2),
-			setGhost(100),
-			setColor(0),
+	return spawnBullet( sequence(
+		replicate("j", "k"),
+		var("speed", spd+2),
+		setGhost(100),
+		setColor(0),
 
-			setCostume("BulletDonut"),
-			addCircleHitbox("bulletHB", 25),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
+		setCostume("BulletDonut"),
+		addCircleHitbox("bulletHB", 25),
+		addHitboxTag("bulletHB", "ENEMY_BULLET"),
+		addHitboxTag("bulletHB", "CLEARABLE"),
 
-			parallel(
-				sequence(
-					warp(boss),
-					look( get("offset") ),
-					turn( mul( 360/count3, get("j") ) ),
-					forever("sequence",
-						forward( get("speed") ),
-						wait()
-					)
-				),
-				tween("size", 200, 65,
-					"brightness", 100, 20,
-					"ghost", 100, 0,
-					30, easing.quadIn),		
-				sequence(
-					wait(80),
-					jsif( equal( get("j"), get("k"), 0),
-						function()
-							return playSound("jingle")
-						end
-					),
-					tween("speed", add(spd+2, mul(get("k"), perAccel) ),
-						"desaturation", mul(get("k"), 10), 40)
-				),
-				sequence(
-					wait(210),
-					disableHitbox("bulletHB"),
-					tween("brightness", 100, "ghost", 100, 120),
-					destroy()
+		parallel(
+			sequence(
+				warp(boss),
+				look( get("offset") ),
+				turn( mul( 360/count3, get("j") ) ),
+				forever("sequence",
+					forward( get("speed") ),
+					wait()
 				)
+			),
+			tween("size", 200, 65,
+				"brightness", 100, 20,
+				"ghost", 100, 0,
+				30, easing.quadIn),		
+			sequence(
+				wait(80),
+				jsif( equal( get("j"), get("k"), 0),
+					function()
+						return playSound("jingle")
+					end
+				),
+				tween("speed", add(spd+2, mul(get("k"), perAccel) ),
+					"desaturation", mul(get("k"), 10), 40)
+			),
+			sequence(
+				wait(210),
+				disableHitbox("bulletHB"),
+				tween("brightness", 100, "ghost", 100, 120),
+				destroy()
 			)
 		)
-	)
+	) )
 end
-local vert = 7
+local vert = 5
 waves[3] = function()
 	return sequence(
 		set("offset", random(1, 360)),
@@ -228,11 +222,8 @@ end
 
 spellData.buildAction = function()
 	return sequence(
-		sound("jingle", "[TH] Jingle"),
-		setSoundVolume("jingle", 5.25),
-
-		sound("shot", "[TH] Shot"),
-		setSoundVolume("shot", -5.5),
+		sound("jingle", "[TH] Jingle", 5.25),
+		sound("shot", "[TH] Shot", -5.5),
 		
 		var("offset", 0),
 		forever("sequence",

@@ -63,7 +63,7 @@ public final class TestSpell extends Spell {
 								)
 							),
 							Seq(
-								Wait(120),
+								Wait(240),
 								Destroy()
 							)
 						)

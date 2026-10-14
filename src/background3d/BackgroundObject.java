@@ -4,7 +4,6 @@ import entity.Appearance;
 
 public final class BackgroundObject extends BO3D {
 	public final Appearance appearance;
-
 	public float width, height;
 
 	public boolean visible = true;

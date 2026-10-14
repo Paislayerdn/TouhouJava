@@ -19,15 +19,10 @@ public final class HUD {
 	private final ArrayList<TextBox> PLAYFIELD_TEXTS = new ArrayList<>();
 	private final ArrayList<TextBox> OVERLAY_TEXTS = new ArrayList<>();
 
-	private TextBox spellWhole;
-	private TextBox spellDecimal;
-	private TextBox spellName;
+	private TextBox spellWhole, spellDecimal, spellName;
 
-	private final TextBox scoreValue;
-	private final TextBox grazeValue;
-	private final TextBox powerValue;
-	private final TextBox livesValue;
-	private final TextBox bombsValue;
+	private final TextBox scoreValue, grazeValue,
+			powerValue,  livesValue, bombsValue;
 	
 	private final BufferedImage foreground;
 	

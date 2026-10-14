@@ -140,6 +140,12 @@ public final class JScratch {
 	}
 	
 	// SOUND
+	public static Action Sound(String name, String asset, float volume) {
+		return Sequence(
+			Sound(name, asset),
+			SetSoundVolume(name, volume)
+		);
+	}
 	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
 	public static Action SetSoundVolume(String name, Object volume) { return new SetSoundVolumeAction(name, volume); }
 	public static Action PlaySound(String name) { return new PlaySoundAction(name); }
