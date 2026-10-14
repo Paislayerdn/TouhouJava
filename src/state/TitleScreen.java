@@ -65,7 +65,7 @@ public class TitleScreen extends GameState {
 		sakuras = new ArrayList<>();
 		
 		bgm = ResourceLoader.music("[TH20] Shrine Maiden Crowned with Glory Slow");
-		bgm.setVolume(-5.0f);
+		bgm.setVolume(-15.0f);
 		bgm.play();
 
 	}

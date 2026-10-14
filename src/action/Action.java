@@ -9,8 +9,8 @@ public abstract class Action {
 	protected boolean finished = false;
 	protected Thing owner;
 	protected ActionContext context;
-
 	public abstract boolean consumesFrame();
+	
 	public void reset() { finished = false; }
 	public void start() {}
 	public void update() {}

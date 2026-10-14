@@ -1,13 +1,8 @@
 package background3d;
 
 public abstract class BO3D { // Background Object 3D
-	public float x;
-	public float y;
-	public float z;
-
-	public float pitch;
-	public float yaw;
-	public float roll;
+	public float x, y, z;
+	public float pitch, yaw, roll;
 	
 	public BO3D() {
 		this(0,0,0, 0,0,0);

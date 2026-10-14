@@ -53,6 +53,7 @@ public final class SCT extends Thing {
 		);
 	}
 	private Action lambda() {
+		int frames = 30;
 		return Sequence(
 			SetCostume("LAMBDASCT"),
 			SetSize(40),
@@ -68,7 +69,7 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -0, 0, "ghost", 100, 0, 15),
+					Tween("brightness", -0, 0, "ghost", 100, 0, frames),
 					Tween("speed", -2, 8),
 					Tween("speed", -6, 8),
 					Tween("size", 50, "ghost", 100, 15),
@@ -79,6 +80,7 @@ public final class SCT extends Thing {
 	}
 
 	private Action reimu() {
+		int frames = 30;
 		return Sequence(
 			SetCostume("ReimuSCT"),
 			SetSize(35),
@@ -93,7 +95,7 @@ public final class SCT extends Thing {
 					)
 				),
 				Sequence(
-					Tween("brightness", -0, 0, "ghost", 100, 0, 30),
+					Tween("brightness", -0, 0, "ghost", 100, 0, frames),
 					Tween("speed", 2, 8),
 					Tween("speed", 6, 8),
 					Tween("size", 50, "ghost", 100, 15),

@@ -8,10 +8,11 @@ local step = -20
 
 spellData.configure = {
 	name = "Junko",
-	timer = 120*60,
+	timer = 15*60,
 	playerCandidateRadius = 30,
 	isSpell = false,
-	caster = "LAMBDA"
+	caster = "LAMBDA",
+	survival = true
 }
 
 spellData.onStart = function()

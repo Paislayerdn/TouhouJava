@@ -42,7 +42,7 @@ public class Playing extends GameState {
 		background = new Background3D();
 		
 		bgm = ResourceLoader.music("PACHAD");
-		bgm.setVolume(-15.0f);
+		bgm.setVolume(-25.0f);
 		bgm.play();
 		
 		background.load("test1");
@@ -52,6 +52,9 @@ public class Playing extends GameState {
 		gameScript.start();
 	}
 	
+	public void spawnBoss(int maxHP) {
+		boss.setMaxHP(maxHP);
+	}
 	public void run(Spell spell) {
 		actions.add((Action) spell);
 		if (spell.getCaster().equalsIgnoreCase("LAMBDA")) hud.setCurrentSpell(spell);
@@ -78,6 +81,8 @@ public class Playing extends GameState {
 		BulletManager.update();
 		
 		CollisionManager.update();
+		
+		gameScript.update();
 		
 		hud.update();
 		devPanel.update();
@@ -111,6 +116,7 @@ public class Playing extends GameState {
 		
 		devPanel.draw(renderer);
 	}
+	
 	public Music getBGM() { return bgm; }
 	public Player getPlayer() { return player; }
 	public Boss getBoss() { return boss; }

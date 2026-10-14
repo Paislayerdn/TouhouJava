@@ -29,6 +29,10 @@ public final class ActionContext {
 		return null;
 	}
 	
+	public boolean has(String name) {
+		return findContext(name) != null;
+	}
+	
 	// Declare a variable in THIS context.
 	public void declare(String name, Object value) {
 		if (variables.containsKey(name)) {
@@ -56,9 +60,5 @@ public final class ActionContext {
 		}
 
 		context.variables.put(name, value);
-	}
-
-	public boolean has(String name) {
-		return findContext(name) != null;
 	}
 }

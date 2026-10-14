@@ -1,4 +1,4 @@
-package spell;
+package action;
 
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.Globals;
@@ -23,7 +23,7 @@ public final class LuaSpell extends Spell {
 		super(boss, player);
 		this.luaFile = file;
 		name = "[UNNAMED LUASPELL]";
-		 
+
 		Globals globals = JSL.registerJScratch();
 		globals.set("spell", CoerceJavaToLua.coerce(this));
 		globals.set("boss", CoerceJavaToLua.coerce(boss));
@@ -31,10 +31,10 @@ public final class LuaSpell extends Spell {
 		String source = ResourceLoader.lua(luaFile);
 		LuaValue script = globals.load( source, luaFile+".lua" );
 		this.luaSpell = script.call();
-	
+
 		configure();
 	}
-	
+
 	@Override
 	protected void configure() {
 		LuaValue config = luaSpell.get("configure");
@@ -77,7 +77,15 @@ public final class LuaSpell extends Spell {
 		} else {
 			Debug.log(this, "isSpell = " + isSpell + " (default)");
 		}
-		
+
+		value = config.get("survival");
+			if (!value.isnil()) {
+				survival = value.toboolean();
+				Debug.log(this, "survival = " + survival);
+			} else {
+				Debug.log(this, "survival = " + survival + " (default)");
+			}
+
 		value = config.get("caster");
 		if (!value.isnil()) {
 			caster = value.tojstring();
@@ -86,12 +94,12 @@ public final class LuaSpell extends Spell {
 			Debug.log(this, "caster = " + caster + " (default)");
 		}
 	}
-	
+
 	@Override
 	public void onStart() {
 		luaSpell.get("onStart").call();
 	}
-	
+
 	@Override
 	protected Action buildAction() {
 		return (Action) luaSpell.get("buildAction").call().checkuserdata(Action.class);

@@ -8,10 +8,8 @@ import graphics.Renderer;
 
 public class Thing {
 	protected Appearance appearance;
-	protected float x;
-	protected float y;
-	protected float trueAngle;
-	protected float appearAngle;
+	protected float x, y;
+	protected float trueAngle, appearAngle;
 	protected boolean angleOverride;
 	
 	protected ActionRunner actions;

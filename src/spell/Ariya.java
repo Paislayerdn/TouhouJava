@@ -80,7 +80,7 @@ public final class Ariya extends Spell {
 							Wait()
 						)
 					),
-					Tween("color", 240, 130, 90),
+					Tween("color", 240, 130, 180),
 					Sequence(
 						Tween("size", 30, 11, "brightness", 100, 60, "ghost", 90, 0, 45),
 						EnableHitbox("bulletHB"),
