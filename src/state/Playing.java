@@ -69,12 +69,15 @@ public class Playing extends GameState {
 	
 	@Override
 	public void update() {
-		background.getCamera().z += 5.0/60; // camera test
+		background.update();
 		if (Input.tap.P) {PlayingStats.debugMode = !PlayingStats.debugMode;}
 		
 		actions.update();
 		if (dialogueRunner != null) {
 			dialogueRunner.update();
+			if (dialogueRunner.isFinished()) {
+				dialogueRunner = null;
+			}
 		}
 		
 		boss.update();

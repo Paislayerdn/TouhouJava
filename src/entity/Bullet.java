@@ -21,10 +21,9 @@ public class Bullet extends Entity {
 		this(999,999);
 	}
 	public Bullet(float x, float y) {
-		this.x = x;
-		this.y = y;
+		setXY(x, y);
 		
-		name = "Bullet";
+		setName("Bullet");
 		grazable = true;
 	}
 	
@@ -46,7 +45,7 @@ public class Bullet extends Entity {
 		}
 
 		if (collision.getType() == DAMAGE) {
-			alive = false;
+			setAlive(false);
 		}
 	}
 	

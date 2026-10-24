@@ -42,8 +42,7 @@ local function wave1bullet()
 
 		setCostume("BulletButterfly"),
 		addCircleHitbox("bulletHB", 6),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 		parallel(
 			sequence(
@@ -106,8 +105,7 @@ local function wave2bullet()
 
 		setCostume("BulletButterfly"),
 		addCircleHitbox("bulletHB", 6),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 		parallel(
 			sequence(
@@ -171,8 +169,7 @@ local function wave3bullet()
 
 		setCostume("BulletDonut"),
 		addCircleHitbox("bulletHB", 25),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 		parallel(
 			sequence(

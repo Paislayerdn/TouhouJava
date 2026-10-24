@@ -32,9 +32,9 @@ public final class Ariya extends Spell {
 	
 	@Override
 	protected Action buildAction() {
-		int count = 270;
-		float step = 2f;
-		float waitIteration = 0.2f;
+		int count = 1000;
+		float step = 0.5f;
+		float waitIteration = 0.125f;
 		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
 		return Sequence(
 			Var("offset", Mul(Random(), 360) ),
@@ -47,50 +47,56 @@ public final class Ariya extends Spell {
 				For("i", 1, count,
 					() -> bullete(goldenAngle, step, waitIteration)
 				),
-				Wait(150)
+				Wait(300)
 			)
 		);
 	}
 	
 	private Action bullete(float goldenAngle, float step, float waitIteration) {
-		float capSpeed = -7.5f;
+		float capSpeed = -3.5f;
 		return SpawnBullet( Sequence(
 			Replicate("i"),
 			Var("speed", 0.30f),
 
 			SetGhost(100),
 			SetCostume("BulletOval"),
-			AddCircleHitbox("bulletHB", 5),
-			AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-			AddHitboxTag("bulletHB", "CLEARABLE"),
+			AddCircleHitbox("bulletHB", 4),
+			AddHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 			DisableHitbox("bulletHB"),
+			GoTo(boss), Look( Get("offset") ),
+			Turn(Mul(Get("i"), goldenAngle) ),
+			Forward( Mul(Get("i"), step) ),
 			Wait(Add(Mul(Get("i"), waitIteration), 1) ),
+			If( Less( Distance(player), 100 ),
+				() -> Destroy()
+			),
 			Parallel(
 				Sequence(
-					GoTo(boss), Look( Get("offset") ),
-					Turn(Mul(Get("i"), goldenAngle) ),
-					Forward( Mul(Get("i"), step) ),
 					PlaySound("shot"),
 					Forever("Sequence",
 						Forward( Get("speed") ),
+						ChangeDesaturation(-0.1),
+						ChangeBrightness(-0.1),
 						Wait()
 					)
 				),
 				Tween("color", 240, 130, 180),
 				Sequence(
-					Tween("size", 30, 11,
+					Tween("size", 30, 9,
 						"brightness", 100, 60,
 						"ghost", 90, 0, 45),
 					EnableHitbox("bulletHB"),
+					Var("aa", Random(1, 360) ),
+					Turn( Get("aa") , 60),
 					While( Greater( Get("speed"), capSpeed),
 						() -> Sequence(
-							Change("speed", -0.07f),
+							Change("speed", -0.035f),
 							Wait()
 						)
 					)
 				),
 				Sequence(
-					Wait(480),
+					Wait(600),
 					DisableHitbox("bulletHB"),
 					Tween("ghost", 100, 60),
 					Destroy()

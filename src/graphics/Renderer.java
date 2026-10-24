@@ -21,6 +21,8 @@ public interface Renderer {
 	void beginBackground(BackgroundCamera camera);
 	void endBackground();
 	void backgroundObject(BackgroundObject object);
+	default boolean usesBackgroundFallback() { return false; }
+	default void backgroundFallback(BufferedImage image) {}
 
 	void image(BufferedImage image, float x, float y);
 	void image(BufferedImage image,	float x, float y,	float width, float height);

@@ -32,7 +32,6 @@ final class WaitAction extends Action {
 		}
 
 		if (intDuration == 0) {
-			Debug.log("JScratch", this, "Waiting for 0 frames, aborting this wait.");
 			consumedFrame = false;
 			finish();
 		}

@@ -26,8 +26,7 @@ wave[1] = function()
 				setGhost(100),
 				setCostume("BulletDonut"),
 				addCircleHitbox("bulletHB", 15),
-				addHitboxTag("bulletHB", "ENEMY_BULLET"),
-				addHitboxTag("bulletHB", "CLEARABLE"),
+				addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 				var("speed", 9),
 
 				parallel(
@@ -71,8 +70,7 @@ wave[2] = function()
 				setColor(160),
 				setCostume("BulletRinged"),
 				addCircleHitbox("bulletHB", 6),
-				addHitboxTag("bulletHB", "ENEMY_BULLET"),
-				addHitboxTag("bulletHB", "CLEARABLE"),
+				addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 				parallel(
 					sequence(
@@ -113,8 +111,7 @@ wave[3] = function()
 				setCostume("BulletFog"),
 
 				addCircleHitbox("bulletHB", 4),
-				addHitboxTag("bulletHB", "ENEMY_BULLET"),
-				addHitboxTag("bulletHB", "CLEARABLE"),
+				addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 				parallel(
 					sequence(

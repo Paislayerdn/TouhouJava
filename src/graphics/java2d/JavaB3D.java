@@ -28,7 +28,7 @@ public final class JavaB3D {
 			return;
 		}
 
-		Appearance appearance = object.appearance;
+		Appearance appearance = object.getAppearance();
 
 		if (appearance.costume == null
 			|| appearance.size == 0
@@ -50,14 +50,14 @@ public final class JavaB3D {
 		for (Point3 corner : corners) {
 			rotate(
 				corner,
-				object.pitch,
-				object.yaw,
-				object.roll
+				object.getPitch(),
+				object.getYaw(),
+				object.getRoll()
 			);
 
-			corner.x += object.x;
-			corner.y += object.y;
-			corner.z += object.z;
+			corner.x += object.getX();
+			corner.y += object.getY();
+			corner.z += object.getZ();
 		}
 
 		BufferedImage image = appearance.getRenderedCostume();
@@ -159,9 +159,9 @@ public final class JavaB3D {
 
 		rotateCamera(
 			point,
-			camera.pitch,
-			camera.yaw,
-			camera.roll
+			camera.getPitch(),
+			camera.getYaw(),
+			camera.getRoll()
 		);
 
 		return point;

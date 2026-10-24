@@ -95,8 +95,8 @@ public final class LoadingState extends GameState {
 		loadTasks.add(() -> ResourceLoader.dialogue(name));
 	}
 
-	public void preloadJBML(String name) {
-		loadTasks.add(() -> ResourceLoader.jbml(name));
+	public void preloadBackgroundLua(String name) {
+		loadTasks.add(() -> ResourceLoader.backgroundLua(name));
 	}
 
 	public void preloadLua(String name) {

@@ -30,8 +30,7 @@ local bullete = function()
 		setGhost(100),
 		setCostume("BulletOval"),
 		addCircleHitbox("bulletHB", 5),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 		disableHitbox("bulletHB"),
 
 		wait( add( mul(get("i"), waitIteration), 1 ) ),

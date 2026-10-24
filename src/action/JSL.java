@@ -16,6 +16,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import main.Debug;
 import static action.JScratch.*;
 import entity.Entity;
+import entity.Thing;
 
 public final class JSL {
 	private JSL() {}
@@ -166,20 +167,6 @@ public final class JSL {
 			}
 		});
 	}
-	private static <T> void registerStringString(Globals globals,
-		String name,
-		BiFunction<String, String, T> function
-	) {
-		globals.set(name, new TwoArgFunction() {
-			@Override
-			public LuaValue call(LuaValue a, LuaValue b) {
-				return CoerceJavaToLua.coerce(
-					function.apply(a.tojstring(), b.tojstring())
-				);
-			}
-		});
-	}
-
 	public static Globals registerJScratch() {
 		Globals globals = JsePlatform.standardGlobals();
 		
@@ -414,8 +401,8 @@ public final class JSL {
 		registerStringArg(globals, "enableHitbox", JScratch::EnableHitbox);
 		registerStringArg(globals, "disableHitbox", JScratch::DisableHitbox);
 
-		registerStringString(globals, "addHitboxTag", JScratch::AddHitboxTag);
-		registerStringString(globals, "removeHitboxTag", JScratch::RemoveHitboxTag);
+		registerVarArg(globals, "addHitboxTag", args -> hitboxTags(args, true));
+		registerVarArg(globals, "removeHitboxTag", args -> hitboxTags(args, false));
 
 		// SOUND
 		globals.set("sound", new VarArgFunction() {
@@ -477,6 +464,25 @@ public final class JSL {
 				return CoerceJavaToLua.coerce(
 					SpawnBullet(action)
 				);
+			}
+		});
+		globals.set("spawn", new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue className, LuaValue alias) {
+				return CoerceJavaToLua.coerce(
+					Spawn(className.checkjstring(), alias.checkjstring())
+				);
+			}
+		});
+		globals.set("bestow", new TwoArgFunction() {
+			@Override
+			public LuaValue call(LuaValue alias, LuaValue actionFactory) {
+				actionFactory.checkfunction();
+				ActionFactory factory = () -> {
+					LuaValue value = actionFactory.call();
+					return (Action) value.checkuserdata(Action.class);
+				};
+				return CoerceJavaToLua.coerce(Bestow(alias.checkjstring(), factory));
 			}
 		});
 		registerZeroArgAction(globals, "destroy", JScratch::Destroy);
@@ -633,9 +639,29 @@ public final class JSL {
 		registerTwoArg(globals, "power", JScratch::Power);
 		globals.set("pow", globals.get("power"));
 		registerTwoArg(globals, "root", JScratch::Root);
+		globals.set("distance", new VarArgFunction() {
+			@Override
+			public Varargs invoke(Varargs args) {
+				if (args.narg() == 1) {
+					Thing target = (Thing) args.arg(1).checkuserdata(Thing.class);
+					return CoerceJavaToLua.coerce(Distance(target));
+				}
+
+				if (args.narg() == 2) {
+					return CoerceJavaToLua.coerce(
+						Distance(toJava(args.arg(1)), toJava(args.arg(2)))
+					);
+				}
+
+				throw Debug.terminate("JSL", "distance expects (Thing) or (x, y)");
+			}
+		});
 		registerOneArg(globals, "abs", JScratch::Abs);
+		registerOneArg(globals, "roundUp", JScratch::RoundUp);
+		registerOneArg(globals, "roundDown", JScratch::RoundDown);
 		registerVarArg(globals, "min", JScratch::Min);
 		registerVarArg(globals, "max", JScratch::Max);
+		registerVarArg(globals, "avg", JScratch::Avg);
 		globals.set("random", new VarArgFunction() {
 			@Override
 			public Varargs invoke(Varargs args) {
@@ -705,5 +731,15 @@ public final class JSL {
 		} );
 		
 		return globals;
+	}
+
+	private static Action hitboxTags(Object[] args, boolean add) {
+		if (args.length < 2) {
+			throw Debug.terminate("JSL", "hitbox tag action expects (name, tag, ...)");
+		}
+
+		String name = (String) args[0];
+		Object[] tags = java.util.Arrays.copyOfRange(args, 1, args.length);
+		return add ? AddHitboxTag(name, tags) : RemoveHitboxTag(name, tags);
 	}
 }

@@ -10,8 +10,8 @@ import graphics.TextAlign;
 
 import state.Playing;
 
-import action.Action;
 import resource.ResourceLoader;
+import resource.Sound;
 
 import main.Input;
 
@@ -25,7 +25,8 @@ public final class DialogueRunner {
 	private final TextBox textBox;
 
 	private boolean waitingForInput;
-	private Action waitingMovement;
+	private boolean skipping;
+	private final Sound advanceSound;
 	
 	public DialogueRunner(Playing parent, String name) {
 		this( parent, DialogueParser.parse( ResourceLoader.dialogue(name) ) );
@@ -33,6 +34,8 @@ public final class DialogueRunner {
 	public DialogueRunner(Playing parent, Dialogue dialogue) {
 		this.parent = parent;
 		this.dialogue = dialogue;
+		this.advanceSound = ResourceLoader.sound("[TH] Fires");
+		this.advanceSound.setVolume(-12.0f);
 		
 		this.textBox = new TextBox("",
 			0, 0,
@@ -99,36 +102,33 @@ public final class DialogueRunner {
 	public void setCurrentSpeakerName(String displayName) {
 		currentSpeaker.setDisplayName(displayName);
 	}
-
-	public void waitForMovement(Action action) {
-		waitingMovement = action;
-	}
 	
 	public String getCurrentText() { return textBox.getText(); }
 	public void setCurrentText(String text) { textBox.setText(text); }
 	
-	public void waitForAdvance() { waitingForInput = true; }
+	public void waitForAdvance() { waitingForInput = !skipping; }
 
 	public void update() {
+		if (Input.tap.Q || Input.hold.Q) {
+			skipping = true;
+			waitingForInput = false;
+		}
+
 		for (DialogueThing speaker : dialogue.getSpeakers()) {
 			speaker.update();
 		}
 
-		if (waitingMovement != null) {
-			if (!waitingMovement.isFinished())
-				return;
-
-			waitingMovement = null;
-		}
-
 		if (waitingForInput) {
-			if (!advancePressed()) return;
+			if (Input.tap.Z) {
+				advanceSound.play();
+			} else if (!skipping) {
+				return;
+			}
 
 			waitingForInput = false;
 		}
 
 		while (!waitingForInput
-				&& waitingMovement == null
 				&& commandIndex < dialogue.getCommands().size()) {
 
 			DialogueCommand command =
@@ -145,11 +145,7 @@ public final class DialogueRunner {
 		textBox.draw(renderer);
 	}
 	
-	private boolean advancePressed() {
-		return Input.tap.Z
-			|| Input.tap.MOUSE_LEFT
-			|| Input.hold.PAGEUP;
-	}
+	public boolean isSkipping() { return skipping; }
 
 	public void playSound(String filename) {
 		ResourceLoader.sound(filename).play();
@@ -157,6 +153,6 @@ public final class DialogueRunner {
 
 	public boolean isFinished() {
 		return commandIndex >= dialogue.getCommands().size()
-			&& !waitingForInput && waitingMovement == null;
+			&& !waitingForInput;
 	}
 }

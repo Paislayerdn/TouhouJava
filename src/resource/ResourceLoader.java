@@ -68,8 +68,8 @@ public final class ResourceLoader {
 			throw Debug.terminate(ResourceLoader.class, "Failed to load text resource: " + name + ", " + e);
 		}
 	}
-	public static String jbml(String name) {
-		return text(ResourceFinder.BACKGROUND, name, ".jbml", ".txt");
+	public static String backgroundLua(String name) {
+		return text(ResourceFinder.BACKGROUND, name, ".lua");
 	}
 	public static String lua(String name) {
 		return text(ResourceFinder.SPELL, name, ".lua");

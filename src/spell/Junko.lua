@@ -7,10 +7,10 @@ local angle = 360/density
 local step = -20
 
 spellData.configure = {
-	name = "Junko",
-	timer = 15*60,
+	name = "Replicated [Trembling, Shivering Star]",
+	timer = 30*60,
 	playerCandidateRadius = 30,
-	isSpell = false,
+	isSpell = true,
 	caster = "LAMBDA",
 	survival = true
 }

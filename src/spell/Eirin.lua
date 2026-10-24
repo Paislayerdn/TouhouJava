@@ -7,10 +7,10 @@ local angle1, angle2 = 360/rings, 360/density
 local cooldown = 175
 
 spellData.configure = {
-	name = "Eirin",
+	name = "Eirin nonspell",
 	timer = 120*60,
 	playerCandidateRadius = 35,
-	isSpell = true,
+	isSpell = false,
 	caster = "LAMBDA"
 }
 
@@ -30,8 +30,7 @@ local bullette = function()
 		setColor( random(40, 210) ),
 		setCostume("BulletFog"),
 		addCircleHitbox("bulletHB", 5),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 
 		parallel(
 			sequence(

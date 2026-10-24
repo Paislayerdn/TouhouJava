@@ -1,14 +1,14 @@
 local spellData = {}
 
 local circleCount = 5
-local density = 100
+local density = 48
 
 spellData.configure = {
 	name = "Replicated [Mountain of Faith]",
 	timer = 60*120,
 	playerCandidateRadius = 70,
 	countableTime = timer,
-	isSpell = false,
+	isSpell = true,
 	caster = "LAMBDA"
 }
 
@@ -21,14 +21,14 @@ end
 local function spawnCircle(amount, radius, centerDistance)
 	return jsfor("p", 1, amount, function()
 		return spawnBullet( sequence(
-			replicate("p", "i", "j"),
+			replicate("p", "j", "i"),
+			var("group", roundDown( div(get("i"), 4 ) ) ),
 			setGhost(100),
 			setColor(45),
 			changeColor( mul(-45, get("j")) ),
-			setCostume("BulletCircle"),
-			addCircleHitbox("bulletHB", 7),
-			addHitboxTag("bulletHB", "ENEMY_BULLET"),
-			addHitboxTag("bulletHB", "CLEARABLE"),
+			setCostume("BulletFog"),
+			addCircleHitbox("bulletHB", 5),
+			addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 			disableHitbox("bulletHB"),
 
 			parallel(
@@ -44,16 +44,32 @@ local function spawnCircle(amount, radius, centerDistance)
 					turn(mul(360 / amount, get("p"))),
 					forward( mul( get("j"), radius ) ),
 
-					wait( mul(0.5, get("p")) ),
+					wait( mul(0.75, get("p")) ),
 					playSound("shot"),
-					tween("size", 30, 13,
+					tween("size", 30, 18,
 						"brightness", 100, 0,
 						"ghost", 100, 0, 30),
-					enableHitbox("bulletHB")
+					setCostume("BulletRinged"),
+					enableHitbox("bulletHB"),
+					var("speed", 3),
+					wait( mul( sub( 3, get("j") ) , 105 ) ),
+					sequence(
+						turn( add(
+							mul( get("group"), -25 ),
+							125
+						), 120),
+						forever("sequence",
+							forward( get("speed") ),
+							jsif( greater(get("speed"), -5),
+								function() return change("speed", -0.075) end
+							),
+							wait()
+						)
+					)
 				),
 
 				sequence(
-					wait(300),
+					wait(1200),
 					disableHitbox("bulletHB"),
 					tween("ghost", 0, 100, 30),
 					destroy()
@@ -65,8 +81,8 @@ end
 
 spellData.buildAction = function()
 	return sequence(
-		sound("jingle", "[TH] Jingle", -0.25),
-		sound("shot", "[TH] Shot", -22.5),
+		sound("jingle", "[TH] Jingle", -5.25),
+		sound("shot", "[TH] Shot", -32.5),
 
 		forever("sequence",
 			playSound("jingle"),
@@ -79,7 +95,7 @@ spellData.buildAction = function()
 					wait(30)
 				)
 			end),
-			wait(450)
+			wait(200)
 		)
 	)
 end

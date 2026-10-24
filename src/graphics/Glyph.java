@@ -12,9 +12,9 @@ public final class Glyph extends Thing {
 	public Glyph(int codePoint) {
 		super();
 
-		this.name = "[Glyph]";
+		setName("[Glyph]");
 		this.codePoint = codePoint;
-		appearance.setCostume(
+		getAppearance().setCostume(
 			TextHelper.getGlyphImage(codePoint)
 		);
 	}

@@ -28,6 +28,7 @@ public class GLWindow {
 			GLFW.GLFW_RESIZABLE,
 			GLFW.GLFW_FALSE
 		);
+		GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
 
 		window = GLFW.glfwCreateWindow(
 			width, height,

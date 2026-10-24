@@ -14,13 +14,10 @@ public final class SpawnBulletAction extends Action {
 
 	@Override
 	public void start() {
-		Bullet bullet = new Bullet();
-
-		ActionContext bulletContext = new ActionContext(getContext());
-		bullet.setActionContext(bulletContext);
-
-		bullet.run(bulletAction);
-		BulletManager.spawn(bullet);
+		Bullet bullet = (Bullet) SpawnRegistry.create("Bullet", "Bullet");
+		bullet.setActionContext(new ActionContext(getContext()));
+		bullet.getActionRunner().add(bulletAction, bullet);
+		SpawnRegistry.activate(bullet);
 
 		finish();
 	}

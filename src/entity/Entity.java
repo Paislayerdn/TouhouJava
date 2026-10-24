@@ -12,8 +12,7 @@ public abstract class Entity extends Thing {
 
 	public Entity() {
 		super();
-		name = "[UNNAMED ENTITY]";
-		this.alive = true;
+		setName("[UNNAMED ENTITY]");
 		hitboxes = new ArrayList<>();
 	}
 

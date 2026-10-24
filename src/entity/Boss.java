@@ -16,10 +16,9 @@ public class Boss extends Entity {
 	private float maxHP = 0, hp = 0;
 
 	public Boss(Player player) {
-		name = "Boss";
+		setName("Boss");
 		this.player = player;
-		x = 0;
-		y = 120;
+		setXY(0, 120);
 		this.lowHP = ResourceLoader.sound("[TH] LowHP");
 		lowHP.setVolume(0.0f);
 		

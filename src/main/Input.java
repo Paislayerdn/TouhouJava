@@ -6,7 +6,7 @@ public final class Input {
 	public enum Key {
 		W, S, A, D,
 		SPACE, Z, X,
-		P, PAGEUP,
+		P, Q, PAGEUP,
 		MOUSE_LEFT
 	}
 
@@ -19,6 +19,7 @@ public final class Input {
 		public volatile boolean Z;
 		public volatile boolean X;
 		public volatile boolean P;
+		public volatile boolean Q;
 		public volatile boolean PAGEUP;
 		public volatile boolean MOUSE_LEFT;
 
@@ -32,6 +33,7 @@ public final class Input {
 				case Z -> Z = value;
 				case X -> X = value;
 				case P -> P = value;
+				case Q -> Q = value;
 				case PAGEUP -> PAGEUP = value;
 				case MOUSE_LEFT -> MOUSE_LEFT = value;
 			}

@@ -2,12 +2,11 @@ package action;
 
 import main.Debug;
 
-import entity.Thing;
 import entity.Entity;
 
 public abstract class Action {
 	protected boolean finished = false;
-	protected Thing owner;
+	protected ActionTarget owner;
 	protected ActionContext context;
 	public abstract boolean consumesFrame();
 	
@@ -18,8 +17,8 @@ public abstract class Action {
 	public final boolean isFinished() { return finished; }
 	public final void finish() { finished = true; }
 	
-	public final Thing getOwner() { return owner; }
-	public final void setOwner(Thing owner) { this.owner = owner; }
+	public final ActionTarget getOwner() { return owner; }
+	public final void setOwner(ActionTarget owner) { this.owner = owner; }
 	
 	public final ActionContext getContext() { return context; }
 	public final void setContext(ActionContext context) { this.context = context; }

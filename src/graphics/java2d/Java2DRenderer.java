@@ -44,6 +44,17 @@ public class Java2DRenderer implements Renderer {
 	}
 
 	@Override
+	public boolean usesBackgroundFallback() {
+		return true;
+	}
+
+	@Override
+	public void backgroundFallback(BufferedImage image) {
+		Depict.image(g2, image, 0, 0,
+			Settings.PLAYFIELD_WIDTH, Settings.PLAYFIELD_HEIGHT);
+	}
+
+	@Override
 	public void endBackground() {
 		b3d.endBackground();
 	}

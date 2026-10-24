@@ -41,6 +41,14 @@ public final class ActionContext {
 
 		variables.put(name, value);
 	}
+
+	public void putLocal(String name, Object value) {
+		variables.put(name, value);
+	}
+
+	public boolean hasLocal(String name) {
+		return variables.containsKey(name);
+	}
 	// Get a variable from this context or parent upwards.
 	public Object get(String name) {
 		ActionContext context = findContext(name);

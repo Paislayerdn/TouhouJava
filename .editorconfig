@@ -1,0 +1,6 @@
+root = true
+
+[*.{java,lua,frag,vert,jbml}]
+indent_style = tab
+indent_size = tab
+tab_width = 4

@@ -2,7 +2,6 @@ package action;
 
 import java.util.ArrayList;
 
-import entity.Thing;
 import java.util.HashMap;
 
 public final class ActionRunner {
@@ -36,7 +35,7 @@ public final class ActionRunner {
 	public synchronized void add(Action action) {
 		add(action, null);
 	}
-	public synchronized void add(Action action, Thing owner) {
+	public synchronized void add(Action action, ActionTarget owner) {
 		action.setOwner(owner);
 		action.setContext(context);
 

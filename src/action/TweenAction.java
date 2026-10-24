@@ -15,7 +15,6 @@ public final class TweenAction extends Action {
 	private final TweenMode mode;
 
 	private final String propertyName;
-	private final ReservedVariable property;
 	private float startValue;
 	private float endValue;
 	private int resolvedFrames;
@@ -35,16 +34,6 @@ public final class TweenAction extends Action {
 	}
 	public TweenAction(String propertyName, Object start, Object end, Object frames, Easing easing, TweenMode mode) {
 		this.propertyName = propertyName;
-		this.property = ReservedVariable.fromName(propertyName);
-
-		if (property != null) {
-			if (property == ReservedVariable.X || property == ReservedVariable.Y) {
-				Debug.warn("JScratch", this,
-					"Tween(\"" + property.getName() + "\", ...) is discouraged. Use "
-					+ (property == ReservedVariable.X ? "SetX(...)" : "SetY(...)") + " instead."
-				);
-			}
-		}
 
 		this.start = start;
 		this.end = end;
@@ -54,18 +43,17 @@ public final class TweenAction extends Action {
 	}
 	
 	public String getPropertyName() { return propertyName; }
-	public ReservedVariable getProperty() { return property; }
 	private float getValue() {
-		if (property != null) {
-			return resolveFloat(property.get(this));
+		if (getOwner() != null && getOwner().hasScriptProperty(propertyName)) {
+			return resolveFloat(getOwner().getScriptProperty(propertyName));
 		}
 
 		return resolveFloat(getVariable(propertyName));
 	}
 
 	private void setValue(float value) {
-		if (property != null) {
-			property.set(this, value);
+		if (getOwner() != null && getOwner().hasScriptProperty(propertyName)) {
+			getOwner().setScriptProperty(propertyName, value);
 		} else {
 			setVariable(propertyName, value);
 		}
@@ -89,8 +77,6 @@ public final class TweenAction extends Action {
 		setValue(startValue);
 
 		if (resolvedFrames == 0) {
-			Debug.log("JScratch", this, "Tween with 0 frames. Immediately finishing...");
-
 			setValue(resolveFloat(end));
 			finish();
 		}

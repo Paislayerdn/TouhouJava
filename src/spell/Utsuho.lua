@@ -37,8 +37,7 @@ local bulette = function()
 		setBrightness(100),
 		setGhost(100),
 		addCircleHitbox("bulletHB", 14),
-		addHitboxTag("bulletHB", "ENEMY_BULLET"),
-		addHitboxTag("bulletHB", "CLEARABLE"),
+		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 		warp(999, 999),
 
 		parallel(

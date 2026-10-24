@@ -16,8 +16,8 @@ public final class JScratch {
 	
 	// POSITION
 	public static Action Forward(Object distance) { return new ForwardAction(distance); }
-	public static Action MoveX(Object x) { return Move(x, 0); }
-	public static Action MoveY(Object y) { return Move(0, y); }
+	public static Action MoveX(Object x) { return new MoveAction(x, MoveAction.Axis.X); }
+	public static Action MoveY(Object y) { return new MoveAction(y, MoveAction.Axis.Y); }
 	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
 	
 	public static Action GoTo(Thing target) { return new GoToAction(target); }
@@ -60,10 +60,10 @@ public final class JScratch {
 	// TWEEN: ANGLE
 	public static Action LookTowards(Thing target, int frames) {
 		return new TweenAction(
-			ReservedVariable.ANGLE.getName(),
+			"angle",
 			Value.Get("angle"),
 			(Value) action -> {
-				Thing owner = action.getOwner();
+				ActionTarget owner = action.getOwner();
 
 				float dx = target.getX() - owner.getX();
 				float dy = target.getY() - owner.getY();
@@ -74,19 +74,19 @@ public final class JScratch {
 		);
 	}
 	public static Action Look(Object angle, int frames) {
-		return new TweenAction(ReservedVariable.ANGLE.getName(),
+		return new TweenAction("angle",
 			angle, frames, Easing.LINEAR, TweenMode.SNAPSHOT
 		);
 	}
 	public static Action Look(Object start, Object end, int frames) {
-		return new TweenAction(ReservedVariable.ANGLE.getName(),
+		return new TweenAction("angle",
 			start, end, frames,
 			Easing.LINEAR, TweenMode.SNAPSHOT
 		);
 	}
 	public static Action Turn(Object angle, int frames) {
 		return new TweenAction(
-			ReservedVariable.ANGLE.getName(),
+			"angle",
 			(Value) action -> Value.Get("angle"),
 			(Value) action -> Add(Value.Get("angle"), angle),
 			frames, Easing.LINEAR, TweenMode.SNAPSHOT
@@ -108,7 +108,7 @@ public final class JScratch {
 	public static Action ChangeColor(Object amount) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.CHANGE, amount); }
 
 	public static Action SetDesaturation(Object desat) { return new AppearanceAction(AppearanceAction.Type.DESATURATION, AppearanceAction.Mode.SET, desat); }
-	public static Action ChangeDesaturation(Object amount) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action ChangeDesaturation(Object amount) { return new AppearanceAction(AppearanceAction.Type.DESATURATION, AppearanceAction.Mode.CHANGE, amount); }
 	
 	public static Action SetPixelate(Object pixelate) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.SET, pixelate); }
 	public static Action ChangePixelate(Object amount) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.CHANGE, amount); }
@@ -129,14 +129,24 @@ public final class JScratch {
 	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
 	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
 
-	public static Action AddHitboxTag(String name, Object tag) { return AdmitHitboxTag(name, tag, true); }
-	public static Action RemoveHitboxTag(String name, Object tag) { return AdmitHitboxTag(name, tag, false); }
-	private static Action AdmitHitboxTag(String name, Object tag, boolean state) {
-		return new SetHitboxTag(
-			name,
-			CollisionTag.valueOf(tag.toString().toUpperCase(Locale.ROOT)),
-			state
-		);
+	public static Action AddHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, true); }
+	public static Action RemoveHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, false); }
+	private static Action AdmitHitboxTags(String name, Object[] tags, boolean state) {
+		if (tags.length == 0) {
+			throw Debug.terminate("JScratch", "At least one hitbox tag is required");
+		}
+
+		Action[] actions = new Action[tags.length];
+
+		for (int i = 0; i < tags.length; i++) {
+			actions[i] = new SetHitboxTag(
+				name,
+				CollisionTag.valueOf(tags[i].toString().toUpperCase(Locale.ROOT)),
+				state
+			);
+		}
+
+		return Sequence(actions);
 	}
 	
 	// SOUND
@@ -168,6 +178,12 @@ public final class JScratch {
 	
 	// BULLET LIFE
 	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }
+	public static Action Spawn(String className, String name) {
+		return new SpawnAction(className, name);
+	}
+	public static Action Bestow(String name, ActionFactory factory) {
+		return new BestowAction(name, factory);
+	}
 	public static Action Destroy() { return new DestroyAction(); }
 	
 	// LOGIC
@@ -245,10 +261,15 @@ public final class JScratch {
 	public static Value Pow(Object a, Object b) { return Power(a, b); }
 	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
 	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
+	public static Value Distance(Thing target) { return MathValue.Distance(target); }
+	public static Value Distance(Object x, Object y) { return MathValue.Distance(x, y); }
 	
 	public static Value Abs(Object value) { return MathValue.Abs(value); }
+	public static Value RoundUp(Object value) { return MathValue.RoundUp(value); }
+	public static Value RoundDown(Object value) { return MathValue.RoundDown(value); }
 	public static Value Min(Object... values) { return MathValue.Min(values); }
 	public static Value Max(Object... values) { return MathValue.Max(values); }
+	public static Value Avg(Object... values) { return MathValue.Avg(values); }
 	
 	public static Value Random() { return MathValue.Random(); }
 	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
@@ -290,28 +311,27 @@ public final class JScratch {
 
 		return Parallel(tweens.toArray(new Action[0]));
 	}
-	
 	// TWEENSERVICE: POSITION HELPER
 	private static Action TweenX(Object end, Object frames) {
-		return new TweenAction(ReservedVariable.X.getName(),
+		return new TweenAction("x",
 			Value.Get("x"), end, frames,
 			Easing.LINEAR
 		);
 	}
 	private static Action TweenX(Object start, Object end, Object frames) {
-		return new TweenAction(ReservedVariable.X.getName(),
+		return new TweenAction("x",
 			start, end, frames,
 			Easing.LINEAR
 		);
 	}
 	private static Action TweenY(Object end, Object frames) {
-		return new TweenAction(ReservedVariable.Y.getName(),
+		return new TweenAction("y",
 			Value.Get("y"), end, frames,
 			Easing.LINEAR
 		);
 	}
 	private static Action TweenY(Object start, Object end, Object frames) {
-		return new TweenAction(ReservedVariable.Y.getName(),
+		return new TweenAction("y",
 			start, end, frames,
 			Easing.LINEAR
 		);

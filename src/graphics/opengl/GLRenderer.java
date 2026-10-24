@@ -89,7 +89,8 @@ public class GLRenderer implements Renderer {
 	@Override
 	public void clear() {
 		GL11.glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClearDepth(1.0);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
 	@Override
@@ -241,6 +242,22 @@ public class GLRenderer implements Renderer {
 	@Override
 	public void beginBackground(BackgroundCamera camera) {
 		endShader();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glDepthMask(true);
+		if (camera.getFogDistance() > 0.0f) {
+			GL11.glEnable(GL11.GL_FOG);
+			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+			GL11.glFogf(GL11.GL_FOG_START, 0.0f);
+			GL11.glFogf(GL11.GL_FOG_END, camera.getFogDistance());
+			java.nio.FloatBuffer fog = org.lwjgl.BufferUtils.createFloatBuffer(4);
+			fog.put(camera.getFogRed() / 255.0f)
+				.put(camera.getFogGreen() / 255.0f)
+				.put(camera.getFogBlue() / 255.0f)
+				.put(1.0f)
+				.flip();
+			GL11.glFogfv(GL11.GL_FOG_COLOR, fog);
+		}
 
 		int viewportX = (int) (
 			Settings.HALF_WIDTH
@@ -291,29 +308,32 @@ public class GLRenderer implements Renderer {
 		GL11.glScalef(1.0f, 1.0f, -1.0f);
 
 		GL11.glRotatef(
-			-camera.roll,
+			-camera.getRoll(),
 			0.0f, 0.0f, 1.0f
 		);
 
 		GL11.glRotatef(
-			-camera.yaw,
+			-camera.getYaw(),
 			0.0f, 1.0f, 0.0f
 		);
 
 		GL11.glRotatef(
-			-camera.pitch,
+			-camera.getPitch(),
 			1.0f, 0.0f, 0.0f
 		);
 
 		GL11.glTranslatef(
-			-camera.x,
-			-camera.y,
-			-camera.z
+			-camera.getX(),
+			-camera.getY(),
+			-camera.getZ()
 		);
 	}
 
 	@Override
 	public void endBackground() {
+		GL11.glDisable(GL11.GL_FOG);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glPopMatrix();
 
@@ -331,16 +351,14 @@ public class GLRenderer implements Renderer {
 	}
 	@Override
 	public void backgroundObject(BackgroundObject object) {
-		Appearance appearance = object.appearance;
-
-		shader.setFloat("color", appearance.color);
-		shader.setFloat("brightness", appearance.brightness);
-		shader.setFloat(
-			"alpha",
-			(100.0f - appearance.ghost) / 100.0f
-		);
-
+		Appearance appearance = object.getAppearance();
+		GL11.glColor4f(1.0f, 1.0f, 1.0f,
+			(100.0f - appearance.ghost) / 100.0f);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 		b3d.render(object);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glColor4f(1, 1, 1, 1);
 	}
 	
 	@Override

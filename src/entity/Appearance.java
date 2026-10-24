@@ -1,12 +1,18 @@
 package entity;
 
+import action.ScriptProperty;
+import action.ScriptPropertySetter;
 import java.awt.image.BufferedImage;
 import graphics.java2d.AppearanceCache;
 
-public final class Appearance {
+public final class Appearance implements ScriptPropertySetter {
 	public BufferedImage costume;
-	public float color, desaturation, pixelate, 
-			brightness, ghost, size;
+	@ScriptProperty public float color;
+	@ScriptProperty public float desaturation;
+	@ScriptProperty public float pixelate;
+	@ScriptProperty public float brightness;
+	@ScriptProperty public float ghost;
+	@ScriptProperty public float size;
 
 	public Appearance() {
 		color = 0;
@@ -41,4 +47,19 @@ public final class Appearance {
 	public void changeGhost(float amount) { setGhost(ghost + amount); }
 	public void setSize(float size) { this.size = Math.max(0, size); }
 	public void changeSize(float amount) { setSize(size + amount); }
+
+	@Override
+	public boolean setScriptProperty(String name, Object value) {
+		float amount = ((Number) value).floatValue();
+		switch (name) {
+			case "color" -> setColor(amount);
+			case "desaturation" -> setDesaturation(amount);
+			case "pixelate" -> setPixelate(amount);
+			case "brightness" -> setBrightness(amount);
+			case "ghost" -> setGhost(amount);
+			case "size" -> setSize(amount);
+			default -> { return false; }
+		}
+		return true;
+	}
 }

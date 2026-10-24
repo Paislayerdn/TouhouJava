@@ -1,6 +1,7 @@
 package action;
 
 import main.Debug;
+import entity.Thing;
 
 public final class MathValue {
 	private MathValue() {}
@@ -62,6 +63,12 @@ public final class MathValue {
 			action.resolveFloat(value)
 		);
 	}
+	public static Value RoundUp(Object value) {
+		return action -> (float) Math.ceil(action.resolveFloat(value));
+	}
+	public static Value RoundDown(Object value) {
+		return action -> (float) Math.floor(action.resolveFloat(value));
+	}
 	public static Value Min(Object... values) {
 		return action -> {
 			if (values.length == 0) return 0.0;
@@ -92,6 +99,21 @@ public final class MathValue {
 			}
 
 			return result;
+		};
+	}
+	public static Value Avg(Object... values) {
+		if (values.length == 0) {
+			throw Debug.terminate("JScratch", MathValue.class, "Avg requires at least one value");
+		}
+
+		return action -> {
+			float result = 0;
+
+			for (Object value : values) {
+				result += action.resolveFloat(value);
+			}
+
+			return result / values.length;
 		};
 	}
 	
@@ -132,6 +154,23 @@ public final class MathValue {
 			}
 
 			return (float) Math.pow(number, 1.0 / degree);
+		};
+	}
+
+	public static Value Distance(Thing target) {
+		return action -> {
+			ActionTarget owner = action.getOwner();
+			float dx = target.getX() - owner.getX();
+			float dy = target.getY() - owner.getY();
+			return (float) Math.sqrt(dx * dx + dy * dy);
+		};
+	}
+	public static Value Distance(Object x, Object y) {
+		return action -> {
+			ActionTarget owner = action.getOwner();
+			float dx = action.resolveFloat(x) - owner.getX();
+			float dy = action.resolveFloat(y) - owner.getY();
+			return (float) Math.sqrt(dx * dx + dy * dy);
 		};
 	}
 	

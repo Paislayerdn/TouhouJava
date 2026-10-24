@@ -27,13 +27,13 @@ public final class GameplayScript {
 
 		started = true;
 		
-//		events.add(new DialogueEvent(parent, "Test"));
-		eventsAddSpell("Utsuho");
-		eventsAddSpell("Kanako");
+		events.add(new DialogueEvent(parent, "Test_1"));
 		if (true) {
 			eventsAddSpell("Remilia");
 			eventsAddSpell("Yuyuko");
 			eventsAddSpell("Eirin");
+			eventsAddSpell("Kanako");
+			eventsAddSpell("Utsuho");
 			eventsAddSpell("Junko");
 			eventsAddSpell("Madness20");
 			eventsAddSpell(Ariya.class);

@@ -6,12 +6,15 @@ import entity.Appearance;
 import org.lwjgl.opengl.GL11;
 
 public final class GLB3D {
+	private static final float PLANE_EXTENT = 20000.0f;
+	private static final float PLANE_TILE_SIZE = 100.0f;
+
 	public void render(BackgroundObject object) {
 		if (!object.visible) {
 			return;
 		}
 
-		Appearance appearance = object.appearance;
+		Appearance appearance = object.getAppearance();
 
 		if (appearance.costume == null
 			|| appearance.size == 0
@@ -27,37 +30,37 @@ public final class GLB3D {
 		GL11.glPushMatrix();
 
 		GL11.glTranslatef(
-			object.x,
-			object.y,
-			object.z
+			object.getX(),
+			object.getY(),
+			object.getZ()
 		);
 
 		GL11.glRotatef(
-			object.roll,
+			object.getRoll(),
 			0.0f,
 			0.0f,
 			1.0f
 		);
 
 		GL11.glRotatef(
-			object.yaw,
+			object.getYaw(),
 			0.0f,
 			1.0f,
 			0.0f
 		);
 
 		GL11.glRotatef(
-			object.pitch,
+			object.getPitch(),
 			1.0f,
 			0.0f,
 			0.0f
 		);
 
-		drawTexturedPlane(
-			texture,
-			object.width,
-			object.height
-		);
+		float width = object.tiledPlane ? PLANE_EXTENT : object.width;
+		float height = object.tiledPlane ? PLANE_EXTENT : object.height;
+		float tilesX = object.tiledPlane ? width / PLANE_TILE_SIZE : 1.0f;
+		float tilesY = object.tiledPlane ? height / PLANE_TILE_SIZE : 1.0f;
+		drawTexturedPlane(texture, width, height, tilesX, tilesY);
 
 		GL11.glPopMatrix();
 	}
@@ -65,7 +68,9 @@ public final class GLB3D {
 	private void drawTexturedPlane(
 		GLTexture texture,
 		float width,
-		float height
+		float height,
+		float tilesX,
+		float tilesY
 	) {
 		float halfWidth = width / 2.0f;
 		float halfHeight = height / 2.0f;
@@ -81,21 +86,21 @@ public final class GLB3D {
 			0.0f
 		);
 
-		GL11.glTexCoord2f(1.0f, 0.0f);
+		GL11.glTexCoord2f(tilesX, 0.0f);
 		GL11.glVertex3f(
 			halfWidth,
 			halfHeight,
 			0.0f
 		);
 
-		GL11.glTexCoord2f(1.0f, 1.0f);
+		GL11.glTexCoord2f(tilesX, tilesY);
 		GL11.glVertex3f(
 			halfWidth,
 			-halfHeight,
 			0.0f
 		);
 
-		GL11.glTexCoord2f(0.0f, 1.0f);
+		GL11.glTexCoord2f(0.0f, tilesY);
 		GL11.glVertex3f(
 			-halfWidth,
 			-halfHeight,

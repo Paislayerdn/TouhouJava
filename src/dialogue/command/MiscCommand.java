@@ -3,6 +3,7 @@ package dialogue.command;
 import main.Debug;
 import dialogue.DialogueCommand;
 import dialogue.DialogueRunner;
+import java.util.Locale;
 
 public final class MiscCommand implements DialogueCommand {
 	private final String command;
@@ -15,11 +16,11 @@ public final class MiscCommand implements DialogueCommand {
 
 	@Override
 	public void execute(DialogueRunner runner) {
-		switch (command) {
-			case "print" -> Debug.log(argument);
+		switch (command.toLowerCase(Locale.ROOT)) {
+			case "print" -> { Debug.log(argument); }
 			case "kill" -> runner.removeCurrentSpeaker();
 			case "name" -> runner.setCurrentSpeakerName(argument);
-			default -> Debug.log(this, "Unknown misc command: " + command);
+			// default -> Debug.log(this, "Unknown misc command: " + command);
 		}
 	}
 

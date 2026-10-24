@@ -19,11 +19,11 @@ public final class VariableAction extends Action {
 
 	@Override
 	public void start() {
-		ReservedVariable property = ReservedVariable.fromName(name);
+		boolean targetProperty = getOwner() != null && getOwner().hasScriptProperty(name);
 
 		switch (operation) {
 			case DECLARE:
-				if (property != null) {
+				if (targetProperty) {
 					throw Debug.terminate("JScratch", this, "Cannot declare reserved value: "+ name);
 				}
 
@@ -31,23 +31,18 @@ public final class VariableAction extends Action {
 				break;
 
 			case SET:
-				if (property != null) {
-					property.warnUsage("Set");
-					property.set(this, resolveFloat(value));
+				if (targetProperty) {
+					getOwner().setScriptProperty(name, resolve(value));
 				} else {
 					setVariable(name, resolve(value));
 				}
 				break;
 
 			case CHANGE:
-				if (property != null) {
-					property.warnUsage("Change");
-
-					float result =
-						((Number) property.get(this)).floatValue()
+				if (targetProperty) {
+					float result = ((Number) getOwner().getScriptProperty(name)).floatValue()
 						+ resolveFloat(value);
-
-					property.set(this, result);
+					getOwner().setScriptProperty(name, result);
 				} else {
 					Object current = getVariable(name);
 

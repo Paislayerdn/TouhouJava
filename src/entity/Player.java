@@ -24,10 +24,9 @@ public class Player extends Entity {
 	
 	public Player(HUD hud) {
 		this.hud = hud;
-		this.name = "Player";
+		setName("Player");
 		
-		this.x = 0;
-		this.y = -80;
+		setXY(0, -80);
 		
 		this.run(
 			Sequence(
@@ -65,8 +64,7 @@ public class Player extends Entity {
 		if (length > 0) {
 			dx /= length;
 			dy /= length;
-			x += dx * speed;
-			y += dy * speed;
+			move(dx * speed, dy * speed);
 		}
 
 		if (Input.tap.PAGEUP) {
@@ -99,8 +97,7 @@ public class Player extends Entity {
 							SetSize(120),
 							SetBrightness(60),
 							AddCircleHitbox("bulletHB", 70),
-							AddHitboxTag("bulletHB", PLAYER_BULLET),
-							AddHitboxTag("bulletHB", BOMB),
+							AddHitboxTag("bulletHB", PLAYER_BULLET, BOMB),
 							Look( Random(1,360) ),
 
 							Forever("Sequence",
@@ -163,7 +160,7 @@ public class Player extends Entity {
 		}
 
 		if (collision.getType() == DAMAGE) {
-			alive = false;
+			setAlive(false);
 		}
 	}
 	

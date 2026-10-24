@@ -75,22 +75,33 @@ final class SetAction extends Action {
 }
 
 final class MoveAction extends Action {
+	enum Axis { X, Y, BOTH }
+
 	private final Object x;
 	private final Object y;
+	private final Axis axis;
 	@Override
 	public boolean consumesFrame() { return false; }
 
 	public MoveAction(Object x, Object y) {
 		this.x = x;
 		this.y = y;
+		this.axis = Axis.BOTH;
+	}
+
+	public MoveAction(Object value, Axis axis) {
+		this.axis = axis;
+		this.x = axis == Axis.X ? value : null;
+		this.y = axis == Axis.Y ? value : null;
 	}
 
 	@Override
 	public void start() {
-		float dx = resolveFloat(x);
-		float dy = resolveFloat(y);
-
-		owner.move(dx, dy);
+		switch (axis) {
+			case X -> owner.setX(owner.getX() + resolveFloat(x));
+			case Y -> owner.setY(owner.getY() + resolveFloat(y));
+			case BOTH -> owner.move(resolveFloat(x), resolveFloat(y));
+		}
 
 		finish();
 	}

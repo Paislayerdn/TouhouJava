@@ -1,11 +1,12 @@
 SCENE
 	CAMERA 0 40 -250 10 0 0
+	border 200 200
 
 	WORLD
-		plane ground 0 -20 0 90 0 0
-		OBJECT tree1 50 0 0
-		OBJECT tree2 -50 0 0
-		OBJECT tree3 25 0 100
+		plane ground 0 0 0 90 0 0
+		OBJECT tree1 50 30 0
+		OBJECT tree2 -50 30 0
+		OBJECT tree3 25 30 100
 	END
 
 	EVENT init
@@ -13,5 +14,8 @@ SCENE
 		SET tree2 costume "Test2Tree"
 		SET tree3 costume "Test2Tree"
 		SET ground costume "Test2Ground"
+		forever
+			change camera z 0.083333
+		end
 	END
 END

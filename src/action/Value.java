@@ -5,9 +5,9 @@ public interface Value {
 	
 	public static Value Get(String name) {
 		return action -> {
-			ReservedVariable property = ReservedVariable.fromName(name);
-
-			if (property != null) { return property.get(action); }
+			if (action.getOwner() != null && action.getOwner().hasScriptProperty(name)) {
+				return action.getOwner().getScriptProperty(name);
+			}
 			return action.getVariable(name);
 		};
 	}
