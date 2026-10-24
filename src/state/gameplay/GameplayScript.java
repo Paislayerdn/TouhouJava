@@ -28,6 +28,7 @@ public final class GameplayScript {
 		started = true;
 		
 //		events.add(new DialogueEvent(parent, "Test"));
+		eventsAddSpell("Utsuho");
 		eventsAddSpell("Kanako");
 		if (true) {
 			eventsAddSpell("Remilia");
