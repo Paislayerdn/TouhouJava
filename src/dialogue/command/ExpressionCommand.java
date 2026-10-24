@@ -16,7 +16,7 @@ public final class ExpressionCommand implements DialogueCommand {
 	public void execute(DialogueRunner runner) {
 		runner.getCurrentSpeaker()
 			.getAppearance()
-			.setCostume(ResourceLoader.image(expression));
+			.setCostume(ResourceLoader.dialogueImage(expression));
 
 		// Debug.log(this, "Expression: " + expression);
 	}

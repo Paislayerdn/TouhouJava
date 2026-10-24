@@ -11,6 +11,7 @@ import static collision.CollisionTag.*;
 import static collision.CollisionType.*;
 
 import state.gameplay.HUD;
+import action.ActionContext;
 
 public class Player extends Entity {
 	private final HUD hud;
@@ -22,8 +23,9 @@ public class Player extends Entity {
 
 	private static final int SHOOT_INTERVAL = 6;
 	
-	public Player(HUD hud) {
+	public Player(HUD hud, ActionContext parentContext) {
 		this.hud = hud;
+		setActionContext(new ActionContext(parentContext));
 		setName("Player");
 		
 		setXY(0, -80);

@@ -20,44 +20,74 @@ public final class AppearanceCache {
 			return null;
 		}
 
+		float quantizedColor = quantize(color, Java2DQuality.COLOR_STEP,
+			Java2DQuality.COLOR_ROUNDING, 0.0f, 255.0f);
+		float quantizedDesaturation = quantize(desaturation, Java2DQuality.DESATURATION_STEP,
+			Java2DQuality.DESATURATION_ROUNDING, 0.0f, 100.0f);
+		float quantizedPixelate = quantize(pixelate, Java2DQuality.PIXELATE_STEP,
+			Java2DQuality.PIXELATE_ROUNDING, 0.0f, Float.POSITIVE_INFINITY);
+		float quantizedBrightness = quantize(brightness, Java2DQuality.BRIGHTNESS_STEP,
+			Java2DQuality.BRIGHTNESS_ROUNDING, -100.0f, 100.0f);
+
 		// No effects? Don't cache anything unnecessarily.
-		if (color == 0
-			&& desaturation == 0
-			&& pixelate == 0
-			&& brightness == 0) {
+		if (quantizedColor == 0
+			&& quantizedDesaturation == 0
+			&& quantizedPixelate == 0
+			&& quantizedBrightness == 0) {
 			return costume;
 		}
 
 		Key key;
 		key = new Key(
 				costume,
-				color,
-				desaturation,
-				pixelate,
-				brightness
+				quantizedColor,
+				quantizedDesaturation,
+				quantizedPixelate,
+				quantizedBrightness
 		);
 
-		return cache.computeIfAbsent(key, k -> {
-			BufferedImage image = costume;
+		BufferedImage cached = cache.get(key);
+		if (cached != null) {
+			return cached;
+		}
 
-			if (pixelate != 0) {
-				image = DepictUtility.pixelate(image, pixelate);
-			}
+		BufferedImage image = costume;
 
-			if (color != 0) {
-				image = DepictUtility.color(image, color);
-			}
+		if (quantizedPixelate != 0) {
+			image = DepictUtility.pixelate(image, quantizedPixelate);
+		}
 
-			if (brightness != 0) {
-				image = DepictUtility.brightness(image, brightness);
-			}
+		if (quantizedColor != 0) {
+			image = DepictUtility.color(image, quantizedColor);
+		}
 
-			if (desaturation != 0) {
-				image = DepictUtility.desaturation(image, desaturation);
-			}
+		if (quantizedBrightness != 0) {
+			image = DepictUtility.brightness(image, quantizedBrightness);
+		}
 
-			return image;
-		});
+		if (quantizedDesaturation != 0) {
+			image = DepictUtility.desaturation(image, quantizedDesaturation);
+		}
+
+		cache.put(key, image);
+		return image;
+	}
+
+	private static float quantize(float value, float step,
+		Java2DQuality.RoundingMode roundingMode, float min, float max) {
+		if (value == 0.0f || step <= 1.0f || !Float.isFinite(step)
+			|| !Float.isFinite(value)) {
+			return value;
+		}
+
+		double units = (double) value / step;
+		double roundedUnits = switch (roundingMode) {
+			case ROUND_UP -> Math.ceil(units);
+			case ROUND -> Math.floor(units + 0.5);
+			case ROUND_DOWN -> Math.floor(units);
+		};
+		float quantized = (float) (roundedUnits * step);
+		return Math.max(min, Math.min(max, quantized));
 	}
 
 	public static void clear() { cache.clear(); }

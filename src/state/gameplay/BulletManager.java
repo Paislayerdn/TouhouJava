@@ -2,6 +2,7 @@ package state.gameplay;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import graphics.Renderer;
 
@@ -11,25 +12,30 @@ import static collision.CollisionTag.*;
 import entity.Bullet;
 
 public final class BulletManager {
-	private static final ArrayList<Bullet> playerBullets = new ArrayList<>();
-	private static final ArrayList<Bullet> enemyBullets = new ArrayList<>();
-	private static final Object bulletLock = new Object();
+	private final ArrayList<Bullet> playerBullets = new ArrayList<>();
+	private final ArrayList<Bullet> enemyBullets = new ArrayList<>();
+	final Object bulletLock = new Object();
+	private final List<Bullet> playerBulletView = Collections.unmodifiableList(playerBullets);
+	private final List<Bullet> enemyBulletView = Collections.unmodifiableList(enemyBullets);
+	private final CollisionManager collisionManager;
 	
-	private BulletManager() {}
+	public BulletManager(CollisionManager collisionManager) {
+		this.collisionManager = collisionManager;
+	}
 	
-	public static List<Bullet> getPlayerBullets() {
+	public List<Bullet> getPlayerBullets() {
 		synchronized (bulletLock) {
-			return List.copyOf(playerBullets);
+			return playerBulletView;
 		}
 	}
 	
-	public static List<Bullet> getEnemyBullets() {
+	public List<Bullet> getEnemyBullets() {
 		synchronized (bulletLock) {
-			return List.copyOf(enemyBullets);
+			return enemyBulletView;
 		}
 	}
 	
-	public static void spawn(Bullet bullet) {
+	public void spawn(Bullet bullet) {
 		synchronized (bulletLock) {
 			for (Hitbox hb : bullet.getHitboxes()) {
 				if (hb.hasTag(PLAYER_BULLET)) {
@@ -42,42 +48,35 @@ public final class BulletManager {
 			}
 		}
 	}
-	public static void spawnPlayer(Bullet bullet) {
+	public void spawnPlayer(Bullet bullet) {
 		synchronized (bulletLock) {
 			playerBullets.add(bullet);
 		}
 	}
 	
-	public static void spawnEnemy(Bullet bullet) {
+	public void spawnEnemy(Bullet bullet) {
 		synchronized (bulletLock) {
 			enemyBullets.add(bullet);
 		}
 	}
 
-	public static void update() {
-		List<Bullet> playerSnapshot;
-		List<Bullet> enemySnapshot;
-
+	public void update() {
 		synchronized (bulletLock) {
-			playerSnapshot = List.copyOf(playerBullets);
-			enemySnapshot = List.copyOf(enemyBullets);
-		}
-
-		for (Bullet bullet : playerSnapshot) {
-			bullet.update();
-		}
-
-		for (Bullet bullet : enemySnapshot) {
-			bullet.update();
-			CollisionManager.updateEnemyCandidate(bullet);
-		}
-
-		synchronized (bulletLock) {
+			int playerCount = playerBullets.size();
+			int enemyCount = enemyBullets.size();
+			for (int i = 0; i < playerCount; i++) {
+				playerBullets.get(i).update();
+			}
+			for (int i = 0; i < enemyCount; i++) {
+				Bullet bullet = enemyBullets.get(i);
+				bullet.update();
+				collisionManager.updateEnemyCandidate(bullet);
+			}
 			playerBullets.removeIf(bullet -> !bullet.isAlive());
 			enemyBullets.removeIf(bullet -> !bullet.isAlive());
 		}
 	}
-	public static void clearBomb() {
+	public void clearBomb() {
 		synchronized (bulletLock) {
 			for (Bullet bullet : enemyBullets) {
 				for (Hitbox hitbox : bullet.getHitboxes()) {
@@ -90,27 +89,21 @@ public final class BulletManager {
 		}
 	}
 
-	public static void draw(Renderer renderer) {
-		for (Bullet bullet : getPlayerBullets()) {
-			bullet.draw(renderer);
-		}
-
-		for (Bullet bullet : getEnemyBullets()) {
-			bullet.draw(renderer);
+	public void draw(Renderer renderer) {
+		synchronized (bulletLock) {
+			for (Bullet bullet : playerBullets) bullet.draw(renderer);
+			for (Bullet bullet : enemyBullets) bullet.draw(renderer);
 		}
 	}
 
-	public static void drawHitboxes(Renderer renderer) {
-		for (Bullet bullet : getPlayerBullets()) {
-			bullet.drawHitboxes(renderer);
-		}
-
-		for (Bullet bullet : getEnemyBullets()) {
-			bullet.drawHitboxes(renderer);
+	public void drawHitboxes(Renderer renderer) {
+		synchronized (bulletLock) {
+			for (Bullet bullet : playerBullets) bullet.drawHitboxes(renderer);
+			for (Bullet bullet : enemyBullets) bullet.drawHitboxes(renderer);
 		}
 	}
 	
-	public static int getBulletCount() {
+	public int getBulletCount() {
 		synchronized (bulletLock) {
 			return playerBullets.size() + enemyBullets.size();
 		}

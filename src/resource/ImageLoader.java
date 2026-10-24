@@ -15,7 +15,10 @@ public final class ImageLoader {
 		".bmp"
 	};
 	public static BufferedImage load(String name) {
-		URL url = ResourceFinder.find(ResourceFinder.IMAGE, name, EXTENSIONS);
+		return load(ResourceFinder.IMAGE, name);
+	}
+	public static BufferedImage load(String folder, String name) {
+		URL url = ResourceFinder.find(folder, name, EXTENSIONS);
 
 		if (url == null) {
 			throw Debug.terminate("Image not found: " + name);

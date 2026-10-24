@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowFocusCallback;
+import org.lwjgl.system.MemoryStack;
 
 import main.Input;
 
@@ -17,6 +18,7 @@ import main.Debug;
 public class GLWindow {
 	private final long window;
 	private final int width, height;
+	private int framebufferWidth, framebufferHeight;
 
 	public GLWindow(int width, int height, String title) {
 		this.width = width;
@@ -53,6 +55,7 @@ public class GLWindow {
 
 		GLFW.glfwMakeContextCurrent(window);
 		GL.createCapabilities();
+		refreshFramebufferSize();
 		
 		GLFW.glfwSetKeyCallback(window, new GLInput());
 		GLFW.glfwSetCursorPosCallback(window, new GLMouse());
@@ -114,4 +117,15 @@ public class GLWindow {
 	public long getHandle() { return window; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
+	public int getFramebufferWidth() { return framebufferWidth; }
+	public int getFramebufferHeight() { return framebufferHeight; }
+	public void refreshFramebufferSize() {
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			java.nio.IntBuffer framebufferWidthBuffer = stack.mallocInt(1);
+			java.nio.IntBuffer framebufferHeightBuffer = stack.mallocInt(1);
+			GLFW.glfwGetFramebufferSize(window, framebufferWidthBuffer, framebufferHeightBuffer);
+			framebufferWidth = framebufferWidthBuffer.get(0);
+			framebufferHeight = framebufferHeightBuffer.get(0);
+		}
+	}
 }

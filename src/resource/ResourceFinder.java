@@ -4,6 +4,8 @@ import java.net.URL;
 
 public final class ResourceFinder {
 	public static final String IMAGE = "/assets/images/";
+	public static final String DIALOGUE_IMAGE = IMAGE + "dialogues/";
+	public static final String BACKGROUND_IMAGE = IMAGE + "background/";
 	public static final String SOUND = "/assets/sounds/";
 	public static final String MUSIC = "/assets/music/";
 	public static final String FONT = "/assets/fonts/";
@@ -30,4 +32,4 @@ public final class ResourceFinder {
 		}
 		return null;
 	}
-}		
+}

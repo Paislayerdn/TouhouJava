@@ -16,13 +16,21 @@ public final class ResourceLoader {
 	private static final Map<String, Font> fonts = new HashMap<>();
 
 	public static BufferedImage image(String name) {
-		BufferedImage image = images.get(name);
-
+		return image(ResourceFinder.IMAGE, name);
+	}
+	public static BufferedImage dialogueImage(String name) {
+		return image(ResourceFinder.DIALOGUE_IMAGE, name);
+	}
+	public static BufferedImage backgroundImage(String name) {
+		return image(ResourceFinder.BACKGROUND_IMAGE, name);
+	}
+	private static BufferedImage image(String folder, String name) {
+		String key = folder + name;
+		BufferedImage image = images.get(key);
 		if (image == null) {
-			image = ImageLoader.load(name);
-			images.put(name, image);
+			image = ImageLoader.load(folder, name);
+			images.put(key, image);
 		}
-
 		return image;
 	}
 

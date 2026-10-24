@@ -7,16 +7,15 @@ import graphics.Renderer;
 
 import main.Settings;
 import entity.Thing;
-import background3d.*;
+import background3d.BackgroundCamera;
+import background3d.BackgroundObject;
 
 public class Java2DRenderer implements Renderer {
 	private AffineTransform oldTransform;
 	private final Graphics2D g2;
-	private final JavaB3D b3d;
 
 	public Java2DRenderer(Graphics2D g2) {
 		this.g2 = g2;
-		this.b3d = new JavaB3D(g2);
 	}
 
 	@Override
@@ -35,12 +34,10 @@ public class Java2DRenderer implements Renderer {
 	
 	@Override
 	public void beginBackground(BackgroundCamera camera) {
-		b3d.beginBackground(camera);
 	}
 
 	@Override
 	public void backgroundObject(BackgroundObject object) {
-		b3d.render(object);
 	}
 
 	@Override
@@ -50,13 +47,15 @@ public class Java2DRenderer implements Renderer {
 
 	@Override
 	public void backgroundFallback(BufferedImage image) {
-		Depict.image(g2, image, 0, 0,
-			Settings.PLAYFIELD_WIDTH, Settings.PLAYFIELD_HEIGHT);
+		Depict.image(g2, image,
+			-Settings.PLAYFIELD_CENTER_X,
+			-Settings.PLAYFIELD_CENTER_Y,
+			Settings.BASE_WIDTH,
+			Settings.BASE_HEIGHT);
 	}
 
 	@Override
 	public void endBackground() {
-		b3d.endBackground();
 	}
 
 	@Override

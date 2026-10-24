@@ -36,8 +36,8 @@ public class Main {
 		window.setIcon(ResourceLoader.image("Icon"));
 
 		GLRenderer renderer = new GLRenderer(
-				Settings.getWindowWidth(),
-				Settings.getWindowHeight()
+				window.getFramebufferWidth(),
+				window.getFramebufferHeight()
 		);
 
 		Game game = new Game();
@@ -54,6 +54,11 @@ public class Main {
 			game.draw(renderer);
 
 			window.update();
+			window.refreshFramebufferSize();
+			renderer.updateFramebufferSize(
+				window.getFramebufferWidth(),
+				window.getFramebufferHeight()
+			);
 
 			nextFrame += (long) frameTime;
 

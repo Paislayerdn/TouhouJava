@@ -8,6 +8,7 @@ import static collision.CollisionType.*;
 import static collision.CollisionTag.*;
 
 import static action.JScratch.*;
+import action.ActionContext;
 
 public class Boss extends Entity {
 	private final Sound lowHP;
@@ -15,7 +16,8 @@ public class Boss extends Entity {
 	
 	private float maxHP = 0, hp = 0;
 
-	public Boss(Player player) {
+	public Boss(Player player, ActionContext parentContext) {
+		setActionContext(new ActionContext(parentContext));
 		setName("Boss");
 		this.player = player;
 		setXY(0, 120);

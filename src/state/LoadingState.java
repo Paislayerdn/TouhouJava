@@ -75,7 +75,7 @@ public final class LoadingState extends GameState {
 
 	public void setForegroundImage(String name) {
 		foreground.run(Sequence(
-			SetCostume(name),
+			SetCostume(ResourceLoader.backgroundImage(name)),
 			SetSize(100),
 			SetGhost(0),
 			SetX(0),

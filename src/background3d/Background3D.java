@@ -64,7 +64,7 @@ public final class Background3D extends ActionTarget {
 
 	private void loadSceneData(LuaTable scene) {
 		LuaValue fallback = scene.get("fallback");
-		if (!fallback.isnil()) fallbackImage = ResourceLoader.image(fallback.checkjstring());
+		if (!fallback.isnil()) fallbackImage = ResourceLoader.backgroundImage(fallback.checkjstring());
 
 		LuaTable border = tableOrEmpty(scene.get("border"));
 		borderX = number(border.get("x"), 0);
@@ -122,7 +122,7 @@ public final class Background3D extends ActionTarget {
 			applyOrientation(object.getOrientation(), tableOrEmpty(descriptor.get("orientation")));
 			LuaValue costume = descriptor.get("costume");
 			if (!costume.isnil()) object.getAppearance().setCostume(
-				ResourceLoader.image(costume.checkjstring()));
+				ResourceLoader.backgroundImage(costume.checkjstring()));
 
 			addObject(object, sky);
 			object.setActionContext(new ActionContext(getActionContext()));
@@ -208,8 +208,8 @@ public final class Background3D extends ActionTarget {
 	}
 
 	public void render(Renderer renderer) {
-		if (fallbackImage != null && renderer.usesBackgroundFallback()) {
-			renderer.backgroundFallback(fallbackImage);
+		if (renderer.usesBackgroundFallback()) {
+			if (fallbackImage != null) renderer.backgroundFallback(fallbackImage);
 			return;
 		}
 		renderer.beginBackground(camera);

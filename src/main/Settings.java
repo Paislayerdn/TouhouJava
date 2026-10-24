@@ -11,7 +11,7 @@ public final class Settings {
 	public static final int HALF_HEIGHT = BASE_HEIGHT / 2;
 
 	// Window scaling
-	public static float SCALE = 1;
+	public static float SCALE = 1.25f;
 	public static int getWindowWidth() {return (int)(BASE_WIDTH * SCALE);}
 	public static int getWindowHeight() {return (int)(BASE_HEIGHT * SCALE);}
 	

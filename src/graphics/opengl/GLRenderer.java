@@ -16,7 +16,7 @@ import background3d.*;
 public class GLRenderer implements Renderer {
 	private static final String VERTEX_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.vert");
 	private static final String FRAGMENT_SHADER = ResourceLoader.text("/graphics/opengl/", "sprite.frag");
-	private final int width, height;
+	private int width, height;
 	private final GLB3D b3d;
 	
 	private final GLShader shader;
@@ -61,10 +61,10 @@ public class GLRenderer implements Renderer {
 		GL11.glLoadIdentity();
 
 		GL11.glOrtho(
-			-width / 2.0,
-			 width / 2.0,
-			-height / 2.0,
-			 height / 2.0,
+			-Settings.BASE_WIDTH / 2.0,
+			 Settings.BASE_WIDTH / 2.0,
+			-Settings.BASE_HEIGHT / 2.0,
+			 Settings.BASE_HEIGHT / 2.0,
 			-1,
 			 1
 		);
@@ -79,6 +79,12 @@ public class GLRenderer implements Renderer {
 			GL11.GL_SRC_ALPHA,
 			GL11.GL_ONE_MINUS_SRC_ALPHA
 		);
+	}
+
+	public void updateFramebufferSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		GL11.glViewport(0, 0, width, height);
 	}
 	
 	@Override
@@ -259,21 +265,16 @@ public class GLRenderer implements Renderer {
 			GL11.glFogfv(GL11.GL_FOG_COLOR, fog);
 		}
 
-		int viewportX = (int) (
-			Settings.HALF_WIDTH
-			+ Settings.PLAYFIELD_LEFT
-		);
-
-		int viewportY = (int) (
-			Settings.HALF_HEIGHT
-			+ Settings.PLAYFIELD_BOTTOM
-		);
+		float scaleX = (float) width / Settings.BASE_WIDTH;
+		float scaleY = (float) height / Settings.BASE_HEIGHT;
+		int viewportX = Math.round((Settings.HALF_WIDTH + Settings.PLAYFIELD_LEFT) * scaleX);
+		int viewportY = Math.round((Settings.HALF_HEIGHT + Settings.PLAYFIELD_BOTTOM) * scaleY);
 
 		GL11.glViewport(
 			viewportX,
 			viewportY,
-			Settings.PLAYFIELD_WIDTH,
-			Settings.PLAYFIELD_HEIGHT
+			Math.round(Settings.PLAYFIELD_WIDTH * scaleX),
+			Math.round(Settings.PLAYFIELD_HEIGHT * scaleY)
 		);
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);

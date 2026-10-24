@@ -1,11 +1,11 @@
 package action;
 
 import entity.Bullet;
+import state.gameplay.BulletManager;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import state.gameplay.BulletManager;
 
 public final class SpawnRegistry {
 	@FunctionalInterface
@@ -40,8 +40,12 @@ public final class SpawnRegistry {
 		return factory.create(requestedName, nextId.incrementAndGet());
 	}
 
-	public static void activate(ActionTarget target) {
-		if (target instanceof Bullet bullet) BulletManager.spawn(bullet);
+	public static void activate(ActionTarget target, BulletManager bulletManager) {
+		if (target instanceof Bullet bullet) {
+			if (bulletManager == null) throw new IllegalStateException(
+				"Cannot activate a Bullet without its 'bullets' manager");
+			bulletManager.spawn(bullet);
+		}
 		target.onBestowed();
 	}
 }

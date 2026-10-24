@@ -24,20 +24,26 @@ public class Playing extends GameState {
 	private final DevPanel devPanel;
 	private GameplayScript gameScript;
 	private final ActionRunner actions;
+	private final ActionContext actionContext;
+	private final BulletManager bulletManager;
+	private final CollisionManager collisionManager;
 	private final Background3D background;
 	private DialogueRunner dialogueRunner;
 
 	public Playing(Game game) {
 		super(game);
-		actions = new ActionRunner();
+		actionContext = new ActionContext();
+		actions = new ActionRunner(actionContext);
 		
 		hud = new HUD();
 		
-		player = new Player(hud);
-		boss = new Boss(player);
+		player = new Player(hud, actionContext);
+		boss = new Boss(player, actionContext);
 		
-		devPanel = new DevPanel(player, boss);
-		CollisionManager.init(player, boss);
+		collisionManager = new CollisionManager(player, boss);
+		bulletManager = new BulletManager(collisionManager);
+		actionContext.putLocal("bullets", bulletManager);
+		devPanel = new DevPanel(player, boss, bulletManager);
 		
 		background = new Background3D();
 		
@@ -56,6 +62,7 @@ public class Playing extends GameState {
 		boss.setMaxHP(maxHP);
 	}
 	public void run(Spell spell) {
+		collisionManager.setPlayerCandidateRadius(spell.getPlayerCandidateRadius());
 		actions.add((Action) spell);
 		if (spell.getCaster().equalsIgnoreCase("LAMBDA")) hud.setCurrentSpell(spell);
 		
@@ -82,9 +89,9 @@ public class Playing extends GameState {
 		
 		boss.update();
 		player.update();
-		BulletManager.update();
+		bulletManager.update();
 		
-		CollisionManager.update();
+		collisionManager.update(bulletManager);
 		
 		gameScript.update();
 		
@@ -100,10 +107,10 @@ public class Playing extends GameState {
 
 		boss.draw(renderer);
 		player.draw(renderer);
-		BulletManager.draw(renderer);
+		bulletManager.draw(renderer);
 
 		if (devPanel.isShowHitboxes()) {
-			BulletManager.drawHitboxes(renderer);
+			bulletManager.drawHitboxes(renderer);
 			boss.drawHitboxes(renderer);
 			player.drawHitboxes(renderer);
 		}

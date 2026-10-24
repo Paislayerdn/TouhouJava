@@ -17,6 +17,7 @@ public final class DevPanel {
 	
 	private Player player;
 	private Boss boss;
+	private final BulletManager bulletManager;
 
 	private boolean showHitboxes = false;
 
@@ -25,9 +26,10 @@ public final class DevPanel {
 		900, 900, TextAlign.LEFT
 	);
 
-	public DevPanel(Player player, Boss boss) {
+	public DevPanel(Player player, Boss boss, BulletManager bulletManager) {
 		this.player = player;
 		this.boss = boss;
+		this.bulletManager = bulletManager;
 		
 		TEXT.setGlyphSize(28.125f);
 	}
@@ -55,7 +57,7 @@ public final class DevPanel {
 			"Mouse ABS\n" +
 			format(Input.mouseX, Input.mouseY, MOUSE_PRECISION) + "\n" +
 			"\n" +
-			"Bullets: " + BulletManager.getBulletCount()
+			"Bullets: " + bulletManager.getBulletCount()
 		);
 
 		TEXT.update();
