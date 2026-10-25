@@ -15,7 +15,7 @@ public final class Ariya extends Spell {
 	
 	@Override
 	public void configure() {
-		name = "Replicated \"Digitalized Pebbles\"";
+		name = "Replicated [Pebbles That Become Boulders]";
 		playerCandidateRadius = 40;
 		timer = 3600;
 		countableTime = timer;
@@ -32,8 +32,8 @@ public final class Ariya extends Spell {
 	
 	@Override
 	protected Action buildAction() {
-		int count = 1000;
-		float step = 0.5f;
+		int count = 800;
+		float step = 0.65f;
 		float waitIteration = 0.125f;
 		float goldenAngle = 360*( 1-2/( 1+ (float) Math.sqrt(5) ) );
 		return Sequence(
@@ -67,8 +67,10 @@ public final class Ariya extends Spell {
 			Turn(Mul(Get("i"), goldenAngle) ),
 			Forward( Mul(Get("i"), step) ),
 			Wait(Add(Mul(Get("i"), waitIteration), 1) ),
-			If( Less( Distance(player), 100 ),
-				() -> Destroy()
+			If(Less(Distance(player), 100),
+				() -> {
+					return Destroy();
+				}
 			),
 			Parallel(
 				Sequence(

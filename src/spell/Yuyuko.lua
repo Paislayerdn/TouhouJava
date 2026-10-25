@@ -33,7 +33,7 @@ local function wave1bullet()
 		var("speed", spd),
 		setGhost(100),
 		setColor(165),
-		jsif( equal( get("type"), 0),
+		jsif(equal(get("type"), 0),
 			function()
 				return changeColor(40)
 			end
@@ -61,7 +61,7 @@ local function wave1bullet()
 				45, easing.quadIn),		
 			sequence(
 				wait(120),
-				jsif( equal( get("j"), get("k"), 0),
+				jsif(equal(get("j"), get("k"), 0),
 					function()
 						return playSound("jingle")
 					end
@@ -125,7 +125,7 @@ local function wave2bullet()
 				turn( mul(45, get("i") ) , 30),
 				turn( mul(22, get("i") ) ),
 				wait(30),
-				jsif( equal( get("j"), get("k"), 0),
+				jsif(equal(get("j"), get("k"), 0),
 					function()
 						return playSound("jingle")
 					end
@@ -187,7 +187,7 @@ local function wave3bullet()
 				30, easing.quadIn),		
 			sequence(
 				wait(80),
-				jsif( equal( get("j"), get("k"), 0),
+				jsif(equal(get("j"), get("k"), 0),
 					function()
 						return playSound("jingle")
 					end

@@ -27,6 +27,7 @@ public final class GameplayScript {
 
 		started = true;
 		
+			eventsAddSpell(Ariya.class);
 		events.add(new DialogueEvent(parent, "Test_1"));
 		if (true) {
 			eventsAddSpell("Remilia");
@@ -36,7 +37,6 @@ public final class GameplayScript {
 			eventsAddSpell("Utsuho");
 			eventsAddSpell("Junko");
 			eventsAddSpell("Madness20");
-			eventsAddSpell(Ariya.class);
 		}
 	}
 	

@@ -25,8 +25,10 @@ local Lasseree = function()
 		setSize(15),
 		setColor(45),
 		setCostume("BulletOval"),
-		jsif( equal( mod(get("j"), 2), 1 ),
-			function() return setColor(140) end
+		jsif(equal(mod(get("j"), 2), 1),
+			function()
+				return setColor(140)
+			end
 		),
 		setBrightness(-30),
 		changeBrightness( mul(get("k"), 15) ),

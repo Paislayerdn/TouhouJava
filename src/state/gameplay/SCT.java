@@ -3,6 +3,7 @@ package state.gameplay;
 import main.Debug;
 
 import action.Action;
+import action.Easing;
 import static action.JScratch.*;
 import entity.Thing;
 
@@ -56,10 +57,10 @@ public final class SCT extends Thing {
 		int frames = 30;
 		return Sequence(
 			SetCostume("LAMBDASCT"),
-			SetSize(40),
+			SetSize(35),
 			Look(180),
-			Warp(0, 480),
-			Var("speed", -4),
+			Warp(0, 280),
+			Var("speed", -1.5),
 			Var("exit", 0),
 			Parallel(
 				While( Equal(Get("exit"), 0),
@@ -70,9 +71,9 @@ public final class SCT extends Thing {
 				),
 				Sequence(
 					Tween("brightness", -0, 0, "ghost", 100, 0, frames),
+					Tween("speed", -0.5, 8),
 					Tween("speed", -2, 8),
-					Tween("speed", -6, 8),
-					Tween("size", 45, "ghost", 100, frames),
+					Tween("size", 40, "ghost", 100, frames, Easing.QuintIn),
 					Set("exit", 1)
 				)
 			)
@@ -83,8 +84,8 @@ public final class SCT extends Thing {
 		int frames = 30;
 		return Sequence(
 			SetCostume("ReimuSCT"),
-			SetSize(35),
-			Warp(0, -480),
+			SetSize(32.5),
+			Warp(0, -340),
 			Var("speed", 4),
 			Var("exit", 0),
 			Parallel(
@@ -96,9 +97,8 @@ public final class SCT extends Thing {
 				),
 				Sequence(
 					Tween("brightness", -0, 0, "ghost", 100, 0, frames),
-					Tween("speed", 2, 8),
-					Tween("speed", 4.5, frames),
-					Tween("size", 45, "ghost", 100, frames),
+					Tween("speed", 1.5, 8),
+					Tween("size", 35, "ghost", 100, frames, Easing.QuintIn),
 					Set("exit", 1)
 				)
 			)

@@ -683,10 +683,25 @@ public final class JSL {
 		// TWEENSERVICE
 		LuaTable easing = new LuaTable();
 
-		easing.set("linear", CoerceJavaToLua.coerce(Easing.LINEAR));
-		easing.set("quadIn", CoerceJavaToLua.coerce(Easing.QUAD_IN));
-		easing.set("quadOut", CoerceJavaToLua.coerce(Easing.QUAD_OUT));
-		easing.set("quadInOut", CoerceJavaToLua.coerce(Easing.QUAD_IN_OUT));
+		easing.set("linear", CoerceJavaToLua.coerce(Easing.Linear));
+		easing.set("quadIn", CoerceJavaToLua.coerce(Easing.QuadIn));
+		easing.set("quadOut", CoerceJavaToLua.coerce(Easing.QuadOut));
+		easing.set("quadInOut", CoerceJavaToLua.coerce(Easing.QuadInOut));
+		easing.set("quintIn", CoerceJavaToLua.coerce(Easing.QuintIn));
+		easing.set("quintOut", CoerceJavaToLua.coerce(Easing.QuintOut));
+		easing.set("quintInOut", CoerceJavaToLua.coerce(Easing.QuintInOut));
+		easing.set("circularIn", CoerceJavaToLua.coerce(Easing.CircularIn));
+		easing.set("circularOut", CoerceJavaToLua.coerce(Easing.CircularOut));
+		easing.set("circularInOut", CoerceJavaToLua.coerce(Easing.CircularInOut));
+		easing.set("backIn", CoerceJavaToLua.coerce(Easing.BackIn));
+		easing.set("backOut", CoerceJavaToLua.coerce(Easing.BackOut));
+		easing.set("backInOut", CoerceJavaToLua.coerce(Easing.BackInOut));
+		easing.set("bounceIn", CoerceJavaToLua.coerce(Easing.BounceIn));
+		easing.set("bounceOut", CoerceJavaToLua.coerce(Easing.BounceOut));
+		easing.set("bounceInOut", CoerceJavaToLua.coerce(Easing.BounceInOut));
+		easing.set("elasticIn", CoerceJavaToLua.coerce(Easing.ElasticIn));
+		easing.set("elasticOut", CoerceJavaToLua.coerce(Easing.ElasticOut));
+		easing.set("elasticInOut", CoerceJavaToLua.coerce(Easing.ElasticInOut));
 		
 		globals.set("easing", easing);
 		registerVarArg(globals, "tween", JScratch::Tween);

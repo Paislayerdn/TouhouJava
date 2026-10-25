@@ -60,8 +60,10 @@ local function spawnCircle(amount, radius, centerDistance)
 						), 120),
 						forever("sequence",
 							forward( get("speed") ),
-							jsif( greater(get("speed"), -5),
-								function() return change("speed", -0.075) end
+							jsif(greater(get("speed"), -5),
+								function()
+									return change("speed", -0.075)
+								end
 							),
 							wait()
 						)

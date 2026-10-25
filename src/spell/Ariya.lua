@@ -1,81 +1,84 @@
 local spellData = {}
 
-local count = 270
-local step = 2
-local waitIteration = 0.2
-local goldenAngle = 360 * (1 - 2 / (1 + math.sqrt(5)))
-
 spellData.configure = {
-	name = "[Lua] Replicated \"Digitalized Pebbles\"",
-	timer = 3600,
+	name = "Replicated [Pebbles That Become Boulders]",
 	playerCandidateRadius = 40,
-	countableTime = timer,
+	timer = 3600,
+	countableTime = 3600,
 	isSpell = true,
 	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
-	boss:setMaxHP(50)
+	boss:setMaxHP(75)
 	spell:startTimer()
 	spell:startCounting()
 end
 
-local bullete = function()
-	local capSpeed = -7.5
+spellData.buildAction = function()
+	local count = 800
+	local step = 0.65
+	local waitIteration = 0.125
+	local goldenAngle = 360 * (1 - 2 / (1 + math.sqrt(5)))
 
-	return spawnBullet( sequence(
-		replicate("i"),
-		var("speed", 0.30),
+	local function bullete()
+		local capSpeed = -3.5
+		return spawnBullet(sequence(
+			replicate("i"),
+			var("speed", 0.30),
 
-		setGhost(100),
-		setCostume("BulletOval"),
-		addCircleHitbox("bulletHB", 5),
-		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
-		disableHitbox("bulletHB"),
+			setGhost(100),
+			setCostume("BulletOval"),
+			addCircleHitbox("bulletHB", 4),
+			addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
+			disableHitbox("bulletHB"),
 
-		wait( add( mul(get("i"), waitIteration), 1 ) ),
-
-		parallel(
-			sequence(
-				goTo(boss),
-				look(get("offset")),
-				turn(mul(get("i"), goldenAngle)),
-				forward(mul(get("i"), step)),
-				playSound("shot"),
-
-				forever("sequence",
-					forward(get("speed")),
-					wait()
-				)
+			goTo(boss),
+			look(get("offset")),
+			turn(mul(get("i"), goldenAngle)),
+			forward(mul(get("i"), step)),
+			wait(add(mul(get("i"), waitIteration), 1)),
+			jsif(less(distance(player), 100),
+				function()
+					return destroy()
+				end
 			),
-			tween("color", 240, 130, 90),
-			sequence(
-				tween("size", 30, 11,
-					"brightness", 100, 60,
-					"ghost", 90, 0, 45),
-				enableHitbox("bulletHB"),
-				jswhile(
-					greater(get("speed"), capSpeed),
-					function()
+
+			parallel(
+				sequence(
+					playSound("shot"),
+					forever("sequence",
+						forward(get("speed")),
+						changeDesaturation(-0.1),
+						changeBrightness(-0.1),
+						wait()
+					)
+				),
+				tween("color", 240, 130, 180),
+				sequence(
+					tween("size", 30, 9,
+						"brightness", 100, 60,
+						"ghost", 90, 0, 45),
+					enableHitbox("bulletHB"),
+					var("aa", random(1, 360)),
+					turn(get("aa"), 60),
+					jswhile(greater(get("speed"), capSpeed), function()
 						return sequence(
-							change("speed", -0.07),
+							change("speed", -0.035),
 							wait()
 						)
-					end
+					end)
+				),
+				sequence(
+					wait(600),
+					disableHitbox("bulletHB"),
+					tween("ghost", 100, 60),
+					destroy()
 				)
-			),
-
-			sequence(
-				wait(480),
-				disableHitbox("bulletHB"),
-				tween("ghost", 100, 60),
-				destroy()
 			)
-		)
-	) )
-end
+		))
+	end
 
-spellData.buildAction = function()
 	return sequence(
 		var("offset", mul(random(), 360)),
 
@@ -84,12 +87,10 @@ spellData.buildAction = function()
 
 		forever("sequence",
 			playSound("jingle"),
-
 			jsfor("i", 1, count, function()
 				return bullete()
 			end),
-
-			wait(150)
+			wait(300)
 		)
 	)
 end

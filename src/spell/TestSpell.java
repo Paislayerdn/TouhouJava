@@ -48,8 +48,10 @@ public final class TestSpell extends Spell {
 							SetBrightness(90),
 							AddCircleHitbox("bulletHB", 7),
 							AddHitboxTag("bulletHB", "ENEMY_BULLET"),
-							If( Equal( Mod( Get("i"), 2 ), Get("count") ),
-								() -> SetColor(50)
+							If(Equal(Mod(Get("i"), 2), Get("count")),
+								() -> {
+									return SetColor(50);
+								}
 							),
 							
 							Sequence(

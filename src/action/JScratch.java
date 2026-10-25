@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.image.BufferedImage;
 
-import static action.AngleAction.*;
 import collision.CollisionTag;
 
 import entity.Thing;
@@ -16,16 +15,25 @@ public final class JScratch {
 	
 	// POSITION
 	public static Action Forward(Object distance) { return new ForwardAction(distance); }
-	public static Action MoveX(Object x) { return new MoveAction(x, MoveAction.Axis.X); }
-	public static Action MoveY(Object y) { return new MoveAction(y, MoveAction.Axis.Y); }
-	public static Action Move(Object x, Object y) { return new MoveAction(x, y); }
+	public static Action MoveX(Object x) { return Change("x", x); }
+	public static Action MoveY(Object y) { return Change("y", y); }
+	public static Action Move(Object x, Object y) {
+		return Parallel(Change("x", x), Change("y", y));
+	}
 	
-	public static Action GoTo(Thing target) { return new GoToAction(target); }
+	public static Action GoTo(Thing target) {
+		return Parallel(
+			Set("x", (Value) action -> target.getX()),
+			Set("y", (Value) action -> target.getY())
+		);
+	}
 	public static Action Warp(Thing target) { return GoTo(target); }
-	public static Action GoTo(Object x, Object y) { return new SetAction(x, y); }
+	public static Action GoTo(Object x, Object y) {
+		return Parallel(Set("x", x), Set("y", y));
+	}
 	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
-	public static Action SetX(Object x) { return new SetAction(x, SetAction.Axis.X); }
-	public static Action SetY(Object y) { return new SetAction(y, SetAction.Axis.Y); }
+	public static Action SetX(Object x) { return Set("x", x); }
+	public static Action SetY(Object y) { return Set("y", y); }
 	
 	// TWEEN: POSITION
 	public static Action GoTo(Thing target, int frames) {
@@ -55,8 +63,8 @@ public final class JScratch {
 
 	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
 	public static Action LookTowards(Thing target) { return new LookTowardsAction(target); }
-	public static Action Look(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.SET, angle); }
-	public static Action Turn(Object angle) { return new AngleAction(Angle.ACTIVE, Operation.CHANGE, angle); }
+	public static Action Look(Object angle) { return Set("angle", angle); }
+	public static Action Turn(Object angle) { return Change("angle", angle); }
 	// TWEEN: ANGLE
 	public static Action LookTowards(Thing target, int frames) {
 		return new TweenAction(
@@ -70,18 +78,18 @@ public final class JScratch {
 
 				return (float) Math.toDegrees(Math.atan2(dy, dx));
 			},
-			frames, Easing.LINEAR, TweenMode.CHASING
+			frames, Easing.Linear
 		);
 	}
 	public static Action Look(Object angle, int frames) {
 		return new TweenAction("angle",
-			angle, frames, Easing.LINEAR, TweenMode.SNAPSHOT
+			angle, frames, Easing.Linear
 		);
 	}
 	public static Action Look(Object start, Object end, int frames) {
 		return new TweenAction("angle",
 			start, end, frames,
-			Easing.LINEAR, TweenMode.SNAPSHOT
+			Easing.Linear
 		);
 	}
 	public static Action Turn(Object angle, int frames) {
@@ -89,38 +97,38 @@ public final class JScratch {
 			"angle",
 			(Value) action -> Value.Get("angle"),
 			(Value) action -> Add(Value.Get("angle"), angle),
-			frames, Easing.LINEAR, TweenMode.SNAPSHOT
+			frames, Easing.Linear
 		);
 	}
 	
-	public static Action SetTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.SET, angle); }
-	public static Action ChangeTrueAngle(Object angle) { return new AngleAction(Angle.TRUE, Operation.CHANGE, angle); }
-	public static Action SetAppearAngle(Object angle) { return new AngleAction(Angle.APPEAR, Operation.SET, angle); }
-	public static Action ChangeAppearAngle(Object angle) { return new AngleAction(Angle.APPEAR, Operation.CHANGE, angle); }
-	public static Action EnableAngleOverride() { return new AngleOverrideAction(true); }
-	public static Action DisableAngleOverride() { return new AngleOverrideAction(false); }
+	public static Action SetTrueAngle(Object angle) { return Set("trueAngle", angle); }
+	public static Action ChangeTrueAngle(Object angle) { return Change("trueAngle", angle); }
+	public static Action SetAppearAngle(Object angle) { return Set("appearAngle", angle); }
+	public static Action ChangeAppearAngle(Object angle) { return Change("appearAngle", angle); }
+	public static Action EnableAngleOverride() { return Set("angleOverride", true); }
+	public static Action DisableAngleOverride() { return Set("angleOverride", false); }
 	
 	// APPEARANCE
-	public static Action SetCostume(String name) { return new SetCostume(name); }
-	public static Action SetCostume(BufferedImage image) { return new SetCostume(image); }
+	public static Action SetCostume(String name) { return new SetCostumeAction(name); }
+	public static Action SetCostume(BufferedImage image) { return new SetCostumeAction(image); }
 	
-	public static Action SetColor(Object color) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.SET, color); }
-	public static Action ChangeColor(Object amount) { return new AppearanceAction(AppearanceAction.Type.COLOR, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetColor(Object color) { return Set("color", color); }
+	public static Action ChangeColor(Object amount) { return Change("color", amount); }
 
-	public static Action SetDesaturation(Object desat) { return new AppearanceAction(AppearanceAction.Type.DESATURATION, AppearanceAction.Mode.SET, desat); }
-	public static Action ChangeDesaturation(Object amount) { return new AppearanceAction(AppearanceAction.Type.DESATURATION, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetDesaturation(Object desat) { return Set("desaturation", desat); }
+	public static Action ChangeDesaturation(Object amount) { return Change("desaturation", amount); }
 	
-	public static Action SetPixelate(Object pixelate) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.SET, pixelate); }
-	public static Action ChangePixelate(Object amount) { return new AppearanceAction(AppearanceAction.Type.PIXELATE, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetPixelate(Object pixelate) { return Set("pixelate", pixelate); }
+	public static Action ChangePixelate(Object amount) { return Change("pixelate", amount); }
 
-	public static Action SetBrightness(Object brightness) { return new AppearanceAction(AppearanceAction.Type.BRIGHTNESS, AppearanceAction.Mode.SET, brightness); }
-	public static Action ChangeBrightness(Object amount) { return new AppearanceAction(AppearanceAction.Type.BRIGHTNESS, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetBrightness(Object brightness) { return Set("brightness", brightness); }
+	public static Action ChangeBrightness(Object amount) { return Change("brightness", amount); }
 
-	public static Action SetGhost(Object ghost) { return new AppearanceAction(AppearanceAction.Type.GHOST, AppearanceAction.Mode.SET, ghost); }
-	public static Action ChangeGhost(Object amount) { return new AppearanceAction(AppearanceAction.Type.GHOST, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetGhost(Object ghost) { return Set("ghost", ghost); }
+	public static Action ChangeGhost(Object amount) { return Change("ghost", amount); }
 
-	public static Action SetSize(Object size) { return new AppearanceAction(AppearanceAction.Type.SIZE, AppearanceAction.Mode.SET, size); }
-	public static Action ChangeSize(Object amount) { return new AppearanceAction(AppearanceAction.Type.SIZE, AppearanceAction.Mode.CHANGE, amount); }
+	public static Action SetSize(Object size) { return Set("size", size); }
+	public static Action ChangeSize(Object amount) { return Change("size", amount); }
 	
 	// HITBOX, ONLY FOR ENTITY
 	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
@@ -277,7 +285,7 @@ public final class JScratch {
 	
 	// TWEENSERVICE, SYNTAX SUGAR TWEEN
 	public static Action Tween(Object... args) {
-		Easing easing = Easing.LINEAR;
+		Easing easing = Easing.Linear;
 
 		if (args[args.length - 1] instanceof Easing) {
 			easing = (Easing) args[args.length - 1];
@@ -315,25 +323,25 @@ public final class JScratch {
 	private static Action TweenX(Object end, Object frames) {
 		return new TweenAction("x",
 			Value.Get("x"), end, frames,
-			Easing.LINEAR
+			Easing.Linear
 		);
 	}
 	private static Action TweenX(Object start, Object end, Object frames) {
 		return new TweenAction("x",
 			start, end, frames,
-			Easing.LINEAR
+			Easing.Linear
 		);
 	}
 	private static Action TweenY(Object end, Object frames) {
 		return new TweenAction("y",
 			Value.Get("y"), end, frames,
-			Easing.LINEAR
+			Easing.Linear
 		);
 	}
 	private static Action TweenY(Object start, Object end, Object frames) {
 		return new TweenAction("y",
 			start, end, frames,
-			Easing.LINEAR
+			Easing.Linear
 		);
 	}
 	

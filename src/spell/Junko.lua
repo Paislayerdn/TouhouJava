@@ -2,7 +2,7 @@ local spellData = {}
 
 local cooldown = 30
 local startAmount = 3
-local density = 77
+local density = 66
 local angle = 360/density
 local step = -20
 

@@ -36,8 +36,8 @@ public class Main {
 		window.setIcon(ResourceLoader.image("Icon"));
 
 		GLRenderer renderer = new GLRenderer(
-				window.getFramebufferWidth(),
-				window.getFramebufferHeight()
+			window.getFramebufferWidth(),
+			window.getFramebufferHeight()
 		);
 
 		Game game = new Game();

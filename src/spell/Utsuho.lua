@@ -30,9 +30,13 @@ local bulette = function()
 		var("speed", 13.5),
 		setCostume("BulletRinged"),
 		setSize(25),
-		jsif( equal( get("LR"), get("dir") ),
-			function() return setColor(230) end,
-			function() return setColor(45) end
+		jsif(equal(get("LR"), get("dir")),
+			function()
+				return setColor(230)
+			end,
+			function()
+				return setColor(45)
+			end
 		),
 		setBrightness(100),
 		setGhost(100),
