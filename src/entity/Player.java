@@ -56,10 +56,10 @@ public class Player extends Entity {
 
 		float dx = 0;
 		float dy = 0;
-		if (Input.hold.W) dy++;
-		if (Input.hold.S) dy--;
-		if (Input.hold.A) dx--;
-		if (Input.hold.D) dx++;
+		if (Input.hold.W || Input.hold.UP) dy++;
+		if (Input.hold.S || Input.hold.DOWN) dy--;
+		if (Input.hold.A || Input.hold.LEFT) dx--;
+		if (Input.hold.D || Input.hold.RIGHT) dx++;
 
 		float length = (float) Math.sqrt(dx * dx + dy * dy);
 

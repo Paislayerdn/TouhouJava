@@ -3,6 +3,8 @@ package graphics;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextLayout;
@@ -19,6 +21,8 @@ import main.Debug;
 public final class TextHelper {
 	private static final Font FONT = new Font("Arial", Font.PLAIN, 64);
 	private static final FontRenderContext FRC = new FontRenderContext(null, true, true);
+	private static final float TEXT_OUTLINE_WIDTH = 4.0f;
+	private static final int TEXT_OUTLINE_PADDING = 3;
 	private static final Map<Integer, BufferedImage> glyphCache = new HashMap<>();
 
 	private TextHelper() {}
@@ -76,8 +80,8 @@ public final class TextHelper {
 		g2.dispose();
 
 		BufferedImage image = new BufferedImage(
-			width,
-			height,
+			width + TEXT_OUTLINE_PADDING * 2,
+			height + TEXT_OUTLINE_PADDING * 2,
 			BufferedImage.TYPE_INT_ARGB
 		);
 
@@ -93,7 +97,23 @@ public final class TextHelper {
 		float baseline =
 			FONT.getLineMetrics(text, FRC).getAscent();
 
-		g2.drawString(text, 0, baseline);
+		g2.setRenderingHint(
+			RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON
+		);
+		java.awt.Shape glyphShape = FONT.createGlyphVector(FRC, text).getOutline(
+			TEXT_OUTLINE_PADDING,
+			baseline + TEXT_OUTLINE_PADDING
+		);
+		g2.setStroke(new BasicStroke(
+			TEXT_OUTLINE_WIDTH,
+			BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND
+		));
+		g2.setColor(Color.BLACK);
+		g2.draw(glyphShape);
+		g2.setColor(Color.WHITE);
+		g2.fill(glyphShape);
 
 		g2.dispose();
 

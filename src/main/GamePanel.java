@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void run() {
 		long nextFrame = System.nanoTime();
 
-		while (true) {
+		while (!game.isQuitting()) {
 			double frameTime = 1_000_000_000.0 / Settings.FPS;
 
 			Input.update();
@@ -79,6 +79,11 @@ public class GamePanel extends JPanel implements Runnable {
 				nextFrame = System.nanoTime();
 			}
 		}
+
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
+			if (window != null) window.dispose();
+		});
 	}
 
 	@Override
@@ -95,11 +100,13 @@ public class GamePanel extends JPanel implements Runnable {
 			RenderingHints.VALUE_INTERPOLATION_BILINEAR
 		);
 
-		// Move origin from top-left to screen center.
-		g2.translate( getWidth() / 2.0, getHeight() / 2.0 );
+		// Match OpenGL's projection by mapping base game coordinates to the
+		// panel's actual drawable size instead of relying on the configured scale.
+		double scaleX = (double) getWidth() / Settings.BASE_WIDTH;
+		double scaleY = (double) getHeight() / Settings.BASE_HEIGHT;
+		g2.translate(getWidth() / 2.0, getHeight() / 2.0);
 		// Cartesian coordinates: +Y goes UP.
-		g2.scale(1, -1);
-		g2.scale(Settings.SCALE, Settings.SCALE);
+		g2.scale(scaleX, -scaleY);
 
 		Java2DRenderer renderer = new Java2DRenderer(g2);
 		game.draw(renderer);

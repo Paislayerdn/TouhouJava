@@ -82,8 +82,9 @@ public final class Depict {
 
 	public static void thing(Graphics2D g2, Thing thing) {
 		Appearance appearance = thing.getAppearance();
+		float renderedSize = thing.getRenderedSize();
 
-		if (appearance.costume == null || appearance.size == 0 || appearance.ghost == 100) {
+		if (appearance.costume == null || renderedSize == 0 || appearance.ghost == 100) {
 			return;
 		}
 
@@ -96,8 +97,8 @@ public final class Depict {
 		float angle = thing.getAngleOverride()? thing.getAppearAngle() : thing.getTrueAngle();
 		g2.rotate(Math.toRadians(angle));
 
-		if (appearance.size != 100) {
-			float scale = appearance.size / 100.0f;
+		if (renderedSize != 100) {
+			float scale = renderedSize / 100.0f;
 			g2.scale(scale, scale);
 		}
 

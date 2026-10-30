@@ -179,13 +179,14 @@ public class GLRenderer implements Renderer {
 	@Override
 	public void thing(Thing thing) {
 		Appearance appearance = thing.getAppearance();
+		float renderedSize = thing.getRenderedSize();
 
 		if (appearance.costume == null) { return; }
-		if (appearance.size == 0 || appearance.ghost == 100) { return; }
+		if (renderedSize == 0 || appearance.ghost == 100) { return; }
 
 		GLTexture texture = GLTexture.get(appearance.costume);
 
-		float scale = appearance.size / 100.0f;
+		float scale = renderedSize / 100.0f;
 		float alpha = (100.0f - appearance.ghost) / 100.0f;
 		float angle = thing.getAngleOverride()? thing.getAppearAngle(): thing.getTrueAngle();
 

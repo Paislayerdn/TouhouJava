@@ -140,6 +140,26 @@ public final class MathValue {
 		);
 	}
 
+	/** Trigonometric functions accept angles in degrees. Inverse functions return degrees. */
+	public static Value Sin(Object degrees) {
+		return action -> Math.sin(Math.toRadians(action.resolveFloat(degrees)));
+	}
+	public static Value Cos(Object degrees) {
+		return action -> Math.cos(Math.toRadians(action.resolveFloat(degrees)));
+	}
+	public static Value Tan(Object degrees) {
+		return action -> Math.tan(Math.toRadians(action.resolveFloat(degrees)));
+	}
+	public static Value Asin(Object value) {
+		return action -> Math.toDegrees(Math.asin(action.resolveFloat(value)));
+	}
+	public static Value Acos(Object value) {
+		return action -> Math.toDegrees(Math.acos(action.resolveFloat(value)));
+	}
+	public static Value Atan(Object value) {
+		return action -> Math.toDegrees(Math.atan(action.resolveFloat(value)));
+	}
+
 	public static Value Root(Object value, Object n) {
 		return action -> {
 			float number = action.resolveFloat(value);

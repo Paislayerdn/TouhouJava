@@ -24,12 +24,14 @@ public final class LoadingState extends GameState {
 
 	private final Route route;
 	private static final int MINIMUM_FRAMES = 30;
-	private static final int GRID_COLUMNS = 24;
-	private static final int GRID_ROWS = 18;
-	private static final float GRID_X = 80;
-	private static final float GRID_Y = 80;
-	private static final float GRID_SPACING_X = 80;
-	private static final float GRID_SPACING_Y = 80;
+	private static final int GRID_COLUMNS = 17;
+	private static final int GRID_ROWS = 13;
+	private static final float GRID_TILE_SIZE = 60;
+	private static final float GRID_HALF_TILE_SIZE = GRID_TILE_SIZE / 2;
+	private static final float GRID_SPACING_X = GRID_TILE_SIZE;
+	private static final float GRID_SPACING_Y = GRID_TILE_SIZE;
+	private static final float GRID_PERIOD_X = GRID_COLUMNS * GRID_SPACING_X;
+	private static final float GRID_PERIOD_Y = GRID_ROWS * GRID_SPACING_Y;
 	
 	private final GameState coveredState;
 	private final Deque<GameState> destinations = new ArrayDeque<>();
@@ -167,14 +169,29 @@ public final class LoadingState extends GameState {
 				Thing tile = new Thing();
 				tile.run(Sequence(
 					SetCostume(gridImage),
-					SetSize(25),
+					SetSize(GRID_TILE_SIZE * 100 / gridImage.getWidth()),
 					SetGhost(0),
-					SetX(-Settings.BASE_WIDTH),
-					SetY(Settings.BASE_HEIGHT),
-					MoveX(-GRID_X + column * GRID_SPACING_X),
-					MoveY(GRID_Y - row * GRID_SPACING_Y),
+					SetX(-Settings.HALF_WIDTH - GRID_HALF_TILE_SIZE),
+					SetY(Settings.HALF_HEIGHT - GRID_HALF_TILE_SIZE),
+					MoveX(column * GRID_SPACING_X),
+					MoveY(-row * GRID_SPACING_Y),
 					Var("phase", (row + column) * 4.0),
 					Forever("Sequence",
+						Move(1, 1),
+						SetX(Sub(
+							Mod(
+								Add(Get("x"), Settings.HALF_WIDTH + GRID_HALF_TILE_SIZE),
+								GRID_PERIOD_X
+							),
+							Settings.HALF_WIDTH + GRID_HALF_TILE_SIZE
+						)),
+						SetY(Sub(
+							Mod(
+								Add(Get("y"), Settings.HALF_HEIGHT + GRID_HALF_TILE_SIZE),
+								GRID_PERIOD_Y
+							),
+							Settings.HALF_HEIGHT + GRID_HALF_TILE_SIZE
+						)),
 						ChangeColor(1),
 						Wait(1)
 					)

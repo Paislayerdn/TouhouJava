@@ -7,14 +7,22 @@ public final class Java2DInput implements KeyListener, MouseMotionListener, Mous
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_W, KeyEvent.VK_UP ->
+			case KeyEvent.VK_W ->
 				Input.keyPressed(Input.Key.W);
-			case KeyEvent.VK_S, KeyEvent.VK_DOWN ->
+			case KeyEvent.VK_S ->
 				Input.keyPressed(Input.Key.S);
-			case KeyEvent.VK_A, KeyEvent.VK_LEFT ->
+			case KeyEvent.VK_A ->
 				Input.keyPressed(Input.Key.A);
-			case KeyEvent.VK_D, KeyEvent.VK_RIGHT ->
+			case KeyEvent.VK_D ->
 				Input.keyPressed(Input.Key.D);
+			case KeyEvent.VK_UP ->
+				Input.keyPressed(Input.Key.UP);
+			case KeyEvent.VK_DOWN ->
+				Input.keyPressed(Input.Key.DOWN);
+			case KeyEvent.VK_LEFT ->
+				Input.keyPressed(Input.Key.LEFT);
+			case KeyEvent.VK_RIGHT ->
+				Input.keyPressed(Input.Key.RIGHT);
 			case KeyEvent.VK_SPACE ->
 				Input.keyPressed(Input.Key.SPACE);
 			case KeyEvent.VK_Z ->
@@ -33,14 +41,22 @@ public final class Java2DInput implements KeyListener, MouseMotionListener, Mous
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_W, KeyEvent.VK_UP ->
+			case KeyEvent.VK_W ->
 				Input.keyReleased(Input.Key.W);
-			case KeyEvent.VK_S, KeyEvent.VK_DOWN ->
+			case KeyEvent.VK_S ->
 				Input.keyReleased(Input.Key.S);
-			case KeyEvent.VK_A, KeyEvent.VK_LEFT ->
+			case KeyEvent.VK_A ->
 				Input.keyReleased(Input.Key.A);
-			case KeyEvent.VK_D, KeyEvent.VK_RIGHT ->
+			case KeyEvent.VK_D ->
 				Input.keyReleased(Input.Key.D);
+			case KeyEvent.VK_UP ->
+				Input.keyReleased(Input.Key.UP);
+			case KeyEvent.VK_DOWN ->
+				Input.keyReleased(Input.Key.DOWN);
+			case KeyEvent.VK_LEFT ->
+				Input.keyReleased(Input.Key.LEFT);
+			case KeyEvent.VK_RIGHT ->
+				Input.keyReleased(Input.Key.RIGHT);
 			case KeyEvent.VK_SPACE ->
 				Input.keyReleased(Input.Key.SPACE);
 			case KeyEvent.VK_Z ->

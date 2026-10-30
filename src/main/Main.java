@@ -44,7 +44,7 @@ public class Main {
 
 		long nextFrame = System.nanoTime();
 
-		while (!window.shouldClose()) {
+		while (!window.shouldClose() && !game.isQuitting()) {
 			double frameTime = 1_000_000_000.0 / Settings.FPS;
 
 			renderer.clear();

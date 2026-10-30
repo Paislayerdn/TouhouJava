@@ -25,6 +25,11 @@ public final class LoadingAssets {
 		loading.preloadImage("TSC3F");
 		loading.preloadImage("TSC4");
 		loading.preloadImage("TSC5");
+		loading.preloadImage("TSCB1");
+		loading.preloadImage("TSCB2");
+		loading.preloadImage("TSCB3");
+		loading.preloadImage("DiamondSelect");
+		loading.preloadImage("BulletDonut");
 	}
 
 	private static void preloadPlaying(LoadingState loading) {

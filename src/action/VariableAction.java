@@ -3,7 +3,7 @@ package action;
 import main.Debug;
 
 public final class VariableAction extends Action {
-	public enum Operation { DECLARE, SET, CHANGE }
+	private enum Operation { DECLARE, SET, CHANGE }
 
 	private final String name;
 	private final Operation operation;
@@ -11,10 +11,20 @@ public final class VariableAction extends Action {
 	@Override
 	public boolean consumesFrame() { return false; }
 
-	public VariableAction(String name, Operation operation, Object value) {
+	private VariableAction(String name, Operation operation, Object value) {
 		this.name = name;
 		this.operation = operation;
 		this.value = value;
+	}
+
+	static VariableAction declare(String name, Object value) {
+		return new VariableAction(name, Operation.DECLARE, value);
+	}
+	static VariableAction set(String name, Object value) {
+		return new VariableAction(name, Operation.SET, value);
+	}
+	static VariableAction change(String name, Object value) {
+		return new VariableAction(name, Operation.CHANGE, value);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ public final class Appearance implements ScriptPropertySetter {
 	@ScriptProperty public float brightness;
 	@ScriptProperty public float ghost;
 	@ScriptProperty public float size;
+	private long costumeRevision;
 
 	public Appearance() {
 		color = 0;
@@ -33,7 +34,11 @@ public final class Appearance implements ScriptPropertySetter {
 		);
 	}
 
-	public void setCostume(BufferedImage costume) { this.costume = costume; }
+	public void setCostume(BufferedImage costume) {
+		this.costume = costume;
+		costumeRevision++;
+	}
+	public long getCostumeRevision() { return costumeRevision; }
 	public void setColor(float color) { this.color = ((color % 256) + 256) % 256; }
 	public void changeColor(float amount) { setColor(color + amount); }
 	public void setDesaturation(float dst) { this.desaturation = Math.max(0, Math.min(100, dst)); }

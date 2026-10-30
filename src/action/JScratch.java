@@ -10,11 +10,24 @@ import collision.CollisionTag;
 
 import entity.Thing;
 import main.Debug;
+import main.Settings;
 
 public final class JScratch {
 	
 	// POSITION
 	public static Action Forward(Object distance) { return new ForwardAction(distance); }
+	public static Action EdgeBounce() {
+		return EdgeBounce(
+			-Settings.HALF_WIDTH, Settings.HALF_WIDTH,
+			-Settings.HALF_HEIGHT, Settings.HALF_HEIGHT
+		);
+	}
+	public static Action EdgeBounce(Object x, Object y) {
+		return new EdgeBounceAction(x, y);
+	}
+	public static Action EdgeBounce(Object left, Object right, Object bottom, Object top) {
+		return new EdgeBounceAction(left, right, bottom, top);
+	}
 	public static Action MoveX(Object x) { return Change("x", x); }
 	public static Action MoveY(Object y) { return Change("y", y); }
 	public static Action Move(Object x, Object y) {
@@ -38,27 +51,35 @@ public final class JScratch {
 	// TWEEN: POSITION
 	public static Action GoTo(Thing target, int frames) {
 		return Parallel(
-			TweenX((Value) action -> target.getX(), frames),
-			TweenY((Value) action -> target.getY(), frames)
+			new TweenAction("x", (Value) action -> target.getX(), frames, Easing.Linear),
+			new TweenAction("y", (Value) action -> target.getY(), frames, Easing.Linear)
 		);
 	}
 	public static Action Warp(Thing target, int frames) { return GoTo(target, frames); }
 	public static Action GoTo(Object x, Object y, int frames) {
 		return Parallel(
-			TweenX(x, frames),
-			TweenY(y, frames)
+			new TweenAction("x", x, frames, Easing.Linear),
+			new TweenAction("y", y, frames, Easing.Linear)
 		);
 	}
 	public static Action GoTo(Object startX, Object startY, Object x, Object y, int frames) {
 		return Parallel(
-			TweenX(startX, x, frames),
-			TweenY(startY, y, frames)
+			new TweenAction("x", startX, x, frames, Easing.Linear),
+			new TweenAction("y", startY, y, frames, Easing.Linear)
 		);
 	}
-	public static Action SetX(Object x, Object frames) { return TweenX(x, frames); }
-	public static Action SetX(Object start, Object end, int frames) { return TweenX(start, end, frames); }
-	public static Action SetY(Object y, Object frames) { return TweenY(y, frames); }
-	public static Action SetY(Object start, Object end, int frames) { return TweenY(start, end, frames); }
+	public static Action SetX(Object x, Object frames) {
+		return new TweenAction("x", x, frames, Easing.Linear);
+	}
+	public static Action SetX(Object start, Object end, int frames) {
+		return new TweenAction("x", start, end, frames, Easing.Linear);
+	}
+	public static Action SetY(Object y, Object frames) {
+		return new TweenAction("y", y, frames, Easing.Linear);
+	}
+	public static Action SetY(Object start, Object end, int frames) {
+		return new TweenAction("y", start, end, frames, Easing.Linear);
+	}
 	
 
 	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
@@ -114,19 +135,14 @@ public final class JScratch {
 	
 	public static Action SetColor(Object color) { return Set("color", color); }
 	public static Action ChangeColor(Object amount) { return Change("color", amount); }
-
 	public static Action SetDesaturation(Object desat) { return Set("desaturation", desat); }
 	public static Action ChangeDesaturation(Object amount) { return Change("desaturation", amount); }
-	
 	public static Action SetPixelate(Object pixelate) { return Set("pixelate", pixelate); }
 	public static Action ChangePixelate(Object amount) { return Change("pixelate", amount); }
-
 	public static Action SetBrightness(Object brightness) { return Set("brightness", brightness); }
 	public static Action ChangeBrightness(Object amount) { return Change("brightness", amount); }
-
 	public static Action SetGhost(Object ghost) { return Set("ghost", ghost); }
 	public static Action ChangeGhost(Object amount) { return Change("ghost", amount); }
-
 	public static Action SetSize(Object size) { return Set("size", size); }
 	public static Action ChangeSize(Object amount) { return Change("size", amount); }
 	
@@ -170,9 +186,9 @@ public final class JScratch {
 	
 	// VARIABLE
 	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
-	public static VariableAction Var(String name, Object value) { return new VariableAction( name, VariableAction.Operation.DECLARE, value); }
-	public static VariableAction Set(String name, Object value) { return new VariableAction(name, VariableAction.Operation.SET, value); }
-	public static VariableAction Change(String name, Object value) { return new VariableAction(name, VariableAction.Operation.CHANGE,value); }
+	public static VariableAction Var(String name, Object value) { return VariableAction.declare(name, value); }
+	public static VariableAction Set(String name, Object value) { return VariableAction.set(name, value); }
+	public static VariableAction Change(String name, Object value) { return VariableAction.change(name, value); }
 	public static Value Get(String name) { return Value.Get(name); }
 	public static Action Replicate(String... names) {
 		Action[] actions = new Action[names.length];
@@ -269,6 +285,12 @@ public final class JScratch {
 	public static Value Pow(Object a, Object b) { return Power(a, b); }
 	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
 	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
+	public static Value Sin(Object degrees) { return MathValue.Sin(degrees); }
+	public static Value Cos(Object degrees) { return MathValue.Cos(degrees); }
+	public static Value Tan(Object degrees) { return MathValue.Tan(degrees); }
+	public static Value Asin(Object value) { return MathValue.Asin(value); }
+	public static Value Acos(Object value) { return MathValue.Acos(value); }
+	public static Value Atan(Object value) { return MathValue.Atan(value); }
 	public static Value Distance(Thing target) { return MathValue.Distance(target); }
 	public static Value Distance(Object x, Object y) { return MathValue.Distance(x, y); }
 	
@@ -319,33 +341,6 @@ public final class JScratch {
 
 		return Parallel(tweens.toArray(new Action[0]));
 	}
-	// TWEENSERVICE: POSITION HELPER
-	private static Action TweenX(Object end, Object frames) {
-		return new TweenAction("x",
-			Value.Get("x"), end, frames,
-			Easing.Linear
-		);
-	}
-	private static Action TweenX(Object start, Object end, Object frames) {
-		return new TweenAction("x",
-			start, end, frames,
-			Easing.Linear
-		);
-	}
-	private static Action TweenY(Object end, Object frames) {
-		return new TweenAction("y",
-			Value.Get("y"), end, frames,
-			Easing.Linear
-		);
-	}
-	private static Action TweenY(Object start, Object end, Object frames) {
-		return new TweenAction("y",
-			start, end, frames,
-			Easing.Linear
-		);
-	}
-	
-	
 	// PRINT
 	public static Action Print(Object message) { return new PrintAction(message, true); }
 	public static Action LuaPrint(Object message) { return new PrintAction(message, false); }

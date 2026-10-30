@@ -15,10 +15,14 @@ final class GLInput extends GLFWKeyCallback {
 
 		boolean pressed = action == GLFW_PRESS;
 		Input.Key mappedKey = switch (key) {
-			case GLFW_KEY_W, GLFW_KEY_UP -> Input.Key.W;
-			case GLFW_KEY_S, GLFW_KEY_DOWN -> Input.Key.S;
-			case GLFW_KEY_A, GLFW_KEY_LEFT -> Input.Key.A;
-			case GLFW_KEY_D, GLFW_KEY_RIGHT -> Input.Key.D;
+			case GLFW_KEY_W -> Input.Key.W;
+			case GLFW_KEY_S -> Input.Key.S;
+			case GLFW_KEY_A -> Input.Key.A;
+			case GLFW_KEY_D -> Input.Key.D;
+			case GLFW_KEY_UP -> Input.Key.UP;
+			case GLFW_KEY_DOWN -> Input.Key.DOWN;
+			case GLFW_KEY_LEFT -> Input.Key.LEFT;
+			case GLFW_KEY_RIGHT -> Input.Key.RIGHT;
 			case GLFW_KEY_SPACE -> Input.Key.SPACE;
 			case GLFW_KEY_Z -> Input.Key.Z;
 			case GLFW_KEY_X -> Input.Key.X;

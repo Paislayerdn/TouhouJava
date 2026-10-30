@@ -5,6 +5,7 @@ import java.util.EnumSet;
 public final class Input {
 	public enum Key {
 		W, S, A, D,
+		UP, DOWN, LEFT, RIGHT,
 		SPACE, Z, X,
 		P, Q, PAGEUP,
 		MOUSE_LEFT
@@ -15,6 +16,10 @@ public final class Input {
 		public volatile boolean S;
 		public volatile boolean A;
 		public volatile boolean D;
+		public volatile boolean UP;
+		public volatile boolean DOWN;
+		public volatile boolean LEFT;
+		public volatile boolean RIGHT;
 		public volatile boolean SPACE;
 		public volatile boolean Z;
 		public volatile boolean X;
@@ -29,6 +34,10 @@ public final class Input {
 				case S -> S = value;
 				case A -> A = value;
 				case D -> D = value;
+				case UP -> UP = value;
+				case DOWN -> DOWN = value;
+				case LEFT -> LEFT = value;
+				case RIGHT -> RIGHT = value;
 				case SPACE -> SPACE = value;
 				case Z -> Z = value;
 				case X -> X = value;

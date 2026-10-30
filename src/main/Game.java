@@ -11,6 +11,7 @@ import state.gameplay.PlayingStats;
 public class Game {
 	private final Deque<GameState> states = new ArrayDeque<>();
 	private PlayingStats playingStats;
+	private volatile boolean quitting;
 
 	public Game() {
 //		pushState(new Playing(this));
@@ -35,6 +36,9 @@ public class Game {
 	public boolean isFront(GameState state) {
 		return states.peekLast() == state;
 	}
+
+	public void quit() { quitting = true; }
+	public boolean isQuitting() { return quitting; }
 
 	private GameState getSecondFromFront() {
 		if (states.size() < 2) return null;

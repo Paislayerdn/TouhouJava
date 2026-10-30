@@ -175,6 +175,14 @@ public final class JSL {
 		registerOneArgAction(globals, "moveY", JScratch::MoveY);
 		registerTwoArgAction(globals, "move", JScratch::Move);
 		registerOneArgAction(globals, "forward", JScratch::Forward);
+		Function<Object[], Action> edgeBounce = args -> switch (args.length) {
+			case 0 -> EdgeBounce();
+			case 2 -> EdgeBounce(args[0], args[1]);
+			case 4 -> EdgeBounce(args[0], args[1], args[2], args[3]);
+			default -> throw Debug.terminate("JSL",
+				"edgeBounce expects (), (x, y), or (left, right, bottom, top)");
+		};
+		registerVarArg(globals, "edgeBounce", edgeBounce);
 		
 		globals.set("goTo", new VarArgFunction() {
 			@Override
@@ -639,6 +647,12 @@ public final class JSL {
 		registerTwoArg(globals, "power", JScratch::Power);
 		globals.set("pow", globals.get("power"));
 		registerTwoArg(globals, "root", JScratch::Root);
+		registerOneArg(globals, "sin", JScratch::Sin);
+		registerOneArg(globals, "cos", JScratch::Cos);
+		registerOneArg(globals, "tan", JScratch::Tan);
+		registerOneArg(globals, "asin", JScratch::Asin);
+		registerOneArg(globals, "acos", JScratch::Acos);
+		registerOneArg(globals, "atan", JScratch::Atan);
 		globals.set("distance", new VarArgFunction() {
 			@Override
 			public Varargs invoke(Varargs args) {
