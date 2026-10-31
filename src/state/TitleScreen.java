@@ -179,6 +179,7 @@ public class TitleScreen extends GameState {
 		switch (selectedItem) {
 			case PLAY -> {
 				bgm.stop();
+				parent.getPlayingStats().reset();
 				parent.pushState(new LoadingState(
 					parent, LoadingState.Route.PLAYING, this
 				));

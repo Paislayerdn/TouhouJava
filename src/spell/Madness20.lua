@@ -9,14 +9,14 @@ spellData.configure = {
 	name = "Touhou 20 Stage 5 Midboss bs idk wth is that holy cow",
 	timer = 60*60,
 	playerCandidateRadius = 70,
-	isSpell = true,
+	isSpell = false,
+	scoreReward = 10000000,
 	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
 	boss:setMaxHP(50)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local count = {27, 11, 15, 7}

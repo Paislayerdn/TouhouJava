@@ -35,6 +35,8 @@ public final class Java2DInput implements KeyListener, MouseMotionListener, Mous
 				Input.keyPressed(Input.Key.P);
 			case KeyEvent.VK_Q ->
 				Input.keyPressed(Input.Key.Q);
+			case KeyEvent.VK_I ->
+				Input.keyPressed(Input.Key.I);
 		}
 	}
 
@@ -69,6 +71,8 @@ public final class Java2DInput implements KeyListener, MouseMotionListener, Mous
 				Input.keyReleased(Input.Key.P);
 			case KeyEvent.VK_Q ->
 				Input.keyReleased(Input.Key.Q);
+			case KeyEvent.VK_I ->
+				Input.keyReleased(Input.Key.I);
 		}
 	}
 

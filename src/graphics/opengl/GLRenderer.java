@@ -455,4 +455,21 @@ public class GLRenderer implements Renderer {
 		GL11.glEnd();
 		endDebug();
 	}
+
+	@Override
+	public void circleArc(float x, float y, float radius, float startAngle, float extentAngle,
+		float red, float green, float blue, float width) {
+		int segments = Math.max(1, (int) Math.ceil(Math.abs(extentAngle) / 3.0f));
+		beginDebug();
+		GL11.glColor3f(red, green, blue);
+		GL11.glLineWidth(width);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		for (int i = 0; i <= segments; i++) {
+			float angle = (float) Math.toRadians(startAngle + extentAngle * i / segments);
+			GL11.glVertex2f(x + (float) Math.cos(angle) * radius,
+				y + (float) Math.sin(angle) * radius);
+		}
+		GL11.glEnd();
+		endDebug();
+	}
 }

@@ -27,7 +27,6 @@ public final class TestSpell extends Spell {
 	public void onStart() {
 		boss.setMaxHP(75);
 		startTimer();
-		startCounting();
 	}
 
 	@Override

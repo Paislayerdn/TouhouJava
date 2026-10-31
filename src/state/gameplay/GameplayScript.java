@@ -4,6 +4,7 @@ import action.LuaSpell;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import main.Debug;
+import resource.ResourceFinder;
 
 import state.Playing;
 import entity.*;
@@ -11,6 +12,7 @@ import action.Spell;
 import spell.*;
 
 public final class GameplayScript {
+	private static final String OPENING_SPELL = "Opening";
 	private final Playing parent;
 	private final Queue<GameplayEvent> events;
 
@@ -28,16 +30,20 @@ public final class GameplayScript {
 		started = true;
 		
 		events.add(new DialogueEvent(parent, "Test_1"));
-		if (true) {
-			eventsAddSpell("Remilia");
-			eventsAddSpell("Yuyuko");
-			eventsAddSpell("Eirin");
-			eventsAddSpell("Kanako");
-			eventsAddSpell("Utsuho");
-			eventsAddSpell("Junko");
-			eventsAddSpell("Madness20");
-			eventsAddSpell(Ariya.class);
+		if (ResourceFinder.find(ResourceFinder.SPELL, OPENING_SPELL, ".lua") != null) {
+			eventsAddSpell(OPENING_SPELL);
+		} else {
+			Debug.log(this, "Opening spell file not added yet: " + OPENING_SPELL + ".lua");
 		}
+		eventsAddSpell("Remilia");
+		eventsAddSpell("Yuyuko");
+		eventsAddSpell("Eirin");
+		eventsAddSpell("Kanako");
+		eventsAddSpell("Utsuho");
+		eventsAddSpell("Junko");
+		eventsAddSpell("Madness20");
+		eventsAddSpell(Ariya.class);
+		events.add(new DialogueEvent(parent, "Ending"));
 	}
 	
 	private void eventsAddSpell(String name) {

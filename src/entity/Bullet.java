@@ -46,12 +46,22 @@ public class Bullet extends Entity {
 
 		if (collision.getType() == DAMAGE) {
 			setAlive(false);
+			return;
+		}
+
+		if (collision.getType() == DEATH) {
+			setAlive(false);
 		}
 	}
 	
 	public void onGraze(Hitbox mine, Hitbox other) {
 		if (grazable) {
-			PlayingStats.addGraze();
+			if (getActionContext().has("stats")) {
+				Object stats = getActionContext().get("stats");
+				if (stats instanceof PlayingStats playingStats) {
+					playingStats.addGraze();
+				}
+			}
 			grazeSound(0).play();
 			grazable = false;
 		} else {

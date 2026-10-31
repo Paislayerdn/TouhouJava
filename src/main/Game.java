@@ -10,8 +10,11 @@ import state.gameplay.PlayingStats;
 
 public class Game {
 	private final Deque<GameState> states = new ArrayDeque<>();
-	private PlayingStats playingStats;
+	private final PlayingStats playingStats = new PlayingStats();
 	private volatile boolean quitting;
+	private long fpsWindowStart = System.nanoTime();
+	private int renderedFrames;
+	private volatile int fps;
 
 	public Game() {
 //		pushState(new Playing(this));
@@ -65,6 +68,15 @@ public class Game {
 	}
 
 	public void draw(Renderer renderer) {
+		renderedFrames++;
+		long now = System.nanoTime();
+		long elapsed = now - fpsWindowStart;
+		if (elapsed >= 1_000_000_000L) {
+			fps = (int) (renderedFrames * 1_000_000_000L / elapsed);
+			renderedFrames = 0;
+			fpsWindowStart = now;
+		}
+
 		if (states.size() >= 2) {
 			getSecondFromFront().draw(renderer);
 		}
@@ -76,6 +88,6 @@ public class Game {
 	}
 	
 	
-	public void setPlayingStats(PlayingStats playingStats) { this.playingStats = playingStats; }
 	public PlayingStats getPlayingStats() { return playingStats; }
+	public int getFps() { return fps; }
 }

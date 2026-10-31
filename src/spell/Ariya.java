@@ -18,7 +18,7 @@ public final class Ariya extends Spell {
 		name = "Replicated [Pebbles That Become Boulders]";
 		playerCandidateRadius = 40;
 		timer = 3600;
-		countableTime = timer;
+		scoreReward = 10_000_000L;
 		isSpell = true;
 		caster = "LAMBDA";
 	}
@@ -27,7 +27,6 @@ public final class Ariya extends Spell {
 	public void onStart() {
 		boss.setMaxHP(75);
 		startTimer();
-		startCounting();
 	}
 	
 	@Override

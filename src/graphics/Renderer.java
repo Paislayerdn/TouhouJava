@@ -28,4 +28,6 @@ public interface Renderer {
 	void image(BufferedImage image,	float x, float y,	float width, float height);
 	void rectangleOutline(float x,	float y, float width, float height);
 	void circleOutline(float x,	float y, float radius);
+	void circleArc(float x, float y, float radius, float startAngle, float extentAngle,
+		float red, float green, float blue, float width);
 }

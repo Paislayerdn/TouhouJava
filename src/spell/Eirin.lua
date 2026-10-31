@@ -17,7 +17,6 @@ spellData.configure = {
 spellData.onStart = function()
 	boss:setMaxHP(50)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local bullette = function()
@@ -31,6 +30,7 @@ local bullette = function()
 		setCostume("BulletFog"),
 		addCircleHitbox("bulletHB", 5),
 		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
+		disableHitbox("bulletHB"),
 
 		parallel(
 			sequence(
@@ -53,7 +53,8 @@ local bullette = function()
 					"brightness", 100, 10,
 					"ghost", 100, 0,
 					add(70, mul(get("i"), 5) ,mul(get("j"), 1.5)), easing.quadInOut),		
-				setCostume("BulletRinged")
+				setCostume("BulletRinged"),
+				enableHitbox("bulletHB")
 			),
 			sequence(
 				wait(1),

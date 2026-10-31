@@ -15,7 +15,7 @@ public class Main {
 	}
 
 	private static void runJava2D() {
-		JFrame window = new JFrame("Touhou Java");
+		JFrame window = new JFrame("Touhou JaVA Demo v0.1");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setIconImage(ResourceLoader.image("Icon"));
@@ -31,7 +31,7 @@ public class Main {
 	
 	private static void runOpenGL() {
 		GLWindow window = new GLWindow(
-				Settings.getWindowWidth(), Settings.getWindowHeight(), "Touhou JaVA"
+				Settings.getWindowWidth(), Settings.getWindowHeight(), "Touhou JaVA Demo v0.1"
 		);
 		window.setIcon(ResourceLoader.image("Icon"));
 

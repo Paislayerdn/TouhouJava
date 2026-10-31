@@ -18,30 +18,22 @@ public abstract class Spell extends Action {
 	protected boolean isSpell = false;
 	protected boolean survival = false;
 	protected String caster = null;
+	protected long scoreReward = 10_000_000L;
 
 	protected float timer = 1770.0f; // 29.5 seconds
-	protected float countableTime;
-	private boolean timerStarted, counting;
+	private float startingTimer;
+	private boolean timerStarted;
 	private int lastSecond;
+	private int deathsAtStart;
+	private long scoreAwarded;
+	private boolean captured;
+	private boolean failed;
 	private final Sound LS;
 
 	public final void startTimer() {
 		lastSecond = (int) Math.ceil(timer / 60.0f);
+		startingTimer = timer;
 		timerStarted = true;
-	}
-
-	public final void startCounting() {
-		counting = true;
-	}
-
-	public final boolean isCounting() {
-		return counting;
-	}
-
-	public final float getProgression() {
-		return ((counting)
-			? (1.0f - timer / countableTime)
-			: 0.0f);
 	}
 
 	public Spell(Boss boss, Player player) {
@@ -58,6 +50,7 @@ public abstract class Spell extends Action {
 
 	@Override
 	public final void start() {
+		deathsAtStart = player.getStats().getDeaths();
 		spellContext = new ActionContext(getContext());
 
 		action = buildAction();
@@ -82,11 +75,11 @@ public abstract class Spell extends Action {
 		}
 
 		if (timerStarted && timer <= 0.0f) {
-			end();
+			capture();
 			return;
 		}
-		if (!survival && boss.getHP() <= 0.0f) {
-			end();
+		if (caster != null && !survival && boss.getHP() <= 0.0f) {
+			capture();
 			return;
 		}
 		if (action == null) return;
@@ -96,14 +89,29 @@ public abstract class Spell extends Action {
 		}
 
 		if (action.isFinished()) {
-			end();
+			capture();
 		}
 	}
 
 	public final void end() {
 		if (finished) return;
+		capture();
+	}
+
+	private void capture() {
+		if (finished) return;
+		captured = true;
+		failed = isBonusFailed();
+		boolean bossHPDepleted = caster != null && !survival && boss.getHP() <= 0;
 
 		onEnd();
+		if (isSpell && !failed) {
+			scoreAwarded = getCurrentBonus();
+		}
+		if (bossHPDepleted && (!isSpell || !failed)) {
+			scoreAwarded += state.gameplay.ScoreRules.BOSS_HP_DEPLETION_REWARD;
+		}
+		player.getStats().addScore(scoreAwarded);
 		finish();
 	}
 
@@ -117,9 +125,29 @@ public abstract class Spell extends Action {
 	public float getPlayerCandidateRadius() { return playerCandidateRadius; }
 	public final boolean isSpell() { return isSpell; }
 	public final boolean isSurvival() { return survival; }
-	public float getCountableTime() { return countableTime; }
 	public boolean isTimerStarted() { return timerStarted; }
 	public int getLastSecond() { return lastSecond; }
 	public final String getCaster() { return caster; }
 	public final float getTimer() { return timer; }
+	public final long getScoreReward() { return scoreReward; }
+	public final long getCurrentBonus() {
+		if (isBonusFailed()) return 0;
+		double value = 1.0;
+		if (!survival && timerStarted && startingTimer > 0) {
+			double remaining = Math.max(0, Math.min(1, timer / startingTimer));
+			value = 0.1 + 0.9 * remaining;
+		}
+		return Math.round(scoreReward * value);
+	}
+	public final boolean isBonusFailed() {
+		return player.getStats().getDeaths() > deathsAtStart;
+	}
+	public final long getScoreAwarded() { return scoreAwarded; }
+	public final boolean wasCaptured() { return captured; }
+	public final boolean isFailed() {
+		return failed;
+	}
+	public final float getElapsedSeconds() {
+		return Math.max(0, startingTimer - timer) / 60.0f;
+	}
 }

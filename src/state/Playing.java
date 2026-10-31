@@ -10,6 +10,7 @@ import dialogue.*;
 
 import entity.Boss;
 import entity.Player;
+import entity.ReimuPlayer;
 import graphics.Renderer;
 import resource.Music;
 import resource.ResourceLoader;
@@ -26,6 +27,7 @@ public class Playing extends GameState {
 	private final ActionRunner actions;
 	private final ActionContext actionContext;
 	private final BulletManager bulletManager;
+	private final ItemManager itemManager;
 	private final CollisionManager collisionManager;
 	private final Background3D background;
 	private DialogueRunner dialogueRunner;
@@ -33,16 +35,19 @@ public class Playing extends GameState {
 	public Playing(Game game) {
 		super(game);
 		actionContext = new ActionContext();
+		actionContext.putLocal("stats", game.getPlayingStats());
 		actions = new ActionRunner(actionContext);
 		
-		hud = new HUD();
+		hud = new HUD(game.getPlayingStats());
 		
-		player = new Player(hud, actionContext);
+		player = new ReimuPlayer(hud, game.getPlayingStats(), actionContext);
 		boss = new Boss(player, actionContext);
+		player.setBoss(boss);
 		
 		collisionManager = new CollisionManager(player, boss);
 		bulletManager = new BulletManager(collisionManager);
 		actionContext.putLocal("bullets", bulletManager);
+		itemManager = new ItemManager(game.getPlayingStats());
 		devPanel = new DevPanel(player, boss, bulletManager);
 		
 		background = new Background3D();
@@ -62,9 +67,10 @@ public class Playing extends GameState {
 		boss.setMaxHP(maxHP);
 	}
 	public void run(Spell spell) {
+		boss.setMaxHP(0);
 		collisionManager.setPlayerCandidateRadius(spell.getPlayerCandidateRadius());
 		actions.add((Action) spell);
-		if (spell.getCaster().equalsIgnoreCase("LAMBDA")) hud.setCurrentSpell(spell);
+		hud.setCurrentSpell(spell.isSpell() ? spell : null);
 		
 		if (spell.isSpell() && spell.getCaster() != null) {
 			hud.showSCT(spell.getCaster());
@@ -73,9 +79,18 @@ public class Playing extends GameState {
 	public void converse(String file) {
 		this.dialogueRunner = new DialogueRunner(this, file);
 	}
+	public void completeEncounter(Spell spell) {
+		bulletManager.clearScreen();
+		if (spell.isSpell()) {
+			itemManager.dropSpellItems(boss.getX(), boss.getY());
+		}
+		hud.showSpellResult(spell);
+	}
+	public boolean isShowingSpellResult() { return hud.isShowingSpellResult(); }
 	
 	@Override
 	public void update() {
+		if (isFinished()) return;
 		background.update();
 		if (Input.tap.P) {PlayingStats.debugMode = !PlayingStats.debugMode;}
 		
@@ -90,13 +105,34 @@ public class Playing extends GameState {
 		boss.update();
 		player.update();
 		bulletManager.update();
+		itemManager.update(player);
 		
 		collisionManager.update(bulletManager);
+		if (!player.isAlive()) {
+			finishRun(false);
+			return;
+		}
 		
 		gameScript.update();
+		if (gameScript.isFinished()) {
+			finishRun(true);
+			return;
+		}
 		
 		hud.update();
+		hud.setFps(parent.getFps());
 		devPanel.update();
+	}
+
+	private void finishRun(boolean cleared) {
+		if (bgm != null) bgm.stop();
+		if (cleared) {
+			parent.getPlayingStats().addScore(ScoreRules.STAGE_CLEAR_BONUS);
+		}
+		finish();
+		parent.removeState(this);
+		if (cleared) parent.pushState(new StageClearScreen(parent));
+		else parent.pushState(new PlayerScore(parent, false));
 	}
 	
 	@Override
@@ -108,6 +144,7 @@ public class Playing extends GameState {
 		boss.draw(renderer);
 		player.draw(renderer);
 		bulletManager.draw(renderer);
+		itemManager.draw(renderer);
 
 		if (devPanel.isShowHitboxes()) {
 			bulletManager.drawHitboxes(renderer);

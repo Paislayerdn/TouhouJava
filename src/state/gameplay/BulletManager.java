@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import graphics.Renderer;
+import static action.JScratch.*;
 
 import collision.Hitbox;
 import static collision.CollisionTag.*;
@@ -85,6 +86,17 @@ public final class BulletManager {
 						break;
 					}
 				}
+			}
+		}
+	}
+
+	public void clearScreen() {
+		synchronized (bulletLock) {
+			for (Bullet bullet : playerBullets) {
+				bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
+			}
+			for (Bullet bullet : enemyBullets) {
+				bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
 			}
 		}
 	}

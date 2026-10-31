@@ -34,6 +34,9 @@ public final class LoadingAssets {
 
 	private static void preloadPlaying(LoadingState loading) {
 		loading.preloadImage("BulletOval");
+		loading.preloadImage("BulletStar");
+		loading.preloadImage("BulletDonut");
+		loading.preloadImage("BulletHeart");
 		loading.preloadImage("LAMBDASCT");
 		loading.preloadImage("ReimuSCT");
 		loading.preloadSound("[TH] Graze");

@@ -15,7 +15,6 @@ spellData.configure = {
 spellData.onStart = function()
 	boss:setMaxHP(50)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local Lasseree = function()

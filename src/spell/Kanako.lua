@@ -7,15 +7,14 @@ spellData.configure = {
 	name = "Replicated [Mountain of Faith]",
 	timer = 60*120,
 	playerCandidateRadius = 70,
-	countableTime = timer,
 	isSpell = true,
+	scoreReward = 10000000,
 	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
 	boss:setMaxHP(100)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local function spawnCircle(amount, radius, centerDistance)

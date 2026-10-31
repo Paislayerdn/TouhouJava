@@ -1,179 +1,83 @@
 package entity;
 
-import graphics.Renderer;
-import main.Input;
-
-import static action.JScratch.*;
-
-import collision.Hitbox;
-import collision.CollisionResult;
-import static collision.CollisionTag.*;
-import static collision.CollisionType.*;
-
-import state.gameplay.HUD;
 import action.ActionContext;
+import collision.CollisionResult;
+import collision.Hitbox;
+import main.Input;
+import state.gameplay.HUD;
+import state.gameplay.PlayingStats;
+import state.gameplay.BulletManager;
 
-public class Player extends Entity {
-	private final HUD hud;
-	
-	private boolean focusing = false;
+import static collision.CollisionType.DAMAGE;
+import static collision.CollisionType.DEATH;
 
-	private int shootCooldown = 0;
-	private boolean autoFire = false;
+/** Common player entity contract shared by playable characters. */
+public abstract class Player extends Entity {
+	protected final HUD hud;
+	protected final PlayingStats stats;
+	private int invulnerabilityFrames;
+	protected Boss boss;
 
-	private static final int SHOOT_INTERVAL = 6;
-	
-	public Player(HUD hud, ActionContext parentContext) {
+	protected Player(HUD hud, PlayingStats stats, ActionContext parentContext) {
 		this.hud = hud;
+		this.stats = stats;
 		setActionContext(new ActionContext(parentContext));
 		setName("Player");
-		
 		setXY(0, -80);
-		
-		this.run(
-			Sequence(
-				SetCostume("BulletStar"),
-				Look(90),
-				SetSize(26),
-				AddCircleHitbox("grazeHB", 9),
-				AddHitboxTag("grazeHB", PGRAZE),
-
-				AddCircleHitbox("deathHB", 2.5),
-				AddHitboxTag("deathHB", PDEATH),
-				
-				Sound("fire", "[TH] Fires", -12.0f)
-			)
-		);
 	}
-	
-	@Override
-	public void update() {
-		updateActions();
-		
-		float speed = 4.8f;
-		focusing = Input.hold.SPACE;
-		if (focusing) { speed = 2; }
 
-		float dx = 0;
-		float dy = 0;
-		if (Input.hold.W || Input.hold.UP) dy++;
-		if (Input.hold.S || Input.hold.DOWN) dy--;
-		if (Input.hold.A || Input.hold.LEFT) dx--;
-		if (Input.hold.D || Input.hold.RIGHT) dx++;
-
-		float length = (float) Math.sqrt(dx * dx + dy * dy);
-
-		if (length > 0) {
-			dx /= length;
-			dy /= length;
-			move(dx * speed, dy * speed);
+	protected final void updatePlayerState() {
+		if (Input.tap.I) {
+			Hitbox deathHitbox = getHitbox("deathHB");
+			if (deathHitbox != null) {
+				deathHitbox.setEnabled(!deathHitbox.isEnabled());
+			}
 		}
 
-		if (Input.tap.PAGEUP) {
-			autoFire = !autoFire;
-		}
-
-		if (Input.tap.X) {
-			bomb();
-		}
-
-		if (shootCooldown > 0) { shootCooldown--; }
-		boolean firing = Input.hold.Z || autoFire;
-		if (firing && shootCooldown <= 0) {
-			shoot();
-			shootCooldown = SHOOT_INTERVAL;
+		if (invulnerabilityFrames > 0) {
+			invulnerabilityFrames--;
+			getAppearance().setGhost((invulnerabilityFrames / 6) % 2 == 0 ? 55 : 0);
+		} else {
+			getAppearance().setGhost(0);
 		}
 	}
-	private void bomb() {
-		hud.showSCT("REIMU");
-		int total = 12;
-		run( Sequence(
-			Wait(60),
-			For("i", 1, total, 
-				() -> Sequence(
-					SpawnBullet(
-						Parallel(
-							Replicate("i"),
-							Warp(this),
-							SetCostume("BulletCircle"),
-							SetSize(120),
-							SetBrightness(60),
-							AddCircleHitbox("bulletHB", 70),
-							AddHitboxTag("bulletHB", PLAYER_BULLET, BOMB),
-							Look( Random(1,360) ),
 
-							Forever("Sequence",
-								Forward(10),
-								ChangeColor(2),
-								Wait()
-							),
-							Sequence(
-								PlaySound("fire"),
-								Wait(300),
-								Destroy()
-							)
-						)
-					),
-					Wait(15)
-				)
-			)
-		) );
+	protected final void grantInvulnerabilityFrames(int frames) {
+		invulnerabilityFrames = Math.max(invulnerabilityFrames, frames);
 	}
-	
-	private void shoot() {
-		int total = 4;
-		run( Sequence (
-			For("i", 1, total, 
-				() -> SpawnBullet(
-					Parallel(
-						Replicate("i"),
-						Warp(this),
-						MoveX( Mul( 15, Sub( Get("i"), (total+1.0)/2.0  )) ),
-						MoveY(5),
-						Look(90),
-						SetCostume("BulletOval"),
-						SetSize(9), SetColor(15),
-						AddCircleHitbox("bulletHB", 6),
-						AddHitboxTag("bulletHB", PLAYER_BULLET),
-						
-						Forever("Sequence",
-							Forward(20),
-							Wait()
-						),
-						Sequence(
-							PlaySound("fire"),
-							Wait(300),
-							Destroy()
-						)
-					)
-				)
-			)
-		) );
-	}
-	
-	@Override
-	public void onHit(CollisionResult collision) {
-		if (collision.getType() == DEATH) {
-			onDeath(
-				collision.getSelf(this),
-				collision.getOther(this)
-			);
-			return;
-		}
 
-		if (collision.getType() == DAMAGE) {
+	public final void setBoss(Boss boss) { this.boss = boss; }
+
+	public void onDeath(Hitbox mine, Hitbox other) {
+		if (!isAlive() || invulnerabilityFrames > 0) return;
+
+		boolean hasLivesRemaining = stats.loseLife();
+		stats.restoreMinimumBombsAfterDeath();
+		if (hasLivesRemaining) {
+			setXY(0, -80);
+			invulnerabilityFrames = 120;
+			if (getActionContext().has("bullets")) {
+				Object manager = getActionContext().get("bullets");
+				if (manager instanceof BulletManager bulletManager) {
+					bulletManager.clearBomb();
+				}
+			}
+		} else {
 			setAlive(false);
 		}
 	}
-	
-	public void onDeath(Hitbox mine, Hitbox other) {
-//		System.out.println("[Player] Pichu'd.");
-	}
-	
+
+	public final boolean isInvulnerable() { return invulnerabilityFrames > 0; }
+	public final PlayingStats getStats() { return stats; }
+
 	@Override
-	public void draw(Renderer renderer) {
-		if (!focusing) this.run( SetDesaturation(0) );
-		else this.run( SetDesaturation(100) );
-		renderer.thing(this);
+	public void onHit(CollisionResult collision) {
+		if (!isAlive()) return;
+		if (collision.getType() == DEATH) {
+			if (isInvulnerable()) return;
+			onDeath(collision.getSelf(this), collision.getOther(this));
+		} else if (collision.getType() == DAMAGE) {
+			setAlive(false);
+		}
 	}
 }

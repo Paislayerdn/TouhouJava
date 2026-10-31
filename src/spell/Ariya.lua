@@ -4,15 +4,14 @@ spellData.configure = {
 	name = "Replicated [Pebbles That Become Boulders]",
 	playerCandidateRadius = 40,
 	timer = 3600,
-	countableTime = 3600,
 	isSpell = true,
+	scoreReward = 10000000,
 	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
 	boss:setMaxHP(75)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 spellData.buildAction = function()

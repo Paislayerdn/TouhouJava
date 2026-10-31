@@ -29,6 +29,7 @@ final class GLInput extends GLFWKeyCallback {
 			case GLFW_KEY_PAGE_UP -> Input.Key.PAGEUP;
 			case GLFW_KEY_P -> Input.Key.P;
 			case GLFW_KEY_Q -> Input.Key.Q;
+			case GLFW_KEY_I -> Input.Key.I;
 			default -> null;
 		};
 

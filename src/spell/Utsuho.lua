@@ -3,7 +3,7 @@ local spellData = {}
 local cooldown = 45
 local interval = 2
 local wave = 90
-local density = 42
+local density = 32
 local tur = 90
 
 spellData.configure = {
@@ -18,7 +18,6 @@ spellData.configure = {
 spellData.onStart = function()
 	boss:setMaxHP(50)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local bulette = function()
@@ -27,7 +26,7 @@ local bulette = function()
 		set("LR", mul( get("LR") , 2)  ),
 		change("LR", -1),
 		change("offset", mul(0.01, get("dir")) ),
-		var("speed", 13.5),
+		var("speed", 11.5),
 		setCostume("BulletRinged"),
 		setSize(25),
 		jsif(equal(get("LR"), get("dir")),
@@ -40,7 +39,7 @@ local bulette = function()
 		),
 		setBrightness(100),
 		setGhost(100),
-		addCircleHitbox("bulletHB", 14),
+		addCircleHitbox("bulletHB", 11),
 		addHitboxTag("bulletHB", "ENEMY_BULLET", "CLEARABLE"),
 		warp(999, 999),
 
@@ -65,7 +64,7 @@ local bulette = function()
 
 			sequence(
 				wait(6),
-				turn( mul(get("LR"), tur) , 70),
+				turn( mul(get("LR"), tur) , 90),
 				wait(60),
 				destroy()
 			)

@@ -7,7 +7,7 @@ public final class Input {
 		W, S, A, D,
 		UP, DOWN, LEFT, RIGHT,
 		SPACE, Z, X,
-		P, Q, PAGEUP,
+		P, Q, I, PAGEUP,
 		MOUSE_LEFT
 	}
 
@@ -25,6 +25,7 @@ public final class Input {
 		public volatile boolean X;
 		public volatile boolean P;
 		public volatile boolean Q;
+		public volatile boolean I;
 		public volatile boolean PAGEUP;
 		public volatile boolean MOUSE_LEFT;
 
@@ -43,6 +44,7 @@ public final class Input {
 				case X -> X = value;
 				case P -> P = value;
 				case Q -> Q = value;
+				case I -> I = value;
 				case PAGEUP -> PAGEUP = value;
 				case MOUSE_LEFT -> MOUSE_LEFT = value;
 			}

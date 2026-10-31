@@ -2,15 +2,15 @@ local spellData = {}
 
 local cooldown = 30
 local startAmount = 3
-local density = 66
+local density = 59
 local angle = 360/density
-local step = -20
 
 spellData.configure = {
 	name = "Replicated [Trembling, Shivering Star]",
 	timer = 30*60,
 	playerCandidateRadius = 30,
 	isSpell = true,
+	scoreReward = 10000000,
 	caster = "LAMBDA",
 	survival = true
 }
@@ -18,17 +18,16 @@ spellData.configure = {
 spellData.onStart = function()
 	boss:setMaxHP(50)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local bulette = function()
 	return spawnBullet( sequence(
 		replicate("i", "j"),
-		var("speed", 5),
+		var("speed", 4.5),
 		setCostume("BulletCircle"),
 		setSize(11.5),
 		setBrightness(100),
-		addCircleHitbox("bulletHB", 4.5),
+		addCircleHitbox("bulletHB", 3),
 		addHitboxTag("bulletHB", "ENEMY_BULLET"),
 		warp(999, 999),
 
@@ -38,7 +37,7 @@ local bulette = function()
 				look( get( "offset" ) ),
 				turn(mul(get("i"), angle/2)),
 				turn(mul(get("j"), angle)),
-				forward(step),
+				forward(-20),
 
 				forever("sequence",
 					forward(get("speed")),
@@ -55,7 +54,7 @@ local bulette = function()
 			),
 
 			sequence(
-				wait(210),
+				wait(300),
 				destroy()
 			)
 		)
@@ -79,7 +78,7 @@ spellData.buildAction = function()
 					jsfor("j", 1, density, function()
 						return bulette()
 					end),
-					wait( 12.5 )
+					wait( 15 )
 				)
 			end),
 			change("amount", 0.5),

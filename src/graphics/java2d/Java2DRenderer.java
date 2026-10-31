@@ -3,6 +3,9 @@ package graphics.java2d;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import graphics.Renderer;
 
 import main.Settings;
@@ -84,6 +87,23 @@ public class Java2DRenderer implements Renderer {
 		float radius
 	) {
 		Depict.circleOutline(g2, x, y, radius);
+	}
+
+	@Override
+	public void circleArc(float x, float y, float radius, float startAngle, float extentAngle,
+		float red, float green, float blue, float width) {
+		var oldStroke = g2.getStroke();
+		var oldColor = g2.getColor();
+		g2.setColor(new Color(clampColor(red), clampColor(green), clampColor(blue)));
+		g2.setStroke(new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g2.draw(new Arc2D.Float(x - radius, y - radius, radius * 2, radius * 2,
+			startAngle, extentAngle, Arc2D.OPEN));
+		g2.setStroke(oldStroke);
+		g2.setColor(oldColor);
+	}
+
+	private static float clampColor(float value) {
+		return Math.max(0, Math.min(1, value));
 	}
 
 	@Override

@@ -14,13 +14,13 @@ spellData.configure = {
 	timer = 150*60,
 	playerCandidateRadius = 100,
 	isSpell = true,
+	scoreReward = 10000000,
 	caster = "LAMBDA"
 }
 
 spellData.onStart = function()
 	boss:setMaxHP(75)
 	spell:startTimer()
-	spell:startCounting()
 end
 
 local waves = {}

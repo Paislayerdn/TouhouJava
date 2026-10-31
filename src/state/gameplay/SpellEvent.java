@@ -6,6 +6,7 @@ import state.Playing;
 public final class SpellEvent implements GameplayEvent {
 	private final Playing playing;
 	private final Spell spell;
+	private boolean completionHandled;
 
 	public SpellEvent(Playing playing, Spell spell) {
 		this.playing = playing;
@@ -19,10 +20,15 @@ public final class SpellEvent implements GameplayEvent {
 
 	@Override
 	public void update() {
+		if (spell.isFinished() && !completionHandled) {
+			playing.completeEncounter(spell);
+			completionHandled = true;
+		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		return spell.isFinished();
+		return spell.isFinished() && completionHandled
+			&& !playing.isShowingSpellResult();
 	}
 }

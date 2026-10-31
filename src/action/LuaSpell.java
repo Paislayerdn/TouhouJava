@@ -70,12 +70,11 @@ public final class LuaSpell extends Spell {
 			Debug.log(this, "timer = " + timer + " (default)");
 		}
 
-		value = config.get("countableTime");
+
+		value = config.get("scoreReward");
 		if (!value.isnil()) {
-			countableTime = value.tofloat();
-			Debug.log(this, "countableTime = " + countableTime);
-		} else {
-			Debug.log(this, "countableTime = " + countableTime + " (default)");
+			scoreReward = value.tolong();
+			Debug.log(this, "scoreReward = " + scoreReward);
 		}
 
 		value = config.get("isSpell");
