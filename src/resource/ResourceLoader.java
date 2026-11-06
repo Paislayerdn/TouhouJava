@@ -63,9 +63,7 @@ public final class ResourceLoader {
 	public static String text(String folder, String name) {
 		URL url = ResourceFinder.find(folder, name);
 
-		if (url == null) {
-			throw Debug.terminate(ResourceLoader.class, "Text resource not found: " + name);
-		}
+		if (url == null) throw Debug.terminate(ResourceLoader.class, "Text resource not found: " + name);
 
 		try (InputStream in = url.openStream()) {
 			return new String(
@@ -89,9 +87,7 @@ public final class ResourceLoader {
 	private static String text(String folder, String name, String... extensions	) {
 		URL url = ResourceFinder.find(folder, name, extensions);
 
-		if (url == null) {
-			throw Debug.terminate("Text resource not found: " + name);
-		}
+		if (url == null) throw Debug.terminate("Text resource not found: " + name);
 
 		try (InputStream in = url.openStream()) {
 			return new String(

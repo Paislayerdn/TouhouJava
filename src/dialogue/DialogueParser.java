@@ -52,9 +52,7 @@ public final class DialogueParser {
 		if (normalized.equals("name") || normalized.equals("print"))
 			argument = tokens.poll();
 
-		if (normalized.equals("print") || normalized.equals("name") || normalized.equals("kill")) {
-			return new MiscCommand(normalized, argument);
-		}
+		if (normalized.equals("print") || normalized.equals("name") || normalized.equals("kill")) return new MiscCommand(normalized, argument);
 
 		return new JScratchCommand(command);
 	}

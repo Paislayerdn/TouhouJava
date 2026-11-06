@@ -16,9 +16,7 @@ public final class AppearanceCache {
 			float pixelate,
 			float brightness
 	) {
-		if (costume == null) {
-			return null;
-		}
+		if (costume == null) return null;
 
 		float quantizedColor = quantize(color, Java2DQuality.COLOR_STEP,
 			Java2DQuality.COLOR_ROUNDING, 0.0f, 255.0f);
@@ -47,27 +45,17 @@ public final class AppearanceCache {
 		);
 
 		BufferedImage cached = cache.get(key);
-		if (cached != null) {
-			return cached;
-		}
+		if (cached != null) return cached;
 
 		BufferedImage image = costume;
 
-		if (quantizedPixelate != 0) {
-			image = DepictUtility.pixelate(image, quantizedPixelate);
-		}
+		if (quantizedPixelate != 0) image = DepictUtility.pixelate(image, quantizedPixelate);
 
-		if (quantizedColor != 0) {
-			image = DepictUtility.color(image, quantizedColor);
-		}
+		if (quantizedColor != 0) image = DepictUtility.color(image, quantizedColor);
 
-		if (quantizedBrightness != 0) {
-			image = DepictUtility.brightness(image, quantizedBrightness);
-		}
+		if (quantizedBrightness != 0) image = DepictUtility.brightness(image, quantizedBrightness);
 
-		if (quantizedDesaturation != 0) {
-			image = DepictUtility.desaturation(image, quantizedDesaturation);
-		}
+		if (quantizedDesaturation != 0) image = DepictUtility.desaturation(image, quantizedDesaturation);
 
 		cache.put(key, image);
 		return image;

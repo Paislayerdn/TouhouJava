@@ -3,8 +3,7 @@ package entity;
 import action.ScriptProperty;
 
 public class Position2D {
-	@ScriptProperty private float x;
-	@ScriptProperty private float y;
+	@ScriptProperty private float x, y;
 
 	public Position2D() { this(0, 0); }
 	public Position2D(float x, float y) { set(x, y); }
@@ -13,5 +12,5 @@ public class Position2D {
 	public void setX(float value) { x = value; }
 	public void setY(float value) { y = value; }
 	public void set(float x, float y) { this.x = x; this.y = y; }
-	public void move(float dx, float dy) { x += dx; y += dy; }
+	public void move(float dx, float dy) { set(x + dx, y + dy); }
 }

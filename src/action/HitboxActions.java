@@ -21,7 +21,7 @@ final class AddCircleHitbox extends Action {
 
 	@Override
 	public void start() {
-		Entity entity = ActionUtil.requireEntity(this);
+		Entity entity = ActionUtil.requireOwner(this, Entity.class);
 		
 		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
@@ -45,7 +45,7 @@ final class AddRectangleHitbox extends Action {
 
 	@Override
 	public void start() {
-		Entity entity = ActionUtil.requireEntity(this);
+		Entity entity = ActionUtil.requireOwner(this, Entity.class);
 		
 		if (entity.getHitbox(name) != null) throw Debug.terminate("JScratch", this, "Hitbox already exists: " + name);
 
@@ -70,7 +70,7 @@ final class SetHitboxEnabled extends Action {
 
 	@Override
 	public void start() {
-		Entity entity = ActionUtil.requireEntity(this);
+		Entity entity = ActionUtil.requireOwner(this, Entity.class);
 		Hitbox hitbox = entity.getHitbox(name);
 
 		if (hitbox == null) throw Debug.terminate("JScratch", this, "Hitbox not found: " + name);
@@ -96,7 +96,7 @@ final class SetHitboxTag extends Action {
 
 	@Override
 	public void start() {
-		Entity entity = ActionUtil.requireEntity(this);
+		Entity entity = ActionUtil.requireOwner(this, Entity.class);
 		Hitbox hitbox = entity.getHitbox(hitboxName);
 
 		if (hitbox == null) throw Debug.terminate("JScratch", this, "Hitbox not found: " + hitboxName);

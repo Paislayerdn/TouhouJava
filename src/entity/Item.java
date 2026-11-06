@@ -18,7 +18,7 @@ public final class Item extends Entity {
 		this.type = type;
 		this.velocityX = velocityX;
 		this.velocityY = velocityY;
-		setXY(x, y);
+		getPosition().set(x, y);
 		setName(type + " Item");
 		getAppearance().setCostume(ResourceLoader.image(switch (type) {
 			case POINT -> "BulletStar";
@@ -48,8 +48,8 @@ public final class Item extends Entity {
 		updateActions();
 		age++;
 		if (homing) {
-			float dx = targetX - getX();
-			float dy = targetY - getY();
+			float dx = targetX - getPosition().getX();
+			float dy = targetY - getPosition().getY();
 			float length = (float) Math.sqrt(dx * dx + dy * dy);
 			if (length > 0) {
 				velocityX = dx / length * 5.5f;
@@ -59,7 +59,7 @@ public final class Item extends Entity {
 			velocityY -= 0.035f;
 			velocityX *= 0.995f;
 		}
-		move(velocityX, velocityY);
+		getPosition().move(velocityX, velocityY);
 		if (age > 900) destroy();
 	}
 }

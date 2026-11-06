@@ -105,9 +105,7 @@ public final class LoadingState extends GameState {
 		loadTasks.add(() -> ResourceLoader.lua(name));
 	}
 
-	public void setReleaseAction(Supplier<Action> releaseAction) {
-		this.releaseAction = releaseAction;
-	}
+	public void setReleaseAction(Supplier<Action> releaseAction) { this.releaseAction = releaseAction; }
 
 	public int getLoadedTaskCount() { return nextTask; }
 	public int getTaskCount() { return loadTasks.size(); }
@@ -116,9 +114,7 @@ public final class LoadingState extends GameState {
 	public void update() {
 		elapsedFrames++;
 
-		for (Thing thing : snapshotThings()) {
-			thing.update();
-		}
+		for (Thing thing : snapshotThings()) thing.update();
 		things.removeIf(thing -> !thing.isAlive());
 
 		if (!releasing) {
@@ -135,13 +131,9 @@ public final class LoadingState extends GameState {
 		}
 
 		if (things.isEmpty()) {
-			if (!destinations.isEmpty()) {
-				parent.pushBehindFront(destinations.removeFirst());
-			}
+			if (!destinations.isEmpty()) parent.pushBehindFront(destinations.removeFirst());
 
-			if (coveredState != null) {
-				parent.removeState(coveredState);
-			}
+			if (coveredState != null) parent.removeState(coveredState);
 
 			finish();
 		}
@@ -157,9 +149,7 @@ public final class LoadingState extends GameState {
 	@Override
 	public void draw(Renderer renderer) {
 		renderer.beginTitle();
-		for (Thing thing : snapshotThings()) {
-			thing.draw(renderer);
-		}
+		for (Thing thing : snapshotThings()) thing.draw(renderer);
 		renderer.endTitle();
 	}
 
@@ -203,9 +193,7 @@ public final class LoadingState extends GameState {
 
 	private void releaseThings() {
 		releasing = true;
-		for (Thing thing : things) {
-			thing.run(releaseAction.get());
-		}
+		for (Thing thing : things) thing.run(releaseAction.get());
 	}
 
 	private static Action defaultRelease() {

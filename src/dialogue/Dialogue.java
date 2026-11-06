@@ -15,15 +15,9 @@ public final class Dialogue {
 		this.commands = new ArrayList<>();
 	}
 
-	public Collection<DialogueThing> getSpeakers() {
-		return speakers.values();
-	}
-	public DialogueThing getSpeaker(String name) {
-		return getOrCreateSpeaker(name);
-	}
-	public DialogueThing getOrCreateSpeaker(String name) {
-		return speakers.computeIfAbsent(name, DialogueThing::new);
-	}
+	public Collection<DialogueThing> getSpeakers() { return speakers.values(); }
+	public DialogueThing getSpeaker(String name) { return getOrCreateSpeaker(name); }
+	public DialogueThing getOrCreateSpeaker(String name) { return speakers.computeIfAbsent(name, DialogueThing::new); }
 	public void removeSpeaker(String name) {
 		speakers.remove(name);
 	}

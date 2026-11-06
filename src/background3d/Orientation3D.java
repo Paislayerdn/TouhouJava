@@ -1,11 +1,9 @@
-package entity;
+package background3d;
 
 import action.ScriptProperty;
 
 public final class Orientation3D {
-	@ScriptProperty private float pitch;
-	@ScriptProperty private float yaw;
-	@ScriptProperty private float roll;
+	@ScriptProperty private float pitch, yaw, roll;
 
 	public Orientation3D() { this(0, 0, 0); }
 	public Orientation3D(float pitch, float yaw, float roll) {

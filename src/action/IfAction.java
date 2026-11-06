@@ -2,8 +2,7 @@ package action;
 
 public final class IfAction extends Action {
 	private final Object condition;
-	private final ActionFactory thenFactory;
-	private final ActionFactory elseFactory;
+	private final ActionFactory thenFactory, elseFactory;
 
 	private Action action;
 
@@ -32,11 +31,7 @@ public final class IfAction extends Action {
 	public void start() {
 		boolean result = LogicValue.toBoolean(resolve(condition), this);
 
-		if (result) {
-			action = thenFactory.create();
-		} else if (elseFactory != null) {
-			action = elseFactory.create();
-		} else {
+		if (result) action = thenFactory.create(); else if (elseFactory != null) action = elseFactory.create(); else {
 			finish();
 			return;
 		}
@@ -45,21 +40,15 @@ public final class IfAction extends Action {
 		action.setContext(context);
 		action.start();
 
-		if (action.isFinished()) {
-			finish();
-		}
+		if (action.isFinished()) finish();
 	}
 
 	@Override
 	public void update() {
 		if (finished) return;
 
-		if (!action.isFinished()) {
-			action.update();
-		}
+		if (!action.isFinished()) action.update();
 
-		if (action.isFinished()) {
-			finish();
-		}
+		if (action.isFinished()) finish();
 	}
 }

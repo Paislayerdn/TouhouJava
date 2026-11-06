@@ -46,12 +46,12 @@ public final class WhileAction extends Action {
 				if (finished) return;
 			}
 
-			if (!action.isFinished()) { action.update(); }
-			if (!action.isFinished()) { return; }
+			if (!action.isFinished()) action.update();
+			if (!action.isFinished()) return;
 
 			boolean consumed = action.consumesFrame();
 			action = null;
-			if (consumed) { return; }
+			if (consumed) return;
 		}
 	}
 }

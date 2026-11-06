@@ -10,18 +10,11 @@ public final class GLB3D {
 	private static final float PLANE_TILE_SIZE = 100.0f;
 
 	public void render(BackgroundObject object) {
-		if (!object.visible) {
-			return;
-		}
+		if (!object.visible) return;
 
 		Appearance appearance = object.getAppearance();
 
-		if (appearance.costume == null
-			|| appearance.size == 0
-			|| appearance.ghost == 100
-		) {
-			return;
-		}
+		if (appearance.getCostume() == null || appearance.getSize() == 0 || appearance.getGhost() == 100) return;
 
 		GLTexture texture = GLTexture.get(
 			appearance.getRenderedCostume()
@@ -30,27 +23,27 @@ public final class GLB3D {
 		GL11.glPushMatrix();
 
 		GL11.glTranslatef(
-			object.getX(),
-			object.getY(),
-			object.getZ()
+			object.getPosition().getX(),
+			object.getPosition().getY(),
+			object.getPosition().getZ()
 		);
 
 		GL11.glRotatef(
-			object.getRoll(),
+			object.getOrientation().getRoll(),
 			0.0f,
 			0.0f,
 			1.0f
 		);
 
 		GL11.glRotatef(
-			object.getYaw(),
+			object.getOrientation().getYaw(),
 			0.0f,
 			1.0f,
 			0.0f
 		);
 
 		GL11.glRotatef(
-			object.getPitch(),
+			object.getOrientation().getPitch(),
 			1.0f,
 			0.0f,
 			0.0f

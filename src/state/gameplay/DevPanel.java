@@ -35,9 +35,7 @@ public final class DevPanel {
 	}
 	
 	public void update() {
-		if (PlayingStats.debugMode != showHitboxes) {
-			showHitboxes = PlayingStats.debugMode;
-		}
+		if (PlayingStats.debugMode != showHitboxes) showHitboxes = PlayingStats.debugMode;
 
 		if (!PlayingStats.debugMode)
 			return;
@@ -46,10 +44,10 @@ public final class DevPanel {
 			"=== DEBUG ===\n" +
 			"\n" +
 			"Player PF\n" +
-			format(player.getX(), player.getY(), PLAYER_PRECISION) + "\n" +
+			format(player.getPosition().getX(), player.getPosition().getY(), PLAYER_PRECISION) + "\n" +
 			"\n" +
 			"Player ABS\n" +
-			format(toScreen(player.getX(), player.getY()), PLAYER_PRECISION) + "\n" +
+			format(toScreen(player.getPosition().getX(), player.getPosition().getY()), PLAYER_PRECISION) + "\n" +
 			"\n" +
 			"Mouse PF\n" +
 			format(toWorld(Input.mouseX, Input.mouseY), MOUSE_PRECISION) + "\n" +
@@ -70,9 +68,7 @@ public final class DevPanel {
 		TEXT.draw(renderer);
 	}
 
-	public void setShowHitboxes(boolean value) {
-		showHitboxes = value;
-	}
+	public void setShowHitboxes(boolean value) { showHitboxes = value; }
 
 	public boolean isShowHitboxes() {
 		return showHitboxes;

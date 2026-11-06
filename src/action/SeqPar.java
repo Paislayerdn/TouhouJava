@@ -14,9 +14,7 @@ final class Sequence extends Action {
 
 	public Sequence(Action... actions) {
 		this.actions = new ArrayList<>();
-		for (Action action : actions) {
-			this.actions.add(action);
-		}
+		for (Action action : actions) this.actions.add(action);
 
 		currentIndex = 0;
 	}
@@ -27,9 +25,7 @@ final class Sequence extends Action {
 		currentIndex = 0;
 		consumedFrame = false;
 
-		for (Action action : actions) {
-			action.reset();
-		}
+		for (Action action : actions) action.reset();
 	}
 	
 	@Override
@@ -45,15 +41,11 @@ final class Sequence extends Action {
 
 		Action current = actions.get(currentIndex);
 
-		if (!current.isFinished()) {
-			current.update();
-		}
+		if (!current.isFinished()) current.update();
 
 		consumedFrame = current.consumesFrame();
 
-		if (!current.isFinished()) {
-			return;
-		}
+		if (!current.isFinished()) return;
 
 		currentIndex++;
 
@@ -110,9 +102,7 @@ final class Parallel extends Action {
 	public Parallel(Action... actions) {
 		this.actions = new ArrayList<>();
 
-		for (Action action : actions) {
-			this.actions.add(action);
-		}
+		for (Action action : actions) this.actions.add(action);
 	}
 
 	@Override

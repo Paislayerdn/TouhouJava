@@ -10,9 +10,7 @@ public final class MathValue {
 		return action -> {
 			float result = 0;
 
-			for (Object value : values) {
-				result += ((Number) action.resolve(value)).floatValue();
-			}
+			for (Object value : values) result += ((Number) action.resolve(value)).floatValue();
 
 			return result;
 		};
@@ -24,9 +22,7 @@ public final class MathValue {
 
 			float result = ((Number) action.resolve(values[0])).floatValue();
 
-			for (int i = 1; i < values.length; i++) {
-				result -= ((Number) action.resolve(values[i])).floatValue();
-			}
+			for (int i = 1; i < values.length; i++) result -= ((Number) action.resolve(values[i])).floatValue();
 
 			return result;
 		};
@@ -36,9 +32,7 @@ public final class MathValue {
 		return action -> {
 			float result = 1;
 
-			for (Object value : values) {
-				result *= ((Number) action.resolve(value)).floatValue();
-			}
+			for (Object value : values) result *= ((Number) action.resolve(value)).floatValue();
 
 			return result;
 		};
@@ -50,9 +44,7 @@ public final class MathValue {
 
 			float result = ((Number) action.resolve(values[0])).floatValue();
 
-			for (int i = 1; i < values.length; i++) {
-				result /= ((Number) action.resolve(values[i])).floatValue();
-			}
+			for (int i = 1; i < values.length; i++) result /= ((Number) action.resolve(values[i])).floatValue();
 
 			return result;
 		};
@@ -75,12 +67,7 @@ public final class MathValue {
 
 			float result = Float.POSITIVE_INFINITY;
 
-			for (Object value : values) {
-				result = Math.min(
-					result,
-					((Number) action.resolve(value)).floatValue()
-				);
-			}
+			for (Object value : values) result = Math.min( result, ((Number) action.resolve(value)).floatValue() );
 
 			return result;
 		};
@@ -91,27 +78,18 @@ public final class MathValue {
 
 			float result = Float.NEGATIVE_INFINITY;
 
-			for (Object value : values) {
-				result = Math.max(
-					result,
-					((Number) action.resolve(value)).floatValue()
-				);
-			}
+			for (Object value : values) result = Math.max( result, ((Number) action.resolve(value)).floatValue() );
 
 			return result;
 		};
 	}
 	public static Value Avg(Object... values) {
-		if (values.length == 0) {
-			throw Debug.terminate("JScratch", MathValue.class, "Avg requires at least one value");
-		}
+		if (values.length == 0) throw Debug.terminate("JScratch", MathValue.class, "Avg requires at least one value");
 
 		return action -> {
 			float result = 0;
 
-			for (Object value : values) {
-				result += action.resolveFloat(value);
-			}
+			for (Object value : values) result += action.resolveFloat(value);
 
 			return result / values.length;
 		};
@@ -165,13 +143,9 @@ public final class MathValue {
 			float number = action.resolveFloat(value);
 			float degree = action.resolveFloat(n);
 
-			if (degree == 0) {
-				throw Debug.terminate("JScratch", MathValue.class, "Root degree cannot be zero");
-			}
+			if (degree == 0) throw Debug.terminate("JScratch", MathValue.class, "Root degree cannot be zero");
 
-			if (number < 0 && degree == (int) degree && ((int) degree & 1) == 0) {
-				throw Debug.terminate("JScratch", MathValue.class, "Cannot take an even root of a negative value");
-			}
+			if (number < 0 && degree == (int) degree && ((int) degree & 1) == 0) throw Debug.terminate("JScratch", MathValue.class, "Cannot take an even root of a negative value");
 
 			return (float) Math.pow(number, 1.0 / degree);
 		};
@@ -179,17 +153,17 @@ public final class MathValue {
 
 	public static Value Distance(Thing target) {
 		return action -> {
-			ActionTarget owner = action.getOwner();
-			float dx = target.getX() - owner.getX();
-			float dy = target.getY() - owner.getY();
+			Thing owner = ActionUtil.requireOwner(action, Thing.class);
+			float dx = target.getPosition().getX() - owner.getPosition().getX();
+			float dy = target.getPosition().getY() - owner.getPosition().getY();
 			return (float) Math.sqrt(dx * dx + dy * dy);
 		};
 	}
 	public static Value Distance(Object x, Object y) {
 		return action -> {
-			ActionTarget owner = action.getOwner();
-			float dx = action.resolveFloat(x) - owner.getX();
-			float dy = action.resolveFloat(y) - owner.getY();
+			Thing owner = ActionUtil.requireOwner(action, Thing.class);
+			float dx = action.resolveFloat(x) - owner.getPosition().getX();
+			float dy = action.resolveFloat(y) - owner.getPosition().getY();
 			return (float) Math.sqrt(dx * dx + dy * dy);
 		};
 	}

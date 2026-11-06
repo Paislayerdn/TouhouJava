@@ -23,11 +23,7 @@ public final class LuaCallAction extends Action {
 	public void start() {
 		Object resolvedIndex = resolve(index);
 
-		if (!(resolvedIndex instanceof Number)) {
-			throw Debug.terminate("JSL", this,
-				"Lua table index must resolve to a number: " + resolvedIndex
-			);
-		}
+		if (!(resolvedIndex instanceof Number)) throw Debug.terminate("JSL", this, "Lua table index must resolve to a number: " + resolvedIndex );
 
 		int i = ((Number) resolvedIndex).intValue();
 
@@ -51,8 +47,6 @@ public final class LuaCallAction extends Action {
 
 		action.update();
 
-		if (action.isFinished()) {
-			finish();
-		}
+		if (action.isFinished()) finish();
 	}
 }

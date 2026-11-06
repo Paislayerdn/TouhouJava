@@ -81,16 +81,12 @@ public final class Java2DInput implements KeyListener, MouseMotionListener, Mous
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			Input.keyPressed(Input.Key.MOUSE_LEFT);
-		}
+		if (e.getButton() == MouseEvent.BUTTON1) Input.keyPressed(Input.Key.MOUSE_LEFT);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			Input.keyReleased(Input.Key.MOUSE_LEFT);
-		}
+		if (e.getButton() == MouseEvent.BUTTON1) Input.keyReleased(Input.Key.MOUSE_LEFT);
 	}
 
 	@Override

@@ -17,9 +17,7 @@ public final class SCT extends Thing {
 	}
 	private static SCTType resolveCaster(String caster) {
 	for (SCTType type : SCTType.values()) {
-			if (type.name().equals(caster)) {
-				return type;
-			}
+			if (type.name().equals(caster)) return type;
 		}
 
 		String upper = caster.toUpperCase();

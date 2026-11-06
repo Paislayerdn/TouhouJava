@@ -35,11 +35,7 @@ final class GLInput extends GLFWKeyCallback {
 
 		if (mappedKey == null) return;
 
-		if (pressed) {
-			Input.keyPressed(mappedKey);
-		} else if (action == GLFW_RELEASE) {
-			Input.keyReleased(mappedKey);
-		}
+		if (pressed) Input.keyPressed(mappedKey); else if (action == GLFW_RELEASE) Input.keyReleased(mappedKey);
 	}
 }
 
@@ -56,10 +52,6 @@ final class GLMouseButton extends GLFWMouseButtonCallback {
 	public void invoke(long window, int button, int action, int mods) {
 		if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
-		if (action == GLFW_PRESS) {
-			Input.keyPressed(Input.Key.MOUSE_LEFT);
-		} else if (action == GLFW_RELEASE) {
-			Input.keyReleased(Input.Key.MOUSE_LEFT);
-		}
+		if (action == GLFW_PRESS) Input.keyPressed(Input.Key.MOUSE_LEFT); else if (action == GLFW_RELEASE) Input.keyReleased(Input.Key.MOUSE_LEFT);
 	}
 }

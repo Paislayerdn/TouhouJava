@@ -1,5 +1,7 @@
 package action;
 
+import entity.Thing;
+
 public final class ForwardAction extends Action {
 	private Object distance;
 	@Override
@@ -11,13 +13,14 @@ public final class ForwardAction extends Action {
 
 	@Override
 	public void start() {
+		Thing thing = ActionUtil.requireOwner(this, Thing.class);
 		float ddDistance = resolveFloat(this.distance);
 
-		float radians = (float) Math.toRadians(owner.getTrueAngle());
+		float radians = (float) Math.toRadians(thing.getOrientation().getTrueAngle());
 		
-		owner.setXY(
-			owner.getX() + (float) Math.cos(radians) * ddDistance,
-			owner.getY() + (float) Math.sin(radians) * ddDistance
+		thing.getPosition().set(
+			thing.getPosition().getX() + (float) Math.cos(radians) * ddDistance,
+			thing.getPosition().getY() + (float) Math.sin(radians) * ddDistance
 		);
 		finish();
 	}

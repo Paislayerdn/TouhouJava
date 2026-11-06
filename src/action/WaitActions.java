@@ -43,9 +43,7 @@ final class WaitAction extends Action {
 
 		timer++;
 
-		if (timer >= (int) resolveFloat(duration)) {
-			finish();
-		}
+		if (timer >= (int) resolveFloat(duration)) finish();
 	}
 }
 
@@ -60,8 +58,6 @@ final class WaitUntilAction extends Action {
 
 	@Override
 	public void update() {
-		if (LogicValue.toBoolean(resolve(condition), this)) {
-			finish();
-		}
+		if (LogicValue.toBoolean(resolve(condition), this)) finish();
 	}
 }

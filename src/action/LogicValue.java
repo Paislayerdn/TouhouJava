@@ -7,14 +7,10 @@ public final class LogicValue {
 
 	public static Value And(Object... values) {
 		return action -> {
-			if (values.length == 0) {
-				throw Debug.terminate("JScratch", LogicValue.class, "And requires at least 1 value");
-			}
+			if (values.length == 0) throw Debug.terminate("JScratch", LogicValue.class, "And requires at least 1 value");
 
 			for (Object value : values) {
-				if (!toBoolean(action.resolve(value), action)) {
-					return false;
-				}
+				if (!toBoolean(action.resolve(value), action)) return false;
 			}
 
 			return true;
@@ -23,14 +19,10 @@ public final class LogicValue {
 
 	public static Value Or(Object... values) {
 		return action -> {
-			if (values.length == 0) {
-				throw Debug.terminate("JScratch", LogicValue.class, "Or requires at least 1 value");
-			}
+			if (values.length == 0) throw Debug.terminate("JScratch", LogicValue.class, "Or requires at least 1 value");
 
 			for (Object value : values) {
-				if (toBoolean(action.resolve(value), action)) {
-					return true;
-				}
+				if (toBoolean(action.resolve(value), action)) return true;
 			}
 
 			return false;

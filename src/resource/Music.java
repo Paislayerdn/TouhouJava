@@ -22,9 +22,7 @@ public final class Music {
 		if (clip == null) {
 			clip = createClip();
 
-			if (clip == null) {
-				return;
-			}
+			if (clip == null) return;
 		}
 
 		clip.stop();
@@ -33,9 +31,7 @@ public final class Music {
 	}
 
 	public void stop() {
-		if (clip == null) {
-			return;
-		}
+		if (clip == null) return;
 
 		clip.stop();
 		clip.setFramePosition(0);
@@ -72,8 +68,6 @@ public final class Music {
 	public void setVolume(float volume) {
 		this.volume = volume;
 
-		if (clip != null) {
-			setClipVolume(clip, volume);
-		}
+		if (clip != null) setClipVolume(clip, volume);
 	}
 }

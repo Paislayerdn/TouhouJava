@@ -72,18 +72,14 @@ public class Playing extends GameState {
 		actions.add((Action) spell);
 		hud.setCurrentSpell(spell.isSpell() ? spell : null);
 		
-		if (spell.isSpell() && spell.getCaster() != null) {
-			hud.showSCT(spell.getCaster());
-		}
+		if (spell.isSpell() && spell.getCaster() != null) hud.showSCT(spell.getCaster());
 	}
 	public void converse(String file) {
 		this.dialogueRunner = new DialogueRunner(this, file);
 	}
 	public void completeEncounter(Spell spell) {
 		bulletManager.clearScreen();
-		if (spell.isSpell()) {
-			itemManager.dropSpellItems(boss.getX(), boss.getY());
-		}
+		if (spell.isSpell()) itemManager.dropSpellItems( boss.getPosition().getX(), boss.getPosition().getY());
 		hud.showSpellResult(spell);
 	}
 	public boolean isShowingSpellResult() { return hud.isShowingSpellResult(); }
@@ -92,14 +88,12 @@ public class Playing extends GameState {
 	public void update() {
 		if (isFinished()) return;
 		background.update();
-		if (Input.tap.P) {PlayingStats.debugMode = !PlayingStats.debugMode;}
+		if (Input.tap.P) PlayingStats.debugMode = !PlayingStats.debugMode;
 		
 		actions.update();
 		if (dialogueRunner != null) {
 			dialogueRunner.update();
-			if (dialogueRunner.isFinished()) {
-				dialogueRunner = null;
-			}
+			if (dialogueRunner.isFinished()) dialogueRunner = null;
 		}
 		
 		boss.update();
@@ -126,9 +120,7 @@ public class Playing extends GameState {
 
 	private void finishRun(boolean cleared) {
 		if (bgm != null) bgm.stop();
-		if (cleared) {
-			parent.getPlayingStats().addScore(ScoreRules.STAGE_CLEAR_BONUS);
-		}
+		if (cleared) parent.getPlayingStats().addScore(ScoreRules.STAGE_CLEAR_BONUS);
 		finish();
 		parent.removeState(this);
 		if (cleared) parent.pushState(new StageClearScreen(parent));
@@ -158,9 +150,7 @@ public class Playing extends GameState {
 
 		hud.drawOverlay(renderer);
 		
-		if (dialogueRunner != null) {
-			dialogueRunner.draw(renderer);
-		}
+		if (dialogueRunner != null) dialogueRunner.draw(renderer);
 		
 		devPanel.draw(renderer);
 	}

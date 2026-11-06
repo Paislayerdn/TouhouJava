@@ -48,9 +48,7 @@ public final class DialogueLexer {
 			String name = text.substring(i + 1, end);
 			Object value = runner.resolveVariable(name);
 
-			if (value == null) {
-				throw Debug.terminate(DialogueLexer.class, "Unknown dialogue variable: " + name);
-			}
+			if (value == null) throw Debug.terminate(DialogueLexer.class, "Unknown dialogue variable: " + name);
 
 			result.append(value);
 			i = end;

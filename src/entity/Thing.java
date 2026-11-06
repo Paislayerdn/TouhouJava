@@ -18,9 +18,7 @@ public class Thing extends ActionTarget {
 		this.position = new Position2D(x, y);
 		this.orientation = new Orientation2D();
 		this.appearance = new Appearance();
-		if (spriteName != null) {
-			this.appearance.setCostume(ResourceLoader.image(spriteName));
-		}
+		if (spriteName != null) this.appearance.setCostume(ResourceLoader.image(spriteName));
 		this.appearance.setSize(size);
 		setName("[UNNAMED THING]");
 		registerScriptComponents(position, orientation, appearance);
@@ -29,10 +27,9 @@ public class Thing extends ActionTarget {
 	public void draw(Renderer renderer) { renderer.thing(this); }
 	public void update() { updateActions(); }
 
-	@Override
 	public final Appearance getAppearance() { return appearance; }
 	public final Position2D getPosition() { return position; }
 	public final Orientation2D getOrientation() { return orientation; }
-	public float getRenderedSize() { return appearance.size; }
+	public float getRenderedSize() { return appearance.getSize(); }
 
 }

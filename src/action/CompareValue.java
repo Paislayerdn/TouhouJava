@@ -32,9 +32,7 @@ public final class CompareValue {
 		Action action,
 		Comparison comparison
 	) {
-		if (values.length < 2) {
-			throw Debug.terminate("JScratch", CompareValue.class, "Comparison requires at least 2 values");
-		}
+		if (values.length < 2) throw Debug.terminate("JScratch", CompareValue.class, "Comparison requires at least 2 values");
 
 		Object[] resolved = new Object[values.length];
 
@@ -44,13 +42,9 @@ public final class CompareValue {
 		for (int i = 0; i < values.length; i++) {
 			resolved[i] = action.resolve(values[i]);
 
-			if (resolved[i] instanceof String) {
-				hasString = true;
-			}
+			if (resolved[i] instanceof String) hasString = true;
 
-			if (!(resolved[i] instanceof Number)) {
-				allNumbers = false;
-			}
+			if (!(resolved[i] instanceof Number)) allNumbers = false;
 		}
 
 		if (hasString) {
@@ -61,23 +55,13 @@ public final class CompareValue {
 			String[] strings = new String[resolved.length];
 
 			for (int i = 0; i < resolved.length; i++) {
-				if (!(resolved[i] instanceof String)
-					&& !(resolved[i] instanceof Number)) {
-
-					throw Debug.terminate("JScratch", CompareValue.class,
-						"Cannot compare "
-						+ resolved[i].getClass().getSimpleName()
-						+ " with String"
-					);
-				}
+				if (!(resolved[i] instanceof String) && !(resolved[i] instanceof Number)) throw Debug.terminate("JScratch", CompareValue.class, "Cannot compare " + resolved[i].getClass().getSimpleName() + " with String" );
 
 				strings[i] = String.valueOf(resolved[i]);
 			}
 
 			for (int i = 0; i < strings.length - 1; i++) {
-				if (!compareStrings(strings[i], strings[i + 1], comparison)) {
-					return false;
-				}
+				if (!compareStrings(strings[i], strings[i + 1], comparison)) return false;
 			}
 
 			return true;
@@ -88,9 +72,7 @@ public final class CompareValue {
 				float a = ((Number) resolved[i]).floatValue();
 				float b = ((Number) resolved[i + 1]).floatValue();
 
-				if (!compareNumbers(a, b, comparison)) {
-					return false;
-				}
+				if (!compareNumbers(a, b, comparison)) return false;
 			}
 
 			return true;

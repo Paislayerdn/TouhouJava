@@ -2,20 +2,16 @@ package action;
 
 public final class ForAction extends Action {
 	private final String variable;
-	private final Object start;
-	private final Object end;
+	private final Object start, end;
 	private final ActionFactory factory;
 
 	private Action action;
 	private ActionContext loopContext;
 	private boolean consumedFrame;
-
 	@Override
 	public boolean consumesFrame() { return consumedFrame; }
 
-	private float current;
-	private float target;
-	private float step;
+	private float current, target, step;
 
 	public ForAction(String variable, Object start, Object end, ActionFactory factory) {
 		this.variable = variable;
@@ -78,9 +74,7 @@ public final class ForAction extends Action {
 
 			consumedFrame = action.consumesFrame();
 
-			if (consumedFrame) {
-				return;
-			}
+			if (consumedFrame) return;
 		}
 	}
 }

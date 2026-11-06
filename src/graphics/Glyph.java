@@ -24,13 +24,8 @@ public final class Glyph extends Thing {
 		);
 	}
 
-	public int getCodePoint() {
-		return codePoint;
-	}
-
-	public String getText() {
-		return new String(Character.toChars(codePoint));
-	}
+	public int getCodePoint() { return codePoint; }
+	public String getText() { return new String(Character.toChars(codePoint)); }
 
 	@Override
 	public void update() {
@@ -40,9 +35,7 @@ public final class Glyph extends Thing {
 		if (costumeRevision != observedCostumeRevision) {
 			observedCostumeRevision = costumeRevision;
 			popElapsed = 0;
-		} else if (popElapsed < POP_DURATION_FRAMES) {
-			popElapsed++;
-		}
+		} else if (popElapsed < POP_DURATION_FRAMES) popElapsed++;
 	}
 
 	@Override
@@ -50,6 +43,6 @@ public final class Glyph extends Thing {
 		float progress = Math.min(1.0f, popElapsed / (float) POP_DURATION_FRAMES);
 		float easedProgress = progress * progress * (3.0f - 2.0f * progress);
 		float popScale = 1.0f + (POP_SCALE - 1.0f) * (1.0f - easedProgress);
-		return getAppearance().size * popScale;
+		return getAppearance().getSize() * popScale;
 	}
 }

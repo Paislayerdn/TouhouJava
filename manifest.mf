@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: Touhou JaVA Demo v0.1
-Implementation-Version: 0.1
+Implementation-Title: Touhou JaVA Demo v0.1.1
+Implementation-Version: 0.1.1
 X-COMMENT: Main-Class will be added automatically by build
 

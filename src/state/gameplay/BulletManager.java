@@ -24,17 +24,9 @@ public final class BulletManager {
 		this.collisionManager = collisionManager;
 	}
 	
-	public List<Bullet> getPlayerBullets() {
-		synchronized (bulletLock) {
-			return playerBulletView;
-		}
-	}
+	public List<Bullet> getPlayerBullets() { synchronized (bulletLock) { return playerBulletView; } }
 	
-	public List<Bullet> getEnemyBullets() {
-		synchronized (bulletLock) {
-			return enemyBulletView;
-		}
-	}
+	public List<Bullet> getEnemyBullets() { synchronized (bulletLock) { return enemyBulletView; } }
 	
 	public void spawn(Bullet bullet) {
 		synchronized (bulletLock) {
@@ -65,9 +57,7 @@ public final class BulletManager {
 		synchronized (bulletLock) {
 			int playerCount = playerBullets.size();
 			int enemyCount = enemyBullets.size();
-			for (int i = 0; i < playerCount; i++) {
-				playerBullets.get(i).update();
-			}
+			for (int i = 0; i < playerCount; i++) playerBullets.get(i).update();
 			for (int i = 0; i < enemyCount; i++) {
 				Bullet bullet = enemyBullets.get(i);
 				bullet.update();
@@ -92,12 +82,8 @@ public final class BulletManager {
 
 	public void clearScreen() {
 		synchronized (bulletLock) {
-			for (Bullet bullet : playerBullets) {
-				bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
-			}
-			for (Bullet bullet : enemyBullets) {
-				bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
-			}
+			for (Bullet bullet : playerBullets) bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
+			for (Bullet bullet : enemyBullets) bullet.run(Sequence(Tween("ghost", 100, 20), Destroy()));
 		}
 	}
 
@@ -115,9 +101,5 @@ public final class BulletManager {
 		}
 	}
 	
-	public int getBulletCount() {
-		synchronized (bulletLock) {
-			return playerBullets.size() + enemyBullets.size();
-		}
-	}
+	public int getBulletCount() { synchronized (bulletLock) { return playerBullets.size() + enemyBullets.size(); } }
 }

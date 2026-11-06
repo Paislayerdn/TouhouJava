@@ -4,12 +4,8 @@ import entity.Thing;
 import main.Debug;
 
 final class EdgeBounceAction extends Action {
-	private final Object left;
-	private final Object right;
-	private final Object bottom;
-	private final Object top;
-	private final boolean symmetric;
-
+	private final Object left, right;
+	private final Object bottom, top;
 	@Override
 	public boolean consumesFrame() { return false; }
 
@@ -18,49 +14,30 @@ final class EdgeBounceAction extends Action {
 		this.right = right;
 		this.bottom = bottom;
 		this.top = top;
-		this.symmetric = false;
 	}
 
 	EdgeBounceAction(Object halfWidth, Object halfHeight) {
-		this.left = halfWidth;
+		this.left = (Value) action -> -action.resolveFloat(halfWidth);
 		this.right = halfWidth;
-		this.bottom = halfHeight;
+		this.bottom = (Value) action -> -action.resolveFloat(halfHeight);
 		this.top = halfHeight;
-		this.symmetric = true;
 	}
 
 	@Override
 	public void start() {
-		if (!(owner instanceof Thing)) {
-			throw Debug.terminate("JScratch", this, "Owner must be a Thing");
-		}
+		Thing thing = ActionUtil.requireOwner(this, Thing.class);
 
-		float minX;
-		float maxX;
-		float minY;
-		float maxY;
-		if (symmetric) {
-			float halfWidth = resolveFloat(left);
-			float halfHeight = resolveFloat(bottom);
-			minX = -halfWidth;
-			maxX = halfWidth;
-			minY = -halfHeight;
-			maxY = halfHeight;
-		} else {
-			minX = resolveFloat(left);
-			maxX = resolveFloat(right);
-			minY = resolveFloat(bottom);
-			maxY = resolveFloat(top);
-		}
+		float minX = resolveFloat(left);
+		float maxX = resolveFloat(right);
+		float minY = resolveFloat(bottom);
+		float maxY = resolveFloat(top);
 
-		if (minX > maxX || minY > maxY) {
-			throw Debug.terminate("JScratch", this,
+		if (minX > maxX || minY > maxY) throw Debug.terminate("JScratch", this,
 				"Bounce bounds must be ordered left-to-right and bottom-to-top");
-		}
 
-		float x = owner.getX();
-		float y = owner.getY();
-		float radians = (float) Math.toRadians(owner.getTrueAngle());
+		float x = thing.getPosition().getX();
+		float y = thing.getPosition().getY();
+		float radians = (float) Math.toRadians(thing.getOrientation().getTrueAngle());
 		float dx = (float) Math.cos(radians);
 		float dy = (float) Math.sin(radians);
 
@@ -72,11 +49,9 @@ final class EdgeBounceAction extends Action {
 		if (bounceX) dx = -dx;
 		if (bounceY) dy = -dy;
 
-		if (bounceX || bounceY) {
-			owner.setTrueAngle((float) Math.toDegrees(Math.atan2(dy, dx)));
-		}
+		if (bounceX || bounceY) thing.getOrientation().setTrueAngle((float) Math.toDegrees(Math.atan2(dy, dx)));
 
-		owner.setXY(
+		thing.getPosition().set(
 			Math.max(minX, Math.min(maxX, x)),
 			Math.max(minY, Math.min(maxY, y))
 		);

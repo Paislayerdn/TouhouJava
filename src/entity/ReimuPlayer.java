@@ -59,7 +59,7 @@ public final class ReimuPlayer extends Player {
 		if (length > 0) {
 			dx /= length;
 			dy /= length;
-			move(dx * speed, dy * speed);
+			getPosition().move(dx * speed, dy * speed);
 		}
 
 		if (Input.tap.PAGEUP) autoFire = !autoFire;
@@ -78,9 +78,7 @@ public final class ReimuPlayer extends Player {
 		grantInvulnerabilityFrames(180);
 		hud.showSCT("REIMU");
 		Object manager = getActionContext().get("bullets");
-		if (manager instanceof state.gameplay.BulletManager bulletManager) {
-			bulletManager.clearBomb();
-		}
+		if (manager instanceof state.gameplay.BulletManager bulletManager) bulletManager.clearBomb();
 		int total = 12;
 		run(Sequence(
 			Wait(60),

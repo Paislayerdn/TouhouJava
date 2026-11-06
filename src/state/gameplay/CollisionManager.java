@@ -23,9 +23,7 @@ public final class CollisionManager {
 		this.boss = boss;
 	}
 	
-	public void setPlayerCandidateRadius(float radius) {
-		playerCandidateRadiusSquared = radius * radius;
-	}
+	public void setPlayerCandidateRadius(float radius) { playerCandidateRadiusSquared = radius * radius; }
 	
 	public void updateEnemyCandidate(Bullet bullet) {
 		if (!bullet.isAlive()) {
@@ -33,13 +31,11 @@ public final class CollisionManager {
 			return;
 		}
 
-		float dx = bullet.getX() - player.getX();
-		float dy = bullet.getY() - player.getY();
+		float dx = bullet.getPosition().getX() - player.getPosition().getX();
+		float dy = bullet.getPosition().getY() - player.getPosition().getY();
 
 		float distanceSquared = dx * dx + dy * dy;
-		if (distanceSquared <= playerCandidateRadiusSquared) {
-			playerCandidates.add(bullet);
-		} else {
+		if (distanceSquared <= playerCandidateRadiusSquared) playerCandidates.add(bullet); else {
 			playerCandidates.remove(bullet);
 		}
 	}
@@ -84,9 +80,7 @@ public final class CollisionManager {
 
 							CollisionResult collision = check(playerBulletHitbox, enemyBulletHitbox);
 
-							if (collision != null) {
-								enemyBullet.destroy();
-							}
+							if (collision != null) enemyBullet.destroy();
 						}
 					}
 				}

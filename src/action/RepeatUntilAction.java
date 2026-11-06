@@ -34,18 +34,16 @@ public final class RepeatUntilAction extends Action {
 		if (finished) return;
 
 		while (!finished) {
-			if (action == null) {
-				startNextIteration();
-			}
+			if (action == null) startNextIteration();
 
-			if (!action.isFinished()) { action.update(); }
-			if (!action.isFinished()) { return; }
+			if (!action.isFinished()) action.update();
+			if (!action.isFinished()) return;
 
 			boolean consumed = action.consumesFrame();
 
 			action = null;
 
-			if (consumed) { return; }
+			if (consumed) return;
 
 			boolean result = LogicValue.toBoolean(resolve(condition), this);
 

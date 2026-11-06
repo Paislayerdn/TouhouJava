@@ -74,9 +74,7 @@ public final class DialogueRunner {
 	private String getDayWithSuffix(int day) {
 		String suffix;
 
-		if (day >= 11 && day <= 13) {
-			suffix = "th";
-		} else {
+		if (day >= 11 && day <= 13) suffix = "th"; else {
 			switch (day % 10) {
 				case 1 -> suffix = "st";
 				case 2 -> suffix = "nd";
@@ -99,9 +97,7 @@ public final class DialogueRunner {
 		dialogue.removeSpeaker(currentSpeaker.getName());
 		currentSpeaker = null;
 	}
-	public void setCurrentSpeakerName(String displayName) {
-		currentSpeaker.setDisplayName(displayName);
-	}
+	public void setCurrentSpeakerName(String displayName) { currentSpeaker.setDisplayName(displayName); }
 	
 	public String getCurrentText() { return textBox.getText(); }
 	public void setCurrentText(String text) { textBox.setText(text); }
@@ -114,16 +110,10 @@ public final class DialogueRunner {
 			waitingForInput = false;
 		}
 
-		for (DialogueThing speaker : dialogue.getSpeakers()) {
-			speaker.update();
-		}
+		for (DialogueThing speaker : dialogue.getSpeakers()) speaker.update();
 
 		if (waitingForInput) {
-			if (Input.tap.Z) {
-				advanceSound.play();
-			} else if (!skipping) {
-				return;
-			}
+			if (Input.tap.Z) advanceSound.play(); else if (!skipping) return;
 
 			waitingForInput = false;
 		}

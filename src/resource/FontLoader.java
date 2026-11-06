@@ -15,9 +15,7 @@ public final class FontLoader {
 
 		URL url = ResourceFinder.find(ResourceFinder.FONT, name, EXTENSIONS);
 
-		if (url == null) {
-			throw Debug.terminate(FontLoader.class, "Font not found: " + name);
-		}
+		if (url == null) throw Debug.terminate(FontLoader.class, "Font not found: " + name);
 
 		try {
 			return Font.createFont(

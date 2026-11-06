@@ -33,17 +33,13 @@ public final class VariableAction extends Action {
 
 		switch (operation) {
 			case DECLARE:
-				if (targetProperty) {
-					throw Debug.terminate("JScratch", this, "Cannot declare reserved value: "+ name);
-				}
+				if (targetProperty) throw Debug.terminate("JScratch", this, "Cannot declare reserved value: "+ name);
 
 				declareVariable(name, resolve(value));
 				break;
 
 			case SET:
-				if (targetProperty) {
-					getOwner().setScriptProperty(name, resolve(value));
-				} else {
+				if (targetProperty) getOwner().setScriptProperty(name, resolve(value)); else {
 					setVariable(name, resolve(value));
 				}
 				break;

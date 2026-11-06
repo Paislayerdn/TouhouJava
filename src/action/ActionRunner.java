@@ -27,9 +27,7 @@ public final class ActionRunner {
 
 		TweenAction old = tweens.put(property, tween);
 
-		if (old != null && old != tween) {
-			old.finish();
-		}
+		if (old != null && old != tween) old.finish();
 	}
 	
 	public synchronized void add(Action action) {
@@ -39,9 +37,7 @@ public final class ActionRunner {
 		action.setOwner(owner);
 		action.setContext(context);
 
-		if (action instanceof TweenAction tween) {
-			registerTween(tween);
-		}
+		if (action instanceof TweenAction tween) registerTween(tween);
 
 		actions.add(action);
 		action.start();
@@ -51,9 +47,7 @@ public final class ActionRunner {
 		ArrayList<Action> snapshot = new ArrayList<>(actions);
 
 		for (Action action : snapshot) {
-			if (!action.isFinished()) {
-				action.update();
-			}
+			if (!action.isFinished()) action.update();
 		}
 
 		actions.removeIf(Action::isFinished);

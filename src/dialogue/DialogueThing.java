@@ -7,7 +7,7 @@ public final class DialogueThing extends Thing {
 
 	public DialogueThing(String name) {
 		super();
-		this.getAppearance().size /= 6;
+		this.getAppearance().setSize(this.getAppearance().getSize() / 6);
 		setName(name);
 		this.displayName = name;
 	}

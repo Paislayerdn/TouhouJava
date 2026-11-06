@@ -28,9 +28,7 @@ public final class SpawnRegistry {
 
 	public static synchronized void register(String className, Factory factory) {
 		String key = className.toUpperCase(Locale.ROOT);
-		if (factories.putIfAbsent(key, factory) != null) {
-			throw new IllegalArgumentException("Spawn type already registered: " + className);
-		}
+		if (factories.putIfAbsent(key, factory) != null) throw new IllegalArgumentException("Spawn type already registered: " + className);
 	}
 
 	public static ActionTarget create(String className, String requestedName) {

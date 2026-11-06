@@ -51,11 +51,7 @@ public final class HUD {
 		this.powerValue = addText(OVERLAY_TEXTS, "", SIDEBAR_VALUE_RIGHT, 42, 250, 50, TextAlign.RIGHT);
 		this.livesValue = addText(OVERLAY_TEXTS, "", SIDEBAR_VALUE_RIGHT, 176, 250, 50, TextAlign.RIGHT);
 		this.bombsValue = addText(OVERLAY_TEXTS, "", SIDEBAR_VALUE_RIGHT, 147, 250, 50, TextAlign.RIGHT);
-		for (TextBox value : new TextBox[] {
-			scoreValue, grazeValue, powerValue, livesValue, bombsValue
-		}) {
-			value.setGlyphSize(30.0f);
-		}
+		for (TextBox value : new TextBox[] { scoreValue, grazeValue, powerValue, livesValue, bombsValue }) value.setGlyphSize(30.0f);
 		this.fpsValue = addText(OVERLAY_TEXTS, "FPS 0", 465, -345, 220, 50, TextAlign.RIGHT);
 		this.fpsValue.setGlyphSize(18.0f);
 
@@ -85,9 +81,7 @@ public final class HUD {
 		this.spellName.setText(cS == null ? "" : cS.getName());
 	}
 
-	public void setFps(int fps) {
-		fpsValue.setText("FPS " + fps);
-	}
+	public void setFps(int fps) { fpsValue.setText("FPS " + fps); }
 
 	public void showSCT(String caster) {
 		SCTs.add(new SCT(caster));

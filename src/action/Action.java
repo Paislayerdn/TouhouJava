@@ -2,7 +2,6 @@ package action;
 
 import main.Debug;
 
-import entity.Entity;
 
 public abstract class Action {
 	protected boolean finished = false;
@@ -42,10 +41,14 @@ public abstract class Action {
 final class ActionUtil {
 	private ActionUtil() {}
 
-	public static Entity requireEntity(Action action) {
-		if (action.getOwner() instanceof Entity entity) {
-			return entity;
-		}
-		throw Debug.terminate("JScratch", action, "Owner must be an Entity");
+	public static <T extends ActionTarget> T requireOwner(Action action, Class<T> type) {
+		ActionTarget owner = action.getOwner();
+		if (owner != null && type.isInstance(owner)) return type.cast(owner);
+		String target = owner == null
+			? "<no target (null)>"
+			: "'" + String.valueOf(owner.getName()) + "' (" + owner.getClass().getName() + ")";
+		throw Debug.terminate("JScratch", action,
+			"Action " + action.getClass().getSimpleName() + " requires "
+				+ type.getSimpleName() + " but target " + target + " was provided");
 	}
 }

@@ -3,16 +3,12 @@ package action;
 import main.Debug;
 
 public final class TweenAction extends Action {
-	private final Object start;
-	private final Object end;
-	private final Object frames;
+	private final Object start, end, frames;
 	private final Easing easing;
 
 	private final String propertyName;
-	private float startValue;
-	private float endValue;
-	private int resolvedFrames;
-	private int elapsed;
+	private float startValue, endValue;
+	private int resolvedFrames, elapsed;
 
 	@Override
 	public boolean consumesFrame() { return true; }
@@ -31,9 +27,7 @@ public final class TweenAction extends Action {
 	
 	public String getPropertyName() { return propertyName; }
 	private void setValue(float value) {
-		if (getOwner() != null && getOwner().hasScriptProperty(propertyName)) {
-			getOwner().setScriptProperty(propertyName, value);
-		} else {
+		if (getOwner() != null && getOwner().hasScriptProperty(propertyName)) getOwner().setScriptProperty(propertyName, value); else {
 			setVariable(propertyName, value);
 		}
 	}
@@ -41,9 +35,7 @@ public final class TweenAction extends Action {
 	@Override
 	public void start() {
 		resolvedFrames = (int) resolveFloat(frames);
-		if (resolvedFrames < 0) {
-			throw Debug.terminate("JScratch", this, "Tween frames cannot be negative: " + resolvedFrames);
-		}
+		if (resolvedFrames < 0) throw Debug.terminate("JScratch", this, "Tween frames cannot be negative: " + resolvedFrames);
 
 		startValue = resolveFloat(start);
 		endValue = resolveFloat(end);

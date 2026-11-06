@@ -13,202 +13,23 @@ import main.Debug;
 import main.Settings;
 
 public final class JScratch {
-	
-	// POSITION
-	public static Action Forward(Object distance) { return new ForwardAction(distance); }
-	public static Action EdgeBounce() {
-		return EdgeBounce(
-			-Settings.HALF_WIDTH, Settings.HALF_WIDTH,
-			-Settings.HALF_HEIGHT, Settings.HALF_HEIGHT
-		);
-	}
-	public static Action EdgeBounce(Object x, Object y) {
-		return new EdgeBounceAction(x, y);
-	}
-	public static Action EdgeBounce(Object left, Object right, Object bottom, Object top) {
-		return new EdgeBounceAction(left, right, bottom, top);
-	}
-	public static Action MoveX(Object x) { return Change("x", x); }
-	public static Action MoveY(Object y) { return Change("y", y); }
-	public static Action Move(Object x, Object y) {
-		return Parallel(Change("x", x), Change("y", y));
-	}
-	
-	public static Action GoTo(Thing target) {
-		return Parallel(
-			Set("x", (Value) action -> target.getX()),
-			Set("y", (Value) action -> target.getY())
-		);
-	}
-	public static Action Warp(Thing target) { return GoTo(target); }
-	public static Action GoTo(Object x, Object y) {
-		return Parallel(Set("x", x), Set("y", y));
-	}
-	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
-	public static Action SetX(Object x) { return Set("x", x); }
-	public static Action SetY(Object y) { return Set("y", y); }
-	
-	// TWEEN: POSITION
-	public static Action GoTo(Thing target, int frames) {
-		return Parallel(
-			new TweenAction("x", (Value) action -> target.getX(), frames, Easing.Linear),
-			new TweenAction("y", (Value) action -> target.getY(), frames, Easing.Linear)
-		);
-	}
-	public static Action Warp(Thing target, int frames) { return GoTo(target, frames); }
-	public static Action GoTo(Object x, Object y, int frames) {
-		return Parallel(
-			new TweenAction("x", x, frames, Easing.Linear),
-			new TweenAction("y", y, frames, Easing.Linear)
-		);
-	}
-	public static Action GoTo(Object startX, Object startY, Object x, Object y, int frames) {
-		return Parallel(
-			new TweenAction("x", startX, x, frames, Easing.Linear),
-			new TweenAction("y", startY, y, frames, Easing.Linear)
-		);
-	}
-	public static Action SetX(Object x, Object frames) {
-		return new TweenAction("x", x, frames, Easing.Linear);
-	}
-	public static Action SetX(Object start, Object end, int frames) {
-		return new TweenAction("x", start, end, frames, Easing.Linear);
-	}
-	public static Action SetY(Object y, Object frames) {
-		return new TweenAction("y", y, frames, Easing.Linear);
-	}
-	public static Action SetY(Object start, Object end, int frames) {
-		return new TweenAction("y", start, end, frames, Easing.Linear);
-	}
-	
-
-	// ANGLE, THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
-	public static Action LookTowards(Thing target) { return new LookTowardsAction(target); }
-	public static Action Look(Object angle) { return Set("angle", angle); }
-	public static Action Turn(Object angle) { return Change("angle", angle); }
-	// TWEEN: ANGLE
-	public static Action LookTowards(Thing target, int frames) {
-		return new TweenAction(
-			"angle",
-			Value.Get("angle"),
-			(Value) action -> {
-				ActionTarget owner = action.getOwner();
-
-				float dx = target.getX() - owner.getX();
-				float dy = target.getY() - owner.getY();
-
-				return (float) Math.toDegrees(Math.atan2(dy, dx));
-			},
-			frames, Easing.Linear
-		);
-	}
-	public static Action Look(Object angle, int frames) {
-		return new TweenAction("angle",
-			angle, frames, Easing.Linear
-		);
-	}
-	public static Action Look(Object start, Object end, int frames) {
-		return new TweenAction("angle",
-			start, end, frames,
-			Easing.Linear
-		);
-	}
-	public static Action Turn(Object angle, int frames) {
-		return new TweenAction(
-			"angle",
-			(Value) action -> Value.Get("angle"),
-			(Value) action -> Add(Value.Get("angle"), angle),
-			frames, Easing.Linear
-		);
-	}
-	
-	public static Action SetTrueAngle(Object angle) { return Set("trueAngle", angle); }
-	public static Action ChangeTrueAngle(Object angle) { return Change("trueAngle", angle); }
-	public static Action SetAppearAngle(Object angle) { return Set("appearAngle", angle); }
-	public static Action ChangeAppearAngle(Object angle) { return Change("appearAngle", angle); }
-	public static Action EnableAngleOverride() { return Set("angleOverride", true); }
-	public static Action DisableAngleOverride() { return Set("angleOverride", false); }
-	
-	// APPEARANCE
-	public static Action SetCostume(String name) { return new SetCostumeAction(name); }
-	public static Action SetCostume(BufferedImage image) { return new SetCostumeAction(image); }
-	
-	public static Action SetColor(Object color) { return Set("color", color); }
-	public static Action ChangeColor(Object amount) { return Change("color", amount); }
-	public static Action SetDesaturation(Object desat) { return Set("desaturation", desat); }
-	public static Action ChangeDesaturation(Object amount) { return Change("desaturation", amount); }
-	public static Action SetPixelate(Object pixelate) { return Set("pixelate", pixelate); }
-	public static Action ChangePixelate(Object amount) { return Change("pixelate", amount); }
-	public static Action SetBrightness(Object brightness) { return Set("brightness", brightness); }
-	public static Action ChangeBrightness(Object amount) { return Change("brightness", amount); }
-	public static Action SetGhost(Object ghost) { return Set("ghost", ghost); }
-	public static Action ChangeGhost(Object amount) { return Change("ghost", amount); }
-	public static Action SetSize(Object size) { return Set("size", size); }
-	public static Action ChangeSize(Object amount) { return Change("size", amount); }
-	
-	// HITBOX, ONLY FOR ENTITY
-	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
-	public static Action AddRectangleHitbox(String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
-
-	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
-	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
-
-	public static Action AddHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, true); }
-	public static Action RemoveHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, false); }
-	private static Action AdmitHitboxTags(String name, Object[] tags, boolean state) {
-		if (tags.length == 0) {
-			throw Debug.terminate("JScratch", "At least one hitbox tag is required");
-		}
-
-		Action[] actions = new Action[tags.length];
-
-		for (int i = 0; i < tags.length; i++) {
-			actions[i] = new SetHitboxTag(
-				name,
-				CollisionTag.valueOf(tags[i].toString().toUpperCase(Locale.ROOT)),
-				state
-			);
-		}
-
-		return Sequence(actions);
-	}
-	
-	// SOUND
-	public static Action Sound(String name, String asset, float volume) {
-		return Sequence(
-			Sound(name, asset),
-			SetSoundVolume(name, volume)
-		);
-	}
-	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
-	public static Action SetSoundVolume(String name, Object volume) { return new SetSoundVolumeAction(name, volume); }
-	public static Action PlaySound(String name) { return new PlaySoundAction(name); }
-	
 	// VARIABLE
 	public static VariableAction Declare(String name, Object value) { return Var(name, value); }
 	public static VariableAction Var(String name, Object value) { return VariableAction.declare(name, value); }
+	public static Action Replicate(String... names) {
+		Action[] actions = new Action[names.length];
+		for (int i = 0; i < names.length; i++) { actions[i] = Var(names[i], Get(names[i])); }
+		return Sequence(actions);
+	}
 	public static VariableAction Set(String name, Object value) { return VariableAction.set(name, value); }
 	public static VariableAction Change(String name, Object value) { return VariableAction.change(name, value); }
 	public static Value Get(String name) { return Value.Get(name); }
-	public static Action Replicate(String... names) {
-		Action[] actions = new Action[names.length];
-
-		for (int i = 0; i < names.length; i++) {
-			actions[i] = Var(names[i], Get(names[i]));
-		}
-
-		return Sequence(actions);
-	}
 	
-	// BULLET LIFE
-	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }
-	public static Action Spawn(String className, String name) {
-		return new SpawnAction(className, name);
-	}
-	public static Action Bestow(String name, ActionFactory factory) {
-		return new BestowAction(name, factory);
-	}
-	public static Action Destroy() { return new DestroyAction(); }
+	// SOUND
+	public static Action Sound(String name, String path) { return new SoundAction(name, path); }
+	public static Action Sound(String name, String asset, float volume) { return Sequence( Sound(name, asset), SetSoundVolume(name, volume) ); }
+	public static Action SetSoundVolume(String name, Object volume) { return new SetSoundVolumeAction(name, volume); }
+	public static Action PlaySound(String name) { return new PlaySoundAction(name); }
 	
 	// LOGIC
 	public static Value And(Object... values) { return LogicValue.And(values); }
@@ -276,35 +97,6 @@ public final class JScratch {
 	}
 	
 	
-	// MATH
-	public static Value Add(Object... values) { return MathValue.Add(values); }
-	public static Value Sub(Object... values) { return MathValue.Sub(values); }
-	public static Value Mul(Object... values) { return MathValue.Mul(values); }
-	public static Value Div(Object... values) { return MathValue.Div(values); }
-	public static Value Mod(Object... values) { return MathValue.Mod(values); }
-	public static Value Pow(Object a, Object b) { return Power(a, b); }
-	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
-	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
-	public static Value Sin(Object degrees) { return MathValue.Sin(degrees); }
-	public static Value Cos(Object degrees) { return MathValue.Cos(degrees); }
-	public static Value Tan(Object degrees) { return MathValue.Tan(degrees); }
-	public static Value Asin(Object value) { return MathValue.Asin(value); }
-	public static Value Acos(Object value) { return MathValue.Acos(value); }
-	public static Value Atan(Object value) { return MathValue.Atan(value); }
-	public static Value Distance(Thing target) { return MathValue.Distance(target); }
-	public static Value Distance(Object x, Object y) { return MathValue.Distance(x, y); }
-	
-	public static Value Abs(Object value) { return MathValue.Abs(value); }
-	public static Value RoundUp(Object value) { return MathValue.RoundUp(value); }
-	public static Value RoundDown(Object value) { return MathValue.RoundDown(value); }
-	public static Value Min(Object... values) { return MathValue.Min(values); }
-	public static Value Max(Object... values) { return MathValue.Max(values); }
-	public static Value Avg(Object... values) { return MathValue.Avg(values); }
-	
-	public static Value Random() { return MathValue.Random(); }
-	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
-	public static Value RandomSign() { return MathValue.RandomSign(); }
-	
 	// TWEENSERVICE, SYNTAX SUGAR TWEEN
 	public static Action Tween(Object... args) {
 		Easing easing = Easing.Linear;
@@ -344,4 +136,171 @@ public final class JScratch {
 	// PRINT
 	public static Action Print(Object message) { return new PrintAction(message, true); }
 	public static Action LuaPrint(Object message) { return new PrintAction(message, false); }
+	
+	// POSITION, REQUIRE POSITION2D, OCCASIONALLY THING
+	public static Action Forward(Object distance) { return new ForwardAction(distance); }
+	public static Action MoveX(Object x) { return Change("x", x); }
+	public static Action MoveY(Object y) { return Change("y", y); }
+	public static Action Move(Object x, Object y) { return Parallel(Change("x", x), Change("y", y)); }
+	
+	public static Action SetX(Object x) { return Set("x", x); }
+	public static Action SetY(Object y) { return Set("y", y); }
+	public static Action GoTo(Thing target) {
+		return Parallel(
+			Set("x", (Value) action -> {
+				ActionUtil.requireOwner(action, Thing.class);
+				return target.getPosition().getX();
+			}),
+			Set("y", (Value) action -> {
+				ActionUtil.requireOwner(action, Thing.class);
+				return target.getPosition().getY();
+			})
+		);
+	}
+	public static Action Warp(Thing target) { return GoTo(target); }
+	public static Action GoTo(Object x, Object y) { return Parallel(Set("x", x), Set("y", y)); }
+	public static Action Warp(Object x, Object y) { return GoTo(x, y); }
+	// POSITION: TWEEN
+	public static Action GoTo(Thing target, int frames) {
+		return Parallel(
+			Tween("x", (Value) action -> {
+				ActionUtil.requireOwner(action, Thing.class);
+				return target.getPosition().getX();
+			}, frames, Easing.Linear),
+			Tween("y", (Value) action -> {
+				ActionUtil.requireOwner(action, Thing.class);
+				return target.getPosition().getY();
+			}, frames, Easing.Linear)
+		);
+	}
+	public static Action Warp(Thing target, int frames) { return GoTo(target, frames); }
+	public static Action GoTo(Object x, Object y, int frames) { return Tween("x", x, "y", y, frames, Easing.Linear); }
+	public static Action GoTo(Object startX, Object startY, Object x, Object y, int frames) { return Tween("x", startX, x, "y", startY, y, frames, Easing.Linear); }
+	public static Action SetX(Object x, Object frames) { return Tween("x", x, frames, Easing.Linear); }
+	public static Action SetX(Object start, Object end, int frames) { return Tween("x", start, end, frames, Easing.Linear); }
+	public static Action SetY(Object y, Object frames) { return Tween("y", y, frames, Easing.Linear); }
+	public static Action SetY(Object start, Object end, int frames) { return Tween("y", start, end, frames, Easing.Linear); }
+	
+	public static Action EdgeBounce() { return EdgeBounce(Settings.HALF_WIDTH, Settings.HALF_HEIGHT); }
+	public static Action EdgeBounce(Object x, Object y) { return new EdgeBounceAction(x, y); }
+	public static Action EdgeBounce(Object left, Object right, Object bottom, Object top) { return new EdgeBounceAction(left, right, bottom, top); }
+
+	// ANGLE REQUIRE ORIENTATION2D, OCCASIONALLY THING
+	// THE FIRST 3 ALWAYS FOLLOW ANGLEOVERRIDE
+	public static Action LookTowards(Thing target) { return new LookTowardsAction(target); }
+	public static Action Look(Object angle) { return Set("angle", angle); }
+	public static Action Turn(Object angle) { return Change("angle", angle); }
+	// ANGLE: TWEEN
+	public static Action LookTowards(Thing target, int frames) {
+		return Tween(
+			"angle",
+			Value.Get("angle"),
+			(Value) action -> {
+				Thing owner = ActionUtil.requireOwner(action, Thing.class);
+
+				float dx = target.getPosition().getX() - owner.getPosition().getX();
+				float dy = target.getPosition().getY() - owner.getPosition().getY();
+
+				return (float) Math.toDegrees(Math.atan2(dy, dx));
+			},
+			frames, Easing.Linear
+		);
+	}
+	public static Action Look(Object angle, int frames) { return Tween("angle", angle, frames, Easing.Linear); }
+	public static Action Look(Object start, Object end, int frames) { return Tween("angle", start, end, frames, Easing.Linear); }
+	public static Action Turn(Object angle, int frames) {
+		return Tween(
+			"angle",
+			(Value) action -> Value.Get("angle"),
+			(Value) action -> Add(Value.Get("angle"), angle),
+			frames, Easing.Linear
+		);
+	}
+	
+	public static Action SetTrueAngle(Object angle) { return Set("trueAngle", angle); }
+	public static Action ChangeTrueAngle(Object angle) { return Change("trueAngle", angle); }
+	public static Action SetAppearAngle(Object angle) { return Set("appearAngle", angle); }
+	public static Action ChangeAppearAngle(Object angle) { return Change("appearAngle", angle); }
+	public static Action EnableAngleOverride() { return Set("angleOverride", true); }
+	public static Action DisableAngleOverride() { return Set("angleOverride", false); }
+	
+	// APPEARANCE, REQUIRE APPEARANCE
+	public static Action SetCostume(String name) { return new SetCostumeAction(name); }
+	public static Action SetCostume(BufferedImage image) { return new SetCostumeAction(image); }
+	
+	public static Action SetColor(Object color) { return Set("color", color); }
+	public static Action ChangeColor(Object amount) { return Change("color", amount); }
+	public static Action SetDesaturation(Object desat) { return Set("desaturation", desat); }
+	public static Action ChangeDesaturation(Object amount) { return Change("desaturation", amount); }
+	public static Action SetPixelate(Object pixelate) { return Set("pixelate", pixelate); }
+	public static Action ChangePixelate(Object amount) { return Change("pixelate", amount); }
+	public static Action SetBrightness(Object brightness) { return Set("brightness", brightness); }
+	public static Action ChangeBrightness(Object amount) { return Change("brightness", amount); }
+	public static Action SetGhost(Object ghost) { return Set("ghost", ghost); }
+	public static Action ChangeGhost(Object amount) { return Change("ghost", amount); }
+	public static Action SetSize(Object size) { return Set("size", size); }
+	public static Action ChangeSize(Object amount) { return Change("size", amount); }
+	
+	// HITBOX, REQUIRE ENTITY
+	public static Action AddCircleHitbox(String name, Object radius) { return new AddCircleHitbox(name, radius); }
+	public static Action AddRectangleHitbox(String name, Object width, Object height) { return new AddRectangleHitbox(name, width, height); }
+
+	public static Action EnableHitbox(String name) { return new SetHitboxEnabled(name, true); }
+	public static Action DisableHitbox(String name) { return new SetHitboxEnabled(name, false); }
+
+	public static Action AddHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, true); }
+	public static Action RemoveHitboxTag(String name, Object... tags) { return AdmitHitboxTags(name, tags, false); }
+	private static Action AdmitHitboxTags(String name, Object[] tags, boolean state) {
+		if (tags.length == 0) {
+			throw Debug.terminate("JScratch", "At least one hitbox tag is required");
+		}
+
+		Action[] actions = new Action[tags.length];
+
+		for (int i = 0; i < tags.length; i++) {
+			actions[i] = new SetHitboxTag(
+				name,
+				CollisionTag.valueOf(tags[i].toString().toUpperCase(Locale.ROOT)),
+				state
+			);
+		}
+
+		return Sequence(actions);
+	}
+	
+	// BULLET LIFE
+	public static Action SpawnBullet(Action action) { return new SpawnBulletAction(action); }
+	public static Action Spawn(String className, String name) { return new SpawnAction(className, name); }
+	public static Action Bestow(String name, ActionFactory factory) { return new BestowAction(name, factory); }
+	public static Action Destroy() { return new DestroyAction(); }
+	
+	// MATH
+	public static Value Add(Object... values) { return MathValue.Add(values); }
+	public static Value Sub(Object... values) { return MathValue.Sub(values); }
+	public static Value Mul(Object... values) { return MathValue.Mul(values); }
+	public static Value Div(Object... values) { return MathValue.Div(values); }
+	public static Value Mod(Object... values) { return MathValue.Mod(values); }
+	public static Value Pow(Object a, Object b) { return Power(a, b); }
+	public static Value Power(Object a, Object b) { return MathValue.Power(a, b); }
+	public static Value Root(Object a, Object b) { return MathValue.Root(a, b); }
+	public static Value Sin(Object degrees) { return MathValue.Sin(degrees); }
+	public static Value Cos(Object degrees) { return MathValue.Cos(degrees); }
+	public static Value Tan(Object degrees) { return MathValue.Tan(degrees); }
+	public static Value Asin(Object value) { return MathValue.Asin(value); }
+	public static Value Acos(Object value) { return MathValue.Acos(value); }
+	public static Value Atan(Object value) { return MathValue.Atan(value); }
+	public static Value Abs(Object value) { return MathValue.Abs(value); }
+	public static Value RoundUp(Object value) { return MathValue.RoundUp(value); }
+	public static Value RoundDown(Object value) { return MathValue.RoundDown(value); }
+	public static Value Min(Object... values) { return MathValue.Min(values); }
+	public static Value Max(Object... values) { return MathValue.Max(values); }
+	public static Value Avg(Object... values) { return MathValue.Avg(values); }
+	
+	public static Value Distance(Thing target) { return MathValue.Distance(target); }
+	public static Value Distance(Object x, Object y) { return MathValue.Distance(x, y); }
+	
+	public static Value Random() { return MathValue.Random(); }
+	public static Value Random(Object a, Object b) { return MathValue.Random(a, b); }
+	public static Value RandomSign() { return MathValue.RandomSign(); }
+	
 }

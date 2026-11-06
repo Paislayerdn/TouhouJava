@@ -13,12 +13,15 @@ public final class LookTowardsAction extends Action {
 
 	@Override
 	public void start() {
-		float dx = target.getX() - owner.getX();
-		float dy = target.getY() - owner.getY();
+		Thing thing = ActionUtil.requireOwner(this, Thing.class);
+		float dx = target.getPosition().getX() - thing.getPosition().getX();
+		float dy = target.getPosition().getY() - thing.getPosition().getY();
 
 		float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 
-		if ( owner.getAngleOverride() ) { owner.setAppearAngle(angle); } else { owner.setTrueAngle(angle); }
+		if (thing.getOrientation().getAngleOverride()) thing.getOrientation().setAppearAngle(angle); else {
+			thing.getOrientation().setTrueAngle(angle);
+		}
 
 		finish();
 	}

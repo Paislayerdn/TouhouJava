@@ -1,6 +1,7 @@
-package entity;
+package background3d;
 
 import action.ScriptProperty;
+import entity.Position2D;
 
 public final class Position3D extends Position2D {
 	@ScriptProperty private float z;
@@ -15,5 +16,8 @@ public final class Position3D extends Position2D {
 	public void set(float x, float y, float z) {
 		super.set(x, y);
 		setZ(z);
+	}
+	public void move(float dx, float dy, float dz) {
+		set(getX() + dx, getY() + dy, z + dz);
 	}
 }

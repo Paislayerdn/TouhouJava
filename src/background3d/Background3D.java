@@ -3,8 +3,7 @@ package background3d;
 import action.Action;
 import action.ActionContext;
 import action.ActionTarget;
-import entity.Position3D;
-import entity.Orientation3D;
+import action.SpawnRegistry;
 import graphics.Renderer;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -53,10 +52,7 @@ public final class Background3D extends ActionTarget {
 
 		Globals globals = JSL.registerJScratch();
 		LuaValue result = globals.load(ResourceLoader.backgroundLua(name), name + ".lua").call();
-		if (!result.istable()) {
-			throw new IllegalArgumentException("Background Lua file '" + name
-				+ "' must return a scene table");
-		}
+		if (!result.istable()) throw new IllegalArgumentException("Background Lua file '" + name + "' must return a scene table");
 		luaScene = result.checktable();
 		loadSceneData(luaScene);
 		luaEvents = tableOrEmpty(luaScene.get("events"));
@@ -102,19 +98,13 @@ public final class Background3D extends ActionTarget {
 			Varargs entry = source.next(key);
 			key = entry.arg1();
 			if (key.isnil()) break;
-			if (!key.isstring() || !entry.arg(2).istable()) {
-				throw new IllegalArgumentException("Scene object entries must map string names to tables");
-			}
+			if (!key.isstring() || !entry.arg(2).istable()) throw new IllegalArgumentException("Scene object entries must map string names to tables");
 
 			String objectName = key.checkjstring();
 			LuaTable descriptor = entry.arg(2).checktable();
 			String type = descriptor.get("type").optjstring("object");
 			boolean tiled = type.equalsIgnoreCase("plane");
-			if (!tiled && !type.equalsIgnoreCase("object")
-					&& !type.equalsIgnoreCase("backgroundobject")) {
-				throw new IllegalArgumentException("Unknown background object type '" + type
-					+ "' for " + objectName);
-			}
+			if (!tiled && !type.equalsIgnoreCase("object") && !type.equalsIgnoreCase("backgroundobject")) throw new IllegalArgumentException("Unknown background object type '" + type + "' for " + objectName);
 
 			BackgroundObject object = new BackgroundObject(objectName, 0, 0, 0,
 				OBJECT_SIZE, OBJECT_SIZE, tiled);
@@ -152,8 +142,8 @@ public final class Background3D extends ActionTarget {
 	}
 
 	private void resetCamera() {
-		camera.setXYZ(0, 0, 0);
-		camera.setRotation(0, 0, 0);
+		camera.getPosition().set(0, 0, 0);
+		camera.getOrientation().set(0, 0, 0);
 		camera.zoom = 1.0f;
 		camera.setFogColor(0, 0, 0);
 		camera.setFogDistance(0);
@@ -173,7 +163,6 @@ public final class Background3D extends ActionTarget {
 		getActionRunner().add(action, this);
 	}
 
-	@Override
 	public ActionTarget spawn(String className, String instanceName) {
 		if (className.equalsIgnoreCase("object")
 				|| className.equalsIgnoreCase("backgroundobject")
@@ -185,14 +174,12 @@ public final class Background3D extends ActionTarget {
 			addObject(object, false);
 			return object;
 		}
-		return super.spawn(className, instanceName);
+		return SpawnRegistry.create(className, instanceName);
 	}
 
 	private void addObject(BackgroundObject object, boolean sky) {
 		String key = object.getName();
-		if (objectMap.putIfAbsent(key, object) != null) {
-			throw new IllegalArgumentException("Duplicate background object: " + key);
-		}
+		if (objectMap.putIfAbsent(key, object) != null) throw new IllegalArgumentException("Duplicate background object: " + key);
 		objects.add(object);
 		(sky ? skyObjects : worldObjects).add(object);
 		if (!sky) wrapWorldObject(object);
@@ -218,20 +205,25 @@ public final class Background3D extends ActionTarget {
 			else forEachWorldCopy(object, copy -> drawIfVisible(renderer, copy));
 		}
 		for (BackgroundObject object : skyObjects) {
-			float[] offset = cameraRelativeOffset(object.getX(), object.getY(), object.getZ());
+			float[] offset = cameraRelativeOffset(
+				object.getPosition().getX(), object.getPosition().getY(), object.getPosition().getZ());
 			BackgroundObject cameraLocked = object.copyAt(
-				camera.getX() + offset[0], camera.getY() + offset[1], camera.getZ() + offset[2]);
-			cameraLocked.setRotation(camera.getPitch() + object.getPitch(),
-				camera.getYaw() + object.getYaw(), camera.getRoll() + object.getRoll());
+				camera.getPosition().getX() + offset[0],
+				camera.getPosition().getY() + offset[1],
+				camera.getPosition().getZ() + offset[2]);
+			cameraLocked.getOrientation().set(
+				camera.getOrientation().getPitch() + object.getOrientation().getPitch(),
+				camera.getOrientation().getYaw() + object.getOrientation().getYaw(),
+				camera.getOrientation().getRoll() + object.getOrientation().getRoll());
 			drawIfVisible(renderer, cameraLocked);
 		}
 		renderer.endBackground();
 	}
 
 	private float[] cameraRelativeOffset(float x, float y, float z) {
-		double pitch = Math.toRadians(camera.getPitch());
-		double yaw = Math.toRadians(camera.getYaw());
-		double roll = Math.toRadians(camera.getRoll());
+		double pitch = Math.toRadians(camera.getOrientation().getPitch());
+		double yaw = Math.toRadians(camera.getOrientation().getYaw());
+		double roll = Math.toRadians(camera.getOrientation().getRoll());
 		float y1 = (float) (y * Math.cos(pitch) - z * Math.sin(pitch));
 		float z1 = (float) (y * Math.sin(pitch) + z * Math.cos(pitch));
 		float x2 = (float) (x * Math.cos(yaw) + z1 * Math.sin(yaw));
@@ -244,9 +236,9 @@ public final class Background3D extends ActionTarget {
 
 	private void forEachWorldCopy(BackgroundObject object,
 		java.util.function.Consumer<BackgroundObject> consumer) {
-		int centerX = tileIndex(camera.getX(), borderX);
-		int centerY = tileIndex(camera.getY(), borderY);
-		int centerZ = tileIndex(camera.getZ(), borderZ);
+		int centerX = tileIndex(camera.getPosition().getX(), borderX);
+		int centerY = tileIndex(camera.getPosition().getY(), borderY);
+		int centerZ = tileIndex(camera.getPosition().getZ(), borderZ);
 		int minX = borderX > 0 ? centerX - 1 : 0;
 		int maxX = borderX > 0 ? centerX + 1 : 0;
 		int minY = borderY > 0 ? centerY - 1 : 0;
@@ -259,12 +251,7 @@ public final class Background3D extends ActionTarget {
 
 		for (int ix = minX; ix <= maxX; ix++) {
 			for (int iy = minY; iy <= maxY; iy++) {
-				for (int iz = minZ; iz <= maxZ; iz++) {
-					consumer.accept(object.copyAt(
-						object.getX() + ix * borderX,
-						object.getY() + iy * borderY,
-						object.getZ() + iz * borderZ));
-				}
+				for (int iz = minZ; iz <= maxZ; iz++) consumer.accept(object.copyAt( object.getPosition().getX() + ix * borderX, object.getPosition().getY() + iy * borderY, object.getPosition().getZ() + iz * borderZ));
 			}
 		}
 	}
@@ -279,9 +266,9 @@ public final class Background3D extends ActionTarget {
 	}
 
 	private void wrapWorldObject(BackgroundObject object) {
-		if (borderX > 0) object.setX(wrap(object.getX(), borderX));
-		if (borderY > 0) object.setY(wrap(object.getY(), borderY));
-		if (borderZ > 0) object.setZ(wrap(object.getZ(), borderZ));
+		if (borderX > 0) object.getPosition().setX(wrap(object.getPosition().getX(), borderX));
+		if (borderY > 0) object.getPosition().setY(wrap(object.getPosition().getY(), borderY));
+		if (borderZ > 0) object.getPosition().setZ(wrap(object.getPosition().getZ(), borderZ));
 	}
 
 	private static float wrap(float value, float period) {

@@ -35,18 +35,14 @@ public final class Forever extends Action {
 
 				consumedFrame = action.consumesFrame();
 
-				if (consumedFrame) {
-					return;
-				}
+				if (consumedFrame) return;
 			}
 
 			action.update();
 
 			consumedFrame = action.consumesFrame();
 
-			if (!action.isFinished() || consumedFrame) {
-				return;
-			}
+			if (!action.isFinished() || consumedFrame) return;
 		}
 	}
 }

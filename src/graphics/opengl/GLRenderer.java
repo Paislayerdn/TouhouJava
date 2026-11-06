@@ -24,22 +24,20 @@ public class GLRenderer implements Renderer {
 
 	private boolean shaderActive;
 	private void beginShader() {
-		if (shaderActive) { return; }
+		if (shaderActive) return;
 
 		shader.use();
 		shader.setInt("tex", 0);
 		shaderActive = true;
 	}
 	private void endShader() {
-		if (!shaderActive) { return;	}
+		if (!shaderActive) return;
 
 		shader.stop();
 		shaderActive = false;
 	}
 	private void bindTexture(GLTexture texture) {
-		if (currentTexture == texture) {
-			return;
-		}
+		if (currentTexture == texture) return;
 
 		texture.bind();
 		currentTexture = texture;
@@ -181,20 +179,22 @@ public class GLRenderer implements Renderer {
 		Appearance appearance = thing.getAppearance();
 		float renderedSize = thing.getRenderedSize();
 
-		if (appearance.costume == null) { return; }
-		if (renderedSize == 0 || appearance.ghost == 100) { return; }
+		if (appearance.getCostume() == null) return;
+		if (renderedSize == 0 || appearance.getGhost() == 100) return;
 
-		GLTexture texture = GLTexture.get(appearance.costume);
+		GLTexture texture = GLTexture.get(appearance.getCostume());
 
 		float scale = renderedSize / 100.0f;
-		float alpha = (100.0f - appearance.ghost) / 100.0f;
-		float angle = thing.getAngleOverride()? thing.getAppearAngle(): thing.getTrueAngle();
+		float alpha = (100.0f - appearance.getGhost()) / 100.0f;
+		float angle = thing.getOrientation().getAngleOverride()
+			? thing.getOrientation().getAppearAngle()
+			: thing.getOrientation().getTrueAngle();
 
 		drawThing(texture,
-			thing.getX(), thing.getY(),
+			thing.getPosition().getX(), thing.getPosition().getY(),
 			scale, angle,
-			appearance.color, appearance.desaturation, appearance.pixelate,
-			appearance.brightness, alpha
+			appearance.getColor(), appearance.getDesaturation(), appearance.getPixelate(),
+			appearance.getBrightness(), alpha
 		);
 	}
 
@@ -310,24 +310,24 @@ public class GLRenderer implements Renderer {
 		GL11.glScalef(1.0f, 1.0f, -1.0f);
 
 		GL11.glRotatef(
-			-camera.getRoll(),
+			-camera.getOrientation().getRoll(),
 			0.0f, 0.0f, 1.0f
 		);
 
 		GL11.glRotatef(
-			-camera.getYaw(),
+			-camera.getOrientation().getYaw(),
 			0.0f, 1.0f, 0.0f
 		);
 
 		GL11.glRotatef(
-			-camera.getPitch(),
+			-camera.getOrientation().getPitch(),
 			1.0f, 0.0f, 0.0f
 		);
 
 		GL11.glTranslatef(
-			-camera.getX(),
-			-camera.getY(),
-			-camera.getZ()
+			-camera.getPosition().getX(),
+			-camera.getPosition().getY(),
+			-camera.getPosition().getZ()
 		);
 	}
 
@@ -355,7 +355,7 @@ public class GLRenderer implements Renderer {
 	public void backgroundObject(BackgroundObject object) {
 		Appearance appearance = object.getAppearance();
 		GL11.glColor4f(1.0f, 1.0f, 1.0f,
-			(100.0f - appearance.ghost) / 100.0f);
+			(100.0f - appearance.getGhost()) / 100.0f);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0f);
 		b3d.render(object);

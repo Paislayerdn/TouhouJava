@@ -15,25 +15,13 @@ public final class CollisionChecker {
 	}
 	
 	private static boolean checkHitboxes(Hitbox a, Hitbox b) {
-		if (a instanceof CircleHitbox ca &&
-			b instanceof CircleHitbox cb) {
-			return circleCircle(ca, cb);
-		}
+		if (a instanceof CircleHitbox ca && b instanceof CircleHitbox cb) return circleCircle(ca, cb);
 
-		if (a instanceof CircleHitbox ca &&
-			b instanceof RectangleHitbox rb) {
-			return circleRectangle(ca, rb);
-		}
+		if (a instanceof CircleHitbox ca && b instanceof RectangleHitbox rb) return circleRectangle(ca, rb);
 
-		if (a instanceof RectangleHitbox ra &&
-			b instanceof CircleHitbox cb) {
-			return circleRectangle(cb, ra);
-		}
+		if (a instanceof RectangleHitbox ra && b instanceof CircleHitbox cb) return circleRectangle(cb, ra);
 
-		if (a instanceof RectangleHitbox ra &&
-			b instanceof RectangleHitbox rb) {
-			return rectangleRectangle(ra, rb);
-		}
+		if (a instanceof RectangleHitbox ra && b instanceof RectangleHitbox rb) return rectangleRectangle(ra, rb);
 
 		return false;
 	}
@@ -51,9 +39,7 @@ public final class CollisionChecker {
 	private static boolean rectangleRectangle(RectangleHitbox a, RectangleHitbox b) {
 		float angleA = a.getOwner().getOrientation().getAngle();
 		float angleB = b.getOwner().getOrientation().getAngle();
-		if (angleA != 0.0f || angleB != 0.0f) {
-			return orientedRectangleRectangle(a, b, angleA, angleB);
-		}
+		if (angleA != 0.0f || angleB != 0.0f) return orientedRectangleRectangle(a, b, angleA, angleB);
 
 		float aLeft = a.getWorldX() - a.getWidth() / 2;
 		float aRight = a.getWorldX() + a.getWidth() / 2;

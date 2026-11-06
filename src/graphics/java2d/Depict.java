@@ -84,17 +84,17 @@ public final class Depict {
 		Appearance appearance = thing.getAppearance();
 		float renderedSize = thing.getRenderedSize();
 
-		if (appearance.costume == null || renderedSize == 0 || appearance.ghost == 100) {
-			return;
-		}
+		if (appearance.getCostume() == null || renderedSize == 0 || appearance.getGhost() == 100) return;
 
 		BufferedImage image = appearance.getRenderedCostume();
 
 		AffineTransform oldTransform = g2.getTransform();
 		var oldComposite = g2.getComposite();
 
-		g2.translate(thing.getX(), thing.getY());
-		float angle = thing.getAngleOverride()? thing.getAppearAngle() : thing.getTrueAngle();
+		g2.translate(thing.getPosition().getX(), thing.getPosition().getY());
+		float angle = thing.getOrientation().getAngleOverride()
+			? thing.getOrientation().getAppearAngle()
+			: thing.getOrientation().getTrueAngle();
 		g2.rotate(Math.toRadians(angle));
 
 		if (renderedSize != 100) {
@@ -102,8 +102,8 @@ public final class Depict {
 			g2.scale(scale, scale);
 		}
 
-		if (appearance.ghost != 0) {
-			float alpha = 1.0f - appearance.ghost / 100.0f;
+		if (appearance.getGhost() != 0) {
+			float alpha = 1.0f - appearance.getGhost() / 100.0f;
 
 			g2.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha) );
 		}

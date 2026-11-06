@@ -19,13 +19,9 @@ public final class ImageLoader {
 	}
 	public static BufferedImage load(String folder, String name) {
 		URL url = ResourceFinder.find(folder, name, EXTENSIONS);
-		if (url == null && ResourceFinder.IMAGE.equals(folder)) {
-			url = ResourceFinder.find(ResourceFinder.TITLE_IMAGE, name, EXTENSIONS);
-		}
+		if (url == null && ResourceFinder.IMAGE.equals(folder)) url = ResourceFinder.find(ResourceFinder.TITLE_IMAGE, name, EXTENSIONS);
 
-		if (url == null) {
-			throw Debug.terminate("Image not found: " + name);
-		}
+		if (url == null) throw Debug.terminate("Image not found: " + name);
 
 		try {
 			BufferedImage image = ImageIO.read(url);

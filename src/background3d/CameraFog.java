@@ -4,21 +4,16 @@ import action.ScriptProperty;
 import action.ScriptPropertySetter;
 
 public final class CameraFog implements ScriptPropertySetter {
-	@ScriptProperty public float fogRed;
-	@ScriptProperty public float fogGreen;
-	@ScriptProperty public float fogBlue;
 	@ScriptProperty public float fogDistance;
+	@ScriptProperty public float fogRed, fogGreen, fogBlue;
 
 	public void setColor(float red, float green, float blue) {
 		fogRed = clamp(red);
 		fogGreen = clamp(green);
 		fogBlue = clamp(blue);
 	}
-
-	private static float clamp(float value) {
-		return Math.max(0.0f, Math.min(255.0f, value));
-	}
-
+	private static float clamp(float value) { return Math.max(0.0f, Math.min(255.0f, value)); }
+	
 	@Override
 	public boolean setScriptProperty(String name, Object value) {
 		float number = ((Number) value).floatValue();

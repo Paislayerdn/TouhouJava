@@ -263,7 +263,7 @@ public final class TextHelper {
 
 			glyph.getAppearance().setSize(size);
 
-			glyph.setXY(
+			glyph.getPosition().set(
 				cursorX + advance / 2.0f,
 				y
 			);
@@ -302,11 +302,7 @@ public final class TextHelper {
 			.getWidth();
 	}
 
-	private static float getLineHeight() {
-		return FONT
-			.getLineMetrics("Ag", FRC)
-			.getHeight();
-	}
+	private static float getLineHeight() { return FONT.getLineMetrics("Ag", FRC).getHeight(); }
 
 	private static int getLineCount(
 		String text,

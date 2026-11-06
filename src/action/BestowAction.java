@@ -17,9 +17,7 @@ public final class BestowAction extends Action {
 	@Override
 	public void start() {
 		Object value = context.get(targetAlias);
-		if (!(value instanceof ActionTarget target)) {
-			throw new IllegalArgumentException("'" + targetAlias + "' does not name an ActionTarget");
-		}
+		if (!(value instanceof ActionTarget target)) throw new IllegalArgumentException("'" + targetAlias + "' does not name an ActionTarget");
 		BulletManager bulletManager = null;
 		if (target instanceof Bullet) {
 			if (!context.has("bullets")) throw new IllegalStateException(

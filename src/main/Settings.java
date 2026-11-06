@@ -12,8 +12,8 @@ public final class Settings {
 
 	// Window scaling
 	public static float SCALE = 1.25f;
-	public static int getWindowWidth() {return (int)(BASE_WIDTH * SCALE);}
-	public static int getWindowHeight() {return (int)(BASE_HEIGHT * SCALE);}
+	public static int getWindowWidth() { return (int) (BASE_WIDTH * SCALE); }
+	public static int getWindowHeight() { return (int) (BASE_HEIGHT * SCALE); }
 	
 	// Game rendering
 	public static final int TILE_SIZE = 24;

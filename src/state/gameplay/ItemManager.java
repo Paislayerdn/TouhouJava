@@ -37,19 +37,17 @@ public final class ItemManager {
 
 	public void update(Player player) {
 		for (Item item : new ArrayList<>(items)) {
-			if (player.getY() >= COLLECTION_LINE_Y || item.isHoming()) {
-				item.homeTo(player.getX(), player.getY());
-			}
+			if (player.getPosition().getY() >= COLLECTION_LINE_Y || item.isHoming()) item.homeTo(player.getPosition().getX(), player.getPosition().getY());
 			item.update();
-			float dx = item.getX() - player.getX();
-			float dy = item.getY() - player.getY();
+			float dx = item.getPosition().getX() - player.getPosition().getX();
+			float dy = item.getPosition().getY() - player.getPosition().getY();
 			if (dx * dx + dy * dy <= COLLECT_RADIUS_SQUARED) {
-				collect(item, player.getY());
+				collect(item, player.getPosition().getY());
 				item.destroy();
 			}
 		}
 		items.removeIf(item -> !item.isAlive()
-			|| item.getY() < Settings.PLAYFIELD_BOTTOM - 40);
+			|| item.getPosition().getY() < Settings.PLAYFIELD_BOTTOM - 40);
 	}
 
 	private void collect(Item item, float playerY) {

@@ -21,7 +21,7 @@ public final class Sound {
 
 		if (clip == null) {
 			clip = createClip();
-			if (clip == null) { return; }
+			if (clip == null) return;
 			clips.add(clip);
 		}
 
@@ -32,9 +32,7 @@ public final class Sound {
 
 	private Clip findAvailableClip() {
 		for (Clip clip : clips) {
-			if (!clip.isRunning()) {
-				return clip;
-			}
+			if (!clip.isRunning()) return clip;
 		}
 		return null;
 	}
@@ -77,8 +75,6 @@ public final class Sound {
 	
 	public void setVolume(float volume) {
 		this.volume = volume;
-		for (Clip clip : clips) {
-			setClipVolume(clip, volume);
-		}
+		for (Clip clip : clips) setClipVolume(clip, volume);
 	}
 }

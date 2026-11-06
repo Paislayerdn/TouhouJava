@@ -3,16 +3,16 @@ package resource;
 import java.net.URL;
 
 public final class ResourceFinder {
-	public static final String IMAGE = "/assets/images/";
-	public static final String TITLE_IMAGE = IMAGE + "title/";
-	public static final String DIALOGUE_IMAGE = IMAGE + "dialogues/";
-	public static final String BACKGROUND_IMAGE = IMAGE + "background/";
-	public static final String SOUND = "/assets/sounds/";
-	public static final String MUSIC = "/assets/music/";
-	public static final String FONT = "/assets/fonts/";
-	public static final String DIALOGUE = "/assets/dialogue/";
-	public static final String SPELL = "/spell/";
-	public static final String BACKGROUND = "/assets/background/";
+	public static final String IMAGE = "/assets/images/",
+			TITLE_IMAGE = IMAGE + "title/",
+			DIALOGUE_IMAGE = IMAGE + "dialogues/",
+			BACKGROUND_IMAGE = IMAGE + "background/",
+			SOUND = "/assets/sounds/",
+			MUSIC = "/assets/music/",
+			FONT = "/assets/fonts/",
+			DIALOGUE = "/assets/dialogue/",
+			SPELL = "/spell/",
+			BACKGROUND = "/assets/background/";
 	
 	private ResourceFinder() {}
 
@@ -29,7 +29,7 @@ public final class ResourceFinder {
 			
 			URL url = ResourceFinder.class.getResource(path);
 
-			if (url != null) { return url; }
+			if (url != null) return url;
 		}
 		return null;
 	}

@@ -1,5 +1,7 @@
 package action;
 
+import background3d.Background3D;
+
 public final class SpawnAction extends Action {
 	private final String className;
 	private final String alias;
@@ -13,9 +15,9 @@ public final class SpawnAction extends Action {
 
 	@Override
 	public void start() {
-		ActionTarget target = owner == null
-			? SpawnRegistry.create(className, alias)
-			: owner.spawn(className, alias);
+		ActionTarget target = owner instanceof Background3D background
+			? background.spawn(className, alias)
+			: SpawnRegistry.create(className, alias);
 		ActionContext childContext = new ActionContext(context);
 		target.setActionContext(childContext);
 		context.putLocal(alias, target);

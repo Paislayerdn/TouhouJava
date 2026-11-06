@@ -24,7 +24,7 @@ public class GLWindow {
 		this.width = width;
 		this.height = height;
 
-		if (!GLFW.glfwInit()) { throw Debug.terminate(this, "Unable to initialize GLFW"); }
+		if (!GLFW.glfwInit()) throw Debug.terminate(this, "Unable to initialize GLFW");
 
 		GLFW.glfwWindowHint(
 			GLFW.GLFW_RESIZABLE,
@@ -65,9 +65,7 @@ public class GLWindow {
 			new GLFWWindowFocusCallback() {
 				@Override
 				public void invoke(long window, boolean focused) {
-					if (!focused) {
-						Input.clear();
-					}
+					if (!focused) Input.clear();
 				}
 			}
 		);

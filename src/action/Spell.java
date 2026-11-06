@@ -84,13 +84,9 @@ public abstract class Spell extends Action {
 		}
 		if (action == null) return;
 
-		if (!action.isFinished()) {
-			action.update();
-		}
+		if (!action.isFinished()) action.update();
 
-		if (action.isFinished()) {
-			capture();
-		}
+		if (action.isFinished()) capture();
 	}
 
 	public final void end() {
@@ -105,12 +101,8 @@ public abstract class Spell extends Action {
 		boolean bossHPDepleted = caster != null && !survival && boss.getHP() <= 0;
 
 		onEnd();
-		if (isSpell && !failed) {
-			scoreAwarded = getCurrentBonus();
-		}
-		if (bossHPDepleted && (!isSpell || !failed)) {
-			scoreAwarded += state.gameplay.ScoreRules.BOSS_HP_DEPLETION_REWARD;
-		}
+		if (isSpell && !failed) scoreAwarded = getCurrentBonus();
+		if (bossHPDepleted && (!isSpell || !failed)) scoreAwarded += state.gameplay.ScoreRules.BOSS_HP_DEPLETION_REWARD;
 		player.getStats().addScore(scoreAwarded);
 		finish();
 	}
@@ -139,15 +131,9 @@ public abstract class Spell extends Action {
 		}
 		return Math.round(scoreReward * value);
 	}
-	public final boolean isBonusFailed() {
-		return player.getStats().getDeaths() > deathsAtStart;
-	}
+	public final boolean isBonusFailed() { return player.getStats().getDeaths() > deathsAtStart; }
 	public final long getScoreAwarded() { return scoreAwarded; }
 	public final boolean wasCaptured() { return captured; }
-	public final boolean isFailed() {
-		return failed;
-	}
-	public final float getElapsedSeconds() {
-		return Math.max(0, startingTimer - timer) / 60.0f;
-	}
+	public final boolean isFailed() { return failed; }
+	public final float getElapsedSeconds() { return Math.max(0, startingTimer - timer) / 60.0f; }
 }

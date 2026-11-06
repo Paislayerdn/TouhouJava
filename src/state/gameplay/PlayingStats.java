@@ -5,11 +5,9 @@ public final class PlayingStats {
 	private static final int INITIAL_BOMBS = 3;
 	private static final long GRAZE_SCORE_REWARD = 10;
 	private long score;
-	private int graze;
-	private int lives;
-	private int bombs;
-	private int power;
 	private int deaths;
+	private int lives, bombs;
+	private int power, graze;
 	
 	public static boolean debugMode = false;
 	
@@ -48,10 +46,10 @@ public final class PlayingStats {
 		if (bombs < INITIAL_BOMBS) bombs = INITIAL_BOMBS;
 	}
 
-	public long getScore() {return score;}
-	public int getGraze() {return graze;}
-	public int getLives() {return lives;}
-	public int getBombs() {return bombs;}
-	public int getPower() {return power;}
-	public int getDeaths() {return deaths;}
+	public long getScore() { return score; }
+	public int getGraze() { return graze; }
+	public int getLives() { return lives; }
+	public int getBombs() { return bombs; }
+	public int getPower() { return power; }
+	public int getDeaths() { return deaths; }
 }

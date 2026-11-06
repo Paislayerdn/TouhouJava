@@ -18,9 +18,7 @@ public final class TextBox {
 		rebuild();
 	}
 
-	public float getGlyphSize() {
-		return glyphSize;
-	}
+	public float getGlyphSize() { return glyphSize; }
 
 	public TextBox(String text,
 		float x, float y,

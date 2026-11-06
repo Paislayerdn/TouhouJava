@@ -3,30 +3,18 @@ package main;
 import java.util.EnumSet;
 
 public final class Input {
+	private Input() {}
 	public enum Key {
-		W, S, A, D,
-		UP, DOWN, LEFT, RIGHT,
+		W, S, A, D, UP, DOWN, LEFT, RIGHT,
 		SPACE, Z, X,
 		P, Q, I, PAGEUP,
 		MOUSE_LEFT
 	}
 
 	public static final class Keys {
-		public volatile boolean W;
-		public volatile boolean S;
-		public volatile boolean A;
-		public volatile boolean D;
-		public volatile boolean UP;
-		public volatile boolean DOWN;
-		public volatile boolean LEFT;
-		public volatile boolean RIGHT;
-		public volatile boolean SPACE;
-		public volatile boolean Z;
-		public volatile boolean X;
-		public volatile boolean P;
-		public volatile boolean Q;
-		public volatile boolean I;
-		public volatile boolean PAGEUP;
+		public volatile boolean W, S, A,  D, UP, DOWN, LEFT, RIGHT;
+		public volatile boolean SPACE, Z, X;
+		public volatile boolean P, Q, I, PAGEUP;
 		public volatile boolean MOUSE_LEFT;
 
 		private void set(Key key, boolean value) {
@@ -51,17 +39,14 @@ public final class Input {
 		}
 
 		private void clear() {
-			for (Key key : Key.values()) {
-				set(key, false);
-			}
+			for (Key key : Key.values()) set(key, false);
 		}
 	}
 
 	public static final Keys hold = new Keys();
 	public static final Keys tap = new Keys();
 
-	public static volatile float mouseX;
-	public static volatile float mouseY;
+	public static volatile float mouseX, mouseY;
 
 	private static final EnumSet<Key> keysDown =
 		EnumSet.noneOf(Key.class);
@@ -69,12 +54,9 @@ public final class Input {
 	private static final EnumSet<Key> pendingTaps =
 		EnumSet.noneOf(Key.class);
 
-	private Input() {}
 
 	public static synchronized void keyPressed(Key key) {
-		if (keysDown.add(key)) {
-			pendingTaps.add(key);
-		}
+		if (keysDown.add(key)) pendingTaps.add(key);
 
 		hold.set(key, true);
 	}
@@ -87,9 +69,7 @@ public final class Input {
 	public static synchronized void update() {
 		tap.clear();
 
-		for (Key key : pendingTaps) {
-			tap.set(key, true);
-		}
+		for (Key key : pendingTaps) tap.set(key, true);
 
 		pendingTaps.clear();
 	}

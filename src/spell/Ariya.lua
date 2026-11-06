@@ -59,7 +59,7 @@ spellData.buildAction = function()
 						"brightness", 100, 60,
 						"ghost", 90, 0, 45),
 					enableHitbox("bulletHB"),
-					var("aa", random(1, 360)),
+					var("aa", random(-179, 180)),
 					turn(get("aa"), 60),
 					jswhile(greater(get("speed"), capSpeed), function()
 						return sequence(

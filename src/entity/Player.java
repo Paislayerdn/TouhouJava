@@ -23,15 +23,13 @@ public abstract class Player extends Entity {
 		this.stats = stats;
 		setActionContext(new ActionContext(parentContext));
 		setName("Player");
-		setXY(0, -80);
+		getPosition().set(0, -80);
 	}
 
 	protected final void updatePlayerState() {
 		if (Input.tap.I) {
 			Hitbox deathHitbox = getHitbox("deathHB");
-			if (deathHitbox != null) {
-				deathHitbox.setEnabled(!deathHitbox.isEnabled());
-			}
+			if (deathHitbox != null) deathHitbox.setEnabled(!deathHitbox.isEnabled());
 		}
 
 		if (invulnerabilityFrames > 0) {
@@ -54,13 +52,11 @@ public abstract class Player extends Entity {
 		boolean hasLivesRemaining = stats.loseLife();
 		stats.restoreMinimumBombsAfterDeath();
 		if (hasLivesRemaining) {
-			setXY(0, -80);
+			getPosition().set(0, -80);
 			invulnerabilityFrames = 120;
 			if (getActionContext().has("bullets")) {
 				Object manager = getActionContext().get("bullets");
-				if (manager instanceof BulletManager bulletManager) {
-					bulletManager.clearBomb();
-				}
+				if (manager instanceof BulletManager bulletManager) bulletManager.clearBomb();
 			}
 		} else {
 			setAlive(false);
@@ -76,8 +72,6 @@ public abstract class Player extends Entity {
 		if (collision.getType() == DEATH) {
 			if (isInvulnerable()) return;
 			onDeath(collision.getSelf(this), collision.getOther(this));
-		} else if (collision.getType() == DAMAGE) {
-			setAlive(false);
-		}
+		} else if (collision.getType() == DAMAGE) setAlive(false);
 	}
 }

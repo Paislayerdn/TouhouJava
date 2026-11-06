@@ -87,7 +87,7 @@ public final class Ariya extends Spell {
 						"brightness", 100, 60,
 						"ghost", 90, 0, 45),
 					EnableHitbox("bulletHB"),
-					Var("aa", Random(1, 360) ),
+					Var("aa", Random(-179, 180) ),
 					Turn( Get("aa") , 60),
 					While( Greater( Get("speed"), capSpeed),
 						() -> Sequence(

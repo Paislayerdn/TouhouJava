@@ -23,7 +23,7 @@ public class Boss extends Entity {
 		setActionContext(new ActionContext(parentContext));
 		setName("Boss");
 		this.player = player;
-		setXY(0, 120);
+		getPosition().set(0, 120);
 		this.lowHP = ResourceLoader.sound("[TH] LowHP");
 		lowHP.setVolume(0.0f);
 		
@@ -62,13 +62,13 @@ public class Boss extends Entity {
 		super.draw(renderer);
 		if (maxHP <= 0) return;
 		float fraction = Math.max(0, Math.min(1, displayedHP / maxHP));
-		renderer.circleArc(getX(), getY(), 50, 90, -360, 0.2f, 0.2f, 0.2f, 6);
-		renderer.circleArc(getX(), getY(), 50, 90, -360 * fraction,
+		renderer.circleArc(getPosition().getX(), getPosition().getY(), 50, 90, -360, 0.2f, 0.2f, 0.2f, 6);
+		renderer.circleArc(getPosition().getX(), getPosition().getY(), 50, 90, -360 * fraction,
 			1 - fraction, fraction, 0, 6);
 	}
 	
 	public void damage(float amount) {
-		if (hp <= 0) { hp = 0; } else {
+		if (hp <= 0) hp = 0; else {
 			hp = Math.max(0, hp - amount);
 			if (!lowHPPlayed && hp <= 0.15 * maxHP) {
 				lowHP.play();
@@ -79,8 +79,6 @@ public class Boss extends Entity {
 	}
 	@Override
 	public void onHit(CollisionResult collisionResult) {
-		if (collisionResult.getType() == DAMAGE) {
-			damage(1);
-		}
+		if (collisionResult.getType() == DAMAGE) damage(1);
 	}
 }

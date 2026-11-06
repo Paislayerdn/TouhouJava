@@ -51,15 +51,11 @@ public class Game {
 	}
 	public void update() {
 		GameState front = states.peekLast();
-		if (front != null) {
-			front.update();
-		}
+		if (front != null) front.update();
 
 		if (states.size() >= 2) {
 			GameState behind = getSecondFromFront();
-			if (behind != null) {
-				behind.update();
-			}
+			if (behind != null) behind.update();
 		}
 
 		while (!states.isEmpty() && states.peekLast().isFinished()) {
@@ -77,14 +73,10 @@ public class Game {
 			fpsWindowStart = now;
 		}
 
-		if (states.size() >= 2) {
-			getSecondFromFront().draw(renderer);
-		}
+		if (states.size() >= 2) getSecondFromFront().draw(renderer);
 
 		GameState front = states.peekLast();
-		if (front != null) {
-			front.draw(renderer);
-		}
+		if (front != null) front.draw(renderer);
 	}
 	
 	

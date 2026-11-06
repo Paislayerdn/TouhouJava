@@ -6,9 +6,7 @@ public final class DepictUtility {
 	private DepictUtility() {}
 
 	public static BufferedImage color(BufferedImage source, float amount) {
-		if (amount == 0) {
-			return source;
-		}
+		if (amount == 0) return source;
 
 		BufferedImage result = new BufferedImage(
 			source.getWidth(),
@@ -56,9 +54,7 @@ public final class DepictUtility {
 	}
 	
 	public static BufferedImage desaturation(BufferedImage source, float amount) {
-		if (amount <= 0) {
-			return source;
-		}
+		if (amount <= 0) return source;
 
 		BufferedImage result = new BufferedImage(
 			source.getWidth(),
@@ -107,9 +103,7 @@ public final class DepictUtility {
 	}
 
 	public static BufferedImage pixelate(BufferedImage source, float amount) {
-		if (amount <= 0) {
-			return source;
-		}
+		if (amount <= 0) return source;
 
 		float blockSize = amount + 1;
 
@@ -128,9 +122,7 @@ public final class DepictUtility {
 				float maxY = Math.min(y + blockSize, source.getHeight());
 
 				for (int py = y; py < maxY; py++) {
-					for (int px = x; px < maxX; px++) {
-						result.setRGB(px, py, sample);
-					}
+					for (int px = x; px < maxX; px++) result.setRGB(px, py, sample);
 				}
 			}
 		}
@@ -139,9 +131,7 @@ public final class DepictUtility {
 	}
 	
 	public static BufferedImage brightness(BufferedImage source, float amount) {
-		if (amount == 0) {
-			return source;
-		}
+		if (amount == 0) return source;
 
 		BufferedImage result = new BufferedImage(
 			source.getWidth(),

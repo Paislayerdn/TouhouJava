@@ -1,6 +1,7 @@
 package action;
 
 import java.awt.image.BufferedImage;
+import entity.Thing;
 import resource.ResourceLoader;
 
 public final class SetCostumeAction extends Action {
@@ -24,10 +25,9 @@ public final class SetCostumeAction extends Action {
 
 	@Override
 	public void start() {
-		if (image != null) {
-			owner.getAppearance().setCostume(image);
-		} else {
-			owner.getAppearance().setCostume(
+		Thing thing = ActionUtil.requireOwner(this, Thing.class);
+		if (image != null) thing.getAppearance().setCostume(image); else {
+			thing.getAppearance().setCostume(
 				ResourceLoader.image(name)
 			);
 		}

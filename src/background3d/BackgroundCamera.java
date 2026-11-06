@@ -15,10 +15,6 @@ public final class BackgroundCamera extends BO3D {
 	public float getFogGreen() { return fog.fogGreen; }
 	public float getFogBlue() { return fog.fogBlue; }
 	public float getFogDistance() { return fog.fogDistance; }
-	public void setFogColor(float red, float green, float blue) {
-		fog.setColor(red, green, blue);
-	}
-	public void setFogDistance(float distance) {
-		fog.fogDistance = Math.max(0, distance);
-	}
+	public void setFogColor(float red, float green, float blue) { fog.setColor(red, green, blue); }
+	public void setFogDistance(float distance) { fog.fogDistance = Math.max(0, distance); }
 }

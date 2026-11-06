@@ -115,11 +115,7 @@ public class TitleScreen extends GameState {
 		) );
 	}
 
-	private List<Thing> getSakuras() {
-		synchronized (sakuraLock) {
-			return List.copyOf(sakuras);
-		}
-	}
+	private List<Thing> getSakuras() { synchronized (sakuraLock) { return List.copyOf(sakuras); } }
 
 	@Override
 	public void update() {

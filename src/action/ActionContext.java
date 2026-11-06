@@ -23,9 +23,9 @@ public final class ActionContext {
 
 	// Find the context where this variable was declared.
 	private ActionContext findContext(String name) {
-		if (variables.containsKey(name)) { return this; }
+		if (variables.containsKey(name)) return this;
 
-		if (parent != null) { return parent.findContext(name); }
+		if (parent != null) return parent.findContext(name);
 		return null;
 	}
 	
@@ -35,9 +35,7 @@ public final class ActionContext {
 	
 	// Declare a variable in THIS context.
 	public void declare(String name, Object value) {
-		if (variables.containsKey(name)) {
-			throw Debug.terminate("JScratch", this, "Variable already declared: " + name);
-		}
+		if (variables.containsKey(name)) throw Debug.terminate("JScratch", this, "Variable already declared: " + name);
 
 		variables.put(name, value);
 	}
@@ -53,9 +51,7 @@ public final class ActionContext {
 	public Object get(String name) {
 		ActionContext context = findContext(name);
 
-		if (context == null) {
-			throw Debug.terminate("JScratch", this, "Getting an undeclared variable: " + name);
-		}
+		if (context == null) throw Debug.terminate("JScratch", this, "Getting an undeclared variable: " + name);
 
 		return context.variables.get(name);
 	}
@@ -63,9 +59,7 @@ public final class ActionContext {
 	public void set(String name, Object value) {
 		ActionContext context = findContext(name);
 
-		if (context == null) {
-			throw Debug.terminate("JScratch", this, "Setting an undeclared variable: " + name);
-		}
+		if (context == null) throw Debug.terminate("JScratch", this, "Setting an undeclared variable: " + name);
 
 		context.variables.put(name, value);
 	}

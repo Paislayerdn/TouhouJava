@@ -25,14 +25,12 @@ public final class GameplayScript {
 	}
 
 	public void start() {
-		if (started) { return; }
+		if (started) return;
 
 		started = true;
 		
 		events.add(new DialogueEvent(parent, "Test_1"));
-		if (ResourceFinder.find(ResourceFinder.SPELL, OPENING_SPELL, ".lua") != null) {
-			eventsAddSpell(OPENING_SPELL);
-		} else {
+		if (ResourceFinder.find(ResourceFinder.SPELL, OPENING_SPELL, ".lua") != null) eventsAddSpell(OPENING_SPELL); else {
 			Debug.log(this, "Opening spell file not added yet: " + OPENING_SPELL + ".lua");
 		}
 		eventsAddSpell("Remilia");
@@ -71,18 +69,14 @@ public final class GameplayScript {
 			if (currentEvent == null) {
 				currentEvent = events.poll();
 
-				if (currentEvent == null) {
-					return;
-				}
+				if (currentEvent == null) return;
 
 				currentEvent.start();
 			}
 
 			currentEvent.update();
 
-			if (!currentEvent.isFinished()) {
-				return;
-			}
+			if (!currentEvent.isFinished()) return;
 
 			currentEvent = null;
 		}

@@ -20,9 +20,7 @@ public abstract class Entity extends Thing {
 	public final ArrayList<Hitbox> getHitboxes() { return hitboxes; }
 	public final Hitbox getHitbox(String name) {
 		for (Hitbox hitbox : hitboxes) {
-			if (hitbox.getName().equals(name.toUpperCase(Locale.ROOT))) {
-				return hitbox;
-			}
+			if (hitbox.getName().equals(name.toUpperCase(Locale.ROOT))) return hitbox;
 		}
 
 		return null;
